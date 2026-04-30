@@ -194,20 +194,44 @@ export function registerMcpCommand(program: Command): void {
     .action(async (name) => {
       const chalk = (await import('chalk')).default;
       console.log(chalk.yellow(`  Restarting MCP server: ${name}...`));
+
+      // Stop via PID file kill
       try {
-        // Stop
-        await fetch(`http://127.0.0.1:4000/trpc/mcp.stopServer?input=${encodeURIComponent(JSON.stringify({ name }))}`, {
-          signal: AbortSignal.timeout(5000),
-        });
-        // Start
-        const res = await fetch(`http://127.0.0.1:4000/trpc/mcp.startServer?input=${encodeURIComponent(JSON.stringify({ name }))}`, {
-          signal: AbortSignal.timeout(10000),
-        });
-        if (res.ok) {
-          console.log(chalk.green(`  ✓ Server '${name}' restarted`));
-        } else {
-          const json = await res.json().catch(() => ({}));
-          console.log(chalk.red(`  ✗ Failed: ${json.error?.message ?? res.statusText}`));
+        const fs = await import('fs');
+        const path = await import('path');
+        const pidFile = path.join(process.env.HOME ?? '', '.borg', 'mcp-pids', `${name}.pid`);
+        const pid = parseInt(fs.readFileSync(pidFile, 'utf8').trim());
+        process.kill(pid, 'SIGTERM');
+        try { fs.unlinkSync(pidFile); } catch {}
+        await new Promise(r => setTimeout(r, 500));
+      } catch {}
+
+      // Get server config and spawn
+      try {
+        const listRes = await fetch('http://127.0.0.1:4000/trpc/mcp.listServers', { signal: AbortSignal.timeout(5000) });
+        if (listRes.ok) {
+          const servers = (await listRes.json())?.result?.data ?? [];
+          const server = servers.find((s: any) => s.name === name);
+          if (server?.config?.command) {
+            const { spawn } = await import('child_process');
+            const proc = spawn(server.config.command, server.config.args ?? [], {
+              stdio: 'ignore', detached: true,
+              env: { ...process.env, ...(server.config.env ?? {}) },
+              shell: true,
+            });
+            proc.unref();
+            // Write PID file
+            try {
+              const fs = await import('fs');
+              const path = await import('path');
+              const pidDir = path.join(process.env.HOME ?? '', '.borg', 'mcp-pids');
+              fs.mkdirSync(pidDir, { recursive: true });
+              fs.writeFileSync(path.join(pidDir, `${name}.pid`), String(proc.pid));
+            } catch {}
+            console.log(chalk.green(`  ✓ Server '${name}' restarted (PID ${proc.pid})`));
+          } else {
+            console.log(chalk.red(`  ✗ Server '${name}' not found or no command`));
+          }
         }
       } catch (e: any) {
         console.log(chalk.red(`  ✗ Error: ${e.message}`));
