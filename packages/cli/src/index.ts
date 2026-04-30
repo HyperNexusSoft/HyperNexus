@@ -31,6 +31,7 @@ import { registerCatalogCommand } from './commands/catalog.js';
 import { registerInfoCommand } from './commands/info.js';
 import { registerDoctorCommand } from './commands/doctor.js';
 import { registerInventoryCommand } from './commands/inventory.js';
+import { registerCloudCommand } from './commands/cloud.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -75,6 +76,7 @@ registerCatalogCommand(program);
 registerInfoCommand(program);
 registerDoctorCommand(program);
 registerInventoryCommand(program);
+registerCloudCommand(program);
 
 // Default action: show help if no command given
 program.action(() => {
