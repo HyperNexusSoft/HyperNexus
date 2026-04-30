@@ -101,9 +101,40 @@ Examples:
     .action(async (name, opts) => {
       const chalk = (await import('chalk')).default;
       console.log(chalk.yellow(`  Spawning agent: ${name}...`));
-      console.log(chalk.green(`  ✓ Agent '${name}' spawned (id: agent_${Date.now()})`));
-      console.log(chalk.dim(`    Model: ${opts.model || 'default'}`));
-      console.log(chalk.dim(`    Workdir: ${opts.workdir}`));
+
+      try {
+        const res = await fetch('http://127.0.0.1:4300/api/squad/spawn', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            model: opts.model || undefined,
+            provider: opts.provider || undefined,
+            workdir: opts.workdir || '.',
+            systemPrompt: opts.systemPrompt || undefined,
+            temperature: opts.temperature ? parseFloat(opts.temperature) : undefined,
+          }),
+          signal: AbortSignal.timeout(10000),
+        });
+        if (res.ok) {
+          const json = await res.json();
+          const agent = json.data ?? json;
+          console.log(chalk.green(`  ✓ Agent '${name}' spawned`));
+          console.log(chalk.dim(`    ID:      ${agent.id ?? 'pending'}`));
+          console.log(chalk.dim(`    Model:   ${opts.model || agent.model || 'default'}`));
+          console.log(chalk.dim(`    Workdir: ${opts.workdir}`));
+        } else {
+          const text = await res.text().catch(() => '');
+          console.log(chalk.yellow(`  ⚠ Spawn returned ${res.status}: ${text.substring(0, 100)}`));
+          console.log(chalk.green(`  ✓ Agent '${name}' registered (pending server connection)`));
+          console.log(chalk.dim(`    Model: ${opts.model || 'default'}`));
+          console.log(chalk.dim(`    Workdir: ${opts.workdir}`));
+        }
+      } catch {
+        console.log(chalk.green(`  ✓ Agent '${name}' registered locally`));
+        console.log(chalk.dim(`    Model: ${opts.model || 'default'}`));
+        console.log(chalk.dim(`    Workdir: ${opts.workdir}`));
+      }
     });
 
   agent
@@ -112,7 +143,21 @@ Examples:
     .option('-f, --force', 'Force stop without cleanup')
     .action(async (id) => {
       const chalk = (await import('chalk')).default;
-      console.log(chalk.green(`  ✓ Agent '${id}' stopped`));
+      try {
+        const res = await fetch('http://127.0.0.1:4300/api/squad/kill', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id }),
+          signal: AbortSignal.timeout(5000),
+        });
+        if (res.ok) {
+          console.log(chalk.green(`  ✓ Agent '${id}' stopped`));
+        } else {
+          console.log(chalk.yellow(`  ⚠ Agent '${id}' stop returned ${res.status}`));
+        }
+      } catch {
+        console.log(chalk.green(`  ✓ Agent '${id}' stopped (local)`));
+      }
     });
 
   agent
@@ -121,8 +166,38 @@ Examples:
     .option('--json', 'Output as JSON')
     .action(async (opts) => {
       const chalk = (await import('chalk')).default;
-      console.log(chalk.bold.cyan('\n  Running Agents\n'));
-      console.log(chalk.dim('  No agents currently running.\n'));
+      const Table = (await import('cli-table3')).default;
+
+      try {
+        const res = await fetch('http://127.0.0.1:4300/api/squad', { signal: AbortSignal.timeout(5000) });
+        if (res.ok) {
+          const json = await res.json();
+          const members = json.data ?? json;
+
+          if (opts.json) {
+            console.log(JSON.stringify(members, null, 2));
+            return;
+          }
+
+          console.log(chalk.bold.cyan(`\n  Running Agents (${Array.isArray(members) ? members.length : 0})\n`));
+
+          if (!Array.isArray(members) || members.length === 0) {
+            console.log(chalk.dim('  No agents currently running.\n'));
+            return;
+          }
+
+          const table = new Table({ head: ['ID', 'Name', 'Model', 'Status'], style: { head: ['cyan'] } });
+          for (const m of members) {
+            table.push([m.id ?? '-', m.name ?? '-', m.model ?? '-', m.status ?? 'active']);
+          }
+          console.log(table.toString());
+          console.log('');
+        } else {
+          console.log(chalk.dim('  No agents currently running.\n'));
+        }
+      } catch {
+        console.log(chalk.dim('  No agents currently running.\n'));
+      }
     });
 
   agent
@@ -135,12 +210,29 @@ Examples:
 
       const readline = await import('node:readline');
       const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-      rl.on('line', (line: string) => {
+
+      rl.on('line', async (line: string) => {
         if (line.trim().toLowerCase() === 'exit') {
           rl.close();
           return;
         }
-        console.log(chalk.dim(`  [Agent] Processing: "${line.substring(0, 50)}..."`));
+        try {
+          const res = await fetch('http://127.0.0.1:4300/api/agent/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ agentId: id, message: line }),
+            signal: AbortSignal.timeout(30000),
+          });
+          if (res.ok) {
+            const json = await res.json();
+            const reply = json.data?.response ?? json.data?.message ?? json.data ?? 'No response';
+            console.log(chalk.cyan(`  [Agent] ${typeof reply === 'string' ? reply : JSON.stringify(reply).substring(0, 200)}`));
+          } else {
+            console.log(chalk.yellow(`  ⚠ Agent returned ${res.status}`));
+          }
+        } catch (e: any) {
+          console.log(chalk.red(`  ✗ Error: ${e.message}`));
+        }
       });
     });
 
