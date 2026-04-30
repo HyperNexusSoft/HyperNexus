@@ -5251,3 +5251,43 @@ and this project adheres to [Semantic Versioning](https://sumver.org/spec/v2.0.0
 - Go sidecar: 543 routes, 340 catalog entries, 25/25 test packages
 - 8 providers detected from environment variables
 - 3 AI tools detected (Claude Desktop, Cursor, VS Code)
+
+## [1.0.0-alpha.42] - 2026-04-30
+
+### Added
+- `borg doctor` — 9 diagnostic checks with fix suggestions (all pass)
+- `borg info` — One-command system summary (server, Go, MCP, catalog, providers, tools)
+- `borg provider test` — Live API authentication for 7 providers (6/7 verified, 630+ models)
+- `borg provider quota` — Shows 7 providers with masked API keys
+- `borg provider fallback` — Configure model fallback chain (persisted to config)
+- `borg provider remove` — Deletes from config.jsonc
+- `borg tools harnesses` — 15 detected CLI harnesses (Aider, Claude Code, Codex, etc.)
+- `borg tools info <name>` — Shows server details from tRPC
+- `borg session export/import` — Real data round-trip via Go sidecar
+- `borg session broadcast` — Queries Go sidecar for active sessions
+- `borg session stop/resume/pause` — Wired to tRPC session procedures
+- `borg session cloud` — Detects cloud dev environments (OpenAI Codex found)
+- `borg session list` — Shows 50 discovered sessions from Go sidecar
+- `borg config secrets --list/--env` — 9 secrets detected, source detection
+- `borg about` — Quick-start guide added
+- `scripts/test-workflow.cjs` — 10/10 end-to-end workflow test
+
+### Changed
+- Lightweight MCP init loads 115 server configs from mcp.jsonc into aggregator
+- `borg start` auto-launches Go sidecar when binary exists
+- Dashboard dev uses pnpm instead of hardcoded next binary path
+- Dashboard builds 86/86 pages (added @trpc/react-query, ms dependencies)
+- Dashboard tRPC proxy fixed: port 3001 → 4000
+- `connectServer` reads from mcp.jsonc instead of nonexistent property
+- Inventory readiness considers persisted database data
+- `memory add` calls saveContext tRPC procedure
+
+### Verified
+- 37/37 tests pass (12 smoke + 25 CLI)
+- 10/10 workflow test passes
+- 9/9 doctor checks pass
+- 6/7 providers authenticated (OpenAI 132 models, Anthropic 9, Google 50, DeepSeek 2, Mistral 69, OpenRouter 368)
+- 15 CLI harnesses detected (10 installed)
+- 50 sessions discovered
+- 340 catalog entries, 311 recently updated
+- Dashboard: 86/86 pages built, 0 errors
