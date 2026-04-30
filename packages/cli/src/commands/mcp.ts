@@ -508,11 +508,20 @@ Examples:
 
       // Fuzzy search across name, tags, description
       const q = query.toLowerCase();
-      const results = servers.filter((s: any) => {
+      let results = servers.filter((s: any) => {
         const name = (s.name ?? '').toLowerCase();
         const tags = (s.tags ?? []).join(' ').toLowerCase();
         const display = (s.displayName ?? '').toLowerCase();
         return name.includes(q) || tags.includes(q) || display.includes(q);
+      });
+
+      // Deduplicate by name
+      const seen = new Set<string>();
+      results = results.filter((s: any) => {
+        const key = s.name ?? s.displayName ?? '';
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
       });
 
       const limit = parseInt(opts.limit) || 20;

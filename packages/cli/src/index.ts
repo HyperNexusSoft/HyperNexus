@@ -37,6 +37,7 @@ import { registerContextCommand } from './commands/context.js';
 import { registerKnowledgeCommand } from './commands/knowledge.js';
 import { registerSwarmCommand } from './commands/swarm.js';
 import { registerMetricsCommand } from './commands/metrics.js';
+import { registerSkillsCommand } from './commands/skills.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -87,6 +88,7 @@ registerContextCommand(program);
 registerKnowledgeCommand(program);
 registerSwarmCommand(program);
 registerMetricsCommand(program);
+registerSkillsCommand(program);
 
 // Default action: show help if no command given
 program.action(() => {
