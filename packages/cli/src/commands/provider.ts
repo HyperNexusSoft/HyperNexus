@@ -318,8 +318,56 @@ Examples:
     .action(async (opts) => {
       const chalk = (await import('chalk')).default;
       console.log(chalk.bold.cyan('\n  Model Fallback Chain\n'));
-      console.log(chalk.dim('  Strategy: ') + (opts.strategy || 'quota-aware'));
-      console.log(chalk.dim('  Chain:    ') + 'not configured');
-      console.log(chalk.dim('\n  Use --set to configure the fallback order.\n'));
+
+      if (opts.set) {
+        // Write fallback chain to config
+        const { readFileSync, writeFileSync, mkdirSync } = await import('fs');
+        const { resolve, dirname } = await import('path');
+        const { homedir } = await import('os');
+        const configDir = process.env.BORG_CONFIG_DIR || resolve(homedir(), '.borg');
+        const configPath = resolve(configDir, 'config.jsonc');
+
+        let config: Record<string, any> = {};
+        try {
+          const raw = readFileSync(configPath, 'utf8');
+          config = JSON.parse(raw.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, ''));
+        } catch {}
+
+        if (!config.fallback) config.fallback = {};
+        config.fallback.chain = opts.set;
+        config.fallback.strategy = opts.strategy || 'quota-aware';
+
+        mkdirSync(dirname(configPath), { recursive: true });
+        writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n');
+        console.log(chalk.green(`  ✓ Fallback chain set: ${opts.set.join(' → ')}`));
+        console.log(chalk.dim(`  Strategy: ${config.fallback.strategy}`));
+        console.log('');
+        return;
+      }
+
+      // Show current chain
+      const strategy = opts.strategy || 'quota-aware';
+      console.log(chalk.dim('  Strategy: ') + strategy);
+
+      // Try to read from config
+      try {
+        const { readFileSync } = await import('fs');
+        const { resolve } = await import('path');
+        const { homedir } = await import('os');
+        const configPath = resolve(process.env.BORG_CONFIG_DIR || resolve(homedir(), '.borg'), 'config.jsonc');
+        const raw = readFileSync(configPath, 'utf8');
+        const config = JSON.parse(raw.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, ''));
+        const chain = config.fallback?.chain ?? [];
+        if (chain.length > 0) {
+          console.log(chalk.dim('  Chain:    ') + chalk.white(chain.join(' → ')));
+        } else {
+          console.log(chalk.dim('  Chain:    ') + 'not configured (auto-detect from providers)');
+          console.log(chalk.dim('  Default:  ') + 'claude-opus-4 → gpt-5 → gemini-2.5-pro → deepseek-v4');
+        }
+      } catch {
+        console.log(chalk.dim('  Chain:    ') + 'not configured (auto-detect from providers)');
+        console.log(chalk.dim('  Default:  ') + 'claude-opus-4 → gpt-5 → gemini-2.5-pro → deepseek-v4');
+      }
+      console.log('');
     });
 }
