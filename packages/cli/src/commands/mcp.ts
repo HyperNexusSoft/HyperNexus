@@ -864,9 +864,14 @@ Supported clients:
         console.log(chalk.dim(`  Found ${servers.length} servers (${alreadyConnected} already connected)`));
         console.log(chalk.dim(`  Attempting to connect ${disconnected.length} servers...\n`));
 
-        let connected = 0, failed = 0;
+        let connected = 0, failed = 0, spawned = 0;
+        const { spawn } = await import('child_process');
+
         for (const server of disconnected.slice(0, 20)) {
           const name = server.name;
+
+          // Try tRPC first
+          let ok = false;
           try {
             const res = await fetch('http://127.0.0.1:4000/trpc/mcp.connectServer', {
               method: 'POST',
@@ -874,20 +879,30 @@ Supported clients:
               body: JSON.stringify({ json: { name } }),
               signal: AbortSignal.timeout(parseInt(opts.timeout)),
             });
-            if (res.ok) {
-              connected++;
-              console.log(chalk.green(`  ✓ ${name}`));
-            } else {
+            if (res.ok) { ok = true; connected++; console.log(chalk.green(`  ✓ ${name}`)); }
+          } catch {}
+
+          // Fallback: spawn directly
+          if (!ok && server.config?.command) {
+            try {
+              const proc = spawn(server.config.command, server.config.args ?? [], {
+                stdio: 'ignore', detached: true,
+                env: { ...process.env, ...(server.config.env ?? {}) },
+                shell: true,
+              });
+              proc.unref();
+              spawned++;
+              console.log(chalk.green(`  ✓ ${name}`) + chalk.dim(` (spawned PID ${proc.pid})`));
+            } catch (e: any) {
               failed++;
-              const json = await res.json().catch(() => ({}));
-              console.log(chalk.red(`  ✗ ${name}: ${json.error?.message ?? 'failed'}`));
+              console.log(chalk.red(`  ✗ ${name}: ${e.message}`));
             }
-          } catch (e: any) {
+          } else if (!ok) {
             failed++;
-            console.log(chalk.red(`  ✗ ${name}: ${e.message}`));
+            console.log(chalk.red(`  ✗ ${name}: no command`));
           }
         }
-        console.log(chalk.dim(`\n  ${connected} connected, ${failed} failed`));
+        console.log(chalk.dim(`\n  ${connected} connected, ${spawned} spawned, ${failed} failed`));
         if (disconnected.length > 20) {
           console.log(chalk.dim(`  (${disconnected.length - 20} servers skipped — use individual connect for more)`));
         }
