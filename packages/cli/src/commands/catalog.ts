@@ -142,4 +142,37 @@ export function registerCatalogCommand(program: Command): void {
         console.log(chalk.red(`  ✗ Error: ${e.message}`));
       }
     });
+
+  catalog
+    .command('install <name>')
+    .description('Install an MCP server from the catalog')
+    .option('--yes', 'Skip confirmation')
+    .action(async (name, opts) => {
+      const chalk = (await import('chalk')).default;
+
+      console.log(chalk.yellow(`  Installing '${name}' from catalog...`));
+
+      try {
+        const res = await fetch('http://127.0.0.1:4300/api/catalog/install', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, autoConfirm: opts.yes }),
+          signal: AbortSignal.timeout(30000),
+        });
+        if (res.ok) {
+          const json = await res.json();
+          const data = json.data ?? {};
+          console.log(chalk.green(`  ✓ '${name}' installed`));
+          if (data.serverName) console.log(chalk.dim(`    Server: ${data.serverName}`));
+          if (data.command) console.log(chalk.dim(`    Command: ${data.command}`));
+          console.log(chalk.dim(`    Use 'borg mcp start ${name}' to connect`));
+        } else {
+          const json = await res.json().catch(() => ({}));
+          console.log(chalk.yellow(`  ⚠ Install returned ${res.status}: ${json.error ?? 'unknown'}`));
+          console.log(chalk.dim(`    Try: borg mcp install @modelcontextprotocol/server-${name}`));
+        }
+      } catch (e: any) {
+        console.log(chalk.red(`  ✗ Error: ${e.message}`));
+      }
+    });
 }

@@ -57,6 +57,11 @@ export function registerKnowledgeCommand(program: Command): void {
       try {
         const res = await fetch(`${TS_URL}/knowledge.getStats`, { signal: AbortSignal.timeout(5000) });
         if (res.ok) stats = (await res.json())?.result?.data ?? {};
+
+        if (!stats.nodes && !stats.count) {
+          const goRes = await fetch(`http://127.0.0.1:4300/api/knowledge/stats`, { signal: AbortSignal.timeout(3000) });
+          if (goRes.ok) stats = (await goRes.json()).data ?? {};
+        }
       } catch {}
 
       if (opts.json) {
@@ -65,7 +70,7 @@ export function registerKnowledgeCommand(program: Command): void {
       }
 
       console.log(chalk.bold.cyan('\n  Knowledge Graph\n'));
-      console.log(chalk.dim('  Nodes:    ') + String(stats.nodes ?? stats.nodeCount ?? 0));
+      console.log(chalk.dim('  Nodes:    ') + String(stats.nodes ?? stats.nodeCount ?? stats.count ?? 0));
       console.log(chalk.dim('  Edges:    ') + String(stats.edges ?? stats.edgeCount ?? 0));
       console.log(chalk.dim('  Types:    ') + String(stats.types ?? 0));
       console.log(chalk.dim('  Size:     ') + String(stats.size ?? '0 KB'));

@@ -50,8 +50,9 @@ export function registerInventoryCommand(program: Command): void {
         if (data.installedHarnesses?.length > 0) {
           console.log(chalk.dim('    Installed:'));
           for (const h of data.installedHarnesses.slice(0, 15)) {
-            const name = typeof h === 'string' ? h : h.name ?? h;
-            console.log(chalk.dim(`      ✓ ${name}`));
+            const name = typeof h === 'string' ? h : h.id ?? h.name ?? 'unknown';
+            const desc = h.description ? chalk.dim(` — ${h.description}`) : '';
+            console.log(chalk.dim(`      ✓ ${name}${desc}`));
           }
         }
 

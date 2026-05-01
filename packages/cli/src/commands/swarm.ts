@@ -77,8 +77,10 @@ export function registerSwarmCommand(program: Command): void {
       }
 
       for (const m of missions) {
-        const status = m.status === 'active' ? chalk.green('●') : m.status === 'completed' ? chalk.green('✓') : chalk.dim('○');
-        console.log(`  ${status} ${m.id ?? '-'} ${chalk.dim(`(${m.status ?? 'unknown'})`)} ${(m.description ?? m.mission ?? '').substring(0, 60)}`);
+        const status = m.status === 'active' || m.status === 'started' ? chalk.green('●') : m.status === 'completed' ? chalk.green('✓') : chalk.dim('○');
+        const id = m.missionId ?? m.id ?? '-';
+        const dateStr = m.createdAt ? chalk.dim(` [${new Date(m.createdAt).toLocaleTimeString()}]`) : '';
+        console.log(`  ${status} ${id} ${chalk.dim(`(${m.status ?? 'unknown'})`)}${dateStr} ${(m.description ?? m.mission ?? '').substring(0, 60)}`);
       }
       console.log('');
     });

@@ -18,7 +18,7 @@ export function registerContextCommand(program: Command): void {
       const chalk = (await import('chalk')).default;
 
       try {
-        const res = await fetch(`${TS_URL}/context.harvest`, {
+        const res = await fetch(`${TS_URL}/borgContext.harvest`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ json: {} }),
@@ -46,7 +46,7 @@ export function registerContextCommand(program: Command): void {
 
       let stats: any = {};
       try {
-        const res = await fetch(`${TS_URL}/context.getHarvestStats`, { signal: AbortSignal.timeout(5000) });
+        const res = await fetch(`${TS_URL}/borgContext.getHarvestStats`, { signal: AbortSignal.timeout(5000) });
         if (res.ok) stats = (await res.json())?.result?.data ?? {};
       } catch {}
 
@@ -73,7 +73,7 @@ export function registerContextCommand(program: Command): void {
 
       let chunks: any[] = [];
       try {
-        const res = await fetch(`${TS_URL}/context.getHarvestedContext`, { signal: AbortSignal.timeout(5000) });
+        const res = await fetch(`${TS_URL}/borgContext.getHarvestedContext`, { signal: AbortSignal.timeout(5000) });
         if (res.ok) chunks = (await res.json())?.result?.data ?? [];
       } catch {}
 
@@ -104,7 +104,7 @@ export function registerContextCommand(program: Command): void {
 
       let prompt: string = '';
       try {
-        const res = await fetch(`${TS_URL}/context.getPrompt`, { signal: AbortSignal.timeout(5000) });
+        const res = await fetch(`${TS_URL}/borgContext.getPrompt`, { signal: AbortSignal.timeout(5000) });
         if (res.ok) prompt = (await res.json())?.result?.data ?? '';
       } catch {}
 
@@ -124,7 +124,7 @@ export function registerContextCommand(program: Command): void {
     .action(async () => {
       const chalk = (await import('chalk')).default;
       try {
-        await fetch(`${TS_URL}/context.clear`, {
+        await fetch(`${TS_URL}/borgContext.clear`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ json: {} }),
