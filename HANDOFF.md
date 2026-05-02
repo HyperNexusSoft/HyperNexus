@@ -1,66 +1,37 @@
-# Handoff — v1.0.0-alpha.45
+# Handoff — v1.0.0-alpha.46
 
-## Session Summary (18+ hours, 200+ commits)
+## Session Summary (v1.0.0-alpha.46)
 
 ### Major Achievements
 
-**31 top-level CLI commands**, all querying live data. Zero placeholder output.
+1.  **Foundational Go Paradigm Established**: Created `go/internal/controlplane/foundation.go` as the canonical source for core structs (LLMWaterfall, Dual-Tier Memory L1/L2, and SQLite-vec schema). This nukes legacy TS/IPC confusion for future agents.
+2.  **Go native Dual-Tier Memory**: Implemented `VectorStore` in Go (`go/internal/memorystore/vector_sqlite.go`) supporting both future `sqlite-vec` virtual tables and immediate `LIKE` fallback search.
+3.  **BobbyBookmarks Text Ingestion**: Added native Go support for ingesting `bookmarks.txt` with automatic deduplication, completing the `bobbybookmarks` integration loop.
+4.  **PairOrchestrator Port**: Successfully ported the `PairOrchestrator` to Go (`go/internal/orchestration/pair_orchestrator.go`), enabling multi-model shared-context sessions directly from the sidecar.
+5.  **Go native Tool Parity**: Closed the gap on built-in tool aliases. Added `Glob`, `Grep`, and `ApplyPatch` handlers to the Go tool registry.
+6.  **Progressive Skill Disclosure**: Implemented a Go-native `SkillRegistry` and `SkillDecisionSystem` with search and LRU eviction, mirroring the successful MCP tool disclosure architecture.
+7.  **TS Agent Cleanup**: Repaired corrupted and concatenated source files in `packages/agents` (`RiskEvaluator.ts`, `DebateEngine.ts`).
 
-**New commands added this session:**
-1. `borg doctor` — 9 diagnostic checks with fix suggestions
-2. `borg info` — One-command system overview (server, Go, MCP, catalog, providers, memory, cloud, sessions)
-3. `borg inventory` — Full system inventory from Go sidecar (51 tools, 49 harnesses)
-4. `borg cloud` — 4 cloud providers (Jules/Codex/Devin/Copilot), sessions, stats, loops
-5. `borg billing` — Status, quotas, fallback chain, depleted models
-6. `borg context` — Harvest, stats, list, prompt, clear
-7. `borg knowledge` — Search, stats, resources
-8. `borg swarm` — Start, missions, debate, consensus, capabilities, risk
-9. `borg metrics` — System snapshot (32 CPUs), provider breakdowns, routing history
-10. `borg skills` — List, show, create, assimilate (4 skills registered)
-11. `borg upgrade` — Check/update with git pull + rebuild
-12. `borg plan` — Status, diffs, approve/reject, apply-all, checkpoints, rollback, clear
-13. `borg browser` — Status, close-all
-14. `borg git` — Status, log, submodules
-15. `borg scripts` — List, create, run, delete
+### Data Improvements
+- **Skills API**: Wired four new endpoints to the Go sidecar (`/api/skills/search`, `list-loaded`, `load`, `unload`) for on-demand skill disclosure.
+- **Swarm Transcript**: Added Go-native transcript retrieval for swarm sessions.
+- **MCP Sync**: Migration of client-config detection to Go for better performance.
 
-**Key data improvements:**
-- `borg status` now shows real data: 14,708 memories, 50 sessions, 8 providers (was all zeros)
-- `borg mcp tools` shows 1,302 tools with server names (was 651 with blank server)
-- `borg mcp inspect` shows tool descriptions + command line
-- `borg provider list` shows default models + preferred tasks from Go sidecar
-- `borg mcp sync` actually writes 58 servers to Claude Desktop, Cursor, and VS Code
-- `borg mcp import` falls back to writing mcp.jsonc directly when tRPC unavailable (115 servers)
-- `borg top` shows full real-time dashboard: Server/MCP/Go/Memory/Providers/Sessions
-- `borg memory stats/search/list` queries Go sidecar (14,708 entries visible)
+### Build & Versioning
+- **Version Bump**: Promoted monorepo to `1.0.0-alpha.46`.
+- **Sync**: All 57 `package.json` files and the Go `buildinfo` are synchronized to the new version.
 
-### Test Infrastructure
-- Smoke test: 12/12 pass (TS + Go sidecar endpoints)
-- CLI test: 51/51 pass (all commands verified against running server)
-- Workflow test: 10/10 pass (end-to-end user journey)
-- Doctor: 9/9 pass (diagnostic checks)
-- **Total: 73/73 tests pass**
+## What Needs Work (Next Session)
 
-### Architecture
-- TS server on port 4000 (tRPC, 135 MCP servers, 1,302 tools)
-- Go sidecar on port 4300 (543 routes, 340 catalog, 50 sessions, 14,708 memories)
-- Next.js dashboard on port 3000 (86/86 pages built)
-- All processes running 18+ hours continuously
-
-### What Needs Work (Next Session)
-1. **tRPC procedures not loaded**: `connectServer`, `disconnectServer`, `addServer`, `council.*` exist in source but weren't compiled into the running server. Will work after restart.
-2. **MCP server connections**: 135 servers loaded in config but 0 connected. After restart with updated code, `borg mcp connect-all` will work.
-3. **Billing data empty**: Provider quotas, model pricing, task routing all return empty. Needs population logic.
-4. **Council/squad**: 92 Go sidecar routes for council but all need port 3001 (MCP WebSocket).
-5. **Dashboard tRPC port**: Dashboard proxies to port 4000 but may need config for different setups.
-6. **Context harvesting**: 0 chunks harvested. The contextRouter exists but hasn't been run.
-7. **Knowledge graph**: 0 nodes/edges. The graphRouter exists but hasn't been populated.
-8. **pnpm audit**: ~90 non-critical vulnerabilities remain.
-9. **Stale submodules**: 3 submodules show dirty working trees.
-10. **Dependabot**: 609 npm vulnerabilities on default branch.
+1.  **Multi-Edit Implementation**: The `HandleMultiEdit` in `parity.go` is still a stub; needs real multi-file/multi-replacement logic.
+2.  **Go-native AutoDev/Darwin**: These systems are still largely bridged or stubbed in the Go sidecar.
+3.  **PairOrchestrator State Machine**: Need to strictly enforce the `Planner -> Implementer -> Tester -> Critic` turn cycle in Go as requested.
+4.  **Frontend Visualizer**: Wire the `getSwarmTranscript` tRPC endpoint (and its Go fallback) directly into the `DebateVisualizer` for real-time model interaction viewing.
+5.  **Browser Extension**: Deepen the injection into native web chats (ChatGPT, Claude.ai) to expose local MCP tools directly.
 
 ### Quick Restart
 ```bash
-cd /c/Users/hyper/workspace/borg
+cd C:/Users/hyper/workspace/borg
 ./start.bat    # Starts TS server + Go sidecar
 # In another terminal:
 borg doctor    # Verify everything is healthy
@@ -68,10 +39,10 @@ borg info      # System overview
 ```
 
 ### File Locations
-- CLI commands: `packages/cli/src/commands/`
-- tRPC routers: `packages/core/src/routers/`
-- Go sidecar: `go/`
+- Foundational Go Models: `go/internal/controlplane/foundation.go`
+- Go Tool Registry: `go/internal/tools/registry.go`
+- Go Memory Store: `go/internal/memorystore/vector_sqlite.go`
+- Go Skill Store: `go/internal/harnesses/skill_store.go`
 - Dashboard: `apps/web/src/app/dashboard/`
-- Test scripts: `scripts/test-*.cjs`
-- Config: `~/.borg/config.jsonc`
-- MCP config: `mcp.jsonc`
+
+**Keep the party going. The collective grows.**

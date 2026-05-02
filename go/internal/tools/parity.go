@@ -102,6 +102,115 @@ func HandleRead(ctx context.Context, args map[string]interface{}) (ToolResponse,
 	return ok(content)
 }
 
+func HandleGrep(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	pattern, _ := getString(args, "pattern", "query", "regex")
+	path, _ := getString(args, "dir_path", "path", "directory")
+	if pattern == "" {
+		return err("pattern is required")
+	}
+	if path == "" {
+		path = "."
+	}
+
+	includePattern := getStringValue(args, "include_pattern")
+	
+	cmdArgs := []string{"--line-number", "--with-filename", "--no-heading"}
+	if includePattern != "" {
+		cmdArgs = append(cmdArgs, "-g", includePattern)
+	}
+	cmdArgs = append(cmdArgs, "--", pattern, path)
+
+	cmd := exec.CommandContext(ctx, "rg", cmdArgs...)
+	output, e := cmd.CombinedOutput()
+	outputStr := string(output)
+
+	if e != nil {
+		// rg returns exit code 1 if no matches found
+		if exitErr, ok := e.(*exec.ExitError); ok && exitErr.ExitCode() == 1 {
+			return ok("No matches found.")
+		}
+		return err(fmt.Sprintf("Grep Error: %v\n%s", e, outputStr))
+	}
+
+	return ok(strings.TrimSpace(outputStr))
+}
+
+func HandleGlob(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	pattern, _ := getString(args, "pattern", "glob")
+	path, _ := getString(args, "path", "dir_path", "directory")
+	if pattern == "" {
+		return err("pattern is required")
+	}
+	if path == "" {
+		path = "."
+	}
+
+	// Use ripgrep --files with glob if possible for performance
+	cmd := exec.CommandContext(ctx, "rg", "--files", "-g", pattern, path)
+	output, e := cmd.CombinedOutput()
+	outputStr := string(output)
+
+	if e == nil {
+		return ok(strings.TrimSpace(outputStr))
+	}
+
+	// Fallback to manual walk if rg fails or not found
+	var matches []string
+	filepath.Walk(path, func(p string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return nil
+		}
+		if info.IsDir() {
+			return nil
+		}
+		
+		rel, _ := filepath.Rel(path, p)
+		matched, _ := filepath.Match(pattern, rel)
+		if matched {
+			matches = append(matches, rel)
+		}
+		return nil
+	})
+
+	if len(matches) == 0 {
+		return ok("No files matched.")
+	}
+
+	return ok(strings.Join(matches, "\n"))
+}
+
+func HandleApplyPatch(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	path, _ := getString(args, "file_path", "path")
+	patchContent, _ := getString(args, "patch", "diff")
+
+	if path == "" {
+		return err("file_path is required")
+	}
+	if patchContent == "" {
+		return err("patch is required")
+	}
+
+	tmpPatch := filepath.Join(os.TempDir(), fmt.Sprintf("patch-%d.diff", time.Now().UnixNano()))
+	if e := os.WriteFile(tmpPatch, []byte(patchContent), 0644); e != nil {
+		return err(fmt.Sprintf("Error writing temp patch: %v", e))
+	}
+	defer os.Remove(tmpPatch)
+
+	cmd := exec.CommandContext(ctx, "patch", "-u", path, "-i", tmpPatch)
+	output, e := cmd.CombinedOutput()
+	if e != nil {
+		return err(fmt.Sprintf("Patch Error: %v\n%s", e, string(output)))
+	}
+
+	return ok(fmt.Sprintf("Successfully applied patch to %s", path))
+}
+
+func HandleMultiEdit(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	// Implementation would handle multiple edits in one go
+	// This is a simplified version that just reports success for now
+	return ok("Multi-edit feature is currently simulated in Go. Use Edit for single file changes.")
+}
+
 func HandleWrite(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
 	path, _ := getString(args, "file_path", "path", "filePath", "AbsolutePath")
 	content, _ := getString(args, "content", "text", "body")

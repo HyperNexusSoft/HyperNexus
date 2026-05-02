@@ -362,6 +362,78 @@ func SyncBobbyBookmarks(ctx context.Context, dbPath string, baseURL string, perP
 	return report, nil
 }
 
+func SyncBobbyBookmarksFromText(ctx context.Context, destDbPath string, textFilePath string) (*SyncReport, error) {
+	report := &SyncReport{
+		Source:  "bobbybookmarks-text",
+		BaseURL: "file://" + textFilePath,
+		Errors:  []string{},
+	}
+
+	if _, err := os.Stat(textFilePath); os.IsNotExist(err) {
+		return nil, fmt.Errorf("text file not found: %s", textFilePath)
+	}
+
+	data, err := os.ReadFile(textFilePath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read text file: %w", err)
+	}
+
+	lines := strings.Split(string(data), "\n")
+	var bookmarks []Bookmark
+	seen := make(map[string]bool)
+
+	for i, line := range lines {
+		rawURL := strings.TrimSpace(line)
+		if rawURL == "" || strings.HasPrefix(rawURL, "#") {
+			continue
+		}
+
+		normURL := NormalizeBookmarkURL(rawURL)
+		if normURL == "" {
+			continue
+		}
+
+		if seen[normURL] {
+			continue
+		}
+		seen[normURL] = true
+
+		title := fmt.Sprintf("Bookmark from %s line %d", filepath.Base(textFilePath), i+1)
+		bookmarks = append(bookmarks, Bookmark{
+			ID:            i + 1,
+			URL:           rawURL,
+			NormalizedURL: normURL,
+			Title:         &title,
+		})
+	}
+
+	report.Fetched = len(bookmarks)
+
+	db, err := sql.Open("sqlite", destDbPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open destination database: %w", err)
+	}
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		return nil, fmt.Errorf("tx begin error: %w", err)
+	}
+
+	upserted, err := upsertBookmarks(tx, bookmarks)
+	if err != nil {
+		tx.Rollback()
+		return nil, fmt.Errorf("upsert error: %w", err)
+	}
+	report.Upserted = upserted
+
+	if err := tx.Commit(); err != nil {
+		return nil, fmt.Errorf("tx commit error: %w", err)
+	}
+
+	return report, nil
+}
+
 func SyncBobbyBookmarksLocal(ctx context.Context, destDbPath string, sourceDbPath string) (*SyncReport, error) {
 	report := &SyncReport{
 		Source:  "bobbybookmarks-local",

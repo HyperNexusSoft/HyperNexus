@@ -54,6 +54,7 @@ import (
 	"github.com/borghq/borg-go/internal/session"
 	"github.com/borghq/borg-go/internal/toolregistry"
 	"github.com/borghq/borg-go/internal/workspaces"
+	"github.com/borghq/borg-go/internal/skillregistry"
 	"github.com/google/uuid"
 	_ "modernc.org/sqlite"
 )
@@ -102,6 +103,9 @@ type Server struct {
 	memoryReactor     *memorystore.MemoryReactor
 	mcpConfig         *mcp.ConfigManager
 	skillStore        *harnesses.SkillStore
+	skillRegistry     *skillregistry.SkillRegistry
+	skillDecision     *skillregistry.SkillDecisionSystem
+	pairOrchestrator  *orchestration.PairOrchestrator
 	memoryArchiver    *memorystore.MemoryArchiver
 
 	// --- New Go-native services (alpha.32+) ---
@@ -435,6 +439,26 @@ func New(cfg config.Config, detector controlplane.ToolProvider) *Server {
 	}
 	server.a2aBroker = orchestration.NewA2ABroker(server.a2aLogger)
 	server.skillStore = harnesses.NewSkillStore(cfg.MainConfigDir)
+	server.skillRegistry = skillregistry.NewSkillRegistry()
+	server.skillDecision = skillregistry.NewSkillDecisionSystem(skillregistry.DefaultSkillDecisionConfig(), server.skillRegistry)
+	server.pairOrchestrator = orchestration.NewPairOrchestrator()
+	server.pairOrchestrator.SetupFrontierSquad()
+	
+	// Populate skill registry from store
+	if skillIDs, err := server.skillStore.ListSkills(); err == nil {
+		for _, id := range skillIDs {
+			if s, err := server.skillStore.GetSkill(id); err == nil {
+				server.skillRegistry.Register(skillregistry.SkillInfo{
+					ID:          s.ID,
+					Name:        s.Name,
+					Description: s.Description,
+					Content:     s.Content,
+					Path:        s.Path,
+				})
+			}
+		}
+	}
+
 	server.coderAgent = orchestration.NewCoderAgent(server.a2aBroker, cfg.WorkspaceRoot)
 	server.coderAgent.Start(context.Background())
 	server.goDirector = orchestration.NewDirector(server.swarmController, server.coderAgent, server.a2aBroker)
@@ -901,6 +925,11 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/tool-sets/update", s.handleToolSetsUpdate)
 	s.mux.HandleFunc("/api/tool-sets/delete", s.handleToolSetsDelete)
 	s.mux.HandleFunc("/api/project/context", s.handleProjectContext)
+	s.mux.HandleFunc("/api/skills/search", s.handleSkillsSearch)
+	s.mux.HandleFunc("/api/skills/list-loaded", s.handleSkillsListLoaded)
+	s.mux.HandleFunc("/api/skills/load", s.handleSkillsLoad)
+	s.mux.HandleFunc("/api/skills/unload", s.handleSkillsUnload)
+	s.mux.HandleFunc("/api/agent/pair/run", s.handleAgentPairRun)
 	s.mux.HandleFunc("/api/project/context/update", s.handleProjectContextUpdate)
 	s.mux.HandleFunc("/api/project/handoffs", s.handleProjectHandoffs)
 	s.mux.HandleFunc("/api/shell/log", s.handleShellLog)
@@ -913,6 +942,7 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/agent/a2a/logs", s.handleA2AGetLogs)
 	s.mux.HandleFunc("/api/agent/a2a/broadcast", s.handleA2ABroadcast)
 	s.mux.HandleFunc("/api/agent/swarm/start", s.handleAgentSwarmStart)
+	s.mux.HandleFunc("/api/agent/swarm/transcript", s.handleAgentSwarmTranscript)
 	s.mux.HandleFunc("/api/agent/director/start", s.handleGoDirectorStart)
 	s.mux.HandleFunc("/api/memory/archive-session", s.handleMemoryArchiveSession)
 	s.mux.HandleFunc("/api/commands/execute", s.handleCommandsExecute)

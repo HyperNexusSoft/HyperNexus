@@ -31,13 +31,16 @@ async function handler(req: Request): Promise<Response> {
 
   let upstreamResponse: Response;
   try {
+    console.log(`[TRPC-Proxy] Fetching from upstream: ${upstreamUrl.toString()} (${req.method})`);
     upstreamResponse = await fetch(upstreamUrl, {
       method: req.method,
       headers,
       body,
     });
+    console.log(`[TRPC-Proxy] Upstream responded: ${upstreamResponse.status} ${upstreamResponse.statusText}`);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
+    console.error(`[TRPC-Proxy] Upstream fetch failed: ${message}`);
     return new Response(
       JSON.stringify({
         error: 'TRPC_UPSTREAM_UNAVAILABLE',

@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://sumver.org/spec/v2.0.0.html).
 
+## [1.0.0-alpha.46] - 2026-05-01
+
+### Added
+- **Foundational Go Models**: Created `go/internal/controlplane/foundation.go` with core structs for LLMWaterfall, Dual-Tier Memory (L1/L2), and SQLite-vec schema.
+- **Go Vector Memory**: Implemented `VectorStore` in `go/internal/memorystore/vector_sqlite.go` using `sqlite-vec` DDL and fallback LIKE search.
+- **BobbyBookmarks Text Ingestion**: Added `SyncBobbyBookmarksFromText` to `go/internal/hsync/bobbybookmarks.go` for text file ingestion with deduplication.
+- **PairOrchestrator (Go)**: Ported `PairOrchestrator` to Go in `go/internal/orchestration/pair_orchestrator.go` and wired to `/api/agent/pair/run`.
+- **Tool Parity (Go)**: Implemented missing native Go handlers for `Glob`, `Grep`, and `ApplyPatch` in `go/internal/tools/parity.go`.
+- **Skill Decision System (Go)**: Implemented `SkillRegistry` and `SkillDecisionSystem` in `go/internal/skillregistry/` with search and LRU eviction.
+- **Skill API (Go)**: Wired `/api/skills/search`, `/list-loaded`, `/load`, and `/unload` to the native Go sidecar.
+- **Swarm Transcript (Go)**: Added `/api/agent/swarm/transcript` to the Go sidecar.
+- **MCP Sync (Go)**: Ported client-config sync detection for Claude Desktop, Cursor, and VS Code to Go in `go/internal/mcp/sync.go`.
+
+### Fixed
+- **TS Agent Stubs**: Repaired corrupted/concatenated `RiskEvaluator.ts` and `DebateEngine.ts` in `packages/agents`.
+- **Version Sync**: Synchronized all 57 `package.json` files and Go `buildinfo` to `1.0.0-alpha.46`.
+
 ## [1.0.0-alpha.45] - 2026-04-30
 
 ### Added

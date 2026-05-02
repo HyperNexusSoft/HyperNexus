@@ -296,3 +296,28 @@ func (s *Server) handleAgentSwarmStart(w http.ResponseWriter, r *http.Request) {
 		},
 	})
 }
+
+func (s *Server) handleAgentSwarmTranscript(w http.ResponseWriter, r *http.Request) {
+	// Try upstream first
+	var result any
+	upstreamBase, err := s.callUpstreamJSON(r.Context(), "agent.getSwarmTranscript", nil, &result)
+	if err == nil {
+		writeJSON(w, http.StatusOK, map[string]any{
+			"success": true,
+			"data":    result,
+			"bridge": map[string]any{
+				"upstreamBase": upstreamBase,
+				"procedure":    "agent.getSwarmTranscript",
+			},
+		})
+		return
+	}
+
+	writeJSON(w, http.StatusOK, map[string]any{
+		"success": true,
+		"data":    s.swarmController.getTranscript(),
+		"bridge": map[string]any{
+			"fallback": "go-local-swarm",
+		},
+	})
+}

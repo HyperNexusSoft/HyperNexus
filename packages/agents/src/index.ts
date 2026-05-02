@@ -1,4 +1,6 @@
-// @borg/agents -- stub
+export * from './orchestration/RiskEvaluator.js';
+export * from './orchestration/DebateEngine.js';
+export * from './orchestration/ConferenceManager.js';
 
 export const A2ALogger: any = undefined;
 export const Council: any = undefined;
