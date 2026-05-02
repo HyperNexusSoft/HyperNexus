@@ -155,4 +155,26 @@ export function PromptLibrary() {
                                     value={editedTemplate}
                                     onChange={(e: any) => setEditedTemplate(e.target.value)}
                                     spellCheck={false}
-   
+                                />
+                            ) : (
+                                <pre className="w-full h-full bg-black/40 border border-zinc-800 rounded-lg p-6 font-mono text-sm text-zinc-300 overflow-auto whitespace-pre-wrap selection:bg-indigo-500/30">
+                                    {selected.template}
+                                </pre>
+                            )}
+                        </div>
+                    </>
+                ) : (
+                    <div className="flex-1 flex flex-col items-center justify-center text-zinc-600 p-8 text-center">
+                        <div className="w-16 h-16 border-2 border-dashed border-zinc-800 rounded-full flex items-center justify-center mb-4">
+                            <Edit2 className="w-6 h-6" />
+                        </div>
+                        <h3 className="text-zinc-400 font-medium">No Prompt Selected</h3>
+                        <p className="text-xs max-w-xs mt-2 italic leading-relaxed">
+                            Choose a prompt from the library to view or edit its implementation details.
+                        </p>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
