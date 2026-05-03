@@ -48,6 +48,7 @@ import (
 	"github.com/borghq/borg-go/internal/ctxharvester"
 	"github.com/borghq/borg-go/internal/eventbus"
 	"github.com/borghq/borg-go/internal/gitservice"
+	"github.com/borghq/borg-go/internal/repograph"
 	"github.com/borghq/borg-go/internal/healer"
 	"github.com/borghq/borg-go/internal/metrics"
 	processmanager "github.com/borghq/borg-go/internal/process"
@@ -121,6 +122,7 @@ type Server struct {
 	processManager    *processmanager.ProcessManager
 	healerService     *healer.HealerService
 	cacheService      *cache.Cache
+	repoGraph         *repograph.RepoGraphService
 }
 
 type providerFallbackEvent struct {
@@ -488,6 +490,11 @@ func New(cfg config.Config, detector controlplane.ToolProvider) *Server {
 
 	// --- Initialize new Go-native services ---
 	server.eventBus = eventbus.New(1000)
+	server.eventBus.OnGlobal(func(ev eventbus.SystemEvent) {
+		if data, err := json.Marshal(ev); err == nil {
+			GlobalSSEBroker.Broadcast(data)
+		}
+	})
 	server.metricsService = metrics.NewMetricsService()
 	server.sessionManager = session.NewSessionManager(100)
 	server.toolRegistry = toolregistry.NewToolRegistry()
@@ -497,6 +504,7 @@ func New(cfg config.Config, detector controlplane.ToolProvider) *Server {
 	server.processManager = processmanager.NewProcessManager()
 	server.healerService = healer.NewHealerService(nil, "") // LLM provider wired later
 	server.cacheService = cache.New(cache.CacheOptions{MaxSize: 500, DefaultTTL: 60000})
+	server.repoGraph = repograph.NewRepoGraphService(cfg.WorkspaceRoot)
 
 	// Register workspace on startup
 	_ = server.workspaceTracker.RegisterWorkspace(cfg.WorkspaceRoot)
@@ -1152,6 +1160,15 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/mesh/query-capabilities", s.handleMeshQueryCapabilities)
 	s.mux.HandleFunc("/api/mesh/find-peer", s.handleMeshFindPeer)
 	s.mux.HandleFunc("/api/mesh/broadcast", s.handleMeshBroadcast)
+
+	// --- Repograph Routes ---
+	s.mux.HandleFunc("/api/repograph/build", s.handleRepoGraphBuild)
+	s.mux.HandleFunc("/api/repograph/graph", s.handleRepoGraphGet)
+	s.mux.HandleFunc("/api/repograph/references", s.handleRepoGraphReferences)
+	s.mux.HandleFunc("/api/repograph/dependents", s.handleRepoGraphDependents)
+	s.mux.HandleFunc("/api/repograph/search", s.handleRepoGraphSearch)
+
+	s.mux.HandleFunc("/api/sse", s.handleSSE)
 
 	// --- New Go-native handlers (alpha.11+) ---
 	s.registerSavedScriptRoutes()
@@ -18000,4 +18017,58 @@ func fmtInt(value int) string {
 	}
 
 	return sign + string(buf[index:])
+}
+
+// --- Repograph Handlers ---
+
+func (s *Server) handleRepoGraphBuild(w http.ResponseWriter, r *http.Request) {
+	graph, err := s.repoGraph.Build(r.Context())
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"success": true, "data": graph})
+}
+
+func (s *Server) handleRepoGraphGet(w http.ResponseWriter, _ *http.Request) {
+	graph := s.repoGraph.GetGraph()
+	if graph == nil {
+		writeJSON(w, http.StatusOK, map[string]any{"success": true, "data": nil, "message": "graph not built yet"})
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"success": true, "data": graph})
+}
+
+func (s *Server) handleRepoGraphReferences(w http.ResponseWriter, r *http.Request) {
+	symbol := r.URL.Query().Get("symbol")
+	if symbol == "" {
+		writeJSON(w, http.StatusBadRequest, map[string]any{"success": false, "error": "missing symbol parameter"})
+		return
+	}
+	refs := s.repoGraph.FindReferences(symbol)
+	writeJSON(w, http.StatusOK, map[string]any{"success": true, "data": refs})
+}
+
+func (s *Server) handleRepoGraphDependents(w http.ResponseWriter, r *http.Request) {
+	path := r.URL.Query().Get("path")
+	if path == "" {
+		writeJSON(w, http.StatusBadRequest, map[string]any{"success": false, "error": "missing path parameter"})
+		return
+	}
+	deps := s.repoGraph.FindDependents(path)
+	writeJSON(w, http.StatusOK, map[string]any{"success": true, "data": deps})
+}
+
+func (s *Server) handleRepoGraphSearch(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query().Get("q")
+	limitStr := r.URL.Query().Get("limit")
+	limit := 50
+	if limitStr != "" {
+		if l, err := strconv.Atoi(limitStr); err == nil {
+			limit = l
+		}
+	}
+
+	results := s.repoGraph.SearchSymbols(query, limit)
+	writeJSON(w, http.StatusOK, map[string]any{"success": true, "data": results})
 }

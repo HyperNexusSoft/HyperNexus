@@ -902,5 +902,22 @@ func BuiltinTools() []ToolEntry {
 		{Name: "unload_tool", OriginalName: "unload_tool", Server: "borg", AdvertisedName: "borg__unload_tool",
 			Description: "Unload a tool from the active working set to free context.",
 			AlwaysOn:    true},
+
+		// Repograph-native tools
+		{Name: "repograph_build", OriginalName: "repograph_build", Server: "borg", AdvertisedName: "borg__repograph_build",
+			Description: "Build or rebuild the repository dependency graph. Triggers a full scan of source files.",
+			AlwaysOn:    true},
+		{Name: "repograph_get", OriginalName: "repograph_get", Server: "borg", AdvertisedName: "borg__repograph_get",
+			Description: "Get the current repository graph structure and statistics.",
+			AlwaysOn:    true},
+		{Name: "repograph_find_references", OriginalName: "repograph_find_references", Server: "borg", AdvertisedName: "borg__repograph_find_references",
+			Description: "Find all references to a specific code symbol (function, type, interface) in the repository.",
+			AlwaysOn:    true},
+		{Name: "repograph_find_dependents", OriginalName: "repograph_find_dependents", Server: "borg", AdvertisedName: "borg__repograph_find_dependents",
+			Description: "Find all files that depend on or import a given source file.",
+			AlwaysOn:    true},
+		{Name: "repograph_search", OriginalName: "repograph_search", Server: "borg", AdvertisedName: "borg__repograph_search",
+			Description: "Search for symbols across the repository using the native Go repograph engine.",
+			AlwaysOn:    true},
 	}
 }
