@@ -81,3 +81,11 @@ borg is transitioning toward a robust, small family of focused binaries rather t
 3. **Visible systems**: Everything—from LLM reasoning to MCP network traffic—must be inspectable.
 4. **Interoperability over reinvention**: Wrap, adapt, and assimilate existing excellent tools (like ripgrep, SQLite, LanceDB) instead of rewriting them poorly.
 5. **Continuity over novelty**: Focus heavily on state recovery, crash resilience, and session persistence.
+
+8. **A2A Interoperability:** Borg discovers and is discovered by other agents over standard protocols.
+9. **Graph Intelligence:** Traverse relationships between tools and tasks, not just keyword matches.
+10. **Zero-Trust Execution:** Total isolation and provenance tracking for arbitrary operations.
+11. **Total Observability:** Anomaly detection and flight-recording for reasoning logic.
+12. **Tiered Intelligence:** Dynamic cost/performance optimization across local SLMs and cloud models.
+13. **Accessibility-Native:** Reading the web through intent, not raw HTML DOM strings.
+14. **Verified Code-as-Action:** Moving from generation to validation as the primary metric of success.
