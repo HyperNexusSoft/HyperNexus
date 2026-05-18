@@ -55,7 +55,7 @@ func (s *Server) buildStartupStatus(ctx context.Context) (StartupStatus, error) 
 		return StartupStatus{}, err
 	}
 
-	upstreamReady, upstreamBase := s.checkUpstreamProcedure(ctx, "startupStatus", nil)
+	upstreamReady, upstreamBase := s.checkUpstreamProcedure(ctx, "mcpServers.list", nil)
 	supervisorReady, supervisorBase := s.checkUpstreamProcedure(ctx, "session.list", nil)
 	importedStats := s.importedSessionMaintenanceStats(ctx)
 

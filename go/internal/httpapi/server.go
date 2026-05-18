@@ -10290,6 +10290,9 @@ func (s *Server) handleConfiguredServerMutation(w http.ResponseWriter, r *http.R
 }
 
 func (s *Server) handleRuntimeStatus(w http.ResponseWriter, r *http.Request) {
+	ctx, cancel := context.WithTimeout(r.Context(), 10*time.Second)
+	defer cancel()
+	_ = ctx
 	candidates, err := s.scanImportSources()
 	if err != nil {
 		writeJSON(w, http.StatusInternalServerError, map[string]any{
@@ -10299,7 +10302,7 @@ func (s *Server) handleRuntimeStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tools, err := s.detector.DetectAll(r.Context())
+	tools, err := s.detector.DetectAll(ctx)
 	if err != nil {
 		writeJSON(w, http.StatusGatewayTimeout, map[string]any{
 			"success": false,
@@ -10358,7 +10361,7 @@ func (s *Server) handleRuntimeStatus(w http.ResponseWriter, r *http.Request) {
 	sessionSummary := summarizeSessions(discoveredSessions)
 	supervisorBridgeAvailable := false
 	supervisorBridgeBase := ""
-	bridgeCtx, cancelBridge := context.WithTimeout(r.Context(), 2*time.Second)
+	bridgeCtx, cancelBridge := context.WithTimeout(ctx, 2*time.Second)
 	bridgeResult, bridgeErr := interop.CallTRPCProcedure(bridgeCtx, s.cfg.MainLockPath(), "session.catalog", nil)
 	cancelBridge()
 	if bridgeErr == nil {
