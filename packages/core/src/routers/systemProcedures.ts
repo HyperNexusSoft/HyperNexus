@@ -19,6 +19,7 @@ import { getCachedToolInventory } from '../mcp/cachedToolInventory.js';
 import { readClaudeMemStoreStatus } from './memoryRouter.claude-mem.js';
 import { summarizeCachedInventory } from './startupInventorySummary.js';
 import type { MemoryPipelineSummary } from '../services/memory/MemoryManager.js';
+import { mcpServerPool } from '../services/mcp-server-pool.service.js';
 
 const EXECUTION_ENV_CACHE_TTL_MS = Number(process.env.BORG_EXECUTION_ENV_CACHE_TTL_MS ?? 30_000);
 
@@ -137,6 +138,7 @@ export const systemProcedures = {
             persistedToolCount,
             persistedAlwaysOnServerCount,
             persistedAlwaysOnToolCount,
+    lazyMode: mcpServerPool.getLifecycleModes().lazySessionMode,
             inventorySource: cachedInventorySummary.source,
             inventorySnapshotUpdatedAt: cachedInventorySummary.snapshotUpdatedAt,
             executionEnvironment: executionEnvironment?.summary ?? null,

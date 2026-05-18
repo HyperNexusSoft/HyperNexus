@@ -83,6 +83,7 @@ type StartupStatusInput = {
     persistedToolCount: number;
     persistedAlwaysOnServerCount: number;
     persistedAlwaysOnToolCount: number;
+	lazyMode?: boolean;
     inventorySource?: 'database' | 'config' | 'empty';
     inventorySnapshotUpdatedAt?: string | null;
     executionEnvironment?: ExecutionEnvironmentSummary | null;
@@ -190,12 +191,12 @@ export async function buildStartupStatusSnapshot(input: StartupStatusInput) {
     );
     const aggregatorReady = Boolean(aggregatorStatus?.initialized);
     const liveReady = mcpReady && aggregatorReady;
-    const residentReady = liveReady && residentLiveServerCount >= advertisedAlwaysOnServerCount;
+    const residentReady = liveReady && (input.lazyMode ? true : residentLiveServerCount >= advertisedAlwaysOnServerCount);
     const mcpWarmupInProgress = Boolean(
         aggregatorStatus?.inProgress
         || configSyncStatus?.inProgress
         || warmingServerCount > 0
-        || (inventoryReady && configuredServerCount > 0 && liveServerCount < configuredServerCount),
+        || (!input.lazyMode && inventoryReady && configuredServerCount > 0 && liveServerCount < configuredServerCount),
     );
     const executionReady = Boolean(executionEnvironment?.ready);
     const claudeMemEnabled = Boolean(claudeMem?.enabled);
