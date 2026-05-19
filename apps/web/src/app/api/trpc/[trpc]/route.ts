@@ -1,3 +1,5 @@
+import { getCacheTTL, getCached, setCached } from '../cache';
+
 export const runtime = 'nodejs';
 
 const DEFAULT_UPSTREAM_TRPC_URL = 'http://127.0.0.1:4100/trpc';
@@ -255,6 +257,19 @@ async function handler(req: Request): Promise<Response> {
   const hasBody = req.method !== 'GET' && req.method !== 'HEAD';
   const body = hasBody ? await req.text() : undefined;
 
+  // Check tRPC response cache for frequently-polled procedures
+  const cacheTTL = getCacheTTL(procedurePath);
+  const cacheInput = new URL(req.url).searchParams.get('input') ?? '{}';
+  if (cacheTTL !== null && req.method === 'GET') {
+    const cached = getCached(procedurePath, cacheInput);
+    if (cached) {
+      return new Response(JSON.stringify(cached.data), {
+        status: cached.status,
+        headers: cached.headers,
+      });
+    }
+  }
+
   let upstreamResponse: Response;
   try {
     upstreamResponse = await fetch(upstreamUrl, {
@@ -290,6 +305,20 @@ async function handler(req: Request): Promise<Response> {
     responseHeaders.set('Connection', 'keep-alive');
     responseHeaders.set('Cache-Control', 'no-cache');
   }
+  // Cache the successful response for frequently-polled procedures
+  if (cacheTTL !== null && upstreamResponse.ok && req.method === 'GET') {
+    try {
+      const bodyClone = upstreamResponse.clone();
+      const bodyText = await bodyClone.text();
+      const responseData = JSON.parse(bodyText);
+      const headerObj: Record<string, string> = {};
+      responseHeaders.forEach((v, k) => { headerObj[k] = v; });
+      setCached(procedurePath, cacheInput, responseData, upstreamResponse.status, headerObj, cacheTTL);
+    } catch {
+      // Cache write failure is non-critical
+    }
+  }
+
   return new Response(upstreamResponse.body, {
     status: upstreamResponse.status,
     statusText: upstreamResponse.statusText,
