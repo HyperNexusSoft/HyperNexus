@@ -22,6 +22,9 @@ export function shouldIgnoreExpectedStartupError(errorLog: string): boolean {
         'econnrefused',
         'no connection could be made because the target machine actively refused it',
         'could not connect to a chroma server',
+    'cannot open database because the directory does not exist',
+    'bobbybookmarks db not found',
+    'borgingest',
     ];
 
     return ignoredFragments.some((fragment) => normalized.includes(fragment));

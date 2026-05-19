@@ -37,7 +37,10 @@ export class BobbyBookmarksSyncWorker {
 
     private async sync(): Promise<void> {
         try {
-            const db = new Database(this.dbPath, { readonly: true });
+            // Check if the database file exists before attempting to open it
+      const fs = await import('fs/promises');
+      try { await fs.access(this.dbPath); } catch { return; }
+      const db = new Database(this.dbPath, { readonly: true });
             
             // We just need the basic details from the local DB
             const rows = db.prepare(`SELECT * FROM bookmarks`).all() as any[];
