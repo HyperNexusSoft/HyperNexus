@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.0-alpha.62] - 2026-05-19
+
+### Added
+- **Deep Link Protocol Scheme (`hypercode://`) in Go**:
+  - Built robust URI handling for `hypercode://attach?session=ID` and `hypercode://create?cliType=aider` commands.
+  - Implemented single-instance CLI dispatcher. Clicking deep links routes actions through the active `borgd` daemon via HTTP REST.
+- **SQLite L2 Vector Vault Visualizer**:
+  - Implemented persistent database queries (`GetAllVaultRecords`) in Go fetching chronic vault memories ordered by importance and heat.
+  - Wired the new tRPC `vaultRecords` query to the Next.js control plane to hook persistent SQLite vector records into the UI.
+  - Re-designed the Healer dashboard in glassmorphic dark-mode, showing streaming active pathogens side-by-side with real persistent L2 Vault records.
+- **LLM Instruction Unification**:
+  - Resolved merge conflict markers and aligned role guidelines across `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `GPT.md`, and `copilot-instructions.md` under `docs/UNIVERSAL_LLM_INSTRUCTIONS.md`.
+
 ## [1.0.0-alpha.61] - 2026-05-17
 
 ### Added
