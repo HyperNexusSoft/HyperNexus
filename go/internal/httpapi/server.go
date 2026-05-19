@@ -10397,7 +10397,7 @@ func (s *Server) handleRuntimeStatus(w http.ResponseWriter, r *http.Request) {
 	supervisorBridgeAvailable := false
 	supervisorBridgeBase := ""
 	bridgeCtx, cancelBridge := context.WithTimeout(ctx, 2*time.Second)
-	bridgeResult, bridgeErr := interop.CallTRPCProcedure(bridgeCtx, s.cfg.MainLockPath(), "session.catalog", nil)
+	bridgeResult, bridgeErr := interop.CallTRPCProcedure(bridgeCtx, s.cfg.MainLockPath(), "health", nil)
 	cancelBridge()
 	if bridgeErr == nil {
 		supervisorBridgeAvailable = true

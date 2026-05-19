@@ -10,6 +10,7 @@ import (
 	"github.com/borghq/borg-go/internal/config"
 	"github.com/borghq/borg-go/internal/interop"
 	"github.com/borghq/borg-go/internal/memorystore"
+	"github.com/borghq/borg-go/internal/mesh"
 )
 
 type StartupBlockingReason struct {
@@ -44,19 +45,61 @@ func (s *Server) handleStartupStatus(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) buildStartupStatus(ctx context.Context) (StartupStatus, error) {
+	// Run all potentially slow operations in parallel
+	type upstreamCheck struct {
+		ready   bool
+		baseURL string
+	}
+	type meshResult struct {
+		status mesh.Status
+		err    error
+	}
+	type memoryResult struct {
+		status memorystore.StoreStatus
+		err    error
+	}
+
+	upstreamCh := make(chan upstreamCheck, 1)
+	supervisorCh := make(chan upstreamCheck, 1)
+	meshCh := make(chan meshResult, 1)
+	memoryCh := make(chan memoryResult, 1)
+
+	go func() {
+		r, b := s.checkUpstreamProcedure(ctx, "health", nil)
+		upstreamCh <- upstreamCheck{ready: r, baseURL: b}
+	}()
+	go func() {
+		r, b := s.checkUpstreamProcedure(ctx, "session.list", nil)
+		supervisorCh <- upstreamCheck{ready: r, baseURL: b}
+	}()
+	go func() {
+		s, err := s.mesh.Status(ctx)
+		meshCh <- meshResult{status: s, err: err}
+	}()
+	go func() {
+		s, err := memorystore.ReadStatus(s.cfg.WorkspaceRoot)
+		memoryCh <- memoryResult{status: s, err: err}
+	}()
+
+	// Collect results (all run in parallel, total time = slowest)
+	upstreamResult := <-upstreamCh
+	supervisorResult := <-supervisorCh
+	meshRes := <-meshCh
+	memoryRes := <-memoryCh
+
+	upstreamReady, upstreamBase := upstreamResult.ready, upstreamResult.baseURL
+	supervisorReady, supervisorBase := supervisorResult.ready, supervisorResult.baseURL
+
+	if meshRes.err != nil {
+		return StartupStatus{}, meshRes.err
+	}
+	if memoryRes.err != nil {
+		return StartupStatus{}, memoryRes.err
+	}
+
 	configStatus := config.Snapshot(s.cfg)
-	memoryStatus, err := memorystore.ReadStatus(s.cfg.WorkspaceRoot)
-	if err != nil {
-		return StartupStatus{}, err
-	}
-
-	meshStatus, err := s.mesh.Status(ctx)
-	if err != nil {
-		return StartupStatus{}, err
-	}
-
-	upstreamReady, upstreamBase := s.checkUpstreamProcedure(ctx, "mcpServers.list", nil)
-	supervisorReady, supervisorBase := s.checkUpstreamProcedure(ctx, "session.list", nil)
+	meshStatus := meshRes.status
+	memoryStatus := memoryRes.status
 	importedStats := s.importedSessionMaintenanceStats(ctx)
 
 	blockingReasons := make([]StartupBlockingReason, 0, 4)
@@ -146,29 +189,28 @@ func (s *Server) buildStartupStatus(ctx context.Context) (StartupStatus, error) 
 }
 
 func (s *Server) importedSessionMaintenanceStats(ctx context.Context) ImportedSessionMaintenanceStats {
+	// Fast path: use cached import scan results instead of calling TS core
+	candidates, cacheErr := s.scanValidatedImportSources()
+	if cacheErr == nil && len(candidates) > 0 {
+		// Check archived records for more detail
+		if archivedRecords, err := s.loadArchivedImportedSessionRecords(); err == nil && len(archivedRecords) > 0 {
+			return archivedImportedSessionMaintenanceStats(archivedRecords)
+		}
+		return ImportedSessionMaintenanceStats{
+			TotalSessions:                len(candidates),
+			InlineTranscriptCount:        0,
+			ArchivedTranscriptCount:      0,
+			MissingRetentionSummaryCount: 0,
+		}
+	}
+	// Slow path: try upstream
 	var stats ImportedSessionMaintenanceStats
 	if _, err := s.callUpstreamJSON(ctx, "session.importedMaintenanceStats", nil, &stats); err == nil {
 		return stats
 	}
-
-	if archivedRecords, err := s.loadArchivedImportedSessionRecords(); err == nil && len(archivedRecords) > 0 {
-		return archivedImportedSessionMaintenanceStats(archivedRecords)
-	}
-
 	// Ensure .borg/imported_sessions exists
 	_ = os.MkdirAll(filepath.Join(s.cfg.WorkspaceRoot, ".borg", "imported_sessions"), 0755)
-
-	candidates, err := s.scanValidatedImportSources()
-	if err != nil {
-		return ImportedSessionMaintenanceStats{}
-	}
-
-	return ImportedSessionMaintenanceStats{
-		TotalSessions:                len(candidates),
-		InlineTranscriptCount:        0,
-		ArchivedTranscriptCount:      0,
-		MissingRetentionSummaryCount: 0,
-	}
+	return ImportedSessionMaintenanceStats{}
 }
 
 func (s *Server) checkUpstreamProcedure(ctx context.Context, procedure string, payload any) (bool, string) {
