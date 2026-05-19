@@ -34,6 +34,20 @@ function cloneHeaders(req: Request): Headers {
 }
 
 function getCompatRoute(procedurePath: string, input: unknown): string | null {
+  // ── Go-native fast paths (cached, <5ms) ──
+  if (procedurePath === 'startupStatus') {
+    return '/api/startup/status';
+  }
+  if (procedurePath === 'mcp.getStatus') {
+    return '/api/mcp/status';
+  }
+  if (procedurePath === 'mcp.listServers') {
+    return '/api/mcp/servers';
+  }
+  if (procedurePath === 'session.list') {
+    return '/api/native/session/list';
+  }
+  // ── Billing (Go-native with local fallback) ──
   if (procedurePath === 'billing.getProviderQuotas') {
     return '/api/billing/provider-quotas';
   }
@@ -205,8 +219,37 @@ async function tryCompatFallback(req: Request, procedurePath: string): Promise<R
   });
 }
 
+/**
+ * Procedures that have fast Go-native implementations.
+ * These are served directly from the Go sidecar (<5ms) instead of
+ * proxying through the TS Core tRPC server (~100-300ms).
+ */
+const GO_NATIVE_PROCEDURES = new Set([
+  // Note: startupStatus omitted because tRPC returns much richer data
+  // (mcpAggregator details, executionEnvironment, etc.) that the Go
+  // sidecar doesn't provide. Go data is only suitable as fallback.
+  'mcp.getStatus',    // Go-native with caching (<5ms vs ~200ms)
+  'mcp.listServers',  // Go-native with local MCP config
+]);
+
 async function handler(req: Request): Promise<Response> {
   const procedurePath = getProcedurePath(req);
+
+  // Go-native fast path: serve from Go sidecar first (<5ms),
+  // fall back to tRPC upstream if Go sidecar is unavailable.
+  const firstProc = procedurePath.split(',')[0]?.trim() ?? '';
+  if (GO_NATIVE_PROCEDURES.has(firstProc)) {
+    const batchInput = parseBatchInput(req);
+    const compatPayload = await getCompatPayload(firstProc, batchInput['0'] ?? {});
+    if (compatPayload !== null) {
+      return new Response(
+        JSON.stringify([{ result: { data: compatPayload } }]),
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      );
+    }
+    // Go sidecar unavailable; fall through to tRPC upstream
+  }
+
   const upstreamUrl = buildUpstreamUrl(req);
   const headers = cloneHeaders(req);
   const hasBody = req.method !== 'GET' && req.method !== 'HEAD';
@@ -214,32 +257,22 @@ async function handler(req: Request): Promise<Response> {
 
   let upstreamResponse: Response;
   try {
-    console.log(`[TRPC-Proxy] Fetching from upstream: ${upstreamUrl.toString()} (${req.method})`);
     upstreamResponse = await fetch(upstreamUrl, {
       method: req.method,
       headers,
       body,
     });
-    console.log(`[TRPC-Proxy] Upstream responded: ${upstreamResponse.status} ${upstreamResponse.statusText}`);
   } catch (error) {
     const compatFallback = await tryCompatFallback(req, procedurePath);
     if (compatFallback) {
       console.warn(`[TRPC-Proxy] Using compat fallback for ${procedurePath} after upstream fetch failure`);
       return compatFallback;
     }
-
     const message = error instanceof Error ? error.message : String(error);
     console.error(`[TRPC-Proxy] Upstream fetch failed: ${message}`);
     return new Response(
-      JSON.stringify({
-        error: 'TRPC_UPSTREAM_UNAVAILABLE',
-        message,
-        upstream: upstreamUrl.toString(),
-      }),
-      {
-        status: 502,
-        headers: { 'content-type': 'application/json' },
-      },
+      JSON.stringify({ error: 'TRPC_UPSTREAM_UNAVAILABLE', message, upstream: upstreamUrl.toString() }),
+      { status: 502, headers: { 'content-type': 'application/json' } },
     );
   }
 
@@ -257,7 +290,6 @@ async function handler(req: Request): Promise<Response> {
     responseHeaders.set('Connection', 'keep-alive');
     responseHeaders.set('Cache-Control', 'no-cache');
   }
-
   return new Response(upstreamResponse.body, {
     status: upstreamResponse.status,
     statusText: upstreamResponse.statusText,
