@@ -18,7 +18,7 @@ _Last updated: 2026-05-20, version 1.0.0-alpha.62_
 
 ## P2 — Helpful but not urgent
 
-- [ ] **Intelligence Heatmap**: Create a 3D visualization of the L2 Vault using the embedding vectors.
+- [x] **Intelligence Heatmap**: Create a 3D visualization of the L2 Vault using the embedding vectors.
 - [x] **Skill Marketplace**: Implement the REST API for downloading community-contributed skills.
 - [x] **Decentralized Memory**: Scoping Phase for P2P memory sync using gossip protocols.
 
