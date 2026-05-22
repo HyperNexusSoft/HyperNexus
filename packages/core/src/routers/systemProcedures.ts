@@ -16,7 +16,7 @@ import { mcpServersRepository, toolsRepository } from '../db/repositories/index.
 import { buildStartupStatusSnapshot } from './startupStatus.js';
 import { detectLocalExecutionEnvironment } from '../services/execution-environment.js';
 import { getCachedToolInventory } from '../mcp/cachedToolInventory.js';
-import { readHypercodeStoreStatus } from './memoryRouter.hypercode.js';
+import { readBorgStoreStatus } from './memoryRouter.borg.js';
 import { summarizeCachedInventory } from './startupInventorySummary.js';
 import type { MemoryPipelineSummary } from '../services/memory/MemoryManager.js';
 import { mcpServerPool } from '../services/mcp-server-pool.service.js';
@@ -82,7 +82,7 @@ export const systemProcedures = {
         const memoryManager = (mcpServer as { memoryManager?: { getPipelineSummary?: () => MemoryPipelineSummary } }).memoryManager;
         const memoryPipelineSummary: MemoryPipelineSummary | null = memoryManager?.getPipelineSummary?.() ?? null;
 
-        const [runtimeServers, sessionCount, browserStatus, persistedServers, persistedTools, executionEnvironment, cachedInventory, claudeMemStoreStatus] = await Promise.all([
+        const [runtimeServers, sessionCount, browserStatus, persistedServers, persistedTools, executionEnvironment, cachedInventory, borgStoreStatus] = await Promise.all([
             aggregator?.listServers?.().catch(() => []) ?? [],
             Promise.resolve(sessionSupervisor?.listSessions?.().length ?? 0),
             Promise.resolve(browserService?.getStatus?.() ?? { active: false, pageCount: 0, pageIds: [] }),
@@ -90,7 +90,7 @@ export const systemProcedures = {
             toolsRepository.findAll().catch(() => []),
             getCachedExecutionEnvironment(),
             getCachedToolInventory().catch(() => ({ servers: [], tools: [], toolCounts: new Map(), source: 'empty' as const, snapshotUpdatedAt: null })),
-            readHypercodeStoreStatus(process.cwd(), memoryPipelineSummary).catch(() => null),
+            readBorgStoreStatus(process.cwd(), memoryPipelineSummary).catch(() => null),
         ]);
 
         const liveServerCount = runtimeServers.filter((server) => server.status === 'connected').length;
@@ -142,17 +142,17 @@ export const systemProcedures = {
             inventorySource: cachedInventorySummary.source,
             inventorySnapshotUpdatedAt: cachedInventorySummary.snapshotUpdatedAt,
             executionEnvironment: executionEnvironment?.summary ?? null,
-            claudeMem: claudeMemStoreStatus
+            borg: borgStoreStatus
                 ? {
-                    enabled: Boolean(claudeMemStoreStatus.runtimePipeline.claudeMemEnabled),
-                    storePath: claudeMemStoreStatus.storePath,
-                    storeExists: claudeMemStoreStatus.exists,
-                    totalEntries: claudeMemStoreStatus.totalEntries,
-                    sectionCount: claudeMemStoreStatus.sectionCount,
-                    defaultSectionCount: claudeMemStoreStatus.defaultSectionCount,
-                    presentDefaultSectionCount: claudeMemStoreStatus.presentDefaultSectionCount,
-                    missingSections: claudeMemStoreStatus.missingSections,
-                    lastUpdatedAt: claudeMemStoreStatus.lastUpdatedAt,
+                    enabled: Boolean(borgStoreStatus.runtimePipeline.borgEnabled),
+                    storePath: borgStoreStatus.storePath,
+                    storeExists: borgStoreStatus.exists,
+                    totalEntries: borgStoreStatus.totalEntries,
+                    sectionCount: borgStoreStatus.sectionCount,
+                    defaultSectionCount: borgStoreStatus.defaultSectionCount,
+                    presentDefaultSectionCount: borgStoreStatus.presentDefaultSectionCount,
+                    missingSections: borgStoreStatus.missingSections,
+                    lastUpdatedAt: borgStoreStatus.lastUpdatedAt,
                 }
                 : null,
         });

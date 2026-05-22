@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { SessionToolWorkingSet } from './borg-session-working-set.service.js';
+import { SessionToolWorkingSet } from './hypercode-session-working-set.service.js';
 
 describe('SessionToolWorkingSet', () => {
     it('uses tighter default limits for the session working set', () => {

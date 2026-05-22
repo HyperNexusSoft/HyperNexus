@@ -57,7 +57,7 @@ export type BorgOperatorGuidance = {
     tone: 'ready' | 'pending' | 'warning' | 'warming';
 };
 
-export const CLAUDE_MEM_CAPABILITIES: BorgCapability[] = [
+export const BORG_CAPABILITIES: BorgCapability[] = [
     {
         title: 'Schema-inspired borg adapter',
         status: 'shipped',
@@ -144,7 +144,7 @@ export const CLAUDE_MEM_CAPABILITIES: BorgCapability[] = [
     },
 ];
 
-export const CLAUDE_MEM_IMPLEMENTATION_FILES = [
+export const BORG_IMPLEMENTATION_FILES = [
     {
         label: 'Current adapter implementation',
         path: 'packages/core/src/services/memory/BorgAdapter.ts',
@@ -254,9 +254,9 @@ export function getBorgStatusSummary(
     startupStatus?: BorgStartupSummary | null,
     installSurfaceArtifacts?: BorgInstallSurfaceArtifact[] | null,
 ): BorgStatusSummary {
-    const shippedCount = CLAUDE_MEM_CAPABILITIES.filter((item) => item.status === 'shipped').length;
-    const partialCount = CLAUDE_MEM_CAPABILITIES.filter((item) => item.status === 'partial').length;
-    const missingCount = CLAUDE_MEM_CAPABILITIES.filter((item) => item.status === 'missing').length;
+    const shippedCount = BORG_CAPABILITIES.filter((item) => item.status === 'shipped').length;
+    const partialCount = BORG_CAPABILITIES.filter((item) => item.status === 'partial').length;
+    const missingCount = BORG_CAPABILITIES.filter((item) => item.status === 'missing').length;
     const coreReady = Boolean(startupStatus?.ready);
     const startupPendingChecks = getPendingStartupChecks(startupStatus);
     const installArtifactPendingChecks = startupStatus && !hasStartupInstallArtifactCheck(startupStatus)

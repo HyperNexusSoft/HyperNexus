@@ -1,4 +1,4 @@
-export interface hypercodeLogEntry {
+export interface HypercodeLogEntry {
     id: string;
     timestamp: Date;
     serverName: string;
@@ -7,18 +7,18 @@ export interface hypercodeLogEntry {
     error?: string;
 }
 
-class hypercodeLogStore {
-    private logs: hypercodeLogEntry[] = [];
+class HypercodeLogStore {
+    private logs: HypercodeLogEntry[] = [];
     private readonly maxLogs = 1000; // Keep only the last 1000 logs
-    private readonly listeners: Set<(log: hypercodeLogEntry) => void> = new Set();
+    private readonly listeners: Set<(log: HypercodeLogEntry) => void> = new Set();
 
     addLog(
         serverName: string,
-        level: hypercodeLogEntry["level"],
+        level: HypercodeLogEntry["level"],
         message: string,
         error?: unknown,
     ) {
-        const logEntry: hypercodeLogEntry = {
+        const logEntry: HypercodeLogEntry = {
             id: crypto.randomUUID(),
             timestamp: new Date(),
             serverName,
@@ -63,7 +63,7 @@ class hypercodeLogStore {
         });
     }
 
-    getLogs(limit?: number): hypercodeLogEntry[] {
+    getLogs(limit?: number): HypercodeLogEntry[] {
         const logsToReturn = limit ? this.logs.slice(-limit) : this.logs;
         return [...logsToReturn].reverse(); // Return newest first
     }
@@ -72,7 +72,7 @@ class hypercodeLogStore {
         this.logs = [];
     }
 
-    addListener(listener: (log: hypercodeLogEntry) => void): () => void {
+    addListener(listener: (log: HypercodeLogEntry) => void): () => void {
         this.listeners.add(listener);
         return () => this.listeners.delete(listener);
     }
@@ -83,4 +83,4 @@ class hypercodeLogStore {
 }
 
 // Singleton instance
-export const hypercodeLogStore = new hypercodeLogStore();
+export const hypercodeLogStore = new HypercodeLogStore();

@@ -12,7 +12,7 @@
 
 import { z } from "zod";
 
-export const MetaMcpLogEntrySchema = z.object({
+export const BorgLogEntrySchema = z.object({
     id: z.string(),
     timestamp: z.date(),
     serverName: z.string().optional(), // Now derived from tool_name prefix or similar
@@ -37,7 +37,7 @@ export const GetLogsRequestSchema = z.object({
 
 export const GetLogsResponseSchema = z.object({
     success: z.literal(true),
-    data: z.array(MetaMcpLogEntrySchema),
+    data: z.array(BorgLogEntrySchema),
     totalCount: z.number(),
 });
 
@@ -70,7 +70,7 @@ export const GetDockerLogsResponseSchema = z.object({
     lines: z.array(z.string()),
 });
 
-export type MetaMcpLogEntry = z.infer<typeof MetaMcpLogEntrySchema>;
+export type BorgLogEntry = z.infer<typeof BorgLogEntrySchema>;
 export type GetLogsRequest = z.infer<typeof GetLogsRequestSchema>;
 export type GetLogsResponse = z.infer<typeof GetLogsResponseSchema>;
 export type ClearLogsResponse = z.infer<typeof ClearLogsResponseSchema>;

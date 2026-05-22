@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { CLAUDE_MEM_CAPABILITIES, getBorgOperatorGuidance, getBorgStatusSummary } from './borg-status';
+import { BORG_CAPABILITIES, getBorgOperatorGuidance, getBorgStatusSummary } from './borg-status';
 
 describe('borg status helpers', () => {
     it('summarizes the current Hypercode borg parity state honestly', () => {
@@ -8,9 +8,9 @@ describe('borg status helpers', () => {
             { id: 'browser-extension-chromium', status: 'ready' },
             { id: 'browser-extension-firefox', status: 'ready' },
         ])).toEqual({
-            shippedCount: CLAUDE_MEM_CAPABILITIES.filter((item) => item.status === 'shipped').length,
-            partialCount: CLAUDE_MEM_CAPABILITIES.filter((item) => item.status === 'partial').length,
-            missingCount: CLAUDE_MEM_CAPABILITIES.filter((item) => item.status === 'missing').length,
+            shippedCount: BORG_CAPABILITIES.filter((item) => item.status === 'shipped').length,
+            partialCount: BORG_CAPABILITIES.filter((item) => item.status === 'partial').length,
+            missingCount: BORG_CAPABILITIES.filter((item) => item.status === 'missing').length,
             stage: 'compatibility-layer',
             stageLabel: 'Compatibility layer',
             coreReady: true,

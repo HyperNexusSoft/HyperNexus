@@ -35,7 +35,7 @@ import { toolsSyncCache } from "./tools-sync-cache.service.js";
 import { parseToolName } from "./tool-name-parser.service.js";
 import { sanitizeName } from "./common-utils.js";
 import { getAgentMemoryService, getMcpServer } from "../lib/trpc-core.js";
-import { SessionToolWorkingSet } from "./borg-session-working-set.service.js";
+import { SessionToolWorkingSet } from "./hypercode-session-working-set.service.js";
 import { getCompatibilityToolDefinitions } from "../mcp/compatibilityToolDefinitions.js";
 import { getToolLoadingDefinitions } from "../mcp/toolLoadingDefinitions.js";
 import {

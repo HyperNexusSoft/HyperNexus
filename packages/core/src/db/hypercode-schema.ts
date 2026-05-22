@@ -225,7 +225,7 @@ export const verificationsTable = sqliteTable("verifications", {
         .default(sql`(strftime('%s', 'now'))`),
 });
 
-// -- CORE METAMCP TABLES --
+// -- CORE BORG TABLES --
 
 /**
  * Table: namespaces
