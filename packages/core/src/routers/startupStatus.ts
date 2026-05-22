@@ -4,11 +4,11 @@ import path from 'node:path';
 import type { RegisteredBridgeClient } from '../bridge/bridge-manifest.js';
 import type { ExecutionEnvironmentSummary } from '../services/execution-environment.js';
 
-let borgVersionPromise: Promise<string> | null = null;
+let hypercodeVersionPromise: Promise<string> | null = null;
 
-async function getBorgVersion(): Promise<string> {
-    if (!borgVersionPromise) {
-        borgVersionPromise = (async () => {
+async function getHypercodeVersion(): Promise<string> {
+    if (!hypercodeVersionPromise) {
+        hypercodeVersionPromise = (async () => {
             try {
                 const version = await readFile(path.join(process.cwd(), 'VERSION'), 'utf-8');
                 const trimmed = version.trim();
@@ -32,7 +32,7 @@ async function getBorgVersion(): Promise<string> {
         })();
     }
 
-    return borgVersionPromise;
+    return hypercodeVersionPromise;
 }
 
 type StartupStatusInput = {
@@ -87,7 +87,7 @@ type StartupStatusInput = {
     inventorySource?: 'database' | 'config' | 'empty';
     inventorySnapshotUpdatedAt?: string | null;
     executionEnvironment?: ExecutionEnvironmentSummary | null;
-    claudeMem?: {
+    borg?: {
         enabled: boolean;
         storePath: string | null;
         storeExists: boolean;
@@ -106,7 +106,7 @@ type StartupBlockingReasonCode =
     | 'mcp_resident_runtime_not_ready'
     | 'mcp_config_sync_pending'
     | 'memory_not_ready'
-    | 'claude_mem_not_ready'
+    | 'borg_not_ready'
     | 'browser_service_not_ready'
     | 'session_restore_not_ready'
     | 'extension_bridge_not_ready'
@@ -138,7 +138,7 @@ export async function buildStartupStatusSnapshot(input: StartupStatusInput) {
         inventorySource,
         inventorySnapshotUpdatedAt,
         executionEnvironment,
-        claudeMem,
+        borg,
     } = input;
     const mcpServerRuntime = mcpServer as {
         memoryManager?: unknown;
@@ -199,12 +199,12 @@ export async function buildStartupStatusSnapshot(input: StartupStatusInput) {
         || (!input.lazyMode && inventoryReady && configuredServerCount > 0 && liveServerCount < configuredServerCount),
     );
     const executionReady = Boolean(executionEnvironment?.ready);
-    const claudeMemEnabled = Boolean(claudeMem?.enabled);
-    const claudeMemStoreExists = Boolean(claudeMem?.storeExists);
-    const claudeMemDefaultSectionsReady = claudeMemEnabled
-        ? Number(claudeMem?.presentDefaultSectionCount ?? 0) >= Number(claudeMem?.defaultSectionCount ?? 0)
+    const borgEnabled = Boolean(borg?.enabled);
+    const borgStoreExists = Boolean(borg?.storeExists);
+    const borgDefaultSectionsReady = borgEnabled
+        ? Number(borg?.presentDefaultSectionCount ?? 0) >= Number(borg?.defaultSectionCount ?? 0)
         : true;
-    const claudeMemReady = !claudeMemEnabled || (claudeMemStoreExists && claudeMemDefaultSectionsReady);
+    const borgReady = !borgEnabled || (borgStoreExists && borgDefaultSectionsReady);
 
     const blockingReasons: StartupBlockingReason[] = [];
 
@@ -249,12 +249,12 @@ export async function buildStartupStatusSnapshot(input: StartupStatusInput) {
         });
     }
 
-    if (!claudeMemReady) {
+    if (!borgReady) {
         blockingReasons.push({
-            code: 'claude_mem_not_ready',
-            detail: !claudeMemStoreExists
-                ? 'claude-mem store has not been created yet.'
-                : 'claude-mem default sections are still being seeded.',
+            code: 'borg_not_ready',
+            detail: !borgStoreExists
+                ? 'hypercode store has not been created yet.'
+                : 'hypercode default sections are still being seeded.',
         });
     }
 
@@ -290,13 +290,13 @@ export async function buildStartupStatusSnapshot(input: StartupStatusInput) {
         ? 'All startup checks passed.'
         : `Startup pending: ${blockingReasons.map((reason) => reason.detail).join(' ')}`;
 
-    const version = await getBorgVersion();
+    const version = await getHypercodeVersion();
 
     return {
         status: 'running',
         ready: residentReady
             && memoryReady
-            && claudeMemReady
+            && borgReady
             && browserReady
             && sessionReady
             && bridgeReady
@@ -343,30 +343,30 @@ export async function buildStartupStatusSnapshot(input: StartupStatusInput) {
                 ready: memoryReady,
                 initialized: memoryInitialized,
                 agentMemory: Boolean(agentMemory),
-                claudeMem: {
-                    ready: claudeMemReady,
-                    enabled: claudeMemEnabled,
-                    storeExists: claudeMemStoreExists,
-                    storePath: claudeMem?.storePath ?? null,
-                    totalEntries: Number(claudeMem?.totalEntries ?? 0),
-                    sectionCount: Number(claudeMem?.sectionCount ?? 0),
-                    defaultSectionCount: Number(claudeMem?.defaultSectionCount ?? 0),
-                    presentDefaultSectionCount: Number(claudeMem?.presentDefaultSectionCount ?? 0),
-                    missingSections: claudeMem?.missingSections ?? [],
-                    lastUpdatedAt: claudeMem?.lastUpdatedAt ?? null,
+                borg: {
+                    ready: borgReady,
+                    enabled: borgEnabled,
+                    storeExists: borgStoreExists,
+                    storePath: borg?.storePath ?? null,
+                    totalEntries: Number(borg?.totalEntries ?? 0),
+                    sectionCount: Number(borg?.sectionCount ?? 0),
+                    defaultSectionCount: Number(borg?.defaultSectionCount ?? 0),
+                    presentDefaultSectionCount: Number(borg?.presentDefaultSectionCount ?? 0),
+                    missingSections: borg?.missingSections ?? [],
+                    lastUpdatedAt: borg?.lastUpdatedAt ?? null,
                 },
             },
-            claudeMem: {
-                ready: claudeMemReady,
-                enabled: claudeMemEnabled,
-                storeExists: claudeMemStoreExists,
-                storePath: claudeMem?.storePath ?? null,
-                totalEntries: Number(claudeMem?.totalEntries ?? 0),
-                sectionCount: Number(claudeMem?.sectionCount ?? 0),
-                defaultSectionCount: Number(claudeMem?.defaultSectionCount ?? 0),
-                presentDefaultSectionCount: Number(claudeMem?.presentDefaultSectionCount ?? 0),
-                missingSections: claudeMem?.missingSections ?? [],
-                lastUpdatedAt: claudeMem?.lastUpdatedAt ?? null,
+            borg: {
+                ready: borgReady,
+                enabled: borgEnabled,
+                storeExists: borgStoreExists,
+                storePath: borg?.storePath ?? null,
+                totalEntries: Number(borg?.totalEntries ?? 0),
+                sectionCount: Number(borg?.sectionCount ?? 0),
+                defaultSectionCount: Number(borg?.defaultSectionCount ?? 0),
+                presentDefaultSectionCount: Number(borg?.presentDefaultSectionCount ?? 0),
+                missingSections: borg?.missingSections ?? [],
+                lastUpdatedAt: borg?.lastUpdatedAt ?? null,
             },
             browser: {
                 ready: browserReady,

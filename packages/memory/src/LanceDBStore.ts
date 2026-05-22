@@ -72,16 +72,34 @@ export class LanceDBStore implements IVectorStore {
 
     async addMemory(content: string, metadata: any) {
         const vector = await this.createEmbeddings(content);
-        const data = [{ vector, text: content, ...metadata, heat_score: metadata.heat_score ?? 50, last_accessed_at: Date.now(), timestamp: Date.now() }];
+        const { heat_score, last_accessed_at, timestamp, ...rest } = metadata;
+        
+        const data = [{ 
+            vector, 
+            text: content,
+            heat_score: heat_score ?? 50, 
+            last_accessed_at: last_accessed_at ?? Date.now(), 
+            timestamp: timestamp ?? Date.now(),
+            metadata: JSON.stringify(rest)
+        }];
         const table = await this.ensureTable(data);
         await table.add(data);
     }
 
     async addDocuments(docs: any[]) {
-        const processed = await Promise.all(docs.map(async d => ({
-            ...d, vector: d.vector || await this.createEmbeddings(d.text || d.content),
-            heat_score: d.heat_score ?? 50, last_accessed_at: d.last_accessed_at ?? Date.now(), timestamp: d.timestamp || Date.now()
-        })));
+        const processed = await Promise.all(docs.map(async d => {
+            const { vector, text, content, heat_score, last_accessed_at, timestamp, metadata, ...rest } = d;
+            const finalMetadata = { ...(metadata || {}), ...rest };
+            
+            return {
+                vector: vector || await this.createEmbeddings(text || content),
+                text: text || content,
+                heat_score: heat_score ?? 50, 
+                last_accessed_at: last_accessed_at ?? Date.now(), 
+                timestamp: timestamp ?? Date.now(),
+                metadata: JSON.stringify(finalMetadata)
+            };
+        }));
         const table = await this.ensureTable(processed);
         await table.add(processed);
     }
