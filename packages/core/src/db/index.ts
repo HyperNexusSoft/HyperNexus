@@ -541,6 +541,115 @@ function initializeSchema(database: InstanceType<typeof Database>): void {
     } catch (err) {
         console.warn("[DB Migration] Failed to alter mcp_servers table:", err);
     }
+
+    // Add remaining schema tables (browser, tool-chains, workflows, council, published catalog)
+    try {
+        const allTables = new Set(
+            (database.pragma("table_list") as Array<{ name: string }>).map((t) => t.name)
+        );
+        const missingTableMigrations: Array<string> = [];
+        if (!allTables.has("browser_history")) missingTableMigrations.push(
+            `CREATE TABLE IF NOT EXISTS browser_history (
+                id TEXT PRIMARY KEY, url TEXT NOT NULL, title TEXT NOT NULL,
+                domain TEXT NOT NULL, visited_at INTEGER NOT NULL, visit_count INTEGER NOT NULL DEFAULT 1
+            ); CREATE INDEX IF NOT EXISTS bh_domain_idx ON browser_history(domain);
+            CREATE INDEX IF NOT EXISTS bh_visited_at_idx ON browser_history(visited_at);`
+        );
+        if (!allTables.has("browser_console_logs")) missingTableMigrations.push(
+            `CREATE TABLE IF NOT EXISTS browser_console_logs (
+                id TEXT PRIMARY KEY, level TEXT NOT NULL, message TEXT NOT NULL,
+                source TEXT NOT NULL, url TEXT, line_number INTEGER, timestamp INTEGER NOT NULL
+            ); CREATE INDEX IF NOT EXISTS bcl_level_idx ON browser_console_logs(level);
+            CREATE INDEX IF NOT EXISTS bcl_timestamp_idx ON browser_console_logs(timestamp);`
+        );
+        if (!allTables.has("web_memories")) missingTableMigrations.push(
+            `CREATE TABLE IF NOT EXISTS web_memories (
+                id TEXT PRIMARY KEY, url TEXT NOT NULL, normalized_url TEXT NOT NULL,
+                title TEXT NOT NULL, content TEXT NOT NULL, selected_text TEXT,
+                tags TEXT NOT NULL DEFAULT '[]', favicon TEXT, source TEXT NOT NULL,
+                content_hash TEXT NOT NULL, saved_at INTEGER NOT NULL DEFAULT (strftime('%s','now'))
+            ); CREATE INDEX IF NOT EXISTS wm_url_idx ON web_memories(url);
+            CREATE INDEX IF NOT EXISTS wm_normalized_url_idx ON web_memories(normalized_url);
+            CREATE INDEX IF NOT EXISTS wm_saved_at_idx ON web_memories(saved_at);`
+        );
+        if (!allTables.has("tool_chains")) missingTableMigrations.push(
+            `CREATE TABLE IF NOT EXISTS tool_chains (
+                id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT,
+                trigger_pattern TEXT, created_at INTEGER NOT NULL DEFAULT (strftime('%s','now'))
+            ); CREATE INDEX IF NOT EXISTS tc_name_idx ON tool_chains(name);`
+        );
+        if (!allTables.has("tool_chain_steps")) missingTableMigrations.push(
+            `CREATE TABLE IF NOT EXISTS tool_chain_steps (
+                id TEXT PRIMARY KEY, chain_id TEXT NOT NULL, step_order INTEGER NOT NULL,
+                tool_name TEXT NOT NULL, arguments_template TEXT NOT NULL DEFAULT '{}',
+                timeout_ms INTEGER, failure_policy TEXT NOT NULL DEFAULT 'abort',
+                retry_count INTEGER NOT NULL DEFAULT 0
+            ); CREATE INDEX IF NOT EXISTS tcs_chain_id_idx ON tool_chain_steps(chain_id);`
+        );
+        if (!allTables.has("tool_aliases")) missingTableMigrations.push(
+            `CREATE TABLE IF NOT EXISTS tool_aliases (
+                alias TEXT PRIMARY KEY, target_tool TEXT NOT NULL, description TEXT,
+                default_arguments TEXT NOT NULL DEFAULT '{}',
+                created_at INTEGER NOT NULL DEFAULT (strftime('%s','now'))
+            ); CREATE INDEX IF NOT EXISTS ta_target_tool_idx ON tool_aliases(target_tool);`
+        );
+        if (!allTables.has("workflows")) missingTableMigrations.push(
+            `CREATE TABLE IF NOT EXISTS workflows (
+                id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT,
+                nodes_json TEXT NOT NULL DEFAULT '[]', edges_json TEXT NOT NULL DEFAULT '[]',
+                created_at INTEGER NOT NULL DEFAULT (strftime('%s','now')),
+                updated_at INTEGER NOT NULL DEFAULT (strftime('%s','now')), user_id TEXT
+            );`
+        );
+        if (!allTables.has("council_workspaces")) missingTableMigrations.push(
+            `CREATE TABLE IF NOT EXISTS council_workspaces (
+                id TEXT PRIMARY KEY, name TEXT NOT NULL, path TEXT NOT NULL,
+                status TEXT NOT NULL DEFAULT 'active', config TEXT NOT NULL DEFAULT '{}',
+                description TEXT, created_at INTEGER NOT NULL DEFAULT (strftime('%s','now')),
+                updated_at INTEGER NOT NULL DEFAULT (strftime('%s','now'))
+            ); CREATE INDEX IF NOT EXISTS idx_council_workspaces_status ON council_workspaces(status);`
+        );
+        if (!allTables.has("published_mcp_server_sources")) missingTableMigrations.push(
+            `CREATE TABLE IF NOT EXISTS published_mcp_server_sources (
+                uuid TEXT PRIMARY KEY, server_uuid TEXT NOT NULL, source_name TEXT NOT NULL,
+                source_url TEXT, raw_payload TEXT,
+                first_seen_at INTEGER NOT NULL DEFAULT (strftime('%s','now')),
+                last_seen_at INTEGER NOT NULL DEFAULT (strftime('%s','now'))
+            ); CREATE INDEX IF NOT EXISTS pmss_server_uuid_idx ON published_mcp_server_sources(server_uuid);
+            CREATE INDEX IF NOT EXISTS pmss_source_name_idx ON published_mcp_server_sources(source_name);
+            CREATE UNIQUE INDEX IF NOT EXISTS pmss_unique_server_source_idx ON published_mcp_server_sources(server_uuid, source_name);`
+        );
+        if (!allTables.has("published_mcp_config_recipes")) missingTableMigrations.push(
+            `CREATE TABLE IF NOT EXISTS published_mcp_config_recipes (
+                uuid TEXT PRIMARY KEY, server_uuid TEXT NOT NULL, recipe_version INTEGER NOT NULL DEFAULT 1,
+                template TEXT NOT NULL, required_secrets TEXT NOT NULL DEFAULT '[]',
+                required_env TEXT NOT NULL DEFAULT '{}', confidence INTEGER NOT NULL DEFAULT 0,
+                explanation TEXT, is_active INTEGER NOT NULL DEFAULT 1,
+                generated_by TEXT NOT NULL DEFAULT 'Configurator',
+                created_at INTEGER NOT NULL DEFAULT (strftime('%s','now')),
+                updated_at INTEGER NOT NULL DEFAULT (strftime('%s','now'))
+            );`
+        );
+        if (!allTables.has("published_mcp_validation_runs")) missingTableMigrations.push(
+            `CREATE TABLE IF NOT EXISTS published_mcp_validation_runs (
+                uuid TEXT PRIMARY KEY, server_uuid TEXT NOT NULL, run_mode TEXT NOT NULL,
+                started_at INTEGER NOT NULL DEFAULT (strftime('%s','now')),
+                finished_at INTEGER, outcome TEXT NOT NULL DEFAULT 'pending',
+                failure_class TEXT, tool_count INTEGER, findings_summary TEXT,
+                performed_by TEXT NOT NULL DEFAULT 'Verifier',
+                created_at INTEGER NOT NULL DEFAULT (strftime('%s','now'))
+            ); CREATE INDEX IF NOT EXISTS pmvr_server_uuid_idx ON published_mcp_validation_runs(server_uuid);
+            CREATE INDEX IF NOT EXISTS pmvr_outcome_idx ON published_mcp_validation_runs(outcome);`
+        );
+        if (missingTableMigrations.length > 0) {
+            for (const sql of missingTableMigrations) {
+                database.exec(sql);
+            }
+            console.info(`[DB Migration] Created ${missingTableMigrations.length} additional missing tables.`);
+        }
+    } catch (err) {
+        console.warn("[DB Migration] Failed to create additional tables:", err);
+    }
 }
 
 // Default to SQLite local file
