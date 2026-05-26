@@ -233,6 +233,7 @@ export class MCPAggregator {
             state.status = 'error';
             state.warmupStatus = state.advertisedAlwaysOn ? 'failed' : state.warmupStatus;
             state.lastError = error instanceof Error ? error.message : String(error);
+      state.lastErrorAt = this.now();
             console.error(`[MCPAggregator] ❌ Failed to connect to ${name}:`, error);
         }
     }
@@ -246,6 +247,12 @@ export class MCPAggregator {
         }
 
         for (const [serverName] of this.getEnabledServerEntries()) {
+            // Skip servers that recently failed to avoid blocking on every tool call.
+            const serverState = this.serverStates.get(serverName);
+            if (serverState && serverState.status === 'error' && serverState.lastErrorAt) {
+                const timeSinceError = this.now() - serverState.lastErrorAt;
+                if (timeSinceError < 120_000) continue; // Cool-down: skip for 2 minutes
+            }
             const client = await this.ensureConnectedClient(serverName);
             const tools = await this.listToolsForServer(serverName, client);
             if (tools.find((tool) => tool.name === name)) {
@@ -266,6 +273,12 @@ export class MCPAggregator {
             // this path is only hit as a last resort where the cache is empty.
             if (this.lazyMode && !this.clients.has(serverName)) {
                 continue;
+            }
+            // Skip servers in error state (recently failed) to avoid blocking.
+            const aggServerState = this.serverStates.get(serverName);
+            if (aggServerState && aggServerState.status === 'error' && aggServerState.lastErrorAt) {
+                const timeSinceError = this.now() - aggServerState.lastErrorAt;
+                if (timeSinceError < 120_000) continue;
             }
 
             const client = await this.ensureConnectedClient(serverName);
@@ -397,14 +410,6 @@ export class MCPAggregator {
             throw new Error(`Tool '${name}' not found in any connected MCP server.`);
         }
 
-        // Skip servers that recently failed to avoid re-blocking on every call.
-        // Allow retry after 2 minutes to recover from transient failures.
-        if (state.status === 'error' && state.lastError) {
-        const timeSinceError = Date.now() - (state.lastConnectedAt ?? 0);
-        if (timeSinceError < 120_000) {
-        throw new Error("Server '" + name + "' is in error state: " + state.lastError);
-        }
-        }
         await this.connectToServer(name, state.config);
         const connectedClient = this.clients.get(name);
         if (!connectedClient) {

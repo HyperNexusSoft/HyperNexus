@@ -1,13 +1,4 @@
 {
-  "test_stdio_import": {
-    "command": "npx",
-    "args": [
-      "-y",
-      "@modelcontextprotocol/server-memory"
-    ],
-    "env": {},
-    "enabled": true
-  },
   "filesystem": {
     "command": "npx",
     "args": [
