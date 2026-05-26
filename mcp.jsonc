@@ -684,14 +684,7 @@
       ],
       "env": []
     },
-    "test_stdio_import": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-memory"
-      ],
-      "env": []
-    },
+    "test_stdio_import": { "command": "echo", "args": ["disabled"], "enabled": false },
     "serena": {
       "command": "uvx",
       "args": [

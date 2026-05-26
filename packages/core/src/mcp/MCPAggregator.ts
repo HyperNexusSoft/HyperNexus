@@ -34,6 +34,9 @@ export class MCPAggregator {
     private readonly now: () => number;
     private readonly serverStates: Map<string, MCPServerState> = new Map();
     private readonly trafficInspector: MCPTrafficInspector;
+  /** Connection timeout per server (ms). Prevents a single broken downstream
+   *  server from blocking the entire aggregator for 60+ seconds. */
+  private readonly connectTimeoutMs: number;
     // When true, listAggregatedTools() skips unconnected servers to avoid eager
     // binary spawning. Set via setLazyMode() once the lifecycle mode is known.
     private lazyMode: boolean = false;
@@ -63,6 +66,7 @@ export class MCPAggregator {
             env: config.env ?? {},
         }));
         this.restartDelayMs = normalizedOptions.restartDelayMs ?? 5_000;
+    this.connectTimeoutMs = 15_000; // 15s per-server connection timeout
         this.now = normalizedOptions.now ?? (() => Date.now());
         this.trafficInspector = new MCPTrafficInspector(normalizedOptions.maxTrafficEvents ?? 200);
         this.lazyMode = Boolean(normalizedOptions.lazyMode);
@@ -212,7 +216,13 @@ export class MCPAggregator {
             }
 
             const client = this.createClient(name, config);
-            await client.connect();
+            // Race the connection against a timeout so a single broken server
+            // (e.g. npx failing due to SSL) doesn't block the entire aggregator.
+            const connectPromise = client.connect();
+            const timeoutPromise = new Promise<void>((_, reject) =>
+            setTimeout(() => reject(new Error("Connection to '" + name + "' timed out after " + this.connectTimeoutMs + "ms")), this.connectTimeoutMs)
+            );
+            await Promise.race([connectPromise, timeoutPromise]);
             this.clients.set(name, client);
             state.status = 'connected';
             state.lastConnectedAt = this.now();
@@ -387,6 +397,14 @@ export class MCPAggregator {
             throw new Error(`Tool '${name}' not found in any connected MCP server.`);
         }
 
+        // Skip servers that recently failed to avoid re-blocking on every call.
+        // Allow retry after 2 minutes to recover from transient failures.
+        if (state.status === 'error' && state.lastError) {
+        const timeSinceError = Date.now() - (state.lastConnectedAt ?? 0);
+        if (timeSinceError < 120_000) {
+        throw new Error("Server '" + name + "' is in error state: " + state.lastError);
+        }
+        }
         await this.connectToServer(name, state.config);
         const connectedClient = this.clients.get(name);
         if (!connectedClient) {
