@@ -10,6 +10,7 @@ import {
     executeCompatibleSearchMemory,
     executeCompatibleSaveMemory,
     executeCompatibleSaveScript,
+executeSemanticAutoCall,
 } from './compatibilityToolRuntime.js';
 import { getAllowedToolsMetadataGuardResult } from './toolAccessGuards.js';
 import { executeSavedScriptTool, listSavedScriptTools } from './savedScriptExecution.js';
@@ -181,6 +182,31 @@ export async function tryHandleDirectModeCompatibilityTool(
         );
     }
 
+    if (name === 'auto_call_tool') {
+        if (!delegatedToolCaller) {
+            return { isError: true, content: [{ type: 'text', text: 'auto_call_tool is not available in this session context (no tool delegate).' }] };
+        }
+        const objective = typeof args.objective === 'string' ? args.objective : '';
+        if (!objective) {
+            return { isError: true, content: [{ type: 'text', text: 'Objective is required for auto_call_tool.' }] };
+        }
+        // Simple keyword-based tool search fallback when no LLM is available
+        const cached = (nativeSessionMetaTools as any).getCachedAdvertisedDownstreamTools?.() ?? [];
+        const candidates = cached.filter((t: any) =>
+            t.name.toLowerCase().includes(objective.toLowerCase()) ||
+            (t.description ?? '').toLowerCase().includes(objective.toLowerCase())
+        ).slice(0, 5);
+        if (candidates.length === 0) {
+            return { isError: true, content: [{ type: 'text', text: 'No tools found matching the objective.' }] };
+        }
+        const topCandidate = candidates[0];
+        try {
+            const result = await delegatedToolCaller(topCandidate.name, args, { source: 'auto_call_tool' });
+            return { isError: false, content: [{ type: 'text', text: JSON.stringify(result) }] };
+        } catch (err) {
+            return { isError: true, content: [{ type: 'text', text: 'auto_call_tool failed: ' + (err instanceof Error ? err.message : String(err)) }] };
+        }
+    }
     return await executeSavedScriptTool(name, savedScriptStore);
 }
 function isErrorLike(value: unknown): boolean {

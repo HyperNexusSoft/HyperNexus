@@ -169,6 +169,26 @@ export class NativeSessionMetaTools {
         if (name === 'list_loaded_tools') {
             return await executeListLoadedToolsCompatibility(this.workingSet);
         }
+        if (name === 'set_capacity') {
+            const maxLoadedTools = typeof args.maxLoadedTools === 'number' ? args.maxLoadedTools : undefined;
+            const maxHydratedSchemas = typeof args.maxHydratedSchemas === 'number' ? args.maxHydratedSchemas : undefined;
+            const idleEvictionThresholdMs = typeof args.idleEvictionThresholdMs === 'number' ? args.idleEvictionThresholdMs : undefined;
+            this.workingSet.reconfigure({
+                maxLoadedTools: maxLoadedTools ?? this.workingSet.getLimits().maxLoadedTools,
+                maxHydratedSchemas: maxHydratedSchemas ?? this.workingSet.getLimits().maxHydratedSchemas,
+                idleEvictionThresholdMs: idleEvictionThresholdMs ?? this.workingSet.getLimits().idleEvictionThresholdMs,
+            });
+            const limits = this.workingSet.getLimits();
+            return createTextResult(`Capacity updated: maxLoadedTools=${limits.maxLoadedTools}, maxHydratedSchemas=${limits.maxHydratedSchemas}, idleEvictionThresholdMs=${limits.idleEvictionThresholdMs}`);
+        }
+        if (name === 'get_eviction_history') {
+            const history = this.workingSet.getEvictionHistory();
+            return createTextResult(JSON.stringify(history));
+        }
+        if (name === 'clear_eviction_history') {
+            this.workingSet.clearEvictionHistory();
+            return createTextResult('Cleared eviction history.');
+        }
 
         return null;
     }
