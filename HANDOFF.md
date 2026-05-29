@@ -1,28 +1,24 @@
-# Handoff - v1.0.0-alpha.66
+# Handoff - v1.0.0-alpha.67
 
 ## Summary
-Successfully identified and resolved two critical architectural issues within the MCP server integration layers:
-1. **Bootstrap Caching Race Condition**: Added a standard Model Context Protocol `notifications/tools/list_changed` event in `server-stdio.ts` triggered immediately upon full Phase 2 server initialization. This instructs the client (e.g. Antigravity) to discard its cached static loading schema and refresh the catalog.
-2. **Latent Tool Catalog Discovery Omission**: Hydrated the active catalog inside `handleDirectMetaTool` using BOTH downstream aggregated tools and standard base/meta tools, resolving search indexing omissions so that JIT context queries like `search_tools` and `list_loaded_tools` find every active definition.
-
-All package builds compile with 0 errors and a type-safe signature.
+Successfully implemented automatic visual dashboard startup within the core MCP server layer:
+1. **Bootstrap Caching & Discovery**: Retained the client-side list-changed hotfix and hydrated meta-tool catalog.
+2. **Asynchronous Visual Dashboard Launcher**: Added `ensureDashboardRunning()` inside `MCPServer.ts` which checks if port 3000 is free and automatically spawns the Next.js visual dashboard (`apps/web`) in the background in non-blocking detached mode, guaranteeing it remains running throughout active MCP client sessions.
 
 ## Accomplishments
-- **Dynamic Tool List Notification**:
-  - Implemented `lightweightServer.notification({ method: "notifications/tools/list_changed" })` upon Phase 2 readiness to solve early client startup cache freezing.
-- **Catalog Refresh Ingestion**:
-  - Combined `cachedAdvertisedDownstreamTools` and `allNativeTools` in `handleDirectMetaTool` for catalog hydration.
-  - Added base meta tools from `listToolDefinitions()` directly to the `refreshCatalog` registry within `NativeSessionMetaTools.ts`.
+- **Automatic Dashboard Boot**:
+  - Implemented automatic check of port 3000 using dynamic `net` socket binding.
+  - Spawned Next.js dev server (`npx next dev`) inside `apps/web` detached so stdout/stderr never pollutes standard MCP stdio JSON-RPC streams.
 - **Topological Version Update**:
-  - Bumped the canonical `VERSION` file to `1.0.0-alpha.66`.
+  - Bumped the canonical `VERSION` file to `1.0.0-alpha.67`.
   - Ran `node scripts/sync-versions.mjs` successfully across all 27 monorepo packages.
 - **Verification**:
   - Run `pnpm -C packages/core run build` which compiled completely clean.
 
 ## Current State
 - **Compilation Health**: Code compiles successfully with 0 errors (`pnpm -C packages/core exec tsc --noEmit` exits with 0).
-- **Client Recovery**: Standard modern clients listening to change events now automatically recover full tool schemas on startup.
+- **Dashboard Autostart**: Spawns seamlessly on first MCP server load and maintains visual deck availability on localhost:3000.
 
 ## Next Steps
-- Continue verifying real-time swarm telemetry once the visual dashboard is online.
-- Check active tRPC channel states for supervisor notifications.
+- Open visual dashboard at http://localhost:3000/dashboard to inspect swarm telemetry.
+- Verify hot-reload behavior of workspace symbol indexing.

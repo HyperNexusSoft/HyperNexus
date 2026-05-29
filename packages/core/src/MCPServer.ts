@@ -3479,6 +3479,9 @@ ${env.tools.filter((tool) => tool.installed).map((tool) => `- **${tool.name}**: 
         // it during core startup instead of advertising a false-positive ready state.
         await this.initializeMemorySystem();
 
+        // Start Next.js Dashboard in the background asynchronously
+        this.ensureDashboardRunning().catch(e => console.error("[MCPServer] Dashboard launch failed:", e));
+
         // Start Services
         // this.director.startChatDaemon(); // Removed, auto-drive handles this
 
@@ -4046,6 +4049,61 @@ ${env.tools.filter((tool) => tool.installed).map((tool) => `- **${tool.name}**: 
             current = path.dirname(current);
         }
         return null;
+    }
+
+    private async ensureDashboardRunning(): Promise<void> {
+        const port = Number(process.env.HYPERCODE_DASH_PORT || process.env.PORT || 3000);
+        
+        const isPortOccupied = async (p: number): Promise<boolean> => {
+            const net = await import('net');
+            return new Promise((resolve) => {
+                const server = net.createServer();
+                server.once('error', () => resolve(true));
+                server.once('listening', () => {
+                    server.close(() => resolve(false));
+                });
+                server.listen(p, '127.0.0.1');
+            });
+        };
+
+        try {
+            const occupied = await isPortOccupied(port);
+            if (occupied) {
+                console.error(`[MCPServer] Dashboard already running or port ${port} is occupied.`);
+                return;
+            }
+
+            console.error(`[MCPServer] Starting Next.js Dashboard on port ${port}...`);
+            const fs = await import('fs');
+            const path = await import('path');
+            const { spawn } = await import('child_process');
+
+            const monorepoRoot = process.cwd();
+            const webDir = path.join(monorepoRoot, 'apps', 'web');
+
+            if (!fs.existsSync(webDir)) {
+                console.error(`[MCPServer] Dashboard directory not found at ${webDir}`);
+                return;
+            }
+
+            const child = spawn(
+                process.platform === 'win32' ? 'npx.cmd' : 'npx',
+                ['next', 'dev', '--port', String(port)],
+                {
+                    cwd: webDir,
+                    detached: true,
+                    stdio: 'ignore',
+                    env: {
+                        ...process.env,
+                        NEXT_PRIVATE_DISABLE_TURBOPACK_CACHE: '1',
+                    }
+                }
+            );
+            child.unref();
+            console.error(`[MCPServer] Dashboard spawned successfully (PID: ${child.pid}).`);
+        } catch (err: any) {
+            console.error('[MCPServer] Failed to auto-start Next.js dashboard:', err.message);
+        }
     }
 
     private broadcastWebSocketMessage(message: Record<string, unknown>, excludeClient?: any) {
