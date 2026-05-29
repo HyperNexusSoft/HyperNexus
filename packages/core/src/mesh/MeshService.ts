@@ -204,6 +204,49 @@ export class MeshService extends EventEmitter {
         globalMeshBus.emit('mesh_message_outbound', response);
     }
 
+    public async request(
+        targetNodeId: string,
+        type: SwarmMessageType,
+        payload: unknown,
+        options: {
+            timeoutMs?: number;
+            responseTypes?: SwarmMessageType[];
+        } = {}
+    ): Promise<SwarmMessage> {
+        return new Promise<SwarmMessage>((resolve, reject) => {
+            const requestId = crypto.randomUUID();
+            const timeoutMs = options.timeoutMs || 5000;
+            const responseTypes = options.responseTypes || [];
+
+            const timer = setTimeout(() => {
+                this.off('message', onMessage);
+                reject(new Error(`Mesh request timed out after ${timeoutMs}ms`));
+            }, timeoutMs);
+
+            const onMessage = (msg: SwarmMessage) => {
+                if (msg.target === this.nodeId && msg.sender === targetNodeId) {
+                    if (msg.id === requestId || responseTypes.includes(msg.type)) {
+                        clearTimeout(timer);
+                        this.off('message', onMessage);
+                        resolve(msg);
+                    }
+                }
+            };
+
+            this.on('message', onMessage);
+
+            const msg: SwarmMessage = {
+                id: requestId,
+                sender: this.nodeId,
+                target: targetNodeId,
+                type,
+                payload,
+                timestamp: Date.now()
+            };
+            globalMeshBus.emit('mesh_message_outbound', msg);
+        });
+    }
+
     public getPeers(): string[] {
         return Array.from(this.knownNodes);
     }

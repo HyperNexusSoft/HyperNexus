@@ -151,7 +151,7 @@ export async function listDownstreamPrompts(options: {
                             _meta: options.meta,
                         },
                     },
-                    ListPromptsResultSchema as unknown as import('zod').ZodType<any>,
+                    ListPromptsResultSchema as any,
                 ),
                 `Prompt discovery for ${serverName}`,
             );
@@ -235,7 +235,7 @@ export async function listDownstreamResources(options: {
                             _meta: options.meta,
                         },
                     },
-                    ListResourcesResultSchema as unknown as import('zod').ZodType<any>,
+                    ListResourcesResultSchema as any,
                 ),
                 `Resource discovery for ${serverName}`,
             );
@@ -312,7 +312,7 @@ export async function listDownstreamResourceTemplates(options: {
                                 _meta: options.meta,
                             },
                         },
-                        ListResourceTemplatesResultSchema as unknown as import('zod').ZodType<any>,
+                        ListResourceTemplatesResultSchema as any,
                     ),
                     `Resource template discovery for ${serverName}`,
                 );

@@ -46,16 +46,16 @@ async function runTest() {
         }, undefined, { timeout: 120000 }); // 2 minute timeout
         console.log("Result:", JSON.stringify(statusResult, null, 2));
 
-        // 2.5. Call Native Tool: system_status
-        console.log("\n--- 2.5. Calling Native Tool: system_status ---");
+        // 2.5. Call Native Tool: system_diagnostics
+        console.log("\n--- 2.5. Calling Native Tool: system_diagnostics ---");
         try {
             const sysStatusResult = await client.callTool({
-                name: "system_status",
+                name: "system_diagnostics",
                 arguments: {}
             }, undefined, { timeout: 60000 });
             console.log("Result:", JSON.stringify(sysStatusResult, null, 2));
         } catch (e) {
-            console.error("system_status call failed:", e);
+            console.error("system_diagnostics call failed:", e);
         }
 
         // 3. Call Standard Tool: list_directory

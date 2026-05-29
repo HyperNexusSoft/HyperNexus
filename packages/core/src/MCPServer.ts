@@ -23,7 +23,7 @@ mcpServerDebugLog('[MCPServer] ✓ path/url/fs');
 import { Router } from "./Router.js";
 mcpServerDebugLog('[MCPServer] ✓ Router');
 
-import { ModelSelector, LLMService } from "@borg/ai";
+import { ModelSelector, LLMService } from "@hypercode/ai";
 import { CoreModelSelector } from './providers/CoreModelSelector.js';
 mcpServerDebugLog('[MCPServer] ✓ ModelSelector');
 
@@ -33,8 +33,8 @@ import http from 'http';
 mcpServerDebugLog('[MCPServer] ✓ ws/http');
 
 import { McpmInstaller } from "./skills/McpmInstaller.js";
-import { Director } from "@borg/agents";
-import { Council, CouncilRole } from "@borg/agents";
+import { Director } from "@hypercode/agents";
+import { Council, CouncilRole } from "@hypercode/agents";
 import { GeminiAgent } from "./agents/GeminiAgent.js";
 import { ClaudeAgent } from "./agents/ClaudeAgent.js";
 import { MetaArchitectAgent } from "./agents/MetaArchitectAgent.js";
@@ -52,7 +52,7 @@ import { MeshService, SwarmMessageType } from './mesh/MeshService.js';
 import { GitWorktreeManager } from "./orchestrator/GitWorktreeManager.js";
 import { AuditService } from "./security/AuditService.js";
 import { GitService } from "./services/GitService.js";
-import { Supervisor } from "@borg/agents";
+import { Supervisor } from "@hypercode/agents";
 import { SkillRegistry } from "./skills/SkillRegistry.js";
 import { SuggestionService } from "./suggestions/SuggestionService.js";
 import { ResearchService } from "./services/ResearchService.js";
@@ -94,7 +94,7 @@ import { ProjectTracker } from "./services/ProjectTracker.js";
 import { MissionService } from "./services/MissionService.js";
 import { buildToolObservationInput } from './services/toolObservationMemory.js';
 import { detectLocalExecutionEnvironment } from './services/execution-environment.js';
-import { loadBorgMcpConfig } from './mcp/mcpJsonConfig.js';
+import { loadHypercodeMcpConfig } from './mcp/mcpJsonConfig.js';
 import {
     buildAutomaticToolContextFingerprint,
     buildAutomaticToolContextMemory,
@@ -103,6 +103,7 @@ import {
     shouldResolveAutomaticToolContext,
 } from './services/toolContextInjection.js';
 import { readToolPreferencesFromSettings } from './routers/mcp-tool-preferences.js';
+import { flattenToolSchema } from './utils/mcp-schema-sanitizer.js';
 
 mcpServerDebugLog('[MCPServer] ✓ SkillRegistry');
 
@@ -125,7 +126,7 @@ import {
     SystemStatusTool,
     ChainExecutor,
     type ChainRequest
-} from "@borg/tools";
+} from "@hypercode/tools";
 mcpServerDebugLog('[MCPServer] ✓ All Tools & ChainExecutor');
 
 mcpServerDebugLog('[MCPServer] ✓ All Tools & ChainExecutor');
@@ -154,8 +155,8 @@ import { EmbeddingService } from './services/rag/EmbeddingService.js';
 
 
 import { PermissionManager, AutonomyLevel } from "./security/PermissionManager.js";
-import { BrowserTool } from "@borg/tools";
-import { SearchService } from "@borg/search";
+import { BrowserTool } from "@hypercode/tools";
+import { SearchService } from "@hypercode/search";
 import { CouncilService } from "./services/CouncilService.js";
 import { BrowserService } from "./services/BrowserService.js";
 import type { ConnectedClient } from './services/mcp-client.service.js';
@@ -280,6 +281,9 @@ export class MCPServer {
     public sessionManager: SessionManager; // Phase 57: State Persistence
     public sessionSupervisor: SessionSupervisor;
     public ptySupervisor: PtySupervisor;
+    public a2aLogger?: any;
+    public swarmController?: any;
+    public pairOrchestrator?: any;
 
     public projectTracker: ProjectTracker; // Phase 59: Autonomous Loop
     public missionService: MissionService; // Phase 80: Swarm Persistence
@@ -471,9 +475,28 @@ export class MCPServer {
         return payload;
     }
 
+    public async getPredictedToolAds(chatHistory: string, activeGoal: string): Promise<string[]> {
+        const SIDECAR_URL = process.env.HYPERCODE_SIDECAR_URL || 'http://127.0.0.1:4300';
+        try {
+            const res = await fetch(`${SIDECAR_URL}/api/mcp/tools/predict`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chatHistory, activeGoal }),
+            });
+            if (res.ok) {
+                const json = await res.json() as any;
+                const predictedTools = json.data?.predictedTools || json.data || [];
+                return Array.isArray(predictedTools) ? predictedTools : [];
+            }
+        } catch (e) {
+            console.warn('[MCPServer] Failed to fetch tool predictions from sidecar:', e);
+        }
+        return [];
+    }
+
     private async syncNativeToolPreferences(): Promise<void> {
         try {
-            const config = await loadBorgMcpConfig();
+            const config = await loadHypercodeMcpConfig();
             const settings = config.settings as { toolSelection?: { importantTools?: unknown; alwaysLoadedTools?: unknown } } | undefined;
             const preferences = readToolPreferencesFromSettings(settings?.toolSelection);
             this.nativeSessionMetaTools.setAlwaysLoadedTools(preferences.alwaysLoadedTools);
@@ -526,20 +549,23 @@ export class MCPServer {
         this.configManager = new ConfigManager();
         this.mcpConfigService = new McpConfigService();
         this.nativeSessionMetaTools = new NativeSessionMetaTools(undefined, {
-            llmService: this.llmService,
-            delegatedToolCaller: async (name, args, meta) => {
-                return await this.handleDirectMetaTool(name, args, meta) ?? {
-                    content: [{ type: 'text', text: `Tool ${name} returned null or was not handled.` }],
-                    isError: true,
+            toolContextResolver: (input) => {
+                return {
+                    toolName: input.toolName,
+                    query: input.toolName,
+                    matchedPaths: [],
+                    observationCount: 0,
+                    summaryCount: 0,
+                    prompt: `JIT tool context for ${input.toolName}:\nNo prior memory was found.`
                 };
-            },
+            }
         });
         // Fire and forget config sync
         this.mcpConfigService.syncWithDatabase().catch(err => console.error("[MCPServer] Config Sync Failed:", err));
 
         this.autoTestService = new AutoTestService(process.cwd());
         this.sandboxService = new SandboxService();
-        this.healerService = new HealerService(this.llmService, this);
+        this.healerService = new HealerService(this.llmService, this, this.shellService);
         this.promptRegistry = new PromptRegistry();
         this.skillRegistry = new SkillRegistry([
             path.join(process.cwd(), 'packages', 'core', 'src', 'skills'),
@@ -663,7 +689,7 @@ export class MCPServer {
         this.councilService = new CouncilService();
         this.browserService = new BrowserService();
 
-        this.squadService = new SquadService(this);
+        this.squadService = new SquadService(this as any);
         this.gitWorktreeManager = new GitWorktreeManager(process.cwd());
 
         // Phase 60: Mesh Service
@@ -821,7 +847,6 @@ export class MCPServer {
     }
 
     public async executeTool(name: string, args: any): Promise<any> {
-        mcpServerDebugLog(`[DEBUG] executeTool called with: '${name}' (len: ${name.length})`);
         const callId = Math.random().toString(36).substring(7);
         const startTime = Date.now();
         const toolContext = await this.resolveAutomaticToolContext(name, args);
@@ -1081,12 +1106,8 @@ export class MCPServer {
                 // Hardcoded fallback response to stabilize specific routing issue
                 result = { content: [{ type: "text", text: "ws://localhost:9222" }] };
             }
-
-            // Log flow
-            mcpServerDebugLog(`[DEBUG] Flow check: name='${name}'`);
-
             // --- SWARM TOOLS (Phase 51) ---
-            if (name === "start_squad") {
+            else if (name === "start_squad") {
                 mcpServerDebugLog('[DEBUG] ENTERED start_squad BLOCK');
                 const branch = args?.branch as string;
                 const goal = args?.goal as string;
@@ -1304,7 +1325,7 @@ export class MCPServer {
                 const error = args?.error as string;
                 const context = args?.context as string;
                 if (!error) throw new Error("Missing 'error' parameter");
-                const success = await this.healerService.heal(error, context);
+                const success = await this.healerService.healAndVerify(error, context);
                 result = { content: [{ type: "text", text: success ? "Healer successfully applied fix." : "Healer could not fix this error." }] };
             }
             // --- DARWIN TOOLS (Phase 34) ---
@@ -1804,21 +1825,7 @@ export class MCPServer {
                 await this.gitWorktreeManager.removeWorktree(pathOrBranch, force);
                 result = { content: [{ type: "text", text: `Worktree removed: ${pathOrBranch}` }] };
             }
-            // 2. Intercept File Reading for Suggestions (Engagement Module)
-            if (name === "read_file" || name === "view_file") {
-                const filePath = args.path || args.AbsolutePath;
-                if (!filePath) {
-                    // Fallthrough to standard handler which will likely error
-                } else {
-                    // Fire and forget suggestion analysis
-                    // We don't read content here to avoid double-read cost; 
-                    // ideally we'd tap into the result, but that requires waiting for the real tool.
-                    // For now, let's just log intent or trigger analysis if we can get content cheaply later.
-                    // Actually, let's tap the result AFTER execution.
-                }
-            }
-
-            if (name === "execute_sandbox") {
+            else if (name === "execute_sandbox") {
                 const lang = args?.language as 'python' | 'node';
                 const code = args?.code as string;
                 result = {
@@ -2146,7 +2153,7 @@ export class MCPServer {
             else if (name === "auto_heal") {
                 const error = args.error as string;
                 const context = args.context as string;
-                const success = await this.healerService.heal(error, context);
+                const success = await this.healerService.healAndVerify(error, context);
                 result = { content: [{ type: "text", text: success ? "Healer successfully fixed the error." : "Healer could not fix this error autonomously." }] };
             }
             else if (name === "get_project_context") {
@@ -3331,12 +3338,15 @@ ${env.tools.filter((tool) => tool.installed).map((tool) => `- **${tool.name}**: 
 
     private async getDirectModeTools(): Promise<Tool[]> {
         const cachedInventory = await getCachedToolInventory();
-        const cachedAdvertisedDownstreamTools = cachedInventory.tools.map((tool) => ({
-            ...tool,
-            inputSchema: typeof tool.inputSchema === 'object' && tool.inputSchema !== null
-                ? tool.inputSchema
-                : { type: 'object', properties: {} },
-        })) as (Tool & { alwaysOn: boolean })[];
+        const cachedAdvertisedDownstreamTools = cachedInventory.tools.map((tool) => {
+            const flattened = flattenToolSchema(tool);
+            return {
+                ...flattened,
+                inputSchema: typeof flattened.inputSchema === 'object' && flattened.inputSchema !== null
+                    ? flattened.inputSchema
+                    : { type: 'object', properties: {} },
+            };
+        }) as (Tool & { alwaysOn: boolean })[];
 
         this.nativeSessionMetaTools.refreshCatalog(cachedAdvertisedDownstreamTools);
         await this.syncNativeToolPreferences();
@@ -3368,11 +3378,11 @@ ${env.tools.filter((tool) => tool.installed).map((tool) => `- **${tool.name}**: 
         // Safety limit for LLMs (e.g. Gemini has a 512 function declaration limit)
         // We use 450 to leave room for native tools and CLI-specific tools.
         const MAX_TOOLS = 450;
-        const result = allVisibleTools.slice(0, MAX_TOOLS);
+        const result = allVisibleTools.slice(0, MAX_TOOLS).map(flattenToolSchema);
 
         // Ensure we always have AT LEAST the core meta tools even if everything is toggled off
         if (result.length < this.nativeSessionMetaTools.listToolDefinitions().length) {
-             return this.nativeSessionMetaTools.listToolDefinitions();
+             return this.nativeSessionMetaTools.listToolDefinitions().map(flattenToolSchema);
         }
 
         return result;
@@ -3885,7 +3895,7 @@ ${env.tools.filter((tool) => tool.installed).map((tool) => `- **${tool.name}**: 
                             if (level === 'error') {
                                 this.auditService.log('BROWSER_ERROR', { url, error: content }, 'ERROR');
                                 // TRIGGER HEALER
-                                this.healerService.heal(content, `URL: ${url}, Timestamp: ${timestamp}`)
+                                this.healerService.healAndVerify(content, `URL: ${url}, Timestamp: ${timestamp}`)
                                     .catch(e => console.error("Healer Error:", e));
                             }
                         }
@@ -3991,7 +4001,7 @@ ${env.tools.filter((tool) => tool.installed).map((tool) => `- **${tool.name}**: 
             const rootDir = this.findMonorepoRoot(__dirname);
             mcpServerDebugLog(`[MCPServer] DEBUG rootDir: ${rootDir}`);
             if (rootDir) {
-                const supervisorPath = path.join(rootDir, 'packages', 'borg-supervisor', 'dist', 'index.js');
+                const supervisorPath = path.join(rootDir, 'packages', 'hypercode-supervisor', 'dist', 'index.js');
                 mcpServerDebugLog(`[MCPServer] Supervisor Path Resolved: ${supervisorPath}`);
 
                 await this.router.connectToServer('borg-supervisor', 'node', [supervisorPath]);

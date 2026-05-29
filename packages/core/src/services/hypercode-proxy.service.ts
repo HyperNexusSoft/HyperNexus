@@ -584,7 +584,7 @@ export const attachTo = async (
                                     method: "tools/list",
                                     params: { cursor, _meta: request.params?._meta }
                                 },
-                                ListToolsResultSchema as unknown as import("zod").ZodType<any>
+                                ListToolsResultSchema as any
                             ) as import("@modelcontextprotocol/sdk/types.js").ListToolsResult;
                             if (result.tools) allServerTools.push(...result.tools);
                             cursor = result.nextCursor;

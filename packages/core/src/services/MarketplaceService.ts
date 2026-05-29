@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { McpmRegistry, RegistryItem } from '../skills/McpmRegistry.js';
 import { McpmInstaller } from '../skills/McpmInstaller.js';
 import { MeshService, SwarmMessage, SwarmMessageType } from '../mesh/MeshService.js';
-import { Registry } from '@borg/mcp-registry';
+import { Registry } from '@hypercode/mcp-registry';
 import path from 'path';
 
 export const MarketplaceEntrySchema = z.object({
