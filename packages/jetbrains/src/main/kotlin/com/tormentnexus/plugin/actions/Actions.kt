@@ -1,11 +1,11 @@
-package com.HyperCode.plugin.actions
+package com.TormentNexus.plugin.actions
 
-import com.HyperCode.plugin.HypercodeService
+import com.TormentNexus.plugin.TormentNexusService
 ========
-package com.hypercode.plugin.actions
+package com.tormentnexus.plugin.actions
 
-import com.hypercode.plugin.HypercodeService
->>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/hypercode/plugin/actions/Actions.kt
+import com.tormentnexus.plugin.TormentNexusService
+>>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/tormentnexus/plugin/actions/Actions.kt
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.actionSystem.AnAction
@@ -16,18 +16,18 @@ import com.intellij.openapi.ui.Messages
 class ConnectAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
-        val service = project.getService(HypercodeService::class.java)
+        val service = project.getService(TormentNexusService::class.java)
         
         val url = Messages.showInputDialog(
             project,
-            "Enter HyperCode Hub URL:",
-            "Connect to HyperCode Hub",
-=        val service = project.getService(HypercodeService::class.java)
+            "Enter TormentNexus Hub URL:",
+            "Connect to TormentNexus Hub",
+=        val service = project.getService(TormentNexusService::class.java)
 
         val url = Messages.showInputDialog(
             project,
-            "Enter hypercode Hub URL:",
-            "Connect to hypercode Hub",
+            "Enter tormentnexus Hub URL:",
+            "Connect to tormentnexus Hub",
 >            null,
             "http://localhost:3000",
             null
@@ -35,23 +35,23 @@ class ConnectAction : AnAction() {
         
         service.setHubUrl(url)
         if (service.connect()) {
-            notify(project, "Connected to HyperCode Hub", NotificationType.INFORMATION)
+            notify(project, "Connected to TormentNexus Hub", NotificationType.INFORMATION)
         } else {
-            notify(project, "Failed to connect to HyperCode Hub", NotificationType.ERROR)
+            notify(project, "Failed to connect to TormentNexus Hub", NotificationType.ERROR)
 ========
-            notify(project, "Connected to hypercode Hub", NotificationType.INFORMATION)
+            notify(project, "Connected to tormentnexus Hub", NotificationType.INFORMATION)
         } else {
-            notify(project, "Failed to connect to hypercode Hub", NotificationType.ERROR)
->>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/hypercode/plugin/actions/Actions.kt
+            notify(project, "Failed to connect to tormentnexus Hub", NotificationType.ERROR)
+>>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/tormentnexus/plugin/actions/Actions.kt
         }
     }
     
     private fun notify(project: com.intellij.openapi.project.Project, message: String, type: NotificationType) {
         NotificationGroupManager.getInstance()
-            .getNotificationGroup("HyperCode Notifications")
+            .getNotificationGroup("TormentNexus Notifications")
 ========
-            .getNotificationGroup("hypercode Notifications")
->>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/hypercode/plugin/actions/Actions.kt
+            .getNotificationGroup("tormentnexus Notifications")
+>>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/tormentnexus/plugin/actions/Actions.kt
             .createNotification(message, type)
             .notify(project)
     }
@@ -60,20 +60,20 @@ class ConnectAction : AnAction() {
 class DisconnectAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
-        val service = project.getService(HypercodeService::class.java)
+        val service = project.getService(TormentNexusService::class.java)
         service.disconnect()
         
         NotificationGroupManager.getInstance()
-            .getNotificationGroup("HyperCode Notifications")
-            .createNotification("Disconnected from HyperCode Hub", NotificationType.INFORMATION)
+            .getNotificationGroup("TormentNexus Notifications")
+            .createNotification("Disconnected from TormentNexus Hub", NotificationType.INFORMATION)
 ========
-        val service = project.getService(HypercodeService::class.java)
+        val service = project.getService(TormentNexusService::class.java)
         service.disconnect()
 
         NotificationGroupManager.getInstance()
-            .getNotificationGroup("hypercode Notifications")
-            .createNotification("Disconnected from hypercode Hub", NotificationType.INFORMATION)
->>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/hypercode/plugin/actions/Actions.kt
+            .getNotificationGroup("tormentnexus Notifications")
+            .createNotification("Disconnected from tormentnexus Hub", NotificationType.INFORMATION)
+>>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/tormentnexus/plugin/actions/Actions.kt
             .notify(project)
     }
 }
@@ -83,16 +83,16 @@ class StartDebateAction : AnAction() {
         val project = e.project ?: return
         val editor = e.getData(CommonDataKeys.EDITOR) ?: return
         val file = e.getData(CommonDataKeys.VIRTUAL_FILE) ?: return
-        val service = project.getService(HypercodeService::class.java)
+        val service = project.getService(TormentNexusService::class.java)
         
         if (!service.isConnected()) {
-            Messages.showErrorDialog(project, "Not connected to HyperCode Hub", "HyperCode")
+            Messages.showErrorDialog(project, "Not connected to TormentNexus Hub", "TormentNexus")
 ========
-        val service = project.getService(HypercodeService::class.java)
+        val service = project.getService(TormentNexusService::class.java)
 
         if (!service.isConnected()) {
-            Messages.showErrorDialog(project, "Not connected to hypercode Hub", "hypercode")
->>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/hypercode/plugin/actions/Actions.kt
+            Messages.showErrorDialog(project, "Not connected to tormentnexus Hub", "tormentnexus")
+>>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/tormentnexus/plugin/actions/Actions.kt
             return
         }
         
@@ -119,10 +119,10 @@ class StartDebateAction : AnAction() {
                 "Council Debate Result"
             )
         } else {
-            Messages.showErrorDialog(project, "Debate failed", "HyperCode")
+            Messages.showErrorDialog(project, "Debate failed", "TormentNexus")
 ========
-            Messages.showErrorDialog(project, "Debate failed", "hypercode")
->>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/hypercode/plugin/actions/Actions.kt
+            Messages.showErrorDialog(project, "Debate failed", "tormentnexus")
+>>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/tormentnexus/plugin/actions/Actions.kt
 =======
 class StartDebateAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
@@ -132,10 +132,10 @@ class StartDebateAction : AnAction() {
 
         val topic = Messages.showInputDialog(project, "Enter debate topic:", "Council Debate", null)
         if (topic != null) {
-            val service = project.getService(HypercodeService::class.java)
+            val service = project.getService(TormentNexusService::class.java)
 ========
-            val service = project.getService(HypercodeService::class.java)
->>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/hypercode/plugin/actions/Actions.kt
+            val service = project.getService(TormentNexusService::class.java)
+>>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/tormentnexus/plugin/actions/Actions.kt
             service.startDebate(topic, selectedText) { result ->
                 Messages.showInfoMessage(project, result, "Debate Result")
             }
@@ -147,14 +147,14 @@ class StartDebateAction : AnAction() {
 class ArchitectModeAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
-        val service = project.getService(HypercodeService::class.java)
+        val service = project.getService(TormentNexusService::class.java)
         
         if (!service.isConnected()) {
-            Messages.showErrorDialog(project, "Not connected to HyperCode Hub", "HyperCode")
-=        val service = project.getService(HypercodeService::class.java)
+            Messages.showErrorDialog(project, "Not connected to TormentNexus Hub", "TormentNexus")
+=        val service = project.getService(TormentNexusService::class.java)
 
         if (!service.isConnected()) {
-            Messages.showErrorDialog(project, "Not connected to hypercode Hub", "hypercode")
+            Messages.showErrorDialog(project, "Not connected to tormentnexus Hub", "tormentnexus")
 >            return
         }
         
@@ -178,18 +178,18 @@ class ArchitectModeAction : AnAction() {
             if (approve == Messages.YES) {
                 service.approveArchitectPlan(session.sessionId)
                 NotificationGroupManager.getInstance()
-                    .getNotificationGroup("HyperCode Notifications")
+                    .getNotificationGroup("TormentNexus Notifications")
 ========
-                    .getNotificationGroup("hypercode Notifications")
->>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/hypercode/plugin/actions/Actions.kt
+                    .getNotificationGroup("tormentnexus Notifications")
+>>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/tormentnexus/plugin/actions/Actions.kt
                     .createNotification("Plan approved", NotificationType.INFORMATION)
                     .notify(project)
             }
         } else {
-            Messages.showErrorDialog(project, "Failed to start architect session", "HyperCode")
+            Messages.showErrorDialog(project, "Failed to start architect session", "TormentNexus")
 ========
-            Messages.showErrorDialog(project, "Failed to start architect session", "hypercode")
->>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/hypercode/plugin/actions/Actions.kt
+            Messages.showErrorDialog(project, "Failed to start architect session", "tormentnexus")
+>>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/tormentnexus/plugin/actions/Actions.kt
         }
     }
 }
@@ -197,16 +197,16 @@ class ArchitectModeAction : AnAction() {
 class ViewAnalyticsAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
-        val service = project.getService(HypercodeService::class.java)
+        val service = project.getService(TormentNexusService::class.java)
         
         if (!service.isConnected()) {
-            Messages.showErrorDialog(project, "Not connected to HyperCode Hub", "HyperCode")
+            Messages.showErrorDialog(project, "Not connected to TormentNexus Hub", "TormentNexus")
 ========
-        val service = project.getService(HypercodeService::class.java)
+        val service = project.getService(TormentNexusService::class.java)
 
         if (!service.isConnected()) {
-            Messages.showErrorDialog(project, "Not connected to hypercode Hub", "hypercode")
->>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/hypercode/plugin/actions/Actions.kt
+            Messages.showErrorDialog(project, "Not connected to tormentnexus Hub", "tormentnexus")
+>>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/tormentnexus/plugin/actions/Actions.kt
             return
         }
         
@@ -226,10 +226,10 @@ class ViewAnalyticsAction : AnAction() {
                 "Supervisor Analytics"
             )
         } else {
-            Messages.showErrorDialog(project, "Failed to fetch analytics", "HyperCode")
+            Messages.showErrorDialog(project, "Failed to fetch analytics", "TormentNexus")
 ========
-            Messages.showErrorDialog(project, "Failed to fetch analytics", "hypercode")
->>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/hypercode/plugin/actions/Actions.kt
+            Messages.showErrorDialog(project, "Failed to fetch analytics", "tormentnexus")
+>>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/tormentnexus/plugin/actions/Actions.kt
         }
     }
 }
@@ -237,29 +237,29 @@ class ViewAnalyticsAction : AnAction() {
 class RunAgentAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
-        Messages.showInfoMessage(project, "Run Agent feature coming soon", "HyperCode")
+        Messages.showInfoMessage(project, "Run Agent feature coming soon", "TormentNexus")
 ========
-        Messages.showInfoMessage(project, "Run Agent feature coming soon", "hypercode")
->>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/hypercode/plugin/actions/Actions.kt
+        Messages.showInfoMessage(project, "Run Agent feature coming soon", "tormentnexus")
+>>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/tormentnexus/plugin/actions/Actions.kt
     }
 }
 
 class SearchMemoryAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
-        Messages.showInfoMessage(project, "Search Memory feature coming soon", "HyperCode")
+        Messages.showInfoMessage(project, "Search Memory feature coming soon", "TormentNexus")
 ========
-        Messages.showInfoMessage(project, "Search Memory feature coming soon", "hypercode")
->>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/hypercode/plugin/actions/Actions.kt
+        Messages.showInfoMessage(project, "Search Memory feature coming soon", "tormentnexus")
+>>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/tormentnexus/plugin/actions/Actions.kt
     }
 }
 =======
         val task = Messages.showInputDialog(project, "Enter task for Architect:", "Architect Mode", null)
         if (task != null) {
-            val service = project.getService(HypercodeService::class.java)
+            val service = project.getService(TormentNexusService::class.java)
 ========
-            val service = project.getService(HypercodeService::class.java)
->>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/hypercode/plugin/actions/Actions.kt
+            val service = project.getService(TormentNexusService::class.java)
+>>>>>>>> origin/dependabot/cargo/packages/zed-extension/cargo-64b2a50fd2:packages/jetbrains/src/main/kotlin/com/tormentnexus/plugin/actions/Actions.kt
             service.startArchitectSession(task) { result ->
                 Messages.showInfoMessage(project, result, "Architect Session Started")
             }

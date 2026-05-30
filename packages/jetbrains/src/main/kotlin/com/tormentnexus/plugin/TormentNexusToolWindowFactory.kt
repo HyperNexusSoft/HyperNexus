@@ -1,4 +1,4 @@
-package com.hypercode.plugin
+package com.tormentnexus.plugin
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
@@ -9,13 +9,13 @@ import com.intellij.ui.content.ContentFactory
 import java.awt.BorderLayout
 import javax.swing.*
 
-class HypercodeToolWindowFactory : ToolWindowFactory {
+class TormentNexusToolWindowFactory : ToolWindowFactory {
     
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
-        val panel = HypercodeToolWindowPanel(project)
+        val panel = TormentNexusToolWindowPanel(project)
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         val panel = JPanel(BorderLayout())
-        val textArea = JTextArea("hypercode Hub Status: Connected\n\nWaiting for activity...")
+        val textArea = JTextArea("tormentnexus Hub Status: Connected\n\nWaiting for activity...")
         textArea.isEditable = false
         
         val scrollPane = JScrollPane(textArea)
@@ -34,9 +34,9 @@ class HypercodeToolWindowFactory : ToolWindowFactory {
     }
 }
 
-class HypercodeToolWindowPanel(private val project: Project) : JPanel(BorderLayout()) {
+class TormentNexusToolWindowPanel(private val project: Project) : JPanel(BorderLayout()) {
     
-    private val service = project.getService(HypercodeService::class.java)
+    private val service = project.getService(TormentNexusService::class.java)
     private val statusLabel = JBLabel("Disconnected")
     private val outputArea = JTextArea().apply {
         isEditable = false
@@ -47,7 +47,7 @@ class HypercodeToolWindowPanel(private val project: Project) : JPanel(BorderLayo
     init {
         val topPanel = JPanel().apply {
             layout = BoxLayout(this, BoxLayout.X_AXIS)
-            add(JBLabel("hypercode Hub: "))
+            add(JBLabel("tormentnexus Hub: "))
             add(statusLabel)
             add(Box.createHorizontalGlue())
             add(JButton("Connect").apply {
@@ -76,11 +76,11 @@ class HypercodeToolWindowPanel(private val project: Project) : JPanel(BorderLayo
     private fun connect() {
         if (service.connect()) {
             statusLabel.text = "Connected"
-            appendOutput("Connected to hypercode Hub")
+            appendOutput("Connected to tormentnexus Hub")
             refreshAnalytics()
         } else {
             statusLabel.text = "Connection Failed"
-            appendOutput("Failed to connect to hypercode Hub")
+            appendOutput("Failed to connect to tormentnexus Hub")
         }
     }
     

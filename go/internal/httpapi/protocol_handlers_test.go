@@ -6,11 +6,11 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/hypercodehq/hypercode-go/internal/eventbus"
-	"github.com/hypercodehq/hypercode-go/internal/supervisor"
+	"github.com/tormentnexushq/tormentnexus-go/internal/eventbus"
+	"github.com/tormentnexushq/tormentnexus-go/internal/supervisor"
 )
 
-func TestHandleHypercodeProtocol(t *testing.T) {
+func TestHandleTormentNexusProtocol(t *testing.T) {
 	s := &Server{
 		supervisorManager: supervisor.NewManager(supervisor.ManagerOptions{}),
 		eventBus:          eventbus.New(10),
@@ -24,7 +24,7 @@ func TestHandleHypercodeProtocol(t *testing.T) {
 	}{
 		{
 			name:           "Valid attach URI",
-			uri:            "hypercode://attach?session=xyz123",
+			uri:            "tormentnexus://attach?session=xyz123",
 			expectedStatus: http.StatusOK,
 			expectedAction: "attach",
 		},
@@ -47,10 +47,10 @@ func TestHandleHypercodeProtocol(t *testing.T) {
 			if tt.expectedAction == "attach" {
 				s.supervisorManager.CreateSession("xyz123", "echo", []string{"hello"}, nil, ".", 0)
 			}
-			req := httptest.NewRequest(http.MethodGet, "/api/protocol/hypercode?uri="+tt.uri, nil)
+			req := httptest.NewRequest(http.MethodGet, "/api/protocol/tormentnexus?uri="+tt.uri, nil)
 			w := httptest.NewRecorder()
 
-			s.handleHypercodeProtocol(w, req)
+			s.handleTormentNexusProtocol(w, req)
 
 			if w.Code != tt.expectedStatus {
 				t.Errorf("expected status %d, got %d", tt.expectedStatus, w.Code)

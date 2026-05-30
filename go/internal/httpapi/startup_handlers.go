@@ -7,11 +7,11 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/hypercodehq/hypercode-go/internal/config"
-	"github.com/hypercodehq/hypercode-go/internal/interop"
-	"github.com/hypercodehq/hypercode-go/internal/memorystore"
-	"github.com/hypercodehq/hypercode-go/internal/mesh"
-	"github.com/hypercodehq/hypercode-go/internal/cache"
+	"github.com/tormentnexushq/tormentnexus-go/internal/config"
+	"github.com/tormentnexushq/tormentnexus-go/internal/interop"
+	"github.com/tormentnexushq/tormentnexus-go/internal/memorystore"
+	"github.com/tormentnexushq/tormentnexus-go/internal/mesh"
+	"github.com/tormentnexushq/tormentnexus-go/internal/cache"
 )
 
 type StartupBlockingReason struct {
@@ -159,7 +159,7 @@ func (s *Server) buildStartupStatus(ctx context.Context) (StartupStatus, error) 
 				"workspaceRootAvailable": configStatus.WorkspaceRoot.Exists,
 				"goConfigDirAvailable":   configStatus.ConfigDir.Exists,
 				"mainConfigDirAvailable": configStatus.MainConfigDir.Exists,
-				"repoConfigAvailable":    configStatus.HypercodeConfigFile.Exists,
+				"repoConfigAvailable":    configStatus.TormentNexusConfigFile.Exists,
 				"mcpConfigAvailable":     configStatus.MCPConfigFile.Exists,
 			},
 			"memory": map[string]any{
@@ -220,8 +220,8 @@ func (s *Server) importedSessionMaintenanceStats(ctx context.Context) ImportedSe
 	if _, err := s.callUpstreamJSON(ctx, "session.importedMaintenanceStats", nil, &stats); err == nil {
 		return stats
 	}
-	// Ensure .hypercode/imported_sessions exists
-	_ = os.MkdirAll(filepath.Join(s.cfg.WorkspaceRoot, ".hypercode", "imported_sessions"), 0755)
+	// Ensure .tormentnexus/imported_sessions exists
+	_ = os.MkdirAll(filepath.Join(s.cfg.WorkspaceRoot, ".tormentnexus", "imported_sessions"), 0755)
 	return ImportedSessionMaintenanceStats{}
 }
 

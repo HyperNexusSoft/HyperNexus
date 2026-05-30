@@ -7,48 +7,48 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/robertpelloni/hypercode/hypercode"
+	"github.com/robertpelloni/tormentnexus/tormentnexus"
 )
 
-type HypercodeStatus struct {
+type TormentNexusStatus struct {
 	Assimilated       bool           `json:"assimilated"`
-	HypercodeCoreURL       string         `json:"hypercodeCoreUrl,omitempty"`
+	TormentNexusCoreURL       string         `json:"tormentnexusCoreUrl,omitempty"`
 	MemoryContext     string         `json:"memoryContext,omitempty"`
 	Provider          ProviderStatus `json:"provider"`
 	MCPServerNames    []string       `json:"mcpServerNames,omitempty"`
 	MCPConfigPath     string         `json:"mcpConfigPath,omitempty"`
-	HypercodeRepoPath string         `json:"hypercodeRepoPath,omitempty"`
+	TormentNexusRepoPath string         `json:"tormentnexusRepoPath,omitempty"`
 	Warnings          []string       `json:"warnings,omitempty"`
 }
 
-type HypercodeAdapter struct {
-	hypercodeAdapter *hypercode.Adapter
+type TormentNexusAdapter struct {
+	tormentnexusAdapter *tormentnexus.Adapter
 	workingDir  string
 	homeDir     string
 }
 
-func NewHypercodeAdapter(workingDir string) *HypercodeAdapter {
+func NewTormentNexusAdapter(workingDir string) *TormentNexusAdapter {
 	homeDir, _ := os.UserHomeDir()
-	return &HypercodeAdapter{
-		hypercodeAdapter: hypercode.NewAdapter(),
+	return &TormentNexusAdapter{
+		tormentnexusAdapter: tormentnexus.NewAdapter(),
 		workingDir:  workingDir,
 		homeDir:     homeDir,
 	}
 }
 
-func (a *HypercodeAdapter) Status() HypercodeStatus {
-	status := HypercodeStatus{
-		Assimilated:   a.hypercodeAdapter != nil && a.hypercodeAdapter.Assimilated,
+func (a *TormentNexusAdapter) Status() TormentNexusStatus {
+	status := TormentNexusStatus{
+		Assimilated:   a.tormentnexusAdapter != nil && a.tormentnexusAdapter.Assimilated,
 		MemoryContext: a.MemoryContext(),
 		Provider:      BuildProviderStatus(),
 	}
-	if a.hypercodeAdapter != nil {
-		status.HypercodeCoreURL = a.hypercodeAdapter.HypercodeCoreURL
+	if a.tormentnexusAdapter != nil {
+		status.TormentNexusCoreURL = a.tormentnexusAdapter.TormentNexusCoreURL
 	}
-	if repoPath, ok := a.findHypercodeRepo(); ok {
-		status.HypercodeRepoPath = repoPath
+	if repoPath, ok := a.findTormentNexusRepo(); ok {
+		status.TormentNexusRepoPath = repoPath
 	} else {
-		status.Warnings = append(status.Warnings, "adjacent hypercode repo not found")
+		status.Warnings = append(status.Warnings, "adjacent tormentnexus repo not found")
 	}
 	if configPath, names, err := a.listMCPServers(); err == nil {
 		status.MCPConfigPath = configPath
@@ -59,28 +59,28 @@ func (a *HypercodeAdapter) Status() HypercodeStatus {
 	return status
 }
 
-func (a *HypercodeAdapter) MemoryContext() string {
-	if a.hypercodeAdapter == nil {
+func (a *TormentNexusAdapter) MemoryContext() string {
+	if a.tormentnexusAdapter == nil {
 		return ""
 	}
-	return a.hypercodeAdapter.GetMemoryContext()
+	return a.tormentnexusAdapter.GetMemoryContext()
 }
 
-func (a *HypercodeAdapter) RouteMCP(request string) string {
-	if a.hypercodeAdapter == nil {
+func (a *TormentNexusAdapter) RouteMCP(request string) string {
+	if a.tormentnexusAdapter == nil {
 		return request
 	}
-	return a.hypercodeAdapter.RouteMCP(request)
+	return a.tormentnexusAdapter.RouteMCP(request)
 }
 
-func (a *HypercodeAdapter) BuildSystemContext() string {
+func (a *TormentNexusAdapter) BuildSystemContext() string {
 	status := a.Status()
 	parts := []string{
-		"[Hypercode Adapter]",
+		"[TormentNexus Adapter]",
 		fmt.Sprintf("Assimilated: %t", status.Assimilated),
 	}
-	if status.HypercodeCoreURL != "" {
-		parts = append(parts, fmt.Sprintf("Hypercode Core URL: %s", status.HypercodeCoreURL))
+	if status.TormentNexusCoreURL != "" {
+		parts = append(parts, fmt.Sprintf("TormentNexus Core URL: %s", status.TormentNexusCoreURL))
 	}
 	if status.MemoryContext != "" {
 		parts = append(parts, status.MemoryContext)
@@ -91,8 +91,8 @@ func (a *HypercodeAdapter) BuildSystemContext() string {
 	if len(status.MCPServerNames) > 0 {
 		parts = append(parts, fmt.Sprintf("Configured MCP servers: %s", strings.Join(status.MCPServerNames, ", ")))
 	}
-	if status.HypercodeRepoPath != "" {
-		parts = append(parts, fmt.Sprintf("Hypercode repo: %s", status.HypercodeRepoPath))
+	if status.TormentNexusRepoPath != "" {
+		parts = append(parts, fmt.Sprintf("TormentNexus repo: %s", status.TormentNexusRepoPath))
 	}
 	if len(status.Warnings) > 0 {
 		parts = append(parts, fmt.Sprintf("Warnings: %s", strings.Join(status.Warnings, "; ")))
@@ -100,7 +100,7 @@ func (a *HypercodeAdapter) BuildSystemContext() string {
 	return strings.Join(parts, "\n")
 }
 
-func (a *HypercodeAdapter) listMCPServers() (string, []string, error) {
+func (a *TormentNexusAdapter) listMCPServers() (string, []string, error) {
 	configPath, config, err := ParseMCPConfig(a.homeDir)
 	if err != nil {
 		return configPath, nil, fmt.Errorf("mcp config unavailable: %w", err)
@@ -113,16 +113,16 @@ func (a *HypercodeAdapter) listMCPServers() (string, []string, error) {
 	return configPath, names, nil
 }
 
-func (a *HypercodeAdapter) findHypercodeRepo() (string, bool) {
+func (a *TormentNexusAdapter) findTormentNexusRepo() (string, bool) {
 	candidates := []string{}
 	if a.workingDir != "" {
 		candidates = append(candidates,
-			filepath.Join(a.workingDir, "..", "hypercode"),
-			filepath.Join(a.workingDir, "../hypercode"),
+			filepath.Join(a.workingDir, "..", "tormentnexus"),
+			filepath.Join(a.workingDir, "../tormentnexus"),
 		)
 	}
 	if a.homeDir != "" {
-		candidates = append(candidates, filepath.Join(a.homeDir, "workspace", "hypercode"))
+		candidates = append(candidates, filepath.Join(a.homeDir, "workspace", "tormentnexus"))
 	}
 	for _, candidate := range candidates {
 		clean := filepath.Clean(candidate)

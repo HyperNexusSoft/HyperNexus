@@ -253,12 +253,12 @@ func (s Scanner) rules() []discoveryRule {
 			fileNameHints: []string{"session", "chat", "copilot", "conversation", "history", "message"},
 		},
 		{
-			sourceTool: "hypercode-mcp",
+			sourceTool: "tormentnexus-mcp",
 			roots: []string{
-				filepath.Join(s.WorkspaceRoot, ".hypercode-mcp", "data.db"),
-				filepath.Join(s.HomeDir, ".hypercode-mcp", "data.db"),
+				filepath.Join(s.WorkspaceRoot, ".tormentnexus-mcp", "data.db"),
+				filepath.Join(s.HomeDir, ".tormentnexus-mcp", "data.db"),
 			},
-			fileNameHints: []string{"hypercode", "data.db", "session", "handoff", "ledger"},
+			fileNameHints: []string{"tormentnexus", "data.db", "session", "handoff", "ledger"},
 		},
 		{
 			sourceTool: "llm-cli",

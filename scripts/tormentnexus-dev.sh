@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# hypercode-dev.sh — Quick development launcher
-# Usage: ./scripts/hypercode-dev.sh [--skip-go] [--skip-install]
+# tormentnexus-dev.sh — Quick development launcher
+# Usage: ./scripts/tormentnexus-dev.sh [--skip-go] [--skip-install]
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
@@ -15,7 +15,7 @@ for arg in "$@"; do
   esac
 done
 
-echo "⬡ Hypercode HYPERCODE v${VER} — Dev Launcher"
+echo "⬡ TormentNexus TORMENTNEXUS v${VER} — Dev Launcher"
 echo ""
 
 # 1. Install if needed
@@ -30,8 +30,8 @@ fi
 # 2. Build Go sidecar
 if [ "$SKIP_GO" = false ] && command -v go &>/dev/null; then
   echo "[2/4] Building Go sidecar..."
-  (cd go && go build -ldflags "-X github.com/hypercodehq/hypercode-go/internal/buildinfo.Version=${VER}" -buildvcs=false -o ../bin/hypercode ./cmd/hypercode)
-  echo "      ✓ bin/hypercode built"
+  (cd go && go build -ldflags "-X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=${VER}" -buildvcs=false -o ../bin/tormentnexus ./cmd/tormentnexus)
+  echo "      ✓ bin/tormentnexus built"
 else
   echo "[2/4] Skipping Go build"
 fi
@@ -46,8 +46,8 @@ echo "[4/4] Starting services..."
 echo ""
 
 # Go sidecar (background)
-if [ -x bin/hypercode ]; then
-  bin/hypercode -port 4300 &>/dev/null &
+if [ -x bin/tormentnexus ]; then
+  bin/tormentnexus -port 4300 &>/dev/null &
   GO_PID=$!
   echo "  Go sidecar:  http://127.0.0.1:4300 (PID $GO_PID)"
 fi

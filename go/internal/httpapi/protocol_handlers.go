@@ -7,13 +7,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hypercodehq/hypercode-go/internal/eventbus"
-	"github.com/hypercodehq/hypercode-go/internal/supervisor"
+	"github.com/tormentnexushq/tormentnexus-go/internal/eventbus"
+	"github.com/tormentnexushq/tormentnexus-go/internal/supervisor"
 )
 
-// handleHypercodeProtocol handles inbound hypercode:// deep links passed from the OS
+// handleTormentNexusProtocol handles inbound tormentnexus:// deep links passed from the OS
 // or client dispatchers.
-func (s *Server) handleHypercodeProtocol(w http.ResponseWriter, r *http.Request) {
+func (s *Server) handleTormentNexusProtocol(w http.ResponseWriter, r *http.Request) {
 	var rawURL string
 
 	if r.Method == http.MethodPost {
@@ -48,10 +48,10 @@ func (s *Server) handleHypercodeProtocol(w http.ResponseWriter, r *http.Request)
 	}
 
 	// Validate scheme
-	if u.Scheme != "hypercode" {
+	if u.Scheme != "tormentnexus" {
 		writeJSON(w, http.StatusBadRequest, map[string]any{
 			"success": false,
-			"error":   "invalid URL scheme; expected hypercode://",
+			"error":   "invalid URL scheme; expected tormentnexus://",
 		})
 		return
 	}

@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/hypercodehq/hypercode-go/internal/controlplane"
+	"github.com/tormentnexushq/tormentnexus-go/internal/controlplane"
 	_ "modernc.org/sqlite"
 )
 

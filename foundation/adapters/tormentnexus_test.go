@@ -6,19 +6,19 @@ import (
 	"testing"
 )
 
-func TestHypercodeAdapterBuildsStatusWithoutPanicking(t *testing.T) {
+func TestTormentNexusAdapterBuildsStatusWithoutPanicking(t *testing.T) {
 	dir := t.TempDir()
-	hypercodeDir := filepath.Join(dir, "..", "hypercode")
-	if err := os.MkdirAll(hypercodeDir, 0o755); err != nil {
+	tormentnexusDir := filepath.Join(dir, "..", "tormentnexus")
+	if err := os.MkdirAll(tormentnexusDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(hypercodeDir, "README.md"), []byte("# Hypercode"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(tormentnexusDir, "README.md"), []byte("# TormentNexus"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	adapter := NewHypercodeAdapter(dir)
+	adapter := NewTormentNexusAdapter(dir)
 	status := adapter.Status()
 	if !status.Assimilated {
-		t.Fatal("expected assimilated hypercode adapter")
+		t.Fatal("expected assimilated tormentnexus adapter")
 	}
 	if status.MemoryContext == "" {
 		t.Fatal("expected memory context")
@@ -26,8 +26,8 @@ func TestHypercodeAdapterBuildsStatusWithoutPanicking(t *testing.T) {
 	if status.Provider.CurrentProvider == "" {
 		t.Fatal("expected provider status")
 	}
-	if status.HypercodeRepoPath == "" {
-		t.Fatal("expected discovered hypercode repo path")
+	if status.TormentNexusRepoPath == "" {
+		t.Fatal("expected discovered tormentnexus repo path")
 	}
 	if adapter.RouteMCP("list tools") == "" {
 		t.Fatal("expected routed MCP string")

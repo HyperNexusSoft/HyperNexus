@@ -1,4 +1,4 @@
-package com.hypercode.plugin
+package com.tormentnexus.plugin
 
 import com.google.gson.Gson
 import com.intellij.openapi.components.Service
@@ -11,7 +11,7 @@ import com.google.gson.JsonObject
 import java.io.IOException
 
 @Service(Service.Level.PROJECT)
-class HypercodeService(private val project: Project) {
+class TormentNexusService(private val project: Project) {
     
     private val client = OkHttpClient()
     private val gson = Gson()
@@ -112,7 +112,7 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 @Service(Service.Level.PROJECT)
-class HypercodeService(private val project: Project) {
+class TormentNexusService(private val project: Project) {
     private val client = OkHttpClient.Builder()
         .connectTimeout(10, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
