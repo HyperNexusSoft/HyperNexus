@@ -1,21 +1,23 @@
-# Handoff - v1.0.0-alpha.78
+# Handoff - v1.0.0-alpha.79
 
 ## Summary
-Successfully implemented a definitive and exhaustive fallback cascade strategy. Added a massive list of free-tier endpoints to the OpenRouter registry and re-engineered `CoreModelSelector` to perform a comprehensive fallback loop across every single active, configured model in the registry before defaulting to local endpoints.
+Successfully implemented the dynamic free endpoint provider querying and periodic background refreshing mechanism under `@hypercode/core`. The catalog will now dynamically fetch OpenRouter models at startup and every 6 hours, filtering for free endpoints and dynamically updating capability profiles in-memory without blocking Node.js exits.
 
 ## Accomplishments
 
-### Definitive Fallback Cascade (v1.0.0-alpha.78)
-- **Fallback List Expansion**: Added a definitive list of active free-tier OpenRouter models (including DeepSeek V4 Flash, Llama 3 8B, Gemma 2 9B, Phi 3 Medium, Mistral 7B, GPT OSS 120B, and Nemotron 3) to the registry catalog.
-- **Recursive Registry Scanning**: Refactored the emergency fallback block inside `CoreModelSelector.ts` to perform a deep scan. If primary models are depleted or revoked, it cascades through all other executable models in the entire catalog.
-- **LMStudio Local Anchor**: Retains the robust local fallback to LMStudio and Ollama as the absolute baseline option.
-- **Safe & Stable Build**: Verified the stability with a 100% successful tsc build across the entire core package.
+### Dynamic Free Provider Refresher (v1.0.0-alpha.79)
+- **OpenRouter Model Fetching**: Designed `refreshFreeModels()` inside `ProviderRegistry.ts` using native `fetch` to query `https://openrouter.ai/api/v1/models`.
+- **Dynamic Identification**: Filtered models ending with `:free` or where prompt/completion pricing parses to `0`. Mapped them to fully qualified `ProviderModelDefinition` objects.
+- **Auto Capability Detection**: Analyzed model descriptions and names to auto-detect `'vision'`, `'tools'`, `'reasoning'`, and `'coding'` capabilities.
+- **In-Place Catalog Merging**: Safely merged newly discovered free models into the catalog, retaining existing metadata and meta models, and rebuilt the `modelIndex` map dynamically.
+- **Idle-Resilient Periodic Refresher**: Set up `startPeriodicRefresh()` which runs on initialization and executes every 6 hours. Utilizes `timer.unref()` to avoid hanging active Node.js processes.
+- **Verified Stability**: Compilation succeeded with 100% clean builds across core, and verified dynamic discovery successfully loaded 27 free OpenRouter models using `test_free_refresher.mjs`.
 
 ## Current State
 - `published_mcp_servers` in `borg.db`: **28,534 rows**
-- `published_mcp_config_recipes` in `borg.db`: **27,553 rows**
-- VERSION: `1.0.0-alpha.78`
-- Monorepo package sync: Verified for all 27 package.json configurations at `1.0.0-alpha.78`.
+- VERSION: `1.0.0-alpha.79`
+- Monorepo package sync: Synchronized all 27 monorepo packages to version `1.0.0-alpha.79`.
 
 ## Next Steps
-1. Perform load testing under complete API credential block scenarios to verify the cascade routes flawlessly across the entire free-model catalog.
+1. Verify if other free providers are available for indexing.
+2. Build UI views to display refreshed free models directly in the control panel dashboard.

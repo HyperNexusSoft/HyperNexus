@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.0-alpha.79] - 2026-05-30
+
+### Added
+- **Dynamic Free Provider Refresher**:
+  - Implemented `refreshFreeModels()` and periodic background query mechanism inside `ProviderRegistry.ts` that fetches `https://openrouter.ai/api/v1/models`.
+  - Dynamically extracts all models ending in `:free` or where prompt/completion pricing parses to `0.0`.
+  - Translates metadata, sanitizes IDs, auto-detects capabilities (vision, reasoning, coding, tools), and merges them into the system's in-memory model catalog.
+  - Automatically schedules refreshes on startup using unreferenced timers (`timer.unref()`) to prevent the Node.js runtime process from hanging when idle.
+  - Verified with 100% clean TypeScript compiler checking.
+
 ## [1.0.0-alpha.78] - 2026-05-30
 
 ### Added

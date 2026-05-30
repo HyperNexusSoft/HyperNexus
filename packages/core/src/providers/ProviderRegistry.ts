@@ -7,6 +7,7 @@ import {
     type ProviderDefinition,
     type ProviderModelDefinition,
     type ProviderTaskType,
+    type ProviderCapability,
 } from './types.js';
 
 export const DEFAULT_PROVIDER_CATALOG: ProviderDefinition[] = [
@@ -507,12 +508,135 @@ export const DEFAULT_PROVIDER_CATALOG: ProviderDefinition[] = [
 export class ProviderRegistry {
     private readonly catalog: ProviderDefinition[];
     private readonly modelIndex: Map<string, ProviderModelDefinition>;
+    private refreshInterval: NodeJS.Timeout | null = null;
 
     constructor(catalog: ProviderDefinition[] = DEFAULT_PROVIDER_CATALOG) {
         this.catalog = catalog;
         this.modelIndex = new Map(
             catalog.flatMap((provider) => provider.models.map((model) => [model.id, model] as const)),
         );
+        this.startPeriodicRefresh();
+    }
+
+    public async refreshFreeModels(): Promise<void> {
+        try {
+            if (typeof fetch !== 'function') {
+                console.warn('[ProviderRegistry] fetch is not available; skipping free models refresh');
+                return;
+            }
+            const response = await fetch('https://openrouter.ai/api/v1/models');
+            if (!response.ok) {
+                console.warn(`[ProviderRegistry] Failed to fetch OpenRouter models: HTTP ${response.status}`);
+                return;
+            }
+            const payload = await response.json() as { data?: any[] };
+            if (!payload || !Array.isArray(payload.data)) {
+                console.warn('[ProviderRegistry] Invalid OpenRouter models response payload');
+                return;
+            }
+
+            const openrouterProvider = this.catalog.find(p => p.id === 'openrouter');
+            if (!openrouterProvider) {
+                console.warn('[ProviderRegistry] OpenRouter provider definition not found in catalog');
+                return;
+            }
+
+            const incomingFreeModels = payload.data.filter((model: any) => {
+                const isFreeId = typeof model.id === 'string' && model.id.endsWith(':free');
+                const pricing = model.pricing;
+                const isFreePricing = pricing &&
+                    parseFloat(pricing.prompt || '0') === 0 &&
+                    parseFloat(pricing.completion || '0') === 0;
+                return isFreeId || isFreePricing;
+            });
+
+            const newModels: ProviderModelDefinition[] = incomingFreeModels.map((model: any) => {
+                const rawId = model.id;
+                const existing = openrouterProvider.models.find(m => 
+                    m.id === rawId || 
+                    m.id === `openrouter/${rawId}` || 
+                    `openrouter/${m.id}` === rawId
+                );
+
+                const finalId = existing ? existing.id : (rawId.startsWith('openrouter/') ? rawId : `openrouter/${rawId}`);
+
+                const capabilities: ProviderCapability[] = ['coding'];
+                const nameLower = (model.name || '').toLowerCase();
+                const descLower = (model.description || '').toLowerCase();
+                if (nameLower.includes('reasoning') || descLower.includes('reasoning') || nameLower.includes('thinking') || descLower.includes('thinking') || nameLower.includes('opus') || nameLower.includes('llama-3.3') || nameLower.includes('hermes-3')) {
+                    capabilities.push('reasoning');
+                }
+                if (descLower.includes('vision') || descLower.includes('multimodal')) {
+                    capabilities.push('vision');
+                }
+                if (descLower.includes('tool') || descLower.includes('function call')) {
+                    capabilities.push('tools');
+                }
+
+                const contextWindow = typeof model.context_length === 'number' ? model.context_length : 8192;
+
+                return {
+                    id: finalId,
+                    provider: 'openrouter',
+                    name: model.name || rawId,
+                    inputPrice: 0,
+                    outputPrice: 0,
+                    contextWindow,
+                    tier: 'free',
+                    recommendedFor: ['worker', 'general'] as ProviderTaskType[],
+                    capabilities,
+                    executable: true,
+                    qualityScore: existing?.qualityScore ?? 7
+                };
+            });
+
+            const nonFreeOrMeta = openrouterProvider.models.filter(m => m.tier !== 'free');
+            
+            const uniqueNewModelsMap = new Map<string, ProviderModelDefinition>();
+            for (const m of newModels) {
+                uniqueNewModelsMap.set(m.id, m);
+            }
+            const uniqueNewModels = Array.from(uniqueNewModelsMap.values());
+
+            openrouterProvider.models = [...uniqueNewModels, ...nonFreeOrMeta];
+
+            this.modelIndex.clear();
+            for (const provider of this.catalog) {
+                for (const model of provider.models) {
+                    this.modelIndex.set(model.id, model);
+                }
+            }
+
+            console.log(`[ProviderRegistry] Successfully refreshed ${uniqueNewModels.length} free OpenRouter models.`);
+        } catch (error) {
+            console.error('[ProviderRegistry] Error refreshing free models:', error);
+        }
+    }
+
+    public startPeriodicRefresh(intervalMs: number = 6 * 60 * 60 * 1000): void {
+        this.stopPeriodicRefresh();
+        
+        this.refreshFreeModels().catch(err => {
+            console.error('[ProviderRegistry] Initial free model refresh failed:', err);
+        });
+
+        const timer = setInterval(() => {
+            this.refreshFreeModels().catch(err => {
+                console.error('[ProviderRegistry] Periodic free model refresh failed:', err);
+            });
+        }, intervalMs);
+
+        if (typeof timer.unref === 'function') {
+            timer.unref();
+        }
+        this.refreshInterval = timer;
+    }
+
+    public stopPeriodicRefresh(): void {
+        if (this.refreshInterval) {
+            clearInterval(this.refreshInterval);
+            this.refreshInterval = null;
+        }
     }
 
     public getCatalog(): ProviderDefinition[] {
