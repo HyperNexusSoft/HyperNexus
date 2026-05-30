@@ -476,6 +476,48 @@ export class MCPServer {
     }
 
     public async getPredictedToolAds(chatHistory: string, activeGoal: string): Promise<string[]> {
+        // LLM-based tool prediction using cheap/free model selection
+        try {
+            const nativeTools = await this.getNativeTools();
+            const toolsList = nativeTools.map(t => `- ${t.name}: ${t.description || ''}`).join('\n');
+
+            const systemPrompt = `You are a predictive tool routing agent. Given a user goal and/or chat history, select the single most relevant and useful MCP tool from the list below that the user is likely to need next.
+
+Available Tools:
+${toolsList}
+
+Respond ONLY with a JSON array of tool name strings, for example: ["tool_name_1"]. If no tool is specifically useful, return [].`;
+
+            const prompt = `User Goal: ${activeGoal}\nChat History:\n${chatHistory}`;
+
+            const modelSelection = await this.modelSelector.selectModel({
+                taskComplexity: 'low',
+                routingTaskType: 'general',
+                routingStrategy: 'cheapest'
+            });
+
+            const completion = await this.llmService.generateText(
+                modelSelection.provider,
+                modelSelection.modelId,
+                systemPrompt,
+                prompt,
+                { routingStrategy: 'cheapest' }
+            );
+
+            const content = typeof completion === 'string' ? completion : (completion.content || '');
+            const jsonStart = content.indexOf('[');
+            const jsonEnd = content.lastIndexOf(']');
+            if (jsonStart !== -1 && jsonEnd !== -1) {
+                const parsed = JSON.parse(content.slice(jsonStart, jsonEnd + 1));
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    console.error(`[MCPServer] 🔮 LLM predicted optimal tools: ${parsed.join(', ')}`);
+                    return parsed;
+                }
+            }
+        } catch (e: any) {
+            console.error('[MCPServer] LLM tool prediction failed, trying sidecar fallback:', e.message);
+        }
+
         const SIDECAR_URL = process.env.HYPERCODE_SIDECAR_URL || 'http://127.0.0.1:4300';
         try {
             const res = await fetch(`${SIDECAR_URL}/api/mcp/tools/predict`, {

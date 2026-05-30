@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.0-alpha.76] - 2026-05-30
+
+### Added
+- **LLM-Based Predictive Tool Ads (Tool Disclosure)**:
+  - Upgraded `getPredictedToolAds` inside `MCPServer.ts` to leverage dynamic LLM-based tool predictions.
+  - Automatically targets cheap/free OpenRouter models with cascading fallbacks to alternative models and a final local fallback to LMStudio.
+  - Keeps a secondary fallback to the Go sidecar to maintain high execution resilience.
+  - Seamlessly injects optimal MCP tool suggestions directly into the context window system prompts.
+  - Verified with a 100% clean tsc compilation check.
+
 ## [1.0.0-alpha.75] - 2026-05-30
 
 ### Added
