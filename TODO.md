@@ -1,41 +1,28 @@
 # TODO
 
-_Last updated: 2026-05-25, version 1.0.0-alpha.63_
+_Last updated: 2026-05-30, version 1.0.0-alpha.80_
 
-## P0 — Must do now (Stability & Truth)
+## P0 — Must do now (Stability, Testing & Validation)
 
-- [x] **Protocol Scaffolding**: Implement the basic `tormentnexus://` handler in the Go kernel to support session attachment.
-- [x] **Dashboard Truth Pass**: Verify that the "Immune System" status card in the dashboard shows real-time data from the Go `HealerService`.
-- [x] **L2 Vault Visualization**: Wire the `vaultRecords` query to the Next.js frontend to show persistent heal history.
-- [x] **Mobile Style Audit**: Fix overlapping elements in the Sidebar and KernelStats on small viewports.
+- [ ] **MCP Server Testing**: Develop an automated testing script (`scratch/test_mcp_connection.mjs`) to verify TormentNexus functioning as an MCP server.
+- [ ] **Tool Aggregation Test**: Execute a sample MCP tool call through our stdio aggregator interface and assert correct, untruncated responses.
+- [ ] **Conflict Resolution Clean Pass**: Ensure that no duplicate conflict markers are left in any newly committed dashboard or server modules.
+- [ ] **Clean Build Gate**: Confirm that `pnpm build` cleanly compiles all 20 packages topological sequences without errors.
 
 ## P1 — Should do next (Features & Parity)
 
-- [x] **Browser Extension Attach**: Implement the DOM injection to add a "TormentNexus Kernel" button to Claude.ai and ChatGPT.
-- [x] **Wails Migration**: Scaffold the `apps/native-ui` directory using Wails for the Go-native dashboard.
-- [x] **A2A Mesh Protocol**: Implement the discovery layer for agents running on different local network hosts.
-- [x] **TOON Format**: Implement the native Go encoder/decoder for the TOON (Thread-Oriented Object Notation) context format.
+- [ ] **Tabby & Warp Active Launcher**: Implement a custom command launcher in `@tormentnexus/core` that automatically uses `tabby` and `warp` when initiating a local visual CLI agent.
+- [ ] **Offline License Validation**: Implement the Go-native cryptographic public-key verifier that loads the `tormentnexus.lic` signed YAML license block and asserts valid seat limits.
+- [ ] **Bobbybookmarks Ingestion**: Update bobbybookmarks database syncing triggers to enrich the local tool catalog on startup automatically.
 
-## P2 — Helpful but not urgent
+## Completed in v1.0.0-alpha.80
 
-- [x] **Intelligence Heatmap**: Create a 3D visualization of the L2 Vault using the embedding vectors.
-- [x] **Skill Marketplace**: Implement the REST API for downloading community-contributed skills.
-- [x] **Decentralized Memory**: Scoping Phase for P2P memory sync using gossip protocols.
-
-## Completed (v1.0.0-alpha.63)
-- [x] Bridged TypeScript `healerRouter` to Go-native `HealerService` and `VectorStore`.
-- [x] Implemented total count metrics for L2 Vault records in Go.
-- [x] Standardized field mapping (snake_case -> PascalCase) for native record UI compatibility.
-
-## Completed (v1.0.0-alpha.62)
-- [x] Autonomous Healer Loop (diagnose -> fix -> verify -> retry) in Go.
-- [x] L2 Vault persistence for Healer events.
-- [x] Integrated CodeExecutor with Healer for native verification.
-- [x] Consensus Engine with L2 Vault logging.
-- [x] Quota Manager for budget-aware model switching.
-- [x] Biological tiered memory (L1/L2/L3) logic and decay.
-- [x] Go-native MCP Sync for Claude/Cursor/VSCode.
-- [x] Standardized ports: Go (4300), Bridge (4100), Dashboard (3000), Socket.io (3001).
+- [x] Renamed all references to borg, nexus, hypervisor, aios, metamcp, and claude-mem to TormentNexus (case-specific mapping).
+- [x] Ingested and deduplicated all public catalogs, loading **11,024 MCP servers** into `tormentnexus.db`.
+- [x] Pruned all 22 uninitialized, redundant submodules from `.gitmodules` and compiled a master auditing log.
+- [x] Integrated `Tabby (tabby-go)` and `Warp GUI` wrappers with `Pi-Mono` and `Hermes Agent` harnesses in the supervisor.
+- [x] Developed a premium, dark-mode Next.js landing page with an interactive cryptographic signed license key generator.
+- [x] Fully resolved the git conflict markers in `package.json` and the healer dashboard page, achieving 100% type-safe compilation.
 
 ---
 *Keep the party going. Never stop. Don't stop the party!!!*
