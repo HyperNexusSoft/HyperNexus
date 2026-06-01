@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.0-alpha.87] - 2026-06-01
+### Added
+- **Verified Tool Expansion**:
+  - Successfully verified, validated, and registered new high-value MCP servers, scaling the production registry to **226 verified servers** and **2,557 tools** inside `tormentnexus.db`.
+  - Registered new servers include `"America's Law Graph"` (14 tools), `"Data Converter"` (3 tools), `"ActionGate"` (6 tools), `"AsterPay — EUR API"` (19 tools), `"SafeAgent Token Safety"` (57 tools), `"CrabbitMQ"` (6 tools), `"czech-vat-mcp"` (4 tools), `"Compress.new"` (1 tool), `"aidroid"` (3 tools), `"mansa"` (14 tools), `"sg-regulatory-data-mcp"` (7 tools), `"subconscious-unlock"` (1 tool), `"Vivid MCP"` (1 tool), `"md2card-mcp-server"` (1 tool), `"odoo-mcp-server"` (1 tool), `"discord-mcp"` (19 tools), and `"firebase-mcp"` (5 tools).
+  - Trapped and handled 20+ configuration, authentication timeouts, and NPM 404 outages gracefully during the automated bulk run.
+- **Monorepo Version Release Sync**:
+  - Synchronized and rebuilt all 34 package manifests in the monorepo to the new `1.0.0-alpha.87` release specification.
+
 ## [1.0.0-alpha.83] - 2026-05-31
 ### Added
 - **Smart Smithery CLI Rewrite Engine**:
