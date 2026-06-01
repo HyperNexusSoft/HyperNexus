@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.0-alpha.89] - 2026-06-01
+### Added
+- **Verified Tool Expansion Batch 3**:
+  - Successfully verified, validated, and registered more high-value MCP servers from the backlog queue, scaling the production registry to **234 verified servers** and **2,601 tools** inside `tormentnexus.db`.
+  - Registered new servers include `"gezhe-mcp-server"` (1 tool), `"wikipedia-mcp-server"` (3 tools), and `"openapi-mcp-server"` (2 tools).
+  - Stably bypassed connection lock compromises, NPM E404s, and interactive OAuth login loops gracefully.
+- **Monorepo Version Release Sync**:
+  - Synchronized and rebuilt all 34 package manifests in the monorepo to the new `1.0.0-alpha.89` release specification.
+
 ## [1.0.0-alpha.88] - 2026-06-01
 ### Added
 - **Verified Tool Expansion Batch 2**:
