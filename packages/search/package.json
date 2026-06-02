@@ -1,6 +1,6 @@
 {
   "name": "@tormentnexus/search",
-  "version": "1.0.0-alpha.99",
+  "version": "1.0.0-alpha.100",
   "private": true,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
