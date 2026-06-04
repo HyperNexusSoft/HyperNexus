@@ -174,3 +174,5 @@ tmp_*.js
 # Auto-generated MCP server context (added automatically)
 .mcp-server-context.md
 nul
+.wwebjs_auth/
+
