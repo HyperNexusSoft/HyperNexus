@@ -125,6 +125,43 @@ function populateEnvSecrets(envObj) {
     return envObj;
 }
 
+import { spawn } from "child_process";
+
+// Pre-flight runner to capture early crashes and stderr traces
+function preflightCheck(command, args, env) {
+    return new Promise((resolve) => {
+        try {
+            const child = spawn(command, args, { env, shell: true });
+            let stderrData = "";
+            let stdoutData = "";
+            let exited = false;
+
+            child.stdout.on("data", (data) => { stdoutData += data.toString(); });
+            child.stderr.on("data", (data) => { stderrData += data.toString(); });
+
+            const timeout = setTimeout(() => {
+                if (!exited) {
+                    try { child.kill(); } catch (e) {}
+                    resolve({ status: "running", stdout: stdoutData, stderr: stderrData });
+                }
+            }, 3000);
+
+            child.on("exit", (code) => {
+                exited = true;
+                clearTimeout(timeout);
+                resolve({ status: "exited", code, stdout: stdoutData, stderr: stderrData });
+            });
+            child.on("error", (err) => {
+                exited = true;
+                clearTimeout(timeout);
+                resolve({ status: "error", error: err, stdout: stdoutData, stderr: stderrData });
+            });
+        } catch (e) {
+            resolve({ status: "error", error: e, stdout: "", stderr: "" });
+        }
+    });
+}
+
 async function validateOne(db, pubServer, workerId) {
     const prefix = `[Worker-${workerId}]`;
     console.log(`\n${prefix} Testing: "${pubServer.display_name}" (${pubServer.canonical_id})`);
@@ -170,63 +207,100 @@ async function validateOne(db, pubServer, workerId) {
     let childEnv = { ...process.env, ...env };
     childEnv = populateEnvSecrets(childEnv);
 
-    const transport = new StdioClientTransport({ command: runCommand, args: runArgs, env: childEnv });
-    const client = new Client({ name: "tormentnexus-parallel-validator", version: "1.0.0" }, { capabilities: {} });
-
+    // 1. Run Pre-flight to inspect standard error / early exits
+    const preflight = await preflightCheck(runCommand, runArgs, childEnv);
     let outcome = 'failure';
     let toolCount = 0;
     let failureClass = 'unknown';
     let findingsSummary = '';
     const startTime = Date.now();
 
-    try {
-        await Promise.race([
-            client.connect(transport),
-            new Promise((_, reject) => setTimeout(() => reject(new Error("Connection timeout (60s)")), 60000))
-        ]);
-
-        const toolsResult = await client.listTools();
-        const toolsList = toolsResult.tools || [];
-        toolCount = toolsList.length;
-        console.log(`${prefix} SUCCESS! ${toolCount} tools found for "${pubServer.display_name}"`);
-        outcome = 'success';
-        findingsSummary = `Connected successfully. Found ${toolCount} tools.`;
-
-        db.transaction(() => {
-            let existing = db.prepare("SELECT uuid FROM mcp_servers WHERE source_published_server_uuid = ?").get(pubServer.uuid);
-            let mcpUuid = existing ? existing.uuid : randomUUID();
-
-            if (!existing) {
-                db.prepare(`
-                    INSERT INTO mcp_servers (uuid, name, description, type, command, args, env, error_status, always_on, created_at, user_id, source_published_server_uuid)
-                    VALUES (?, ?, ?, 'stdio', ?, ?, ?, '', 0, strftime('%s','now'), 'system', ?)
-                `).run(mcpUuid, pubServer.display_name, pubServer.description || '', originalCommand, JSON.stringify(originalArgs), JSON.stringify(env), pubServer.uuid);
+    if (preflight.status === 'exited' || preflight.status === 'error') {
+        const errorOutput = preflight.stderr || preflight.stdout || (preflight.error ? preflight.error.message : "Early exit");
+        console.log(`${prefix} Pre-flight check failed early: ${errorOutput.substring(0, 150).replace(/\n/g, ' ')}`);
+        
+        // Check for missing env vars
+        const envMatch = errorOutput.match(/Missing required environment variable[s]?:\s*([A-Za-z0-9_]+)/i) || 
+                         errorOutput.match(/env[a-zA-Z_]*\s+is\s+not\s+set/i) || 
+                         errorOutput.match(/set\s+the\s+([A-Za-z0-9_]+)\s+environment\s+variable/i);
+                         
+        if (envMatch) {
+            const detectedVar = envMatch[1];
+            console.log(`${prefix} Auto-detected missing environment variable: ${detectedVar}`);
+            childEnv[detectedVar] = "YOUR_KEY_HERE";
+            
+            // Re-run pre-flight check with the newly injected env var
+            const retryPreflight = await preflightCheck(runCommand, runArgs, childEnv);
+            if (retryPreflight.status === 'running') {
+                console.log(`${prefix} Retry pre-flight succeeded! Continuing to handshake...`);
+                preflight.status = 'running';
             } else {
-                db.prepare(`UPDATE mcp_servers SET command = ?, args = ?, env = ?, error_status = '' WHERE uuid = ?`).run(originalCommand, JSON.stringify(originalArgs), JSON.stringify(env), mcpUuid);
+                failureClass = "missing_env";
+                findingsSummary = `Failed with missing env var ${detectedVar}: ` + retryPreflight.stderr.substring(0, 400);
             }
-
-            db.prepare("DELETE FROM tools WHERE mcp_server_uuid = ?").run(mcpUuid);
-            const insertTool = db.prepare(`INSERT INTO tools (uuid, name, description, tool_schema, is_deferred, always_on, created_at, updated_at, mcp_server_uuid) VALUES (?, ?, ?, ?, 0, 0, datetime('now'), datetime('now'), ?)`);
-            for (const tool of toolsList) {
-                insertTool.run(randomUUID(), tool.name, tool.description || '', JSON.stringify(tool.inputSchema || {}), mcpUuid);
-            }
-
-            db.prepare(`UPDATE catalog.published_mcp_servers SET status = 'verified', confidence = 1.0, last_verified_at = strftime('%s','now'), updated_at = strftime('%s','now') WHERE uuid = ?`).run(pubServer.uuid);
-        })();
-
-    } catch (err) {
-        console.error(`${prefix} Failed "${pubServer.display_name}":`, err.message.substring(0, 100));
-        failureClass = err.message.includes("timeout") ? "timeout" : "runtime_crash";
-        findingsSummary = err.message.substring(0, 500);
-        db.prepare(`UPDATE catalog.published_mcp_servers SET status = 'failed', updated_at = strftime('%s','now') WHERE uuid = ?`).run(pubServer.uuid);
-    } finally {
-        try { await transport.close(); } catch(e) {}
-        const endTime = Date.now();
-        db.prepare(`
-            INSERT INTO catalog.published_mcp_validation_runs (uuid, server_uuid, run_mode, started_at, finished_at, outcome, failure_class, tool_count, findings_summary, performed_by, created_at)
-            VALUES (?, ?, 'parallel_bulk', ?, ?, ?, ?, ?, ?, 'ParallelValidatorNode', strftime('%s','now'))
-        `).run(randomUUID(), pubServer.uuid, Math.floor(startTime/1000), Math.floor(endTime/1000), outcome, failureClass, toolCount, findingsSummary);
+        } else {
+            failureClass = "early_crash";
+            findingsSummary = errorOutput.substring(0, 500);
+        }
     }
+
+    // 2. Run standard MCP transport handshake if pre-flight passed
+    if (preflight.status === 'running') {
+        const transport = new StdioClientTransport({ command: runCommand, args: runArgs, env: childEnv });
+        const client = new Client({ name: "tormentnexus-parallel-validator", version: "1.0.0" }, { capabilities: {} });
+
+        try {
+            await Promise.race([
+                client.connect(transport),
+                new Promise((_, reject) => setTimeout(() => reject(new Error("Connection timeout (60s)")), 60000))
+            ]);
+
+            const toolsResult = await client.listTools();
+            const toolsList = toolsResult.tools || [];
+            toolCount = toolsList.length;
+            console.log(`${prefix} SUCCESS! ${toolCount} tools found for "${pubServer.display_name}"`);
+            outcome = 'success';
+            findingsSummary = `Connected successfully. Found ${toolCount} tools.`;
+
+            db.transaction(() => {
+                let existing = db.prepare("SELECT uuid FROM mcp_servers WHERE source_published_server_uuid = ?").get(pubServer.uuid);
+                let mcpUuid = existing ? existing.uuid : randomUUID();
+
+                if (!existing) {
+                    db.prepare(`
+                        INSERT INTO mcp_servers (uuid, name, description, type, command, args, env, error_status, always_on, created_at, user_id, source_published_server_uuid)
+                        VALUES (?, ?, ?, 'stdio', ?, ?, ?, '', 0, strftime('%s','now'), 'system', ?)
+                    `).run(mcpUuid, pubServer.display_name, pubServer.description || '', runCommand, JSON.stringify(runArgs), JSON.stringify(env), pubServer.uuid);
+                } else {
+                    db.prepare(`UPDATE mcp_servers SET command = ?, args = ?, env = ?, error_status = '' WHERE uuid = ?`).run(runCommand, JSON.stringify(runArgs), JSON.stringify(env), mcpUuid);
+                }
+
+                db.prepare("DELETE FROM tools WHERE mcp_server_uuid = ?").run(mcpUuid);
+                const insertTool = db.prepare(`INSERT INTO tools (uuid, name, description, tool_schema, is_deferred, always_on, created_at, updated_at, mcp_server_uuid) VALUES (?, ?, ?, ?, 0, 0, datetime('now'), datetime('now'), ?)`);
+                for (const tool of toolsList) {
+                    insertTool.run(randomUUID(), tool.name, tool.description || '', JSON.stringify(tool.inputSchema || {}), mcpUuid);
+                }
+
+                db.prepare(`UPDATE catalog.published_mcp_servers SET status = 'verified', confidence = 1.0, last_verified_at = strftime('%s','now'), updated_at = strftime('%s','now') WHERE uuid = ?`).run(pubServer.uuid);
+            })();
+
+        } catch (err) {
+            console.error(`${prefix} Failed "${pubServer.display_name}":`, err.message.substring(0, 100));
+            failureClass = err.message.includes("timeout") ? "timeout" : "runtime_crash";
+            findingsSummary = err.message.substring(0, 500);
+            db.prepare(`UPDATE catalog.published_mcp_servers SET status = 'failed', updated_at = strftime('%s','now') WHERE uuid = ?`).run(pubServer.uuid);
+        } finally {
+            try { await transport.close(); } catch(e) {}
+        }
+    } else {
+        db.prepare(`UPDATE catalog.published_mcp_servers SET status = 'failed', updated_at = strftime('%s','now') WHERE uuid = ?`).run(pubServer.uuid);
+    }
+
+    const endTime = Date.now();
+    db.prepare(`
+        INSERT INTO catalog.published_mcp_validation_runs (uuid, server_uuid, run_mode, started_at, finished_at, outcome, failure_class, tool_count, findings_summary, performed_by, created_at)
+        VALUES (?, ?, 'parallel_bulk', ?, ?, ?, ?, ?, ?, 'ParallelValidatorNode', strftime('%s','now'))
+    `).run(randomUUID(), pubServer.uuid, Math.floor(startTime/1000), Math.floor(endTime/1000), outcome, failureClass, toolCount, findingsSummary);
 }
 
 async function runWorker(workerId, servers) {
