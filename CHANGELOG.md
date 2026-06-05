@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.0-alpha.118] - 2026-06-05
+### Added
+- **Category 13: Semantic Code Understanding (serena) Reimplementation**:
+  - Reimplemented all seven Serena MCP server tools (`get_symbols_overview`, `find_symbol`, `find_referencing_symbols`, `find_implementations`, `find_declaration`, `rename_symbol`, `onboarding`) natively in Go (`serena.go`).
+  - Implemented high-fidelity Go AST structural code-navigation parsing using native `go/parser` and `go/ast` libraries, with generic fallback parsing for JavaScript, TypeScript, and Python.
+  - Added unit test suite covering overview generation, symbol retrieval, cross-file reference mapping, declaration regex capture, and symbol renaming.
+  - Registered all handlers in the Go control plane registry and verified sidecar compilation.
+
 ## [1.0.0-alpha.117] - 2026-06-05
 ### Added
 - **Category 12: Provider Abstraction Layer (pal-mcp-server) Reimplementation**:

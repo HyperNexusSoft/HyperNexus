@@ -141,6 +141,15 @@ func (r *Registry) registerAll() {
 	r.handlers["debug"] = HandlePalDebug
 	r.handlers["challenge"] = HandlePalChallenge
 
+	// Serena Tools (Category 13)
+	r.handlers["get_symbols_overview"] = HandleGetSymbolsOverview
+	r.handlers["find_symbol"] = HandleFindSymbol
+	r.handlers["find_referencing_symbols"] = HandleFindReferencingSymbols
+	r.handlers["find_implementations"] = HandleFindImplementations
+	r.handlers["find_declaration"] = HandleFindDeclaration
+	r.handlers["rename_symbol"] = HandleRenameSymbol
+	r.handlers["onboarding"] = HandleOnboarding
+
 	// Claude Code Aliases
 	r.handlers["Read"] = HandleRead
 	r.handlers["Write"] = HandleWrite
