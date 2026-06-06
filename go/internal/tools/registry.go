@@ -528,6 +528,24 @@ func (r *Registry) registerAll() {
 	r.handlers["git_blame"] = HandleGitBlame
 	r.handlers["git_commit"] = HandleGitCommit
 	r.handlers["git_checkout"] = HandleGitCheckout
+
+	// Terraform — infrastructure management
+	r.handlers["terraform_search_providers"] = HandleTerraformSearchProviders
+	r.handlers["terraform_search_modules"] = HandleTerraformSearchModules
+	r.handlers["terraform_get_provider"] = HandleTerraformGetProvider
+
+	// Google News — news headlines and search
+	r.handlers["google_news_headlines"] = HandleGoogleNewsHeadlines
+	r.handlers["google_news_search"] = HandleGoogleNewsSearch
+
+	// OpenRouter Deep Research
+	r.handlers["deep_research"] = HandleDeepResearch
+	r.handlers["deep_research_status"] = HandleDeepResearchStatus
+
+	// Prompt Library — SQLite-backed prompt storage
+	r.handlers["prompt_list"] = HandlePromptList
+	r.handlers["prompt_get"] = HandlePromptGet
+	r.handlers["prompt_search"] = HandlePromptSearch
 }
 
 func (r *Registry) Execute(ctx context.Context, name string, args map[string]interface{}) (ToolResponse, error) {
