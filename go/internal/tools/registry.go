@@ -546,6 +546,32 @@ func (r *Registry) registerAll() {
 	r.handlers["prompt_list"] = HandlePromptList
 	r.handlers["prompt_get"] = HandlePromptGet
 	r.handlers["prompt_search"] = HandlePromptSearch
+
+	// Context Server — SQLite-backed context management
+	r.handlers["context_store"] = HandleContextStore
+	r.handlers["context_search"] = HandleContextSearch
+	r.handlers["context_get"] = HandleContextGet
+	r.handlers["context_delete"] = HandleContextDelete
+	r.handlers["context_list_threads"] = HandleContextListThreads
+	r.handlers["context_stats"] = HandleContextStats
+
+	// WebPeel — web data extraction
+	r.handlers["webpeel_fetch"] = HandleWebpeelFetch
+	r.handlers["webpeel_search"] = HandleWebpeelSearch
+	r.handlers["webpeel_extract"] = HandleWebpeelExtract
+
+	// Omnisearch — universal search
+	r.handlers["omnisearch_github"] = HandleOmnisearchGithub
+	r.handlers["omnisearch_stackoverflow"] = HandleOmnisearchStackoverflow
+	r.handlers["omnisearch_npm"] = HandleOmnisearchNpm
+	r.handlers["omnisearch_pypi"] = HandleOmnisearchPypi
+	r.handlers["omnisearch_web"] = HandleOmnisearchWeb
+
+	// Grants — government grants discovery
+	r.handlers["grants_search"] = HandleGrantsSearch
+	r.handlers["grants_by_agency"] = HandleGrantsByAgency
+	r.handlers["grants_by_category"] = HandleGrantsByCategory
+	r.handlers["grants_trends"] = HandleGrantsTrends
 }
 
 func (r *Registry) Execute(ctx context.Context, name string, args map[string]interface{}) (ToolResponse, error) {
