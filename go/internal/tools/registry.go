@@ -11,11 +11,13 @@ package tools
 import (
 	"context"
 	"fmt"
+	"sync"
 )
 
 type ToolHandler func(ctx context.Context, args map[string]interface{}) (ToolResponse, error)
 
 type Registry struct {
+	mu       sync.RWMutex
 	handlers map[string]ToolHandler
 }
 
@@ -600,7 +602,9 @@ func (r *Registry) registerAll() {
 }
 
 func (r *Registry) Execute(ctx context.Context, name string, args map[string]interface{}) (ToolResponse, error) {
+	r.mu.RLock()
 	handler, ok := r.handlers[name]
+	r.mu.RUnlock()
 	if !ok {
 		return ToolResponse{}, fmt.Errorf("tool handler not found for: %s", name)
 	}
@@ -608,6 +612,19 @@ func (r *Registry) Execute(ctx context.Context, name string, args map[string]int
 }
 
 func (r *Registry) HasTool(name string) bool {
+	r.mu.RLock()
 	_, ok := r.handlers[name]
+	r.mu.RUnlock()
 	return ok
+}
+
+// List returns all registered tool names.
+func (r *Registry) List() []string {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+	result := make([]string, 0, len(r.handlers))
+	for name := range r.handlers {
+		result = append(result, name)
+	}
+	return result
 }

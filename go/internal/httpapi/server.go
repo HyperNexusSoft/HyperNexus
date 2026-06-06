@@ -76,8 +76,20 @@ var sessionExportKnownFormats = []map[string]any{
 // This allows the Next.js dashboard (port 3000) and browser extensions to
 // call Go sidecar endpoints without CORS blocks.
 func corsMiddleware(next http.Handler) http.Handler {
+	allowedOrigins := []string{
+		"http://localhost:3000",
+		"http://127.0.0.1:3000",
+		"http://localhost:5173",
+		"http://127.0.0.1:5173",
+	}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
+		origin := r.Header.Get("Origin")
+		for _, allowed := range allowedOrigins {
+			if origin == allowed || origin == "" {
+				w.Header().Set("Access-Control-Allow-Origin", allowed)
+				break
+			}
+		}
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 		if r.Method == http.MethodOptions {
@@ -552,6 +564,18 @@ func New(cfg config.Config, detector controlplane.ToolProvider) *Server {
 	ai.GlobalQuotaTracker = server.quotaManager
 	server.modelSelector = providers.NewModelSelector(server.quotaManager)
 	server.toolRegistry = toolregistry.NewToolRegistry()
+
+	// Sync Go-native tools from tools.Registry to toolRegistry for dashboard visibility
+	if server.toolsRegistry != nil {
+		toolNames := server.toolsRegistry.List()
+		for _, name := range toolNames {
+			_ = server.toolRegistry.Register(toolregistry.ToolInfo{
+				Name:       name,
+				ServerName: "go-native",
+				Source:     "native",
+			})
+		}
+	}
 	server.gitService = gitservice.NewGitService(cfg.WorkspaceRoot)
 	server.contextHarvester = ctxharvester.NewContextHarvester(nil)
 	server.workspaceTracker = workspaces.NewWorkspaceTracker("")
