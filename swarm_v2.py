@@ -48,11 +48,11 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "sk-freellm")
 
 # Model priority: try these in order. First available wins.
 PREFERRED_MODELS = os.environ.get("SWARM_MODELS", "").split(",") if os.environ.get("SWARM_MODELS") else [
-    "claude-sonnet-4-20250514",
-    "claude-3-7-sonnet-20250219",
-    "gpt-4o-mini",
     "gemini-3-flash",
+    "DeepSeek-V3.2",
+    "gpt-4o-mini",
     "deepseek-v4-flash-free",
+    "claude-sonnet-4-20250514",
     "free-llm",
 ]
 
