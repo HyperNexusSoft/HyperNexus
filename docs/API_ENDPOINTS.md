@@ -3,6 +3,7 @@
 This document provides a comprehensive list of the HTTP API endpoints available in the TormentNexus Go sidecar (Port 4300).
 
 ## Metadata & Health
+- `GET /api/service/connectivity`: Service health and discovery overview.
 - `GET /health`: Basic service health check.
 - `GET /version`: Build version for the Go sidecar.
 - `GET /api/index`: Self-describing index of the Go sidecar API surface.
@@ -21,6 +22,7 @@ This document provides a comprehensive list of the HTTP API endpoints available 
 - `GET /api/config/always-visible-tools`: Read always-visible tools.
 
 ## MCP (Model Context Protocol)
+- `POST /api/mcp/client-sync`: IDE configuration synchronization (Claude/Cursor/VSCode).
 - `GET /api/mcp/status`: MCP runtime status and pool state.
 - `GET /api/mcp/servers`: Aggregated list of all MCP servers.
 - `GET /api/mcp/tools`: Aggregated list of all MCP tools.

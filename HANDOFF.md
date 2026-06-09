@@ -44,3 +44,4 @@ The TormentNexus assimilation pipeline is now fully operational and hardened. Th
 - **HTTP API Integration**: Validated live kernel via `scratch/e2e_integration_verify.py`. Confirmed tool execution, skill discovery, and system health.
 - **Security Audit**: Removed hardcoded Jules API secrets from `orchestrate.js`; validated path sanitization in `HandleRipgrep`.
 - **Documentation**: Finalized `docs/API_ENDPOINTS.md` with verified response envelopes and detailed native tool specs.
+- **Service Connectivity**: Verified sidecar-to-upstream probing logic via `/api/service/connectivity`; confirmed IDE sync capability via `/api/mcp/client-sync`.
