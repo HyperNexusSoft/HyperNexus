@@ -70,3 +70,28 @@ This document provides a comprehensive list of the HTTP API endpoints available 
 - `GET /api/symbols/find`: Search for pinned symbols.
 
 > **Note**: This is an abbreviated list. For a full, auto-generated list of all 600+ endpoints, use the `/api/index` endpoint on a running TormentNexus instance.
+## Verified API Response Envelope
+Standard response format: `{"success": true, "data": { ... }}`
+
+## Integration Test Coverage
+- Health and System Status: VERIFIED
+- Native Tool Execution (/api/agent/tool): VERIFIED
+- Skill Discovery: VERIFIED
+- Script/Prompt Catalog: VERIFIED
+
+## Detailed Native Tool Specifications
+### ripgrep_search
+- **Description**: High-speed recursive regex search.
+- **Arguments**:
+  - `pattern`: The regex to search for.
+  - `path`: The directory to search in (default: ".").
+
+### anyquery
+- **Description**: SQL interface to file system and other data sources.
+- **Arguments**:
+  - `query`: The SQL query to execute.
+
+### codemod
+- **Description**: Execute large-scale codebase refactoring.
+- **Arguments**:
+  - `command`: The codemod command to run.
