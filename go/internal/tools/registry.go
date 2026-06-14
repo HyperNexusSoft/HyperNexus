@@ -262,7 +262,7 @@ func (r *Registry) registerAll() {
 // TODO: 	r.handlers["octagon_news"] = HandleOctagonNews
 
 	// Browser Automation Tools (Assimilated from playwright/browser-use/browsermcp/puppeteer/browserbase)
-// TODO: 	r.handlers["browser_navigate"] = HandleBrowserNavigate
+r.handlers["browser_navigate"] = HandleBrowserNavigate
 // TODO: 	r.handlers["browser_screenshot"] = HandleBrowserScreenshot
 // TODO: 	r.handlers["browser_get_html"] = HandleBrowserGetHTML
 // TODO: 	r.handlers["browser_evaluate"] = HandleBrowserEvaluate

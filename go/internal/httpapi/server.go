@@ -704,6 +704,7 @@ func (s *Server) registerRoutes() {
 
 	s.mux.HandleFunc("/health", s.handleHealth)
 	s.mux.HandleFunc("/version", s.handleVersion)
+	s.mux.HandleFunc("/.well-known/agent-card", s.handleAgentCard)
 	s.mux.HandleFunc("/api/index", s.handleAPIIndex)
 	s.mux.HandleFunc("/api/health", s.handleHealth)
 	s.mux.HandleFunc("/api/health/server", s.handleHealth)

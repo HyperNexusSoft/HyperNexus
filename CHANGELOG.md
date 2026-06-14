@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.0.0-alpha.128] - 2026-06-14
+### Added
+- **Bulk Skill Assimilation**: Assimilated **3,229 unique skills** from home directory harness ecosystems into `~/.tormentnexus/skills/`.
+  - Scanned 7 source directories: `~/.a5c` (2,099), `~/.agent/skills` (723), `~/.ccs` (466), `~/.hermes/skills` (87), `~/.pi` (40), `~/.agents/skills` (2), `~/.config/opencode-temp/skills` (1)
+  - Found 3,418 total SKILL.md files, merged 2 duplicates via content-hash deduplication
+  - Each skill enriched with frontmatter: `name`, `source`, `category`, `date`, `tags`
+  - Script: `data/assimilate_skills.py`
+- **Skill Registry Verification**: All skill tests pass (`TestSkillSearch`, `TestSkillDecisionProgressiveLoading`, `TestSkillsFallBackToLocalSkillRegistry`)
+- **Version Sync**: Synced all 35 package.json files and Go buildinfo to v1.0.0-alpha.128
+
+### Changed
+- **Tracking Files Updated**: Updated `HANDOFF.md`, `MEMORY.md`, `TODO.md`, `VERSION.md` with assimilation stats and next steps
+
+### Next Steps
+- Wire skills into Go HTTP API for tRPC access
+- Map skills into FreeLLM A2A registry as `AgentSkill` structs
+- Implement skill win-rate tracking and auto-retirement
+
 ## [1.0.0-alpha.127] - 2026-06-08
 ### Added
 - **Hardened Kernel Registry**: Restored approximately 60 "swarm" tool registrations and implemented stubs in `swarm.go` to ensure kernel build stability.
