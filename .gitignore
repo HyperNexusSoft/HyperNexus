@@ -39,6 +39,10 @@ Thumbs.db
 **/.pi/
 .pi-logs/
 
+# === pi-lens cache (auto-generated) ===
+.pi-lens/cache/
+.pi-lens/
+
 # === Coverage ===
 coverage/
 .nyc_output/
@@ -46,6 +50,23 @@ coverage/
 # === Temporary files ===
 tmp/
 temp/
+tmp_*/
+temp_*/
+.tmp-*/
+
+# === Shell/PS artifacts ===
+$null
+^
+"path here"
+
+# === Cloned/imported temp repos ===
+akb/
+akb_repo/
+appwrite_utils_temp/
+mcp-server-*/
+yorck-mcp-src/
+
+# === Verification ===
 verification/
 reader_output.json
 reader_error.txt
@@ -55,6 +76,22 @@ push_err.txt
 push_out.txt
 screenshot*.png
 audit-*.jsonl
+$null
+^
+
+# === Standalone test/experiment files ===
+test_*.py
+test*.txt
+fix_build*.py
+cleanup_tools.py
+batch_generate.py
+build_watchdog.py
+
+# === Cloned/imported repos ===
+yorck-mcp-src/
+akb/
+akb_repo/
+appwrite_utils_temp/
 
 # === Next.js / Turbopack ===
 .next/
