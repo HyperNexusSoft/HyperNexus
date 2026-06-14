@@ -626,6 +626,10 @@ func (r *Registry) registerAll() {
 	r.handlers["codemod"] = HandleCodemod
 	r.handlers["puppeteer_navigate"] = HandlePuppeteer
 	r.handlers["bobbybookmarks_sync"] = HandleBobbyBookmarksSync
+
+	// Orchestration & Deployment
+	r.handlers["repo_sync"] = HandleRepoSync
+	r.handlers["project_deploy"] = HandleProjectDeploy
 }
 
 func (r *Registry) Execute(ctx context.Context, name string, args map[string]interface{}) (ToolResponse, error) {

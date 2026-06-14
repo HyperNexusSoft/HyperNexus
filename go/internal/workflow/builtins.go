@@ -65,3 +65,23 @@ func LintAndTestWorkflow(workspaceRoot string) *Workflow {
 		ShellStep("ts-typecheck", "TypeScript Typecheck", "pnpm run build:workspace", workspaceRoot),
 	})
 }
+
+// ManagedProjectCIWorkflow creates a generic CI workflow for any managed project
+func ManagedProjectCIWorkflow(id, name, projectPath, buildCmd, testCmd string) *Workflow {
+	steps := []*Step{}
+
+	if buildCmd != "" {
+		steps = append(steps, ShellStep("build", "Build Project", buildCmd, projectPath))
+	}
+
+	testDeps := []string{}
+	if buildCmd != "" {
+		testDeps = append(testDeps, "build")
+	}
+
+	if testCmd != "" {
+		steps = append(steps, ShellStep("test", "Test Project", testCmd, projectPath, testDeps...))
+	}
+
+	return NewWorkflow(id, name, "Automated CI for managed project: "+name, steps)
+}
