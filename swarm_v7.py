@@ -79,15 +79,17 @@ if NVIDIA_KEY:
         ("deepseek-ai/deepseek-v4-pro", 10),
         ("deepseek-ai/deepseek-v4-flash", 5),
     ]:
-        DIRECT_PROVIDERS.append({
-            "name": f"nvidia-{_model.replace('/', '-').lower()}",
-            "url": NVIDIA_BASE,
-            "key": NVIDIA_KEY,
-            "model": _model,
-            "cooldown": _cd,
-            "timeout": 300,
-            "stream": False,
-        })
+        DIRECT_PROVIDERS.append(
+            {
+                "name": f"nvidia-{_model.replace('/', '-').lower()}",
+                "url": NVIDIA_BASE,
+                "key": NVIDIA_KEY,
+                "model": _model,
+                "cooldown": _cd,
+                "timeout": 300,
+                "stream": False,
+            }
+        )
 
 # Also add free-llm proxy as fallback
 for _model, _cd in [
@@ -214,7 +216,7 @@ class Log:
 
     def llm_fail(self, m, w=None):
         self._w("LLM-ERR", "R", w, m)
-        self._inc("llm_err_count")
+        # self._inc("llm_err_count")  # disabled
 
     def phase(self, m, w=None):
         self._w("PHASE", "B", w, m)
@@ -579,7 +581,9 @@ def extract_go_code(content, go_filename):
 def sanitize_go_code(code):
     """Delegate to the external sanitize_go module."""
     from sanitize_go import sanitize_go_code as _sanitize
+
     return _sanitize(code)
+
 
 def _strip_fences(code):
     code = re.sub(r"^```go\s*\n?", "", code)
@@ -765,7 +769,7 @@ def claim_task(worker_id):
         db.isolation_level = "EXCLUSIVE"
         c = db.cursor()
         row = c.execute(
-            "SELECT name, github_url, score, category, description, subcategory, tags FROM mcp_servers WHERE status='pending' ORDER BY score DESC LIMIT 1"
+            "SELECT name, github_url, score FROM mcp_servers WHERE status='pending' ORDER BY score DESC LIMIT 1"
         ).fetchone()
         if not row:
             db.close()
@@ -784,10 +788,10 @@ def claim_task(worker_id):
             "name": name,
             "github_url": row[1] or "",
             "score": row[2] or 0,
-            "category": row[3] or "unknown",
-            "description": row[4] or "",
-            "subcategory": row[5] or "",
-            "tags": row[6] or "",
+            "category": "unknown",
+            "description": "",
+            "subcategory": "",
+            "tags": "",
         }
 
 
@@ -1313,17 +1317,17 @@ def worker_loop(worker_id, shutdown, completed_lock, completed_count):
             log.err(f"Write {go_file}: {e}", worker_id)
             continue
     if manifest:
-            MANIFEST_DIR.mkdir(exist_ok=True)
-            try:
-                with open(MANIFEST_DIR / f"{fn}.json", "w", encoding="utf-8") as f:
-                    json.dump(manifest, f, indent=2)
-            except:
-                pass
+        MANIFEST_DIR.mkdir(exist_ok=True)
+        try:
+            with open(MANIFEST_DIR / f"{fn}.json", "w", encoding="utf-8") as f:
+                json.dump(manifest, f, indent=2)
+        except:
+            pass
         tc = len(handlers_found)
         complete_task(name, go_file, tc, review_status)
         log.ok(f"DONE: {name} ({tc}h, {review_status})", worker_id)
-        with completed_lock:
-            completed_count[0] += 1
+    with completed_lock:
+        completed_count[0] += 1
 
 
 # === ORCHESTRATOR ===
