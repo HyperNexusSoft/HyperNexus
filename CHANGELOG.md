@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.0.0-alpha.132] - 2026-06-17
+### Added
+- **sync_catalog_to_assimilation.py**: Cross-references catalog.db → assimilation_state.db, adding 3,269 missing MCP server entries as pending tasks
+- 7 new swarm-generated Go tool implementations: agestra, codeloop, larkx, oxis_dev_tessra, unitsvc_cc_helper, xquik_tweetclaw, yahoo_finance2
+- Assimilation DB expanded from 10,981 → 14,250 rows (3,270 pending for swarm)
+
+## [1.0.0-alpha.131] - 2026-06-16
+### Added
+- Swarm v7 generated ~130 new MCP server Go tool wrappers across go/internal/tools/
+- Session import pipeline validated: 49 candidates discovered from ~/.claude and ~/.aider artifacts
+- Imported sessions tracked: 586 rows in `imported_sessions` table
+- MEMORY.md and HANDOFF.md updated with multi-agent observations
+### Changed
+- Version bumped to 1.0.0-alpha.131 across all 35 workspace packages
+- Removed 2,268 lines of obsolete/broken tool files and manifests
+- Assimilation state: failed entries reduced from 146→30
+- Go sidecar PID excluded from git tracking
+### Fixed
+- Session import endpoint now correctly called with `{"data":"{}","merge":true,"dryRun":false}`
+- Swarm --forever mode stabilized (removed --repair flag)
+
 ## [1.0.0-alpha.130] - 2026-06-14
 ### Added
 - **Skill HTTP API**: Implemented three new endpoints (`/api/skills/list`, `/api/skills/get`, `/api/skills/search`) querying `orchestration.GlobalSkillRegistry`.
