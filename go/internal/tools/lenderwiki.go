@@ -1,0 +1,1 @@
+      return ok(TextContent(json.NewEncoder(json.NewEncoder(os.Stdout)).Encode(data)))

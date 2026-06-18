@@ -7,12 +7,12 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/gofiber/websocket/v2"
 	foundationrepomap "github.com/NexusSoftMDMA/TormentNexus/foundation/repomap"
 	"github.com/NexusSoftMDMA/TormentNexus/mcp"
 	"github.com/NexusSoftMDMA/TormentNexus/orchestrator"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/websocket/v2"
 	"github.com/spf13/cobra"
 )
 
@@ -537,8 +537,8 @@ var serveCmd = &cobra.Command{
 			return c.SendFile("./dist/index.html")
 		})
 
-		log.Println("[Server] Hono/Bun Parity Achieved. Listening locally on :8080")
-		log.Fatal(app.Listen(":8080"))
+		log.Println("[Server] Hono/Bun Parity Achieved. Listening locally on :7778")
+		log.Fatal(app.Listen(":7778"))
 	},
 }
 

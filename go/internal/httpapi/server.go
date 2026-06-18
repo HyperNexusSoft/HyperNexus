@@ -10,10 +10,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/tormentnexushq/tormentnexus-go/internal/codeexec"
-	"github.com/tormentnexushq/tormentnexus-go/internal/memorystore"
 	"github.com/tormentnexushq/tormentnexus-go/internal/ai"
+	"github.com/tormentnexushq/tormentnexus-go/internal/codeexec"
 	"github.com/tormentnexushq/tormentnexus-go/internal/enterprise"
+	"github.com/tormentnexushq/tormentnexus-go/internal/memorystore"
 	"io"
 	"io/fs"
 	"math"
@@ -46,6 +46,7 @@ import (
 	"github.com/tormentnexushq/tormentnexus-go/internal/tools"
 	"github.com/tormentnexushq/tormentnexus-go/internal/workflow"
 
+	"github.com/google/uuid"
 	"github.com/tormentnexushq/tormentnexus-go/internal/cache"
 	"github.com/tormentnexushq/tormentnexus-go/internal/ctxharvester"
 	"github.com/tormentnexushq/tormentnexus-go/internal/eventbus"
@@ -58,7 +59,6 @@ import (
 	"github.com/tormentnexushq/tormentnexus-go/internal/skillregistry"
 	"github.com/tormentnexushq/tormentnexus-go/internal/toolregistry"
 	"github.com/tormentnexushq/tormentnexus-go/internal/workspaces"
-	"github.com/google/uuid"
 	_ "modernc.org/sqlite"
 )
 
@@ -141,24 +141,24 @@ type Server struct {
 	directorNotes     *orchestration.DirectorNotesManager
 	expertManager     *hsync.ExpertManager
 	memoryArchiver    *memorystore.MemoryArchiver
-	importCache     *importScanCache
+	importCache       *importScanCache
 	fleetManager      *orchestration.FleetManagerPlus
 	consensusEngine   *orchestration.ConsensusEngine
 	quotaManager      *providers.QuotaManager
 	modelSelector     *providers.ModelSelector
 
 	// --- New Go-native services (alpha.32+) ---
-	eventBus          *eventbus.EventBus
-	metricsService    *metrics.MetricsService
-	sessionManager    *session.SessionManager
-	toolRegistry      *toolregistry.ToolRegistry
-	gitService        *gitservice.GitService
-	contextHarvester  *ctxharvester.ContextHarvester
-	workspaceTracker  *workspaces.WorkspaceTracker
-	processManager    *processmanager.ProcessManager
-	healerService     *healer.HealerService
-	cacheService      *cache.Cache
-	repoGraph         *repograph.RepoGraphService
+	eventBus         *eventbus.EventBus
+	metricsService   *metrics.MetricsService
+	sessionManager   *session.SessionManager
+	toolRegistry     *toolregistry.ToolRegistry
+	gitService       *gitservice.GitService
+	contextHarvester *ctxharvester.ContextHarvester
+	workspaceTracker *workspaces.WorkspaceTracker
+	processManager   *processmanager.ProcessManager
+	healerService    *healer.HealerService
+	cacheService     *cache.Cache
+	repoGraph        *repograph.RepoGraphService
 
 	// Phase 113 — conversational tool injection
 	conversationalPredictor *mcp.ConversationalPredictor
@@ -286,11 +286,11 @@ type LockRuntimeSummary struct {
 }
 
 type ConfigRuntimeSummary struct {
-	WorkspaceRootAvailable bool `json:"workspaceRootAvailable"`
-	ConfigDirAvailable     bool `json:"configDirAvailable"`
-	MainConfigDirAvailable bool `json:"mainConfigDirAvailable"`
-	RepoConfigAvailable    bool `json:"repoConfigAvailable"`
-	MCPConfigAvailable     bool `json:"mcpConfigAvailable"`
+	WorkspaceRootAvailable         bool `json:"workspaceRootAvailable"`
+	ConfigDirAvailable             bool `json:"configDirAvailable"`
+	MainConfigDirAvailable         bool `json:"mainConfigDirAvailable"`
+	RepoConfigAvailable            bool `json:"repoConfigAvailable"`
+	MCPConfigAvailable             bool `json:"mcpConfigAvailable"`
 	TormentNexusSubmoduleAvailable bool `json:"tormentnexusSubmoduleAvailable"`
 }
 
@@ -658,7 +658,7 @@ func (s *Server) PreWarmCaches() {
 		time.Sleep(bobbyBookmarksSyncDelay)
 		dbPath := s.localTormentNexusDBPath()
 		baseURL := "https://bobbybookmarks.com"
-		
+
 		// Initial sync on startup
 		fmt.Printf("[BobbyBookmarks] Starting initial auto-sync from %s...\n", baseURL)
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
@@ -667,10 +667,10 @@ func (s *Server) PreWarmCaches() {
 		if err != nil {
 			fmt.Printf("[BobbyBookmarks] Initial sync error: %v\n", err)
 		} else {
-			fmt.Printf("[BobbyBookmarks] Initial sync complete: fetched=%d, upserted=%d, pages=%d\n", 
+			fmt.Printf("[BobbyBookmarks] Initial sync complete: fetched=%d, upserted=%d, pages=%d\n",
 				res.Fetched, res.Upserted, res.Pages)
 		}
-		
+
 		// Periodic re-sync every hour
 		ticker := time.NewTicker(bobbyBookmarksSyncInterval)
 		defer ticker.Stop()
@@ -681,7 +681,7 @@ func (s *Server) PreWarmCaches() {
 			if err != nil {
 				fmt.Printf("[BobbyBookmarks] Periodic sync error: %v\n", err)
 			} else {
-				fmt.Printf("[BobbyBookmarks] Periodic re-sync complete: fetched=%d, upserted=%d, pages=%d\n", 
+				fmt.Printf("[BobbyBookmarks] Periodic re-sync complete: fetched=%d, upserted=%d, pages=%d\n",
 					res.Fetched, res.Upserted, res.Pages)
 			}
 			cancel()
@@ -2796,7 +2796,7 @@ func (s *Server) handleMCPCallTool(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var result any
-		// Translate request format: toolName/arguments -> name/args
+	// Translate request format: toolName/arguments -> name/args
 	if tn, ok := payload["toolName"]; ok {
 		payload["name"] = tn
 		delete(payload, "toolName")
@@ -9183,7 +9183,7 @@ func (s *Server) handleOpenWebUIEmbedURL(w http.ResponseWriter, r *http.Request)
 
 	url := strings.TrimSpace(os.Getenv("OPEN_WEBUI_URL"))
 	if url == "" {
-		url = "http://localhost:8080"
+		url = "http://localhost:7778"
 	}
 	writeJSON(w, http.StatusOK, map[string]any{
 		"success": true,
@@ -10531,7 +10531,7 @@ func (s *Server) handleRuntimeStatus(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		writeJSON(w, http.StatusInternalServerError, map[string]any{
 			"success": false,
-			"error": "failed to validate import sources: " + err.Error(),
+			"error":   "failed to validate import sources: " + err.Error(),
 		})
 		return
 	}
@@ -10541,14 +10541,14 @@ func (s *Server) handleRuntimeStatus(w http.ResponseWriter, r *http.Request) {
 	discoveredSessions := make([]Session, 0, len(validatedCandidates))
 	for index, candidate := range validatedCandidates {
 		discoveredSessions = append(discoveredSessions, Session{
-			ID:          "discovered_" + fmtInt(index+1),
-			CLIType:     candidate.SourceTool,
-			Status:      "discovered",
-			Task:        candidate.SourceType,
-			StartedAt:   candidate.LastModifiedAt,
-			SourcePath:  candidate.SourcePath,
-			SessionFormat: candidate.Format,
-			Valid:       candidate.Valid,
+			ID:             "discovered_" + fmtInt(index+1),
+			CLIType:        candidate.SourceTool,
+			Status:         "discovered",
+			Task:           candidate.SourceType,
+			StartedAt:      candidate.LastModifiedAt,
+			SourcePath:     candidate.SourcePath,
+			SessionFormat:  candidate.Format,
+			Valid:          candidate.Valid,
 			DetectedModels: candidate.DetectedModels,
 		})
 	}
@@ -10591,11 +10591,11 @@ func (s *Server) handleRuntimeStatus(w http.ResponseWriter, r *http.Request) {
 				RunningCount: runningLocks,
 			},
 			Config: ConfigRuntimeSummary{
-				WorkspaceRootAvailable: configStatus.WorkspaceRoot.Exists,
-				ConfigDirAvailable:     configStatus.ConfigDir.Exists,
-				MainConfigDirAvailable: configStatus.MainConfigDir.Exists,
-				RepoConfigAvailable:    configStatus.TormentNexusConfigFile.Exists,
-				MCPConfigAvailable:     configStatus.MCPConfigFile.Exists,
+				WorkspaceRootAvailable:         configStatus.WorkspaceRoot.Exists,
+				ConfigDirAvailable:             configStatus.ConfigDir.Exists,
+				MainConfigDirAvailable:         configStatus.MainConfigDir.Exists,
+				RepoConfigAvailable:            configStatus.TormentNexusConfigFile.Exists,
+				MCPConfigAvailable:             configStatus.MCPConfigFile.Exists,
 				TormentNexusSubmoduleAvailable: configStatus.TormentNexusSubmodule.Exists,
 			},
 			CLI: CLIRuntimeSummary{

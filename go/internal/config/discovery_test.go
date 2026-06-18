@@ -22,7 +22,7 @@ func TestDefaultServiceDiscovery(t *testing.T) {
 
 func TestServiceDiscoveryFromEnv(t *testing.T) {
 	t.Setenv("TORMENTNEXUS_GO_PORT", "5500")
-	t.Setenv("TORMENTNEXUS_TRPC_UPSTREAM", "http://192.168.1.100:4100/trpc")
+	t.Setenv("TORMENTNEXUS_TRPC_UPSTREAM", "http://192.168.1.100:7779/trpc")
 	t.Setenv("TORMENTNEXUS_BRIDGE_PORT", "4001")
 	t.Setenv("TORMENTNEXUS_DASHBOARD_PORT", "8080")
 
@@ -37,24 +37,24 @@ func TestServiceDiscoveryFromEnv(t *testing.T) {
 	if sd.DashboardPort != 8080 {
 		t.Errorf("expected DashboardPort=8080, got %d", sd.DashboardPort)
 	}
-	if sd.TRPCUpstreamURLs[0] != "http://192.168.1.100:4100/trpc" {
+	if sd.TRPCUpstreamURLs[0] != "http://192.168.1.100:7779/trpc" {
 		t.Errorf("expected env tRPC URL first, got %s", sd.TRPCUpstreamURLs[0])
 	}
 }
 
 func TestServiceDiscoveryDedupTRPCURLs(t *testing.T) {
-	t.Setenv("TORMENTNEXUS_TRPC_UPSTREAM", "http://127.0.0.1:4100/trpc")
+	t.Setenv("TORMENTNEXUS_TRPC_UPSTREAM", "http://127.0.0.1:7779/trpc")
 	sd := DefaultServiceDiscovery()
 
 	// The env URL should be first but not duplicated
 	count := 0
 	for _, u := range sd.TRPCUpstreamURLs {
-		if u == "http://127.0.0.1:4100/trpc" {
+		if u == "http://127.0.0.1:7779/trpc" {
 			count++
 		}
 	}
 	if count != 1 {
-		t.Errorf("expected exactly 1 occurrence of http://127.0.0.1:4100/trpc, got %d", count)
+		t.Errorf("expected exactly 1 occurrence of http://127.0.0.1:7779/trpc, got %d", count)
 	}
 }
 
@@ -96,7 +96,7 @@ func TestDedupStrings(t *testing.T) {
 		{"empty", []string{}, []string{}},
 		{"no dups", []string{"a", "b", "c"}, []string{"a", "b", "c"}},
 		{"with dups", []string{"a", "b", "a", "c", "b"}, []string{"a", "b", "c"}},
-		{"trailing slash normalization", []string{"http://x:4100/trpc/", "http://x:4100/trpc"}, []string{"http://x:4100/trpc"}},
+		{"trailing slash normalization", []string{"http://x:7779/trpc/", "http://x:7779/trpc"}, []string{"http://x:7779/trpc"}},
 		{"whitespace trim", []string{"  a  ", "a"}, []string{"a"}},
 		{"empty strings skipped", []string{"", "a", ""}, []string{"a"}},
 	}

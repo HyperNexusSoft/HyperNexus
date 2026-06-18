@@ -43,7 +43,7 @@ func (s stubDetector) DetectAll(context.Context) ([]controlplane.Tool, error) {
 // because fallback tests require the upstream to be offline.
 func skipIfServerRunning(t *testing.T) {
 	t.Helper()
-	if conn, err := net.DialTimeout("tcp", "127.0.0.1:4100", 100*time.Millisecond); err == nil {
+	if conn, err := net.DialTimeout("tcp", "127.0.0.1:7779", 100*time.Millisecond); err == nil {
 		conn.Close()
 		t.Skip("TS server running on port 4000 — fallback test requires offline upstream")
 	}
@@ -6402,7 +6402,7 @@ func TestAuditReadEndpointsFallBackToLocalFiles(t *testing.T) {
 func TestStatusReadEndpointsFallBackToLocalPreview(t *testing.T) {
 	t.Skip("Skipping test for now")
 	t.Setenv("TORMENTNEXUS_TRPC_UPSTREAM", "http://127.0.0.1:1/trpc")
-	t.Setenv("OPEN_WEBUI_URL", "http://localhost:8080")
+	t.Setenv("OPEN_WEBUI_URL", "http://localhost:7778")
 
 	server := New(config.Default(), stubDetector{})
 
@@ -6440,7 +6440,7 @@ func TestStatusReadEndpointsFallBackToLocalPreview(t *testing.T) {
 				`"fallback":"go-local-status"`,
 				`"procedure":"openWebUI.getEmbedUrl"`,
 				`using local Open WebUI URL fallback`,
-				`"url":"http://localhost:8080"`,
+				`"url":"http://localhost:7778"`,
 			},
 		},
 		{
@@ -12396,7 +12396,7 @@ func TestUIHelperBridgeRoutes(t *testing.T) {
 		case "/trpc/openWebUI.getStatus":
 			_ = json.NewEncoder(w).Encode(map[string]any{"result": map[string]any{"data": map[string]any{"json": map[string]any{"status": "active"}}}})
 		case "/trpc/openWebUI.getEmbedUrl":
-			_ = json.NewEncoder(w).Encode(map[string]any{"result": map[string]any{"data": map[string]any{"json": map[string]any{"url": "http://localhost:8080"}}}})
+			_ = json.NewEncoder(w).Encode(map[string]any{"result": map[string]any{"data": map[string]any{"json": map[string]any{"url": "http://localhost:7778"}}}})
 		case "/trpc/codeMode.getStatus":
 			_ = json.NewEncoder(w).Encode(map[string]any{"result": map[string]any{"data": map[string]any{"json": map[string]any{"enabled": true}}}})
 		case "/trpc/codeMode.enable":
@@ -12475,7 +12475,7 @@ func TestUIHelperBridgeRoutes(t *testing.T) {
 		{name: "browser delete memory", method: http.MethodPost, path: "/api/browser-extension/delete-memory", body: `{"id":"mem-1"}`, contains: `"deleted":true`, procedure: `"procedure":"browserExtension.deleteMemory"`},
 		{name: "browser stats", method: http.MethodGet, path: "/api/browser-extension/stats", contains: `"totalMemories":1`, procedure: `"procedure":"browserExtension.stats"`},
 		{name: "openwebui status", method: http.MethodGet, path: "/api/open-webui/status", contains: `"status":"active"`, procedure: `"procedure":"openWebUI.getStatus"`},
-		{name: "openwebui embed", method: http.MethodGet, path: "/api/open-webui/embed-url", contains: `"http://localhost:8080"`, procedure: `"procedure":"openWebUI.getEmbedUrl"`},
+		{name: "openwebui embed", method: http.MethodGet, path: "/api/open-webui/embed-url", contains: `"http://localhost:7778"`, procedure: `"procedure":"openWebUI.getEmbedUrl"`},
 		{name: "code mode status", method: http.MethodGet, path: "/api/code-mode/status", contains: `"enabled":true`, procedure: `"procedure":"codeMode.getStatus"`},
 		{name: "code mode enable", method: http.MethodPost, path: "/api/code-mode/enable", body: `{}`, contains: `"enabled":true`, procedure: `"procedure":"codeMode.enable"`},
 		{name: "code mode disable", method: http.MethodPost, path: "/api/code-mode/disable", body: `{}`, contains: `"enabled":false`, procedure: `"procedure":"codeMode.disable"`},

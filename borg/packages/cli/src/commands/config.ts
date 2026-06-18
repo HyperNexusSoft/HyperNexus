@@ -53,7 +53,7 @@ export function registerConfigCommand(program: Command): void {
 			// Try to get config from running server
 			let serverConfig: any = null;
 			try {
-				const res = await fetch("http://127.0.0.1:4100/trpc/settings.get", {
+				const res = await fetch("http://127.0.0.1:7779/trpc/settings.get", {
 					signal: AbortSignal.timeout(3000),
 				});
 				if (res.ok) {

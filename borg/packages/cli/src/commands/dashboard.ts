@@ -93,7 +93,7 @@ Examples:
       const { spawn } = await import('child_process');
       const webDir = resolve(process.cwd(), 'apps/web');
       const url = `http://${opts.host}:${opts.port}`;
-      const upstreamTrpc = process.env.TORMENTNEXUS_TRPC_UPSTREAM?.trim() || 'http://127.0.0.1:4100/trpc';
+      const upstreamTrpc = process.env.TORMENTNEXUS_TRPC_UPSTREAM?.trim() || 'http://127.0.0.1:7779/trpc';
       const scriptPath = resolve(webDir, 'scripts', opts.dev ? 'dev.mjs' : 'start.mjs');
       const coreReachable = await isCoreReachable(upstreamTrpc);
 
