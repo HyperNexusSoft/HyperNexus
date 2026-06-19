@@ -136,8 +136,9 @@ def start_worker(name, config):
         log(f"Started {name} (PID {proc.pid})")
 
         # Write PID file if configured
-        if config["pid_file"]:
-            pid_path = WORKSPACE / config["pid_file"]
+        pid_file = config.get("pid_file")
+        if pid_file:
+            pid_path = WORKSPACE / pid_file
             with open(pid_path, "w") as f:
                 f.write(str(proc.pid))
 
