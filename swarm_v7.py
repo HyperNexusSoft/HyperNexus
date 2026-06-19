@@ -1001,6 +1001,10 @@ def fetch_source_code(github_url, temp_dir):
         return sources
 
     repo_url = github_url.rstrip("/")
+    if repo_url.startswith("git+"):
+        repo_url = repo_url[4:]
+    if repo_url.startswith("git@"):
+        repo_url = "https://" + repo_url.split("@")[1].replace(":", "/")
     if repo_url.endswith(".git"):
         repo_url = repo_url[:-4]
 
