@@ -107,37 +107,20 @@ for _model, _cd in [
         }
     )
 
-# FALLBACK: LM Studio local models (localhost:1234)
-LMSTUDIO_BASE = "http://localhost:1234/v1/chat/completions"
-for _model, _cd in [
-    ("local-model", 120),
-]:
-    DIRECT_PROVIDERS.append(
-        {
-            "name": f"lmstudio-{_model.replace('/', '-').lower()}",
-            "url": LMSTUDIO_BASE,
-            "key": "",
-            "model": _model,
-            "cooldown": _cd,
-            "timeout": 10,
-            "stream": False,
-        }
-    )
-
-# All pipeline phases use freellm only (primary) with LM Studio fallback
+# All pipeline phases use freellm only — waits indefinitely, never times out
 GENERATOR_MODELS = ["free-llm"]
 REVIEWER_MODELS = ["free-llm"]
 FIXER_MODELS = ["free-llm"]
 
-STREAM_TIMEOUT = 3600
-CURL_TIMEOUT = 3600
-CALL_COOLDOWN = 15  # Faster cycling since only one model
-PIPELINE_COOLDOWN = 10  # Faster pipeline
-MAX_RETRIES = 5
-RETRY_BASE_DELAY = 30  # Quick retry
-CIRCUIT_BREAKER_FAILS = 50
-CIRCUIT_BREAKER_COOLDOWN = 60
-MIN_CONTENT_LENGTH = 200  # Ignore short garbage responses ("GEN NO-CODE")
+STREAM_TIMEOUT = 86400
+CURL_TIMEOUT = 86400
+CALL_COOLDOWN = 10  # Fast cycling — only one provider
+PIPELINE_COOLDOWN = 5  # Fast pipeline
+MAX_RETRIES = 999  # Wait indefinitely for freellm
+RETRY_BASE_DELAY = 60  # Slow initial backoff
+CIRCUIT_BREAKER_FAILS = 999
+CIRCUIT_BREAKER_COOLDOWN = 10
+MIN_CONTENT_LENGTH = 50  # Accept short responses, let them fail review naturally
 BUILD_VERIFY_EVERY = 3
 PROXY_RESTART_AFTER = 8
 
@@ -974,6 +957,13 @@ RULES:
 8. 2-6 handlers, keep simple, MUST COMPILE, no TODOs
 9. Do NOT redeclare ToolResponse, ok, err, getString, getInt, getBool, TextContent - they exist in parity.go
 10. NO external packages (no github.com imports)
+11. COMMON BUGS TO AVOID:
+    - NEVER redeclare a variable named "err" — it shadows the err() function from parity.go. Use different names like "apiErr", "fetchErr", "parseErr"
+    - ALWAYS import ALL packages you use: "time", "strings", "net/url", "regexp", "sort" are NOT automatic
+    - EVERY function MUST end with a return statement (return ok(...) or return err(...))
+    - Do NOT use url.QueryEscape — use net/url's url.Values instead
+    - If you use "regexp", import "regexp" and compile with regexp.MustCompile
+12. Use specific variable names (apiErr, fetchErr, parseErr, reqErr) instead of generic "err" to avoid shadowing
 OUTPUT FORMAT - output TWO sections:
 ===GO_FILE===
 package tools // complete Go source code
