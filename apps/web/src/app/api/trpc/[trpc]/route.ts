@@ -400,6 +400,9 @@ const GO_NATIVE_PROCEDURES = new Set([
 	"mcp.getStatus",
 	"mcp.listServers",
 	"mcp.getToolSelectionTelemetry",
+	"mcp.clearToolSelectionTelemetry",
+	"mcp.runServerTest",
+	"session.list",
 	"session.importedMaintenanceStats",
 	"billing.getProviderQuotas",
 	"billing.getModelPricing",
@@ -408,8 +411,10 @@ const GO_NATIVE_PROCEDURES = new Set([
 	"billing.getFallbackHistory",
 	"billing.getFallbackChain",
 	"billing.getTaskRoutingRules",
+	"billing.getCostHistory",
 	"director.status",
 	"directorConfig.get",
+	"llm.generate",
 	"git.getLog",
 	"git.getStatus",
 	"git.getModules",
@@ -432,6 +437,9 @@ const GO_NATIVE_PROCEDURES = new Set([
 	"memory.searchUserPrompts",
 	"memory.searchMemoryPivot",
 	"memory.searchSessionSummaries",
+	"memory.getRecentObservations",
+	"memory.getRecentUserPrompts",
+	"memory.getRecentSessionSummaries",
 ]);
 
 async function handler(req: Request): Promise<Response> {

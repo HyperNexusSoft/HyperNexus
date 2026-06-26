@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.0-alpha.190] - 2026-06-26
+
+### Added
+- **tRPC Route Native Acceleration**: Promoted 8 more tRPC procedures to the `GO_NATIVE_PROCEDURES` fast path in Next.js backend router, reducing latency on dashboard telemetry, session listing, provider cost history, LLM generation, and memory observation retrieval.
+
 ## [1.0.0-alpha.189] - 2026-06-26
 
 ### Added
