@@ -435,9 +435,9 @@ export default function AIToolsDashboard() {
                         </div>
                     ) : (
                         <div className="space-y-2">
-                            {filteredTools.map((tool: any) => (
+                            {filteredTools.map((tool: any, idx: number) => (
                                 <div
-                                    key={tool.uuid ?? `${tool.name}-${tool.server}`}
+                                    key={tool.uuid ? `${tool.uuid}-${idx}` : `${tool.name}-${tool.server}-${idx}`}
                                     className="rounded-md border border-zinc-800 bg-zinc-950/60 p-3 flex items-start justify-between gap-3"
                                 >
                                     <div className="min-w-0">

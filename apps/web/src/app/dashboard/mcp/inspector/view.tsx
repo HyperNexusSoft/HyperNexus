@@ -404,9 +404,9 @@ function InspectorDashboardContent() {
                             </div>
                         ) : (
                             <div className="divide-y divide-zinc-800/50">
-                                {filteredTools.map((tool) => (
+                                {filteredTools.map((tool, idx) => (
                                     <button
-                                        key={tool.name}
+                                        key={`${tool.server ?? ''}:${tool.name}:${idx}`}
                                         onClick={() => selectTool(tool)}
                                         title={`Select ${tool.name} from ${tool.server ?? 'unknown server'} for inspection`}
                                         aria-label={`Select tool ${tool.name}`}
@@ -592,8 +592,8 @@ function InspectorDashboardContent() {
                     <CardContent className="p-0 flex-1 overflow-y-auto">
                         {workingSet.length > 0 ? (
                             <div className="divide-y divide-zinc-800/50">
-                                {workingSet.map((tool) => (
-                                    <div key={tool.name} className="p-3 space-y-2">
+                                {workingSet.map((tool, idx) => (
+                                    <div key={`${tool.name}:${idx}`} className="p-3 space-y-2">
                                         <div className="font-mono text-xs text-zinc-200 break-all">{tool.name}</div>
                                         <div className="flex flex-wrap gap-2 text-[10px] uppercase tracking-wider">
                                             <span className="bg-zinc-800 px-2 py-0.5 rounded text-zinc-400">loaded</span>

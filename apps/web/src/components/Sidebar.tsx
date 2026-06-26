@@ -104,13 +104,19 @@ export function Sidebar({ className }: SidebarProps) {
         }
     }, []);
 
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
     const isActive = (href: string) => {
         if (href.includes('?')) {
             const [urlPath, queryStr] = href.split('?');
             if (pathname !== urlPath) {
                 return false;
             }
-            if (typeof window !== 'undefined') {
+            if (mounted && typeof window !== 'undefined') {
                 const params = new URLSearchParams(queryStr);
                 const currentParams = new URLSearchParams(window.location.search);
                 return currentParams.get('tab') === params.get('tab');

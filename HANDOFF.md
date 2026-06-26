@@ -1,8 +1,8 @@
-# HANDOFF — Session 2026-06-26 R3 (Dashboard Pages Condensation & Consolidation - Alpha.170)
+# HANDOFF — Session 2026-06-26 R4 (React Key Warnings & Hydration Mismatch Fixed - Alpha.175)
 
 ## Summary
 
-Successfully condensed and consolidated 60+ individual dashboard pages and routes into 3 unified, high-performance tabbed hubs. Updated sidebar navigation configurations, added active state highlights checking query parameters, implemented client-side redirects for backward compatibility, and verified the entire setup compiles with zero TypeScript errors. Bumped the version to `1.0.0-alpha.170`.
+Successfully fixed the React console warnings about duplicate keys (like `windows-mcp__App`, `av__TOOL_CALL`, `browser_click`) and resolved the React hydration mismatch warning caused by the sidebar query check. Verified that the entire web app builds and compiles with zero TypeScript errors. Bumped the version to `1.0.0-alpha.175`.
 
 ### What was done
 

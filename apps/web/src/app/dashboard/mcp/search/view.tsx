@@ -844,11 +844,11 @@ function SearchDashboard() {
                                 </div>
                             ) : results.length > 0 ? (
                                 <div className="divide-y divide-zinc-800/80">
-                                    {results.map((tool) => {
+                                    {results.map((tool, idx) => {
                                         const isLoaded = tool.loaded ?? loadedToolNames.has(tool.name);
 
                                         return (
-                                            <div key={tool.name} className="p-5 hover:bg-zinc-950/60 transition-colors space-y-4">
+                                            <div key={`${tool.server ?? ''}:${tool.name}:${idx}`} className="p-5 hover:bg-zinc-950/60 transition-colors space-y-4">
                                                 <div className="flex items-start justify-between gap-4">
                                                     <div className="min-w-0">
                                                         <div className="font-mono text-blue-400 font-medium text-lg mb-1 break-all">{tool.name}</div>
@@ -1047,8 +1047,8 @@ function SearchDashboard() {
                                                 <div className={`text-[10px] uppercase tracking-wider ${section.tone}`}>
                                                     {section.label} ({section.tools.length})
                                                 </div>
-                                                {section.tools.length > 0 ? section.tools.map((tool) => (
-                                                    <div key={tool.name} className="rounded-lg border border-zinc-800 bg-zinc-950/60 p-3 space-y-2">
+                                                {section.tools.length > 0 ? section.tools.map((tool, idx) => (
+                                                    <div key={`${tool.name}:${idx}`} className="rounded-lg border border-zinc-800 bg-zinc-950/60 p-3 space-y-2">
                                                         <div className="flex items-start justify-between gap-3">
                                                             <div className="min-w-0">
                                                                 <div className="font-mono text-sm text-zinc-100 break-all">{tool.name}</div>

@@ -1530,8 +1530,8 @@ export function MCPDashboardOverview(): React.JSX.Element {
                         {isLoadingTools ? (
                             <div className="flex justify-center p-8"><Loader2 className="h-6 w-6 animate-spin text-zinc-500" /></div>
                         ) : topTools.length > 0 ? (
-                            topTools.map((tool) => (
-                                <div key={`${tool.server}:${tool.name}`} className="rounded-lg border border-zinc-800 bg-zinc-950/60 p-4">
+                            topTools.map((tool, idx) => (
+                                <div key={`${tool.server}:${tool.name}:${idx}`} className="rounded-lg border border-zinc-800 bg-zinc-950/60 p-4">
                                     <div className="flex items-center gap-2">
                                         <div className="font-mono text-sm text-blue-400 break-all">{tool.name}</div>
                                         <span className="rounded bg-zinc-800 px-2 py-0.5 text-[10px] uppercase tracking-wider text-zinc-400">{tool.server}</span>

@@ -1,5 +1,11 @@
 # Changelog
- 
+
+## [1.0.0-alpha.175] - 2026-06-26
+
+### Fixed
+- **Sidebar Hydration Mismatch**: Added a mounted state check in `Sidebar.tsx` active path checking to prevent mismatch between server and client query parameter rendering.
+- **Duplicate React Keys**: Updated tool rendering lists across `catalog/view.tsx`, `ai-tools/view.tsx`, `inspector/view.tsx`, `observability/view.tsx`, `search/view.tsx`, `docs/tools/page.tsx` and the main dashboard snapshot map to combine names/uuids with indices, successfully silencing all duplicate key warnings in the browser console.
+
 ## [1.0.0-alpha.174] - 2026-06-26
 
 ### Fixed

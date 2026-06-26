@@ -2,6 +2,10 @@
 
 ## Session 2026-06-26 (Dashboard Hub Condensation & Verification)
 
+### React and Hydration Stability Observations
+- **Hydration Mismatch Mitigation**: Query parameter checks (e.g. `window.location.search`) in global layout components like the `Sidebar` must be deferred until the component is mounted on the client (`mounted` state check). This guarantees identical initial HTML structure between server-rendered (SSR) and client-rendered content, eliminating React hydration warning spam.
+- **Unique React Loop Keys**: When mapping dynamic data such as lists of MCP tools where multiple instances of tools or servers can exist (or tool names lack unique IDs), utilizing just `tool.name` or `tool.uuid` triggers React duplicate key errors. Combining server name, tool name, and array mapping indices (e.g., `key={\`${tool.server ?? ''}__\${tool.name ?? ''}__\${idx}\`}`) prevents rendering identity bugs and cleans up the browser console.
+
 ### Layout & Routing Condensation Heuristics
 - **High-Fidelity Tabbed Consolidation**: Condensed 60 separate subpage folders into 3 major hub pages (System `/dashboard`, MCP Tool Services `/dashboard/mcp`, and Agent Swarm `/dashboard/swarm`). 
 - **Tab State and History Sync**: Integrating Next.js `useSearchParams()` with `router.replace` allows seamless navigation tab switching that synchronizes with the URL address bar and updates the sidebar navigation highlighted status automatically.

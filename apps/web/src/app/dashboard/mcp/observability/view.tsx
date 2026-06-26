@@ -83,8 +83,8 @@ export default function ObservabilityDashboard() {
                             </div>
                         ) : (
                             <div className="space-y-4">
-                                {topTools.slice(0, 5).map((tool) => (
-                                    <div key={tool.name} className="space-y-1">
+                                {topTools.slice(0, 5).map((tool, idx) => (
+                                    <div key={`${tool.name}:${idx}`} className="space-y-1">
                                         <div className="flex justify-between text-xs text-zinc-400">
                                             <span>{tool.name}</span>
                                             <span>{tool.count} calls</span>

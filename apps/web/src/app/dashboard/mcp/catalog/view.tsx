@@ -48,8 +48,8 @@ export default function CatalogDashboard() {
                 </div>
             ) : (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {filteredTools.map((tool: any) => (
-                        <Card key={tool.uuid} className="bg-zinc-900 border-zinc-800 hover:border-zinc-700 transition-colors group">
+                    {filteredTools.map((tool: any, idx: number) => (
+                        <Card key={`${tool.server ?? ''}__${tool.name ?? ''}__${idx}`} className="bg-zinc-900 border-zinc-800 hover:border-zinc-700 transition-colors group">
                             <CardHeader className="pb-2">
                                 <CardTitle className="text-base font-medium text-zinc-200 flex items-center justify-between">
                                     <span className="font-mono text-blue-400">{tool.name}</span>
