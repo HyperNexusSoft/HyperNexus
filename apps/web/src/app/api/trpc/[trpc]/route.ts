@@ -177,6 +177,99 @@ function getCompatRoute(procedurePath: string, input: unknown): string | null {
 		return `/api/memory/session-summaries/recent?${params.toString()}`;
 	}
 
+	// ── Health ──
+	if (procedurePath === "health") {
+		return "/api/health";
+	}
+
+	// ── Git (Go-native with local fallback) ──
+	if (procedurePath === "git.getLog") {
+		const limit = (input as any)?.limit ?? 10;
+		return `/api/git/log?limit=${limit}`;
+	}
+	if (procedurePath === "git.getStatus") {
+		return "/api/git/status";
+	}
+	if (procedurePath === "git.getModules") {
+		return "/api/git/modules";
+	}
+	if (procedurePath === "git.revert") {
+		return "/api/git/revert";
+	}
+
+	// ── Graph (Go-native with local fallback) ──
+	if (procedurePath === "graph.getSymbolsGraph" || procedurePath === "graph.getSymbols") {
+		return "/api/graph/symbols";
+	}
+	if (procedurePath === "graph.get") {
+		return "/api/graph";
+	}
+
+	// ── Knowledge (Go-native with local fallback) ──
+	if (procedurePath === "knowledge.ingest") {
+		return "/api/knowledge/ingest";
+	}
+	if (procedurePath === "knowledge.getResources") {
+		return "/api/knowledge/resources";
+	}
+	if (procedurePath === "knowledge.graph") {
+		return "/api/knowledge/graph";
+	}
+	if (procedurePath === "knowledge.stats") {
+		return "/api/knowledge/stats";
+	}
+
+	// ── LSP (Go-native with local fallback) ──
+	if (procedurePath === "lsp.getSymbols") {
+		const filePath = (input as any)?.filePath || "";
+		return `/api/lsp/symbols?filePath=${encodeURIComponent(filePath)}`;
+	}
+	if (procedurePath === "lsp.findSymbol") {
+		const filePath = (input as any)?.filePath || "";
+		const symbolName = (input as any)?.symbolName || "";
+		return `/api/lsp/find-symbol?filePath=${encodeURIComponent(filePath)}&symbolName=${encodeURIComponent(symbolName)}`;
+	}
+	if (procedurePath === "lsp.findReferences") {
+		const filePath = (input as any)?.filePath || "";
+		const line = (input as any)?.line || 0;
+		const character = (input as any)?.character || 0;
+		return `/api/lsp/find-references?filePath=${encodeURIComponent(filePath)}&line=${line}&character=${character}`;
+	}
+	if (procedurePath === "lsp.searchSymbols") {
+		const query = (input as any)?.query || "";
+		return `/api/lsp/search?query=${encodeURIComponent(query)}`;
+	}
+	if (procedurePath === "lsp.indexProject") {
+		return "/api/lsp/index";
+	}
+
+	// ── Memory Queries (Go-native with local fallback) ──
+	if (procedurePath === "memory.query" || procedurePath === "memory.searchAgentMemory") {
+		const query = (input as any)?.query || "";
+		const limit = (input as any)?.limit || 10;
+		return `/api/memory/search?query=${encodeURIComponent(query)}&limit=${limit}`;
+	}
+	if (procedurePath === "memory.searchObservations") {
+		const query = (input as any)?.query || "";
+		const limit = (input as any)?.limit || 10;
+		return `/api/memory/observations/search?query=${encodeURIComponent(query)}&limit=${limit}`;
+	}
+	if (procedurePath === "memory.searchUserPrompts") {
+		const query = (input as any)?.query || "";
+		const limit = (input as any)?.limit || 10;
+		return `/api/memory/user-prompts/search?query=${encodeURIComponent(query)}&limit=${limit}`;
+	}
+	if (procedurePath === "memory.searchMemoryPivot") {
+		const query = (input as any)?.query || "";
+		const limit = (input as any)?.limit || 10;
+		return `/api/memory/pivot/search?query=${encodeURIComponent(query)}&limit=${limit}`;
+	}
+	if (procedurePath === "memory.searchSessionSummaries") {
+		const query = (input as any)?.query || "";
+		const limit = (input as any)?.limit || 10;
+		return `/api/memory/session-summaries/search?query=${encodeURIComponent(query)}&limit=${limit}`;
+	}
+
 	return null;
 }
 
@@ -303,6 +396,7 @@ async function tryCompatFallback(
  * proxying through the TS Core tRPC server (~100-300ms).
  */
 const GO_NATIVE_PROCEDURES = new Set([
+	"health",
 	"mcp.getStatus",
 	"mcp.listServers",
 	"mcp.getToolSelectionTelemetry",
@@ -316,6 +410,28 @@ const GO_NATIVE_PROCEDURES = new Set([
 	"billing.getTaskRoutingRules",
 	"director.status",
 	"directorConfig.get",
+	"git.getLog",
+	"git.getStatus",
+	"git.getModules",
+	"git.revert",
+	"graph.getSymbolsGraph",
+	"graph.getSymbols",
+	"graph.get",
+	"knowledge.ingest",
+	"knowledge.getResources",
+	"knowledge.graph",
+	"knowledge.stats",
+	"lsp.getSymbols",
+	"lsp.findSymbol",
+	"lsp.findReferences",
+	"lsp.searchSymbols",
+	"lsp.indexProject",
+	"memory.query",
+	"memory.searchAgentMemory",
+	"memory.searchObservations",
+	"memory.searchUserPrompts",
+	"memory.searchMemoryPivot",
+	"memory.searchSessionSummaries",
 ]);
 
 async function handler(req: Request): Promise<Response> {

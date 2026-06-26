@@ -137,7 +137,7 @@ if "!WEB_CHECK!"=="200" (
 
 REM Start TypeScript control plane
 set TORMENTNEXUS_PORT=%TORMENTNEXUS_PORT%
-if "%TORMENTNEXUS_PORT%"=="" set TORMENTNEXUS_PORT=4100
+if "%TORMENTNEXUS_PORT%"=="" set TORMENTNEXUS_PORT=4300
 
 REM Wait for dashboard to be ready
 echo   Waiting for dashboard to compile...
@@ -152,30 +152,16 @@ if "!DASH_READY!"=="200" goto :dash_done_ts
     goto :dash_wait_ts
 :dash_done_ts
 
-REM Check if core is already running
-curl -s -o nul -w "%%{http_code}" http://127.0.0.1:%TORMENTNEXUS_PORT%/health > "%TEMP%\tormentnexus_core_check.txt" 2>nul
-set /p CORE_CHECK=<"%TEMP%\tormentnexus_core_check.txt"
-if "!CORE_CHECK!"=="200" (
-    echo   TS control plane already running on port %TORMENTNEXUS_PORT%.
-) else (
-    echo   Starting TS control plane on port %TORMENTNEXUS_PORT%...
-)
 echo.
-echo   tRPC:      http://0.0.0.0:%TORMENTNEXUS_PORT%/trpc
-echo   REST:      http://0.0.0.0:%TORMENTNEXUS_PORT%/api
-echo   Go:        http://127.0.0.1:7778/health
-echo   Dashboard: http://localhost:%DASH_PORT%/dashboard
+echo   Go Backend: http://127.0.0.1:4300
+echo   Dashboard:  http://localhost:%DASH_PORT%/dashboard
 echo.
-if not "!CORE_CHECK!"=="200" (
-    echo Press Ctrl+C to stop all services.
-    echo.
-    node packages/cli/dist/cli/src/index.js start --port %TORMENTNEXUS_PORT% !REMAINING_ARGS!
-) else (
-    echo Press Ctrl+C to stop all services.
-    echo.
-    echo All services running. Core was already active.
-    timeout /t 99999 > nul
-)
+echo   [DEPRECATED] TS Control Plane daemon startup skipped.
+echo   All backend APIs are natively run in the Go sidecar.
+echo.
+echo Press Ctrl+C to stop all services.
+echo.
+timeout /t 99999 > nul
 goto :eof
 
 REM ===== GO-PRIMARY PATH =====

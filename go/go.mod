@@ -13,6 +13,7 @@ require (
 require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/google/jsonschema-go v0.4.2 // indirect
+	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/mark3labs/mcp-go v0.46.0 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect

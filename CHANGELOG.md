@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.0-alpha.177] - 2026-06-26
+
+### Fixed
+- **Traffic Inspector WebSocket Port**: Configured `TrafficInspector.tsx` to default to port `3001` (where the MCP bridge runs) instead of Next.js server port `3000` to prevent WebSocket handshake errors.
+
 ## [1.0.0-alpha.176] - 2026-06-26
 
 ### Fixed

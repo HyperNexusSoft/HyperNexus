@@ -599,6 +599,15 @@ func (s *Server) injectAlwaysOnStatus(tools []map[string]any) []map[string]any {
 	for _, tool := range tools {
 		name, _ := tool["name"].(string)
 		isAlwaysOn := parityTools[name] || alwaysOnMap[name]
+		// Dynamically treat all accessory/native tools as always-on
+		if registry := roottools.NewRegistry(); registry != nil {
+			for _, t := range registry.Tools {
+				if t.Name == name {
+					isAlwaysOn = true
+					break
+				}
+			}
+		}
 		tool["alwaysOn"] = isAlwaysOn
 		tool["alwaysShow"] = isAlwaysOn
 	}
