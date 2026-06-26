@@ -1,9 +1,21 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { PageHeader } from '@/components/PageHeader';
 import { PageStatusBanner } from '@/components/PageStatusBanner';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, Button, Input, Tabs, TabsContent, TabsList, TabsTrigger, Badge, ScrollArea } from '@tormentnexus/ui';
+
+// Import all Swarm & Intelligence sub-pages to consolidate
+import CognitiveBrainDashboard from '../brain/page';
+import SessionDashboard from '../session/page';
+import LibraryDashboard from '../library/page';
+import CodeDashboard from '../code/page';
+import SkillsPage from '../skills/page';
+import SubmodulesPage from '../submodules/page';
+import MemoryHydrationPage from '../memory/hydration/page';
+import CodeSandboxPage from '../code/sandbox/page';
+import ClaudeChromePage from '../claude-chrome/page';
 import { SwarmTranscript } from '@/components/swarm/SwarmTranscript';
 import { DebateVisualizer } from "@/components/council/DebateVisualizer";
 import { SquadsPanel } from '@tormentnexus/ui';
@@ -142,7 +154,7 @@ function parseCommaSeparatedList(input: string): string[] {
 type DebateMode = 'standard' | 'adversarial';
 type DebateTopicType = 'general' | 'mission-plan';
 
-export default function SwarmDashboard() {
+export function SwarmDashboardOverview() {
     const [activeTab, setActiveTab] = useState<'swarm' | 'squads' | 'director' | 'supervisor' | 'council' | 'missions' | 'telemetry' | 'transcript'>('swarm');
 
     // Telemetry State
@@ -758,4 +770,78 @@ export default function SwarmDashboard() {
             </div>
         </div>
     );
+}
+
+const SWARM_TABS = [
+  { id: 'swarm', label: 'Swarm Control' },
+  { id: 'brain', label: 'Brain & Memory' },
+  { id: 'session', label: 'Sessions & Context' },
+  { id: 'library', label: 'Knowledge & Skills' },
+  { id: 'code', label: 'Code Platform' },
+  { id: 'skills', label: 'Skills Registry' },
+  { id: 'submodules', label: 'Submodules' },
+  { id: 'hydration', label: 'Memory Hydration' },
+  { id: 'sandbox', label: 'Code Sandbox' },
+  { id: 'claude-chrome', label: 'Chrome Automation' },
+] as const;
+
+export default function SwarmDashboard(): React.JSX.Element {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'swarm';
+
+  const handleTabChange = (tabId: string) => {
+    router.replace(`/dashboard/swarm?tab=${tabId}`);
+  };
+
+  const renderActiveTab = () => {
+    switch (activeTab) {
+      case 'brain':
+        return <CognitiveBrainDashboard />;
+      case 'session':
+        return <SessionDashboard />;
+      case 'library':
+        return <LibraryDashboard />;
+      case 'code':
+        return <CodeDashboard />;
+      case 'skills':
+        return <SkillsPage />;
+      case 'submodules':
+        return <SubmodulesPage />;
+      case 'hydration':
+        return <MemoryHydrationPage />;
+      case 'sandbox':
+        return <CodeSandboxPage />;
+      case 'claude-chrome':
+        return <ClaudeChromePage />;
+      case 'swarm':
+      default:
+        return <SwarmDashboardOverview />;
+    }
+  };
+
+  return (
+    <div className="flex flex-col min-h-screen bg-black text-zinc-100">
+      {/* Sleek Sub-navigation Tab Bar */}
+      <div className="sticky top-0 z-20 flex overflow-x-auto border-b border-zinc-800 bg-zinc-950/95 backdrop-blur px-4 py-2 scrollbar-none gap-1">
+        {SWARM_TABS.map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            onClick={() => handleTabChange(tab.id)}
+            className={`px-3 py-1.5 text-xs font-semibold rounded-md whitespace-nowrap transition-all duration-150 ${
+              activeTab === tab.id
+                ? 'bg-zinc-800 text-white shadow-sm'
+                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+      <div className="flex-1 p-4 md:p-6 min-h-0 overflow-auto">
+        {renderActiveTab()}
+      </div>
+    </div>
+  );
 }

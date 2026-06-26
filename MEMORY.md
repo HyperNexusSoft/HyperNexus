@@ -1,5 +1,12 @@
 # MEMORY.md — Multi-Agent Observations
 
+## Session 2026-06-26 (Dashboard Hub Condensation & Verification)
+
+### Layout & Routing Condensation Heuristics
+- **High-Fidelity Tabbed Consolidation**: Condensed 60 separate subpage folders into 3 major hub pages (System `/dashboard`, MCP Tool Services `/dashboard/mcp`, and Agent Swarm `/dashboard/swarm`). 
+- **Tab State and History Sync**: Integrating Next.js `useSearchParams()` with `router.replace` allows seamless navigation tab switching that synchronizes with the URL address bar and updates the sidebar navigation highlighted status automatically.
+- **Client-Side Redirection Fallbacks**: Rewriting the `page.tsx` files of condensed routes with immediate client-side client redirects (`router.replace`) ensures complete backward compatibility for bookmarks and direct links without breaking any feature flows.
+
 ## Session 2026-06-26 (Go Sidecar Redeclaration & Port Hardening)
 
 ### Code Generation & Compiler Redeclaration Observations

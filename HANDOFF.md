@@ -1,3 +1,43 @@
+# HANDOFF — Session 2026-06-26 R3 (Dashboard Pages Condensation & Consolidation - Alpha.170)
+
+## Summary
+
+Successfully condensed and consolidated 60+ individual dashboard pages and routes into 3 unified, high-performance tabbed hubs. Updated sidebar navigation configurations, added active state highlights checking query parameters, implemented client-side redirects for backward compatibility, and verified the entire setup compiles with zero TypeScript errors. Bumped the version to `1.0.0-alpha.170`.
+
+### What was done
+
+1. **Sidebar Navigation Updates**:
+   - Mapped all legacy paths in `nav-config.ts` to the new hubs using `?tab=...` parameters.
+   - Updated the `isActive` utility in `Sidebar.tsx` to read the search params and correctly highlight the active tab.
+
+2. **System & Operations Control Hub (`/dashboard`)**:
+   - Integrated Home (Overview), Diagnostics & Research, Command Console, Git Chronicle, User Manual, Workflows, Security & Audits, Integrations Hub, Cloud Orchestrator, Billing & Plans, and Global Settings under a unified tab bar.
+
+3. **MCP Registry & Tool Services Hub (`/dashboard/mcp`)**:
+   - Rebuilt `/dashboard/mcp` to support tabs for all MCP tool sets, catalog, search, registry, endpoints, scripts, docs, always-on, and policies.
+
+4. **Agent Swarm & Intelligence Hub (`/dashboard/swarm`)**:
+   - Rebuilt `/dashboard/swarm` to support tabs for Swarm Control, Brain & Memory, Sessions, Library, Code platform, skills, submodules, and chrome automation.
+
+5. **Client-Side Redirection Fallbacks**:
+   - Automatically updated all 50+ secondary page files under legacy routes to use standard Next.js client-side redirection `router.replace(...)` to prevent broken links.
+
+6. **Validation**:
+   - Ran `pnpm -C apps/web exec tsc --noEmit` and verified 100% clean compilation.
+
+### Current State
+
+- **Monorepo Version**: `1.0.0-alpha.170`
+- **TypeScript Compiler**: ✅ Clean compile.
+- **Unified Hubs**: Live at `/dashboard`, `/dashboard/mcp`, and `/dashboard/swarm`.
+
+### Next Agent Instructions
+
+- Run the Next.js dev server and verify the UI behavior in a browser.
+- Monitor the background swarm generators to ensure any regenerated Go MCP tools continue to compile correctly.
+
+---
+
 # HANDOFF — Session 2026-06-26 R2 (Server Error Resolution & TS Control Plane Activation)
 
 ## Summary

@@ -1,5 +1,10 @@
 # Changelog
  
+## [1.0.0-alpha.170] - 2026-06-26
+
+### Changed
+- **Dashboard Condensation & Consolidation**: Condensed all 60+ individual subpages and routes within the TormentNexus web dashboard into 3 major hub pages (System & Operations `/dashboard`, MCP Tool Services `/dashboard/mcp`, and Agent Swarm `/dashboard/swarm`). Added instant client-side fallback redirects for backward compatibility. Updated sidebar navigation configuration and active link status checks to support query parameters.
+
 ## [1.0.0-alpha.165] - 2026-06-26
 
 ### Added

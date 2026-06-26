@@ -2,8 +2,31 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import type { ComponentType, FormEvent } from 'react';
 import { Button, Card, CardContent, CardHeader, CardTitle } from '@tormentnexus/ui';
+
+// Import all MCP sub-pages to consolidate
+import AlwaysOnToolsPage from './always-on/page';
+import CatalogDashboard from './catalog/page';
+import InspectorDashboard from './inspector/page';
+import RegistryDashboard from './registry/page';
+import MCPSettings from './settings/page';
+import AgentPlayground from './agent/page';
+import AIToolsDashboard from './ai-tools/page';
+import ApiKeysDashboard from './api-keys/page';
+import AuditDashboard from './audit/page';
+import DocsDashboard from './docs/page';
+import EndpointsDashboard from './endpoints/page';
+import NamespacesDashboard from './namespaces/page';
+import ObservabilityDashboard from './observability/page';
+import PoliciesDashboard from './policies/page';
+import ScriptsDashboard from './scripts/page';
+import SearchDashboardPage from './search/page';
+import SystemStatusDashboard from './system/page';
+import ToolSetsDashboard from './tool-sets/page';
+import ToolsRegistryDashboard from './tools/page';
+import TormentNexusPage from './tormentnexus/page';
 import { trpc } from '@/utils/trpc';
 import { buildBulkImportServers } from '@/lib/mcp-import';
 import { toast } from 'sonner';
@@ -710,7 +733,7 @@ function BulkImportForm({ onDone, existingServerNames }: { onDone: () => void; e
     );
 }
 
-export default function MCPDashboard(): React.JSX.Element {
+export function MCPDashboardOverview(): React.JSX.Element {
     const trpcUtils = trpc.useUtils();
     const { data: servers, isLoading: isLoadingServers, refetch: refetchServers } = trpc.mcp.listServers.useQuery();
     const mcpServersClient = trpc.mcpServers as any;
@@ -1526,4 +1549,111 @@ export default function MCPDashboard(): React.JSX.Element {
             </div>
         </div>
     );
+}
+
+const MCP_TABS = [
+  { id: 'dashboard', label: 'MCP Dashboard' },
+  { id: 'always-on', label: 'Always-On' },
+  { id: 'catalog', label: 'Tool Catalog' },
+  { id: 'inspector', label: 'Tools Inspector' },
+  { id: 'registry', label: 'MCP Registry' },
+  { id: 'settings', label: 'MCP Settings' },
+  { id: 'agent', label: 'Agent Playground' },
+  { id: 'ai-tools', label: 'AI Tools' },
+  { id: 'api-keys', label: 'API Keys' },
+  { id: 'audit', label: 'Audit Log' },
+  { id: 'docs', label: 'Documentation' },
+  { id: 'endpoints', label: 'Endpoints' },
+  { id: 'namespaces', label: 'Namespaces' },
+  { id: 'observability', label: 'Observability' },
+  { id: 'policies', label: 'Policies' },
+  { id: 'scripts', label: 'Scripts' },
+  { id: 'search', label: 'Search' },
+  { id: 'system', label: 'System Status' },
+  { id: 'tool-sets', label: 'Tool Sets' },
+  { id: 'tools', label: 'Tools Registry' },
+  { id: 'tormentnexus', label: 'TormentNexus Core' },
+] as const;
+
+export default function MCPDashboard(): React.JSX.Element {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'dashboard';
+
+  const handleTabChange = (tabId: string) => {
+    router.replace(`/dashboard/mcp?tab=${tabId}`);
+  };
+
+  const renderActiveTab = () => {
+    switch (activeTab) {
+      case 'always-on':
+        return <AlwaysOnToolsPage />;
+      case 'catalog':
+        return <CatalogDashboard />;
+      case 'inspector':
+        return <InspectorDashboard />;
+      case 'registry':
+        return <RegistryDashboard />;
+      case 'settings':
+        return <MCPSettings />;
+      case 'agent':
+        return <AgentPlayground />;
+      case 'ai-tools':
+        return <AIToolsDashboard />;
+      case 'api-keys':
+        return <ApiKeysDashboard />;
+      case 'audit':
+        return <AuditDashboard />;
+      case 'docs':
+        return <DocsDashboard />;
+      case 'endpoints':
+        return <EndpointsDashboard />;
+      case 'namespaces':
+        return <NamespacesDashboard />;
+      case 'observability':
+        return <ObservabilityDashboard />;
+      case 'policies':
+        return <PoliciesDashboard />;
+      case 'scripts':
+        return <ScriptsDashboard />;
+      case 'search':
+        return <SearchDashboardPage />;
+      case 'system':
+        return <SystemStatusDashboard />;
+      case 'tool-sets':
+        return <ToolSetsDashboard />;
+      case 'tools':
+        return <ToolsRegistryDashboard />;
+      case 'tormentnexus':
+        return <TormentNexusPage />;
+      case 'dashboard':
+      default:
+        return <MCPDashboardOverview />;
+    }
+  };
+
+  return (
+    <div className="flex flex-col min-h-screen bg-black text-zinc-100">
+      {/* Sleek Sub-navigation Tab Bar */}
+      <div className="sticky top-0 z-20 flex overflow-x-auto border-b border-zinc-800 bg-zinc-950/95 backdrop-blur px-4 py-2 scrollbar-none gap-1">
+        {MCP_TABS.map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            onClick={() => handleTabChange(tab.id)}
+            className={`px-3 py-1.5 text-xs font-semibold rounded-md whitespace-nowrap transition-all duration-150 ${
+              activeTab === tab.id
+                ? 'bg-zinc-800 text-white shadow-sm'
+                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+      <div className="flex-1 p-4 md:p-6 min-h-0 overflow-auto">
+        {renderActiveTab()}
+      </div>
+    </div>
+  );
 }

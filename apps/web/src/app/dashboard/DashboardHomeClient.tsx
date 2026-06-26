@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { trpc } from '../../utils/trpc';
 import {
   DashboardHomeView,
@@ -17,6 +18,18 @@ import { useGoSidecarDashboard } from '../../hooks/useGoSidecarData';
 import { BrowserToolWidget } from '../../components/BrowserToolWidget';
 import { VibeCheckWidget } from '../../components/VibeCheckWidget';
 
+// Import sub-pages to consolidate
+import ResearchPage from './research/page';
+import CommandDashboard from './command/page';
+import ChronicleDashboard from './chronicle/page';
+import ManualPage from './manual/page';
+import WorkflowsPage from './workflows/page';
+import SecurityPage from './security/page';
+import IntegrationsDashboard from './integrations/page';
+import CloudOrchestratorDashboardPage from './cloud-orchestrator/page';
+import ProviderAuthBillingMatrix from './billing/page';
+import SettingsDashboard from './settings/page';
+
 const SESSION_STATUS_PRIORITY: Record<DashboardSessionSummary['status'], number> = {
   error: 6,
   restarting: 5,
@@ -26,6 +39,20 @@ const SESSION_STATUS_PRIORITY: Record<DashboardSessionSummary['status'], number>
   created: 1,
   stopped: 0,
 };
+
+const TABS = [
+  { id: 'home', label: 'Overview' },
+  { id: 'research', label: 'Research' },
+  { id: 'command', label: 'Command' },
+  { id: 'chronicle', label: 'Chronicle' },
+  { id: 'workflows', label: 'Workflows' },
+  { id: 'security', label: 'Security & Audits' },
+  { id: 'integrations', label: 'Integrations' },
+  { id: 'cloud-orchestrator', label: 'Cloud' },
+  { id: 'billing', label: 'Billing' },
+  { id: 'settings', label: 'Settings' },
+  { id: 'manual', label: 'Manual' },
+] as const;
 
 export function sortSessions(sessions: DashboardSessionSummary[]) {
   return [...sessions].sort((left, right) => {
@@ -42,6 +69,14 @@ function sortServers(servers: DashboardServerSummary[]) {
 }
 
 export function DashboardHomeClient() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'home';
+
+  const handleTabChange = (tabId: string) => {
+    router.replace(`/dashboard?tab=${tabId}`);
+  };
+
   const utils = trpc.useUtils();
   const toolsClient = trpc.tools as any;
   const [pendingSessionActionId, setPendingSessionActionId] = useState<string | null>(null);
@@ -264,40 +299,91 @@ export function DashboardHomeClient() {
     };
   }, [healerHistoryQuery.data, healerVaultCountQuery.data, healerHistoryQuery.isSuccess, healerVaultCountQuery.isSuccess]);
 
+  const renderActiveTab = () => {
+    switch (activeTab) {
+      case 'research':
+        return <ResearchPage />;
+      case 'command':
+        return <CommandDashboard />;
+      case 'chronicle':
+        return <ChronicleDashboard />;
+      case 'workflows':
+        return <WorkflowsPage />;
+      case 'security':
+        return <SecurityPage />;
+      case 'integrations':
+        return <IntegrationsDashboard />;
+      case 'cloud-orchestrator':
+        return <CloudOrchestratorDashboardPage />;
+      case 'billing':
+        return <ProviderAuthBillingMatrix />;
+      case 'settings':
+        return <SettingsDashboard />;
+      case 'manual':
+        return <ManualPage />;
+      case 'home':
+      default:
+        return (
+          <DashboardHomeView
+            generatedAtLabel={
+              currentTimestamp
+                ? new Date(currentTimestamp).toLocaleTimeString()
+                : 'just now'
+            }
+            currentTimestamp={currentTimestamp}
+            isBootstrapping={isBootstrapping}
+            mcpStatus={mcpStatus}
+            startupStatus={startupStatus}
+            servers={servers}
+            traffic={traffic}
+            providers={providers}
+            fallbackChain={fallbackChain}
+            sessions={sessions}
+            healerStatus={healerStatus}
+            installSurfaceArtifacts={installArtifactsQuery.data ?? null}
+            onStartSession={(sessionId) => {
+              setPendingSessionActionId(sessionId);
+              startSessionMutation.mutate({ id: sessionId });
+            }}
+            onStopSession={(sessionId) => {
+              setPendingSessionActionId(sessionId);
+              stopSessionMutation.mutate({ id: sessionId });
+            }}
+            onRestartSession={(sessionId) => {
+              setPendingSessionActionId(sessionId);
+              restartSessionMutation.mutate({ id: sessionId });
+            }}
+            pendingSessionActionId={pendingSessionActionId}
+          >
+            <BrowserToolWidget />
+            <VibeCheckWidget />
+          </DashboardHomeView>
+        );
+    }
+  };
+
   return (
-    <DashboardHomeView
-      generatedAtLabel={
-        currentTimestamp
-          ? new Date(currentTimestamp).toLocaleTimeString()
-          : 'just now'
-      }
-      currentTimestamp={currentTimestamp}
-      isBootstrapping={isBootstrapping}
-      mcpStatus={mcpStatus}
-      startupStatus={startupStatus}
-      servers={servers}
-      traffic={traffic}
-      providers={providers}
-      fallbackChain={fallbackChain}
-      sessions={sessions}
-      healerStatus={healerStatus}
-      installSurfaceArtifacts={installArtifactsQuery.data ?? null}
-      onStartSession={(sessionId) => {
-        setPendingSessionActionId(sessionId);
-        startSessionMutation.mutate({ id: sessionId });
-      }}
-      onStopSession={(sessionId) => {
-        setPendingSessionActionId(sessionId);
-        stopSessionMutation.mutate({ id: sessionId });
-      }}
-      onRestartSession={(sessionId) => {
-        setPendingSessionActionId(sessionId);
-        restartSessionMutation.mutate({ id: sessionId });
-      }}
-      pendingSessionActionId={pendingSessionActionId}
-    >
-      <BrowserToolWidget />
-      <VibeCheckWidget />
-    </DashboardHomeView>
+    <div className="flex flex-col min-h-screen bg-black text-zinc-100">
+      {/* Sleek Sub-navigation Tab Bar */}
+      <div className="sticky top-0 z-20 flex overflow-x-auto border-b border-zinc-800 bg-zinc-950/95 backdrop-blur px-4 py-2 scrollbar-none gap-1">
+        {TABS.map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            onClick={() => handleTabChange(tab.id)}
+            className={`px-3 py-1.5 text-xs font-semibold rounded-md whitespace-nowrap transition-all duration-150 ${
+              activeTab === tab.id
+                ? 'bg-zinc-800 text-white shadow-sm'
+                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+      <div className="flex-1 p-4 md:p-6 min-h-0 overflow-auto">
+        {renderActiveTab()}
+      </div>
+    </div>
   );
 }
