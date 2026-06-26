@@ -60,6 +60,7 @@ import (
 	"github.com/tormentnexushq/tormentnexus-go/internal/skillregistry"
 	"github.com/tormentnexushq/tormentnexus-go/internal/toolregistry"
 	"github.com/tormentnexushq/tormentnexus-go/internal/workspaces"
+	"github.com/tormentnexushq/tormentnexus-go/internal/systray"
 	_ "modernc.org/sqlite"
 )
 
@@ -106,7 +107,9 @@ func corsMiddleware(next http.Handler) http.Handler {
 			w.WriteHeader(http.StatusNoContent)
 			return
 		}
+		systray.NotifyActivity("in")
 		next.ServeHTTP(w, r)
+		systray.NotifyActivity("out")
 	})
 }
 
@@ -576,6 +579,7 @@ func New(cfg config.Config, detector controlplane.ToolProvider) *Server {
 
 	// --- Initialize new Go-native services ---
 	server.eventBus = eventbus.New(1000)
+	systray.Start(server.eventBus)
 	memoryVS, _ := memorystore.NewVectorStore(filepath.Join(cfg.ConfigDir, "memory.db"))
 	server.memoryReactor = memorystore.NewMemoryReactor(cfg.WorkspaceRoot, memoryVS)
 	server.memoryArchiver = memorystore.NewMemoryArchiver(cfg.WorkspaceRoot, memoryVS)
@@ -838,6 +842,8 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/memory/add-history", s.handleMemoryAddHistory)
 	s.mux.HandleFunc("/api/memory/relations/add", s.handleMemoryAddRelation)
 	s.mux.HandleFunc("/api/memory/relations/get", s.handleMemoryGetRelations)
+	s.mux.HandleFunc("/api/memory/spaced-repetition/due", s.handleMemorySpacedRepetitionDue)
+	s.mux.HandleFunc("/api/memory/spaced-repetition/review", s.handleMemorySpacedRepetitionReview)
 	s.mux.HandleFunc("/api/code/exec", s.handleCodeExec)
 
 	s.mux.HandleFunc("/api/protocol/tormentnexus", s.handleTormentNexusProtocol)

@@ -136,6 +136,12 @@ export default function CognitiveBrainDashboard() {
 	// --- Tab Selection ---
 	const [activeTab, setActiveTab] = useState("vault");
 
+	// --- SPACED REPETITION STATE ---
+	const [dueMemories, setDueMemories] = useState<any[]>([]);
+	const [dueLoading, setDueLoading] = useState(false);
+	const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+	const [showReviewAnswer, setShowReviewAnswer] = useState(false);
+
 	// --- COGNITIVE GRAPH STATE ---
 	const graphQuery = trpc.graph.getSymbolsGraph.useQuery();
 	const { nodes: rawNodes = [], links: rawLinks = [] } = graphQuery.data || {};
@@ -352,9 +358,60 @@ export default function CognitiveBrainDashboard() {
 		}
 	};
 
+	const fetchDueMemories = async () => {
+		setDueLoading(true);
+		try {
+			const resp = await fetch("/api/go/api/memory/spaced-repetition/due");
+			if (resp.ok) {
+				const data = await resp.json();
+				if (data.success) {
+					setDueMemories(data.due_records || []);
+					setCurrentReviewIndex(0);
+					setShowReviewAnswer(false);
+				}
+			}
+		} catch (err) {
+			console.error("Failed to fetch due memories", err);
+		} finally {
+			setDueLoading(false);
+		}
+	};
+
+	const handleGradeMemory = async (memoryID: string, quality: number) => {
+		try {
+			const resp = await fetch("/api/go/api/memory/spaced-repetition/review", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ memory_id: memoryID, quality }),
+			});
+			if (resp.ok) {
+				const data = await resp.json();
+				if (data.success) {
+					toast.success(`Memory graded ${quality}/5 successfully!`);
+					setShowReviewAnswer(false);
+					if (currentReviewIndex < dueMemories.length - 1) {
+						setCurrentReviewIndex((prev) => prev + 1);
+					} else {
+						await fetchDueMemories();
+					}
+				} else {
+					toast.error("Failed to grade memory: " + data.error);
+				}
+			} else {
+				toast.error("Failed to grade memory: server returned error");
+			}
+		} catch (err: any) {
+			toast.error("Failed to grade memory: " + err.message);
+		}
+	};
+
 	useEffect(() => {
 		if (activeTab === "sync") {
 			fetchHydrationStatus();
+		} else if (activeTab === "spaced-repetition") {
+			fetchDueMemories();
 		}
 	}, [activeTab]);
 
@@ -698,6 +755,12 @@ export default function CognitiveBrainDashboard() {
 						Memory Vault
 					</TabsTrigger>
 					<TabsTrigger
+						value="spaced-repetition"
+						className="text-sm font-medium px-4 py-1.5 rounded-md transition-all border border-pink-500/20 text-pink-400"
+					>
+						Spaced Repetition
+					</TabsTrigger>
+					<TabsTrigger
 						value="graph"
 						className="text-sm font-medium px-4 py-1.5 rounded-md transition-all"
 					>
@@ -1024,6 +1087,113 @@ export default function CognitiveBrainDashboard() {
 								</ScrollArea>
 							</CardContent>
 						</Card>
+					</div>
+				</TabsContent>
+
+				{/* SPACED REPETITION TAB */}
+				<TabsContent
+					value="spaced-repetition"
+					className="flex-1 flex flex-col min-h-0 outline-none"
+				>
+					<div className="flex-1 flex flex-col items-center justify-center max-w-3xl mx-auto w-full p-4">
+						{dueLoading ? (
+							<div className="flex flex-col items-center gap-3">
+								<Loader2 className="h-8 w-8 animate-spin text-pink-500" />
+								<p className="text-sm font-mono text-zinc-400">Loading synapses due for review...</p>
+							</div>
+						) : dueMemories.length === 0 ? (
+							<Card className="bg-zinc-900 border border-zinc-800 p-8 text-center max-w-md w-full shadow-xl">
+								<Sparkles className="h-12 w-12 text-pink-500 mx-auto mb-4 animate-bounce" />
+								<h3 className="text-xl font-bold text-white mb-2">All Caught Up!</h3>
+								<p className="text-sm text-zinc-400">
+									No memories are due for spaced repetition review right now.
+									Check back later or ingest more facts!
+								</p>
+							</Card>
+						) : (
+							<div className="w-full space-y-6">
+								{/* Progress Header */}
+								<div className="flex justify-between items-center text-xs text-zinc-400">
+									<span>Reviewing memory {currentReviewIndex + 1} of {dueMemories.length}</span>
+									<span className="bg-pink-500/10 text-pink-300 border border-pink-500/20 px-2.5 py-0.5 rounded-full font-mono font-bold">
+										{dueMemories.length} due
+									</span>
+								</div>
+
+								{/* Flashcard */}
+								<Card className="bg-zinc-900/80 border border-zinc-800 p-8 shadow-2xl rounded-2xl flex flex-col gap-6 relative min-h-[250px] justify-between backdrop-blur-md">
+									<div className="space-y-4">
+										<div className="flex justify-between items-center">
+											<Badge variant="outline" className="text-[10px] uppercase font-mono px-2 py-0.5 border-zinc-700 text-zinc-300">
+												{dueMemories[currentReviewIndex]?.memory_kind || dueMemories[currentReviewIndex]?.memory_type || "memory"}
+											</Badge>
+											{dueMemories[currentReviewIndex]?.category && (
+												<span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">
+													Category: {dueMemories[currentReviewIndex]?.category}
+												</span>
+											)}
+										</div>
+
+										<p className="text-base text-white font-medium leading-relaxed whitespace-pre-wrap font-mono p-4 bg-black/40 border border-zinc-850 rounded-lg">
+											{dueMemories[currentReviewIndex]?.content}
+										</p>
+									</div>
+
+									{/* Reveal / Grading Options */}
+									<div className="pt-6 border-t border-zinc-850 flex flex-col items-center gap-4">
+										{!showReviewAnswer ? (
+											<Button
+												onClick={() => setShowReviewAnswer(true)}
+												className="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-semibold px-8 py-2 rounded-lg shadow-lg shadow-pink-900/20 transition-all text-xs"
+											>
+												Reveal Details &amp; Grade
+											</Button>
+										) : (
+											<div className="w-full space-y-4">
+												{/* Additional info revealed */}
+												<div className="grid grid-cols-2 gap-4 text-xs bg-black/40 p-3 rounded-lg border border-zinc-800 font-mono text-zinc-400">
+													<div>
+														<span className="text-zinc-500">Importance:</span> {(dueMemories[currentReviewIndex]?.importance * 100).toFixed(0)}%
+													</div>
+													<div>
+														<span className="text-zinc-500">Heat Score:</span> {dueMemories[currentReviewIndex]?.heat_score?.toFixed(1) || "100.0"}
+													</div>
+													{dueMemories[currentReviewIndex]?.tags && (
+														<div className="col-span-2">
+															<span className="text-zinc-500">Tags:</span> {dueMemories[currentReviewIndex]?.tags}
+														</div>
+													)}
+												</div>
+
+												{/* Grade Buttons */}
+												<div className="space-y-2">
+													<p className="text-[11px] font-bold text-center text-zinc-500 uppercase tracking-widest">How well did you recall this memory?</p>
+													<div className="grid grid-cols-6 gap-2">
+														{[
+															{ val: 0, label: "Forgot", color: "bg-red-900/50 hover:bg-red-800 text-red-200 border-red-800/40" },
+															{ val: 1, label: "Wrong", color: "bg-orange-950 hover:bg-orange-900 text-orange-200 border-orange-900/40" },
+															{ val: 2, label: "Hard", color: "bg-amber-950 hover:bg-amber-900 text-amber-200 border-amber-900/40" },
+															{ val: 3, label: "Good", color: "bg-yellow-950/80 hover:bg-yellow-900 text-yellow-200 border-yellow-800/40" },
+															{ val: 4, label: "Easy", color: "bg-emerald-950 hover:bg-emerald-900 text-emerald-200 border-emerald-900/40" },
+															{ val: 5, label: "Perfect", color: "bg-green-900/50 hover:bg-green-800 text-green-200 border-green-800/40" },
+														].map((grade) => (
+															<button
+																key={grade.val}
+																onClick={() => handleGradeMemory(dueMemories[currentReviewIndex].id, grade.val)}
+																className={`border rounded-lg p-2 flex flex-col items-center transition-all ${grade.color}`}
+															>
+																<span className="text-base font-bold">{grade.val}</span>
+																<span className="text-[9px] font-medium tracking-tight mt-0.5">{grade.label}</span>
+															</button>
+														))}
+													</div>
+												</div>
+											</div>
+										)}
+									</div>
+								</Card>
+							</div>
+						)}
 					</div>
 				</TabsContent>
 

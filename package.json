@@ -1,6 +1,6 @@
 {
   "name": "tormentnexus-monorepo",
-  "version": "1.0.0-alpha.186",
+  "version": "1.0.0-alpha.187",
   "private": true,
   "packageManager": "pnpm@10.28.0",
   "scripts": {
@@ -54,8 +54,9 @@
       "glob": ">=10.5.0",
       "sharp": "0.34.5",
       "esbuild": ">=0.25.0",
-      "qs": ">=6.14.1",
-      "@modelcontextprotocol/sdk": ">=1.25.2",
+      "qs": ">=6.15.2",
+      "@modelcontextprotocol/sdk": ">=1.29.0",
+      "@babel/core": ">=7.29.6",
       "@types/react": "18.3.3",
       "@types/react-dom": "18.3.0",
       "basic-ftp": ">=5.2.0",

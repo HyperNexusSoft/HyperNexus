@@ -66,6 +66,11 @@ func NewVectorStore(dbPath string) (*VectorStore, error) {
 		return nil, fmt.Errorf("failed to init vector schema: %w", err)
 	}
 
+	if err := InitSpacedRepetition(db); err != nil {
+		db.Close()
+		return nil, fmt.Errorf("failed to init spaced repetition schema: %w", err)
+	}
+
 	// Backfill existing memories into FTS table if needed
 	_, _ = db.Exec("INSERT INTO l2_vault_fts(id, content) SELECT id, content FROM l2_vault WHERE id NOT IN (SELECT id FROM l2_vault_fts)")
 

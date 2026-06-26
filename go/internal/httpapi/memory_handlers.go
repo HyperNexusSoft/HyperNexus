@@ -110,3 +110,46 @@ func (s *Server) handleMemoryGetRelations(w http.ResponseWriter, r *http.Request
 	writeJSON(w, http.StatusOK, map[string]any{"success": true, "relations": relations})
 }
 
+func (s *Server) handleMemorySpacedRepetitionDue(w http.ResponseWriter, r *http.Request) {
+	if s.memoryReactor == nil || s.memoryReactor.VectorStore() == nil {
+		writeJSON(w, http.StatusServiceUnavailable, map[string]any{"success": false, "error": "vector store not initialized"})
+		return
+	}
+	dueRecords, err := s.memoryReactor.VectorStore().GetDueMemoriesRecords()
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"success": true, "due_records": dueRecords})
+}
+
+func (s *Server) handleMemorySpacedRepetitionReview(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeJSON(w, http.StatusMethodNotAllowed, map[string]any{"success": false, "error": "method not allowed"})
+		return
+	}
+	if s.memoryReactor == nil || s.memoryReactor.VectorStore() == nil {
+		writeJSON(w, http.StatusServiceUnavailable, map[string]any{"success": false, "error": "vector store not initialized"})
+		return
+	}
+	var req struct {
+		MemoryID string `json:"memory_id"`
+		Quality  int    `json:"quality"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]any{"success": false, "error": "invalid json body"})
+		return
+	}
+	if req.MemoryID == "" {
+		writeJSON(w, http.StatusBadRequest, map[string]any{"success": false, "error": "memory_id is required"})
+		return
+	}
+	err := s.memoryReactor.VectorStore().ReviewMemory(req.MemoryID, req.Quality)
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"success": true})
+}
+
+

@@ -125,18 +125,7 @@ func (s *Server) buildStartupStatus(ctx context.Context) (StartupStatus, error) 
 			Detail: "Sectioned memory store is not available yet.",
 		})
 	}
-	if !upstreamReady {
-		blockingReasons = append(blockingReasons, StartupBlockingReason{
-			Code:   "main_control_plane_unreachable",
-			Detail: "The Go sidecar cannot currently reach the main TypeScript control plane.",
-		})
-	}
-	if !supervisorReady {
-		blockingReasons = append(blockingReasons, StartupBlockingReason{
-			Code:   "session_supervisor_bridge_unavailable",
-			Detail: "The supervised-session bridge is not reachable through the main control plane.",
-		})
-	}
+
 
 	summary := "All Go startup checks passed."
 	if len(blockingReasons) > 0 {

@@ -1,6 +1,6 @@
 {
   "name": "@tormentnexus/enterprise",
-  "version": "1.0.0-alpha.186",
+  "version": "1.0.0-alpha.187",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -8,7 +8,6 @@
     "lint": "echo \"Linting skipped\""
   },
   "dependencies": {
-    "@tormentnexus/core": "workspace:*",
     "@tormentnexus/ui": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -1,3 +1,16 @@
+# HANDOFF — Session 2026-06-26 R12 (System Tray Utility, Spaced Repetition, and Encrypted Mesh - Alpha.187)
+
+## Summary
+
+Successfully implemented the Windows system tray utility (with headless Linux support), SuperMemo SM-2 spaced repetition memory scheduler, AES-GCM encrypted mesh discovery network, and aligned monorepo package configurations:
+1. **Windows System Tray & Linux Headless**: Created a conditionally-compiled Go system tray package (`go/internal/systray`) that renders a tray icon in Windows, reacts to inbound/outbound I/O traffic, and opens a native Event Log window streaming logs from the `EventBus` on click, while remaining a headless no-op on Linux.
+2. **Spaced Repetition Tier & Interactive UI**: Implemented SM-2 scheduling algorithms in the Go vector store, added `/api/memory/spaced-repetition/due` and `/review` REST API endpoints, and built a dedicated "Spaced Repetition" flashcard review interface inside the Cognitive Brain Dashboard (`apps/web/src/app/dashboard/brain/view.tsx`).
+3. **Encrypted Mesh network**: Integrated AES-GCM symmetric encryption into UDP discovery beacon broadcasts and listeners inside `go/internal/mesh`.
+4. **Dependency Alignment**: Resolved workspace resolution crashes by removing deprecated `@tormentnexus/core` dependency configurations in `apps/web/`, `packages/enterprise/`, and `packages/ui/`.
+5. **Verification**: Compiled the sidecar cleanly (`bin/tormentnexus.exe`), successfully ran memory store and mesh UDP tests, verified Next.js frontend TS safety (zero compile errors), and bumped version to `1.0.0-alpha.187`.
+
+---
+
 # HANDOFF — Session 2026-06-26 R11 (L3 Cold Archive Verification and SQLite Timestamp Formatting - Alpha.186)
 
 ## Summary
