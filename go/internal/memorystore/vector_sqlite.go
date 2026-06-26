@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"math"
 	"sort"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
@@ -32,10 +33,11 @@ type QueryPayload struct {
 }
 
 type VectorStore struct {
-	db      *sql.DB
-	mu      sync.Mutex
-	l1Cache map[string]*l1Entry
-	l1Max   int
+	db          *sql.DB
+	mu          sync.Mutex
+	l1Cache     map[string]*l1Entry
+	l1Max       int
+	coldArchive *L3ColdArchive
 }
 
 func NewVectorStore(dbPath string) (*VectorStore, error) {
@@ -67,14 +69,29 @@ func NewVectorStore(dbPath string) (*VectorStore, error) {
 	// Backfill existing memories into FTS table if needed
 	_, _ = db.Exec("INSERT INTO l2_vault_fts(id, content) SELECT id, content FROM l2_vault WHERE id NOT IN (SELECT id FROM l2_vault_fts)")
 
+	var l3 *L3ColdArchive
+	var l3Err error
+	if dbPath == ":memory:" {
+		l3, l3Err = NewColdArchive(":memory:")
+	} else {
+		l3, l3Err = NewColdArchive(filepath.Join(filepath.Dir(dbPath), "l3_cold_archive.db"))
+	}
+	if l3Err != nil {
+		fmt.Printf("Warning: failed to initialize L3 Cold Archive: %v\n", l3Err)
+	}
+
 	return &VectorStore{
-		db:      db,
-		l1Cache: make(map[string]*l1Entry),
-		l1Max:   100,
+		db:          db,
+		l1Cache:     make(map[string]*l1Entry),
+		l1Max:       100,
+		coldArchive: l3,
 	}, nil
 }
 
 func (s *VectorStore) Close() error {
+	if s.coldArchive != nil {
+		_ = s.coldArchive.Close()
+	}
 	return s.db.Close()
 }
 
@@ -248,7 +265,9 @@ func (s *VectorStore) SemanticSearch(ctx context.Context, query string, limit in
 			results[i] = c.record
 			s.incrementHeatLocked(ctx, c.record.ID)
 		}
-		return results, nil
+
+		results, err = s.fallbackL3Search(ctx, results, queryText, limit)
+		return results, err
 	}
 
 	// Check L1 cache first for manual / working memory queries (supporting text filter)
@@ -364,10 +383,32 @@ func (s *VectorStore) SemanticSearch(ctx context.Context, query string, limit in
 		for _, r := range results {
 			s.incrementHeatLocked(ctx, r.ID)
 		}
-		return results, nil
+		results, err = s.fallbackL3Search(ctx, results, queryText, limit)
+		return results, err
 	}
 
-	return nil, nil
+	results, err := s.fallbackL3Search(ctx, nil, queryText, limit)
+	return results, err
+}
+
+func (s *VectorStore) fallbackL3Search(ctx context.Context, results []controlplane.L2VaultRecord, queryText string, limit int) ([]controlplane.L2VaultRecord, error) {
+	if len(results) > 0 || queryText == "" || s.coldArchive == nil {
+		return results, nil
+	}
+	s.mu.Unlock()
+	defer s.mu.Lock()
+	coldResults, err := s.coldArchive.SearchCold(ctx, queryText, limit)
+	if err != nil {
+		return results, nil
+	}
+	for _, r := range coldResults {
+		promoted, err := s.coldArchive.Promote(ctx, r.ID)
+		if err == nil && promoted != nil {
+			_ = s.Commit(ctx, *promoted)
+			results = append(results, *promoted)
+		}
+	}
+	return results, nil
 }
 
 func (s *VectorStore) ReinforceMemory(ctx context.Context, id string, success bool) error {
@@ -585,6 +626,36 @@ func (s *VectorStore) ForgettingCurveDecay(ctx context.Context) error {
 	`)
 	if err != nil {
 		return fmt.Errorf("ForgettingCurveDecay archive promotion: %w", err)
+	}
+
+	// Archive demotion to L3 Cold Archive: memories with heat score < 10.0 move to L3
+	if s.coldArchive != nil {
+		rows, err := s.db.QueryContext(ctx, `
+			SELECT id, session_id, memory_type, memory_kind, category, tags, source_url, content, importance, heat_score, last_accessed_at, created_at
+			FROM l2_vault
+			WHERE heat_score < 10.0 AND memory_type != 'archive'
+		`)
+		if err == nil {
+			var records []controlplane.L2VaultRecord
+			for rows.Next() {
+				var r controlplane.L2VaultRecord
+				var mType string
+				if err := rows.Scan(&r.ID, &r.SessionID, &mType, &r.Kind, &r.Category, &r.Tags, &r.SourceURL, &r.Content, &r.Importance, &r.HeatScore, &r.LastAccessedAt, &r.CreatedAt); err == nil {
+					r.Type = controlplane.MemoryType(mType)
+					records = append(records, r)
+				}
+			}
+			rows.Close()
+
+			for _, r := range records {
+				errArchive := s.coldArchive.Archive(ctx, r)
+				if errArchive == nil {
+					_, _ = s.db.ExecContext(ctx, `DELETE FROM l2_vault WHERE id = ?`, r.ID)
+					_, _ = s.db.ExecContext(ctx, `DELETE FROM vec_l2_vault WHERE id = ?`, r.ID)
+					_, _ = s.db.ExecContext(ctx, `DELETE FROM l2_vault_fts WHERE id = ?`, r.ID)
+				}
+			}
+		}
 	}
 
 	return nil
