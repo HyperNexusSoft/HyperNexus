@@ -1,3 +1,39 @@
+# HANDOFF — Session 2026-06-26 R8 (ChunkHound & Probe Native Go Integration - Alpha.181)
+
+## Summary
+
+Successfully re-implemented and integrated `probe` and `chunkhound` (`code_research`, `search_semantic`, `search_regex`) as native Go tool handlers in `go/internal/tools/` and registered them dynamically in `registry.go`. Also fixed compilation errors inside `fetch.go`, verified clean Go sidecar compilation, ran monorepo TypeScript type checking with zero errors, bumped version to `1.0.0-alpha.181`, and pushed to both remote repositories.
+
+### What was done
+
+1. **Native Go Tool Integrations**:
+   - Implemented `go/internal/tools/probe.go` with HTTP request validations.
+   - Implemented `go/internal/tools/chunkhound.go` exposing `code_research`, `search_semantic` (utilizing `memorystore.Search` fallback logic), and `search_regex`.
+   - Wired handlers to `registry.go` so they are dynamic and always-on.
+
+2. **Hygiene & Compiler Resolution**:
+   - Fixed broken comments and indentation issues in `go/internal/tools/fetch.go`.
+   - Ran `reset_compilation_broken_tools.py` to auto-quarantine other syntax-broken tools like `supabase.go`.
+   - Re-compiled `bin/tormentnexus.exe` with standard build arguments.
+
+3. **Version Synced & Pushed**:
+   - Synchronized all package dependency configurations with `node scripts/sync-versions.mjs`.
+   - Staged and pushed version branch changes to `origin` and `origin-backup`.
+
+### Current State
+
+- **Monorepo Version**: `1.0.0-alpha.181`
+- **Go Sidecar Server**: Live on port `4300` with the new native tools active.
+- **Next.js Dev Server**: Running on port `3000`.
+- **TypeScript Codebase**: ✅ 100% type-safe compilation.
+
+### Next Agent Instructions
+
+- Monitor always-on tool registrations in the browser dashboard at `http://localhost:3000/dashboard/mcp?tab=always-on` to verify the new tools (`probe`, `code_research`, `search_semantic`, `search_regex`, `fetch`, `get`, `post`) are loaded.
+- Verify search performance via these tools to ensure response latencies stay < 5ms.
+
+---
+
 # HANDOFF — Session 2026-06-26 R7 (tRPC Route Delegation & Telemetry Replay Buffer - Alpha.180)
 
 ## Summary

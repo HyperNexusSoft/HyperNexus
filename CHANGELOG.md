@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.0-alpha.181] - 2026-06-26
+
+### Added
+- **ChunkHound & Probe Go Integration**: Re-implemented and integrated `probe` and `chunkhound` (`code_research`, `search_semantic`, `search_regex`) as native Go tool handlers in `go/internal/tools/` and registered them inside the registry.
+- **Fetch Handlers registration**: Added registration for native `fetch`, `get`, and `post` handlers inside `registry.go`.
+
+### Fixed
+- **Fetch compilation**: Corrected broken imports, compiler comments, and syntax errors inside `fetch.go` to restore compilation.
+
+## [1.0.0-alpha.180] - 2026-06-26
+
+### Added
+- **tRPC Route Delegation**: Mapped legacy TypeScript procedures to Go HTTP REST handlers inside `route.ts`.
+- **WebSocket Telemetry Replay**: Added event replay buffer to the `WSBroker` inside `mcp_websocket.go`.
+- **Git LFS Migration**: Configured `.gitattributes` to track SQLite databases via Git LFS.
+
 ## [1.0.0-alpha.177] - 2026-06-26
 
 ### Fixed

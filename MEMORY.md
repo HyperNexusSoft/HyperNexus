@@ -1,5 +1,12 @@
 # MEMORY.md — Multi-Agent Observations
 
+## Session 2026-06-26 (Native Tool Integration & Compilation Fixes)
+
+### Compilation & Tool Hygiene
+- **Go Tool Indentation and Comments**: Avoid leaving conversational comments or unindented imports inside tool Go files as it triggers compilation errors in package scope.
+- **Go Tool Compiler Healing**: Running `reset_compilation_broken_tools.py` regularly helps quarantine syntactically invalid tool files by parsing compiler errors and resetting database status to `pending`, ensuring monorepo stability.
+- **Native Go Tool Implementations**: Porting tool integrations to native Go tool registries (like `chunkhound` and `probe`) using helpers from `registry.go` (like `ok` and `err`) allows low-latency execution and direct SQLite database access.
+
 ## Session 2026-06-26 (Dashboard Hub Condensation & Verification)
 
 ### React and Hydration Stability Observations
