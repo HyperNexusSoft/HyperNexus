@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { trpc } from '../../utils/trpc';
 import {
@@ -71,6 +71,14 @@ function sortServers(servers: DashboardServerSummary[]) {
 }
 
 export function DashboardHomeClient() {
+  return (
+    <Suspense fallback={<div className="p-8 text-zinc-500">Loading dashboard...</div>}>
+      <DashboardHomeClientContent />
+    </Suspense>
+  );
+}
+
+function DashboardHomeClientContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const activeTab = searchParams.get('tab') || 'home';

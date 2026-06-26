@@ -31807,3 +31807,98 @@ Let me add Suspense to the import.
 **Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/apps/web && grep -rl "useSearchParams" src/app/dashboard/ | grep "page.tsx"")
 **Observation**: bash: success
 
+## Turn 27 | 2026-06-26T16:46:44.986Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: Only those two pages use `useSearchParams`. But the root dashboard page is also failing. Let me check if the root dashboard page uses any hook that triggers the same error.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/apps/web && pnpm build 2>&1 | grep -B3 "dashboard/page" | head -10", timeout: 180)
+**Observation**: bash: success
+
+## Turn 28 | 2026-06-26T16:48:00.689Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: The root dashboard is also having a prerender issue. Let me check if it uses `useSearchParams` or any other hook that causes this.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/apps/web && grep -n "useSearchParams\|useRouter\|usePathname" src/app/dashboard/page.tsx | head -5")
+**Observation**: bash: success
+
+## Turn 29 | 2026-06-26T16:48:05.360Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: No search params or router hooks in the root dashboard page. The error might be coming from a nested component. Let me see the full error stack.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/apps/web && pnpm build 2>&1 | grep -E "missing-suspense|useSearchParams" | head -5", timeout: 180)
+**Observation**: bash: success
+
+## Turn 30 | 2026-06-26T16:49:09.232Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: The root dashboard page (or one of its children) uses `useSearchParams` without a Suspense boundary. This might be a shared component. Let me check.
+
+Actually — the root dashboard page might import or render a component that uses `useSearchParams`. Let me check its imports.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/apps/web && head -20 src/app/dashboard/page.tsx")
+**Observation**: bash: success
+
+## Turn 31 | 2026-06-26T16:49:14.421Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: The root dashboard just renders `DashboardHomeClient`. Let me check that component.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/apps/web && grep -n "useSearchParams\|export default\|function" src/app/dashboard/DashboardHomeClient.tsx 2>/dev/null | head -10")
+**Observation**: bash: success
+
+## Turn 32 | 2026-06-26T16:49:18.359Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: Found it! `DashboardHomeClient` uses `useSearchParams` at line 75. Let me wrap it in Suspense.
+**Action**: read(path: "C:/Users/hyper/workspace/tormentnexus/apps/web/src/app/dashboard/DashboardHomeClient.tsx", limit: 10)
+**Observation**: read: success
+
+## Turn 33 | 2026-06-26T16:49:22.150Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Action**: edit(path: "C:/Users/hyper/workspace/tormentnexus/apps/web/src/app/dashboard/DashboardHomeClient.tsx", edits: [object Object],[object Object])
+**Observation**: edit: success
+
+## Turn 34 | 2026-06-26T16:50:03.705Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: Now rebuild.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/apps/web && pnpm build 2>&1 | tail -5", timeout: 180)
+**Observation**: bash: success
+
+## Turn 35 | 2026-06-26T16:51:25.051Z | deepseek/deepseek-v4-flash
+
+**Thought**: ✅ Dashboard build clean. Now restart services in production mode.
+**Thinking**: ✅ Dashboard build clean. Now let me start the Go sidecar, restart the production dashboard, and verify.
+**Action**: bash(command: "taskkill //F //PID 12040 2>/dev/null
+cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.162" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 | tail -1 && echo "GO: BUILT"", timeout: 120)
+**Observation**: bash: success
+
+## Turn 36 | 2026-06-26T16:51:32.439Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: The binary is in use by the running process. Let me kill the running Go sidecar first.
+**Action**: bash(command: "taskkill //F //PID 51484 2>/dev/null
+sleep 2
+cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.162" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 | tail -1
+echo "---"
+cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
+sleep 3
+echo "---"
+netstat -ano | findstr "LISTENING" | findstr ":7778 :7779" 2>&1", timeout: 30)
+**Observation**: bash: success
+
+## Turn 37 | 2026-06-26T16:51:45.506Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: Go sidecar running on 7778. The dashboard binary was killed earlier — let me start it in production mode.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/apps/web && PORT=7779 pnpm start &
+sleep 4
+netstat -ano | findstr "LISTENING" | findstr ":7779" 2>&1 && echo "DASHBOARD: RUNNING"", timeout: 15)
+**Observation**: bash: success
+
+## Turn 38 | 2026-06-26T16:51:55.350Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: Both services running. Let me verify they work and commit the fixes.
+**Action**: bash(command: "echo "=== FINAL HEALTH CHECK ===" && echo "Go sidecar:" && curl -s --max-time 5 http://127.0.0.1:7778/health 2>&1 && echo "" && echo "Dashboard tools API:" && curl -s --max-time 8 http://127.0.0.1:7779/api/tools/list 2>&1 | python -X utf-8 -c "import sys,json; d=json.load(sys.stdin); print(f'{len(d.get(\"tools\",[]))} tools')" 2>&1 && echo "" && echo "Dashboard page:" && curl -s --max-time 5 http://127.0.0.1:7779/dashboard/mcp 2>&1 | python -X utf-8 -c "import sys; h=sys.stdin.read(); print(f'{len(h)} bytes')" 2>&1 && echo "" && echo "Ports:" && netstat -ano | findstr "LISTENING" | findstr ":7778 :7779 :4000 :4100 :1234 :3000 :4300" 2>&1", timeout: 20)
+**Observation**: bash: success
+
