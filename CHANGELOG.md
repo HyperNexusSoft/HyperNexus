@@ -1,5 +1,18 @@
 # Changelog
  
+## [1.0.0-alpha.165] - 2026-06-26
+
+### Added
+- **Database Restoration & Merge**: Safely merged `imported_sessions` (+410), `imported_session_memories` (+57,144), and `links_backlog` (+17,341) from `bobbybookmarks/tormentnexus.db` into the active workspace database, resolving data loss issues.
+- **Accessory Tools Integration**: Integrated built-in root accessory tools (such as `bash`, `search`, `repomap`, and file actions) into the sidecar's `/api/mcp/tools` registry, enabling custom always-on configuration from the dashboard.
+- **Node Heap Limit Configuration**: Updated `start-ts.bat` to declare `set NODE_OPTIONS=--max-old-space-size=8192` to resolve JavaScript heap out-of-memory errors during build runs.
+
+## [1.0.0-alpha.164] - 2026-06-26
+
+### Added
+- **Submodules Ingestion**: Extracted, verified, and ingested 35 reference repositories under `submodules/` from BobbyBookmarks discussions data to enable feature analysis.
+- **Dashboard Sidebar Consolidation**: Streamlined dashboard navigation inside `apps/web/src/components/mcp/nav-config.ts` into a clean tabbed layout with 4 core diagnostics sections.
+
 ## [1.0.0-alpha.163] - 2026-06-26
 
 ### Added

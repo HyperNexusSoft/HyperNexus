@@ -11,6 +11,7 @@ import (
 
 	"github.com/tormentnexushq/tormentnexus-go/internal/mcp"
 	"github.com/tormentnexushq/tormentnexus-go/internal/cache"
+	roottools "github.com/NexusSoftMDMA/TormentNexus/tools"
 )
 
 func (s *Server) handleMCPStatus(w http.ResponseWriter, r *http.Request) {
@@ -71,6 +72,7 @@ func (s *Server) handleMCPTools(w http.ResponseWriter, r *http.Request) {
 		if bytes, errMar := json.Marshal(result); errMar == nil {
 			_ = json.Unmarshal(bytes, &toolsList)
 		}
+		toolsList = s.mergeAccessoryTools(toolsList)
 		if len(toolsList) > 0 {
 			toolsList = s.injectAlwaysOnStatus(toolsList)
 			result = toolsList
@@ -96,9 +98,10 @@ func (s *Server) handleMCPTools(w http.ResponseWriter, r *http.Request) {
 		for key, value := range inventoryBridgeMeta(view) {
 			bridge[key] = value
 		}
+		mergedTools := s.mergeAccessoryTools(fallbackMCPInventoryTools(view))
 		writeJSON(w, http.StatusOK, map[string]any{
 			"success": true,
-			"data":    s.injectAlwaysOnStatus(fallbackMCPInventoryTools(view)),
+			"data":    s.injectAlwaysOnStatus(mergedTools),
 			"bridge":  bridge,
 		})
 		return
@@ -118,17 +121,19 @@ func (s *Server) handleMCPTools(w http.ResponseWriter, r *http.Request) {
 		for key, value := range inventoryBridgeMeta(view) {
 			bridge[key] = value
 		}
+		mergedTools := s.mergeAccessoryTools([]map[string]any{})
 		writeJSON(w, http.StatusOK, map[string]any{
 			"success": true,
-			"data":    []map[string]any{},
+			"data":    s.injectAlwaysOnStatus(mergedTools),
 			"bridge":  bridge,
 		})
 		return
 	}
 
+	mergedTools := s.mergeAccessoryTools(fallbackMCPTools(summary.InstalledHarnesses))
 	writeJSON(w, http.StatusOK, map[string]any{
 		"success": true,
-		"data":    s.injectAlwaysOnStatus(fallbackMCPTools(summary.InstalledHarnesses)),
+		"data":    s.injectAlwaysOnStatus(mergedTools),
 		"bridge": map[string]any{
 			"fallback":  "go-local-mcp",
 			"procedure": "mcp.listTools",
@@ -598,5 +603,44 @@ func (s *Server) injectAlwaysOnStatus(tools []map[string]any) []map[string]any {
 		tool["alwaysShow"] = isAlwaysOn
 	}
 	return tools
+}
+
+func (s *Server) mergeAccessoryTools(toolsList []map[string]any) []map[string]any {
+	registry := roottools.NewRegistry()
+	if registry == nil {
+		return toolsList
+	}
+	seen := make(map[string]bool)
+	for _, t := range toolsList {
+		if name, ok := t["name"].(string); ok {
+			seen[name] = true
+		}
+	}
+	for _, t := range registry.Tools {
+		if seen[t.Name] {
+			continue
+		}
+		seen[t.Name] = true
+		var inputSchema map[string]any
+		if len(t.Parameters) > 0 {
+			_ = json.Unmarshal(t.Parameters, &inputSchema)
+		}
+		if inputSchema == nil {
+			inputSchema = map[string]any{
+				"type": "object",
+				"properties": map[string]any{},
+			}
+		}
+		toolMap := map[string]any{
+			"name":        t.Name,
+			"description": t.Description,
+			"inputSchema": inputSchema,
+			"alwaysOn":    false,
+			"alwaysShow":  false,
+			"source":      "built-in",
+		}
+		toolsList = append(toolsList, toolMap)
+	}
+	return toolsList
 }
 

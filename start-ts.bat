@@ -1,5 +1,6 @@
 @echo off
 setlocal EnableDelayedExpansion
+set NODE_OPTIONS=--max-old-space-size=8192
 
 REM ==============================================
 REM  TormentNexus TORMENTNEXUS - TypeScript Core + Dashboard
