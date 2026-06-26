@@ -826,6 +826,7 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/protocol/tormentnexus", s.handleTormentNexusProtocol)
 
 	s.mux.HandleFunc("/health", s.handleHealth)
+	s.mux.HandleFunc("/trpc/", s.handleTRPC)
 	s.mux.HandleFunc("/version", s.handleVersion)
 	s.mux.HandleFunc("/.well-known/agent-card", s.handleAgentCard)
 	s.mux.HandleFunc("/api/index", s.handleAPIIndex)

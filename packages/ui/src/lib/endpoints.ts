@@ -55,10 +55,10 @@ export function resolveTrpcHttpUrl(envUrl?: string | null): string {
   }
 
   if (typeof window !== 'undefined') {
-    return `${window.location.origin}/api/trpc`;
+    return `${window.location.protocol}//${window.location.hostname}:4300/trpc`;
   }
 
-  return 'http://localhost:3000/api/trpc';
+  return 'http://localhost:4300/trpc';
 }
 
 export function resolveCoreWsUrl(envUrl?: string | null): string {
