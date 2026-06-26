@@ -1,5 +1,10 @@
 # Changelog
  
+## [1.0.0-alpha.174] - 2026-06-26
+
+### Fixed
+- **Duplicate React Keys**: Appended loop indices to React elements inside `always-on/view.tsx` to ensure all elements are assigned unique keys and silence duplicate key console warnings.
+
 ## [1.0.0-alpha.173] - 2026-06-26
 
 ### Fixed

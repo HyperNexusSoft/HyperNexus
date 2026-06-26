@@ -215,9 +215,9 @@ export default function AlwaysOnToolsPage() {
 								Always-On ({alwaysOn.length})
 							</h2>
 							<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
-								{alwaysOn.map((tool) => (
+								{alwaysOn.map((tool, idx) => (
 									<ToolCard
-										key={tool.name}
+										key={`${tool.name}__${idx}`}
 										tool={tool}
 										onToggle={toggleAlwaysOn}
 									/>
@@ -233,9 +233,9 @@ export default function AlwaysOnToolsPage() {
 								Optional ({optional.length})
 							</h2>
 							<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
-								{optional.map((tool) => (
+								{optional.map((tool, idx) => (
 									<ToolCard
-										key={tool.name}
+										key={`${tool.name}__${idx}`}
 										tool={tool}
 										onToggle={toggleAlwaysOn}
 									/>
