@@ -7,15 +7,15 @@ import { PageStatusBanner } from '@/components/PageStatusBanner';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, Button, Input, Tabs, TabsContent, TabsList, TabsTrigger, Badge, ScrollArea } from '@tormentnexus/ui';
 
 // Import all Swarm & Intelligence sub-pages to consolidate
-import CognitiveBrainDashboard from '../brain/page';
-import SessionDashboard from '../session/page';
-import LibraryDashboard from '../library/page';
-import CodeDashboard from '../code/page';
-import SkillsPage from '../skills/page';
-import SubmodulesPage from '../submodules/page';
-import MemoryHydrationPage from '../memory/hydration/page';
-import CodeSandboxPage from '../code/sandbox/page';
-import ClaudeChromePage from '../claude-chrome/page';
+import CognitiveBrainDashboard from '../brain/view';
+import SessionDashboard from '../session/view';
+import LibraryDashboard from '../library/view';
+import CodeDashboard from '../code/view';
+import SkillsPage from '../skills/view';
+import SubmodulesPage from '../submodules/view';
+import MemoryHydrationPage from '../memory/hydration/view';
+import CodeSandboxPage from '../code/sandbox/view';
+import ClaudeChromePage from '../claude-chrome/view';
 import { SwarmTranscript } from '@/components/swarm/SwarmTranscript';
 import { DebateVisualizer } from "@/components/council/DebateVisualizer";
 import { SquadsPanel } from '@tormentnexus/ui';

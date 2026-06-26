@@ -21,16 +21,16 @@ import { VibeCheckWidget } from '../../components/VibeCheckWidget';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Import sub-pages to consolidate
-import ResearchPage from './research/page';
-import CommandDashboard from './command/page';
-import ChronicleDashboard from './chronicle/page';
-import ManualPage from './manual/page';
-import WorkflowsPage from './workflows/page';
-import SecurityPage from './security/page';
-import IntegrationsDashboard from './integrations/page';
-import CloudOrchestratorDashboardPage from './cloud-orchestrator/page';
-import ProviderAuthBillingMatrix from './billing/page';
-import SettingsDashboard from './settings/page';
+import ResearchPage from './research/view';
+import CommandDashboard from './command/view';
+import ChronicleDashboard from './chronicle/view';
+import ManualPage from './manual/view';
+import WorkflowsPage from './workflows/view';
+import SecurityPage from './security/view';
+import IntegrationsDashboard from './integrations/view';
+import CloudOrchestratorDashboardPage from './cloud-orchestrator/view';
+import ProviderAuthBillingMatrix from './billing/view';
+import SettingsDashboard from './settings/view';
 
 const SESSION_STATUS_PRIORITY: Record<DashboardSessionSummary['status'], number> = {
   error: 6,

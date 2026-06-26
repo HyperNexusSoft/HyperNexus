@@ -1,5 +1,10 @@
 # Changelog
  
+## [1.0.0-alpha.173] - 2026-06-26
+
+### Fixed
+- **Dashboard Tab Render Redirection Loop**: Restored original page files to `view.tsx` and modified the unified hubs to import from `./subpath/view` instead of `./subpath/page`, preventing infinite client-side redirect loops and resolving the empty tabs issue.
+
 ## [1.0.0-alpha.172] - 2026-06-26
 
 ### Changed
