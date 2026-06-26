@@ -99,3 +99,10 @@
 - **Client Redirects**: Replacing redundant page paths (like `/dashboard/memory`) with a client-side Next.js `useRouter.push()` redirect ensures backward compatibility for older bookmarks.
 - **Turbo Filter validation**: When a package doesn't exist in the workspace, Turbo's `--filter` triggers an error. Custom dev tools (like `scripts/dev_tabby_ready.mjs`) must avoid hardcoded package exclusion filters that target deleted packages (like `mcp-superassistant` or `@extension/hmr`).
 
+## Session 2026-06-26 (Go Parity & Trigger Hardening)
+
+### SQLite FTS5 Trigger Syntax
+- **Trigger Deletes**: The CGO-based trigger syntax `INSERT INTO fts_table(fts_table, ...) VALUES('delete', ...)` only works on external-content FTS5 virtual tables. On standard virtual tables, it throws a `SQL logic error (1)`. Replacing these triggers with standard `DELETE FROM fts_table WHERE id = old.id` resolves compatibility issues across memory stores.
+
+### Code-Gen Swarm Sanitization
+- **English Commentary / Invalid Files**: Occasionally the LLM code-generation swarm outputs files filled with English commentary/discussions instead of valid Go syntax (e.g. `browser_tools_mcp.go`), or files with missing return statements (e.g. `osaurus.go`). Extending the compiler healing loop to scan and remove these files while resetting their database status to `'pending'` ensures code base hygiene.

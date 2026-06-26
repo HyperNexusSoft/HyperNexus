@@ -1,4 +1,39 @@
+# HANDOFF — Session 2026-06-26 (Go Parity & Trigger Hardening — Verified)
+
+## Summary
+
+Successfully verified startup port configurations, cleaned up invalid/corrupted Go-native tool files, resolved duplicate declarations in the `memorystore` package, corrected syntax for FTS5 memory store triggers, and validated the newly added GraphRAG relations endpoints.
+
+### What was done
+
+1. **Go Sidecar Compilation & Duplicate Resolutions**:
+   - Resolved a duplicate declaration of `SearchResult` in the `memorystore` package by renaming the one in [fts_search.go](file:///c:/Users/hyper/workspace/tormentnexus/go/internal/memorystore/fts_search.go) to `FTSMemorySearchResult`.
+   - Sanitized and removed corrupted tool files (`browser_tools_mcp.go` and `osaurus.go` containing LLM commentary) and reset their DB state to `pending`.
+   - Go sidecar compiles 100% cleanly and standard tests pass successfully.
+
+2. **GraphRAG Relations & Port Verification**:
+   - Verified that the new GraphRAG relations endpoints (`/api/memory/relations/add` and `/api/memory/relations/get`) return correct JSON responses.
+   - Confirmed the ports configurations: TS control plane on `4100`, Next.js Dashboard on `3000`, and Go sidecar on `7778` (port `4300` is fully decommissioned and dead).
+
+3. **L3 FTS5 Triggers**:
+   - Corrected triggers in L3 cold archive memory store ([cold_archive.go](file:///c:/Users/hyper/workspace/tormentnexus/go/internal/memorystore/cold_archive.go)) to use standard SQLite DELETE statements, avoiding CGO-specific delete triggers that cause logic errors on standard virtual tables.
+
+### Current State
+
+- **Monorepo Version**: `1.0.0-alpha.161`
+- **Go Sidecar Status**: ✅ Clean compilation, running on port `7778`.
+- **Dashboard Status**: ✅ Running on port `3000`.
+- **TS Control Plane**: ✅ Running on port `4100`.
+
+### Next Agent Instructions
+
+- Monitor daemon logs (`data/watchdog.log`) and swarm outputs.
+- Verify user-facing UI elements on the new "Brain & Memory" tabs at `http://localhost:3000/dashboard/brain`.
+
+---
+
 # HANDOFF — Session 2026-06-25 R3 (Dashboard Consolidation & Dev Hardening — Clean Version Bump)
+
 
 ## Summary
 
