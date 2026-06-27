@@ -467,6 +467,7 @@ class ProxyManager:
         for attempt in range(3):
             try:
                 import urllib.request
+
                 with urllib.request.urlopen(f"{PROXY_URL}/v1/models", timeout=5) as r:
                     if r.status == 200:
                         self._healthy = True
@@ -1474,15 +1475,58 @@ def worker_loop(worker_id, shutdown, completed_lock, completed_count):
         # === SANITIZE CODE ===
         final_code = sanitize_go_code(final_code)
 
-        # === WRITE FILE ===
+        # === WRITE FILE (with Go compilation check) ===
         go_file = f"{fn}.go"
+        # Write to a staging location first
+        staging_dir = TOOLS_DIR / "_staging"
+        staging_dir.mkdir(exist_ok=True)
+        staging_path = staging_dir / go_file
         try:
-            with open(TOOLS_DIR / go_file, "w", encoding="utf-8") as f:
+            with open(staging_path, "w", encoding="utf-8") as f:
                 f.write(final_code)
         except Exception as e:
             fail_task(name, f"write error: {e}")
             log.err(f"Write {go_file}: {e}", worker_id)
             continue
+
+        # Compile-check: try building a tiny package with this file + registry
+        # This prevents corrupted .go files from landing in the real tools/ dir.
+        try:
+            # Copy registry + server to staging so the package can compile
+            for dep in ("registry.go", "server.go"):
+                dep_src = TOOLS_DIR / dep
+                if dep_src.exists():
+                    (staging_dir / dep).write_text(
+                        dep_src.read_text(encoding="utf-8"), encoding="utf-8"
+                    )
+            result = subprocess.run(
+                ["go", "build", "./internal/tools/_staging"],
+                capture_output=True,
+                text=True,
+                timeout=30,
+                cwd=str(GO_DIR),
+            )
+            if result.returncode != 0:
+                errors = result.stderr[:500]
+                log.warn(f"Compile check FAILED for {go_file}: {errors}", worker_id)
+                # Write to broken directory instead of tools/
+                broken_dir = TOOLS_DIR / "_broken"
+                broken_dir.mkdir(exist_ok=True)
+                (broken_dir / go_file).write_text(final_code, encoding="utf-8")
+                staging_path.unlink(missing_ok=True)
+                fail_task(name, f"compile failed: {errors[:200]}")
+                continue
+        except subprocess.TimeoutExpired:
+            log.warn(
+                f"Compile check timed out for {go_file}, accepting anyway", worker_id
+            )
+        except FileNotFoundError:
+            log.warn("go not found on PATH, skipping compile check", worker_id)
+
+        # Compilation passed — promote from staging to real tools/
+        shutil.copy2(staging_path, TOOLS_DIR / go_file)
+        staging_path.unlink(missing_ok=True)
+        log.ok(f"Compile check PASSED for {go_file}", worker_id)
     if manifest:
         MANIFEST_DIR.mkdir(exist_ok=True)
         try:

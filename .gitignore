@@ -266,3 +266,7 @@ bravesearch.go
 ccoreguidelines.go
 *.exe~
 watchdog.py
+
+# Swarm build artifacts
+go/internal/tools/_staging/
+go/internal/tools/_broken/
