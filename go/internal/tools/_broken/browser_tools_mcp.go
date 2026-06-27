@@ -6,51 +6,20 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
+	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 )
 
-// Client for communicating with BrowserTools Server
-var http.DefaultClient = http.DefaultClient
-
-// Server discovery state
-type serverState struct {
-	host       string
-	port       int
-	discovered bool
-}
-
-var server = serverState{
-	host:       "127.0.0.1",
-	port:       3025,
-	discovered: false,
-}
-
-func getDefaultServerPort() int {
-	// Check environment variable
-	if envPort := os.Getenv("BROWSER_TOOLS_PORT"); envPort != "" {
-		if p, e := strconv.Atoi(envPort); e == nil && p > 0 {
-			return p
-		}
-	}
-
-	// Try to read from .port file
-	if portFile, e := os.ReadFile(".port"); e == nil {
-		if p, e := strconv.Atoi(string(portFile)); e == nil && p > 0 {
-			return p
-		}
-	}
-
-	return 3025
-}
-
-func getDefaultServerHost() string {
-	if envHost := os.Getenv("BROWSER_TOOLS_HOST"); envHost != "" {
-		return envHost
-	}
-	return "127.0.0.1"
-}
+var (
+	discoveredHost   = "127.0.0.1"
+	discoveredPort   = 3025
+	serverDiscovered = false
+	client = http.DefaultClient
+)
 
 func discoverServer() bool {
 	hosts := []string{getDefaultServerHost(), "127.0.0.1", "localhost"}
@@ -65,157 +34,466 @@ func discoverServer() bool {
 
 	for _, host := range hosts {
 		for _, port := range ports {
-			url := fmt.Sprintf("http://%s:%d/.identity", host, port)
-			resp, e := http.DefaultClient.Get(url)
-			if e != nil {
+			target := fmt.Sprintf("http://%s:%d/.identity", host, port)
+			resp, fetchErr := client.Get(target)
+			if fetchErr != nil {
 				continue
 			}
 			defer resp.Body.Close()
 
-			if resp.StatusCode != 200 {
+			if resp.StatusCode != http.StatusOK {
 				continue
 			}
 
 			var identity struct {
 				Signature string `json:"signature"`
 			}
-
-			if e := json.NewDecoder(resp.Body).Decode(&identity); e != nil {
+			if parseErr := json.NewDecoder(resp.Body).Decode(&identity); parseErr != nil {
 				continue
 			}
 
 			if identity.Signature == "mcp-browser-connector-24x7" {
-				server.host = host
-				server.port = port
-				server.discovered = true
+				discoveredHost = host
+				discoveredPort = port
+				serverDiscovered = true
 				return true
 			}
 		}
 	}
-
 	return false
 }
 
 }
 
-func withServerConnection(apiCall func() (ToolResponse, error)) (ToolResponse, error) {
-	if !server.discovered {
+func getDefaultServerPort() int {
+	if envPort := os.Getenv("BROWSER_TOOLS_PORT"); envPort != "" {
+		if port, convErr := strconv.Atoi(envPort); convErr == nil && port > 0 {
+			return port
+		}
+	}
+
+	portFile := filepath.Join(".", ".port")
+	if data, readErr := os.ReadFile(portFile); readErr == nil {
+		if port, convErr := strconv.Atoi(strings.TrimSpace(string(data))); convErr == nil && port > 0 {
+			return port
+		}
+	}
+
+	return 3025
+}
+
+func getDefaultServerHost() string {
+	if host := os.Getenv("BROWSER_TOOLS_HOST"); host != "" {
+		return host
+	}
+	return "127.0.0.1"
+}
+
+func withServerConnection(ctx context.Context, apiCall func() (ToolResponse, error)) (ToolResponse, error) {
+	if !serverDiscovered {
 		if !discoverServer() {
 			return err("Failed to discover browser connector server. Please ensure it's running.")
 
 	}
 
-	response, apiErr := apiCall()
-	if apiErr != nil {
-		server.discovered = false
-		if discoverServer() {
-			response, retryErr := apiCall()
-			if retryErr != nil {
-				return err(fmt.Sprintf("Error after reconnection attempt: %s", retryErr.Error()))
-}
-
-			return response, nil
-		}
-		return err(fmt.Sprintf("Failed to reconnect to server: %s", apiErr.Error()))
-}
-
-	return response, nil
-}
-
-}
-
-func makeGetRequest(path string) ([]byte, error) {
-	url := fmt.Sprintf("http://%s:%d%s", server.host, server.port, path)
-	resp, e := http.DefaultClient.Get(url)
-	if e != nil {
-		return nil, e
+	res, callErr := apiCall()
+	if callErr == nil {
+		return res, nil
 	}
-	defer resp.Body.Close()
 
-	return io.ReadAll(resp.Body)
+	serverDiscovered = false
+	if discoverServer() {
+		return apiCall()
+}
+
+	return err(fmt.Sprintf("Failed to reconnect to server: %v", callErr))
+}
+
 }
 
 func HandleGetConsoleLogs(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	return withServerConnection(func() (ToolResponse, error) {
+	return withServerConnection(ctx, func() (ToolResponse, error) {
 }
-		data, e := makeGetRequest("/console-logs")
-		if e != nil {
-			return err(fmt.Sprintf("Failed to get console logs: %s", e.Error()))
-}
-
-		return ok(string(data))
-	})
-
-func HandleGetConsoleErrors(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	return withServerConnection(func() (ToolResponse, error) {
-}
-		data, e := makeGetRequest("/console-errors")
-		if e != nil {
-			return err(fmt.Sprintf("Failed to get console errors: %s", e.Error()))
-}
-
-		return ok(string(data))
-	})
-
-func HandleGetNetworkErrors(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	return withServerConnection(func() (ToolResponse, error) {
-}
-		data, e := makeGetRequest("/network-errors")
-		if e != nil {
-			return err(fmt.Sprintf("Failed to get network errors: %s", e.Error()))
-}
-
-		return ok(string(data))
-	})
-
-func HandleGetNetworkLogs(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	return withServerConnection(func() (ToolResponse, error) {
-}
-		data, e := makeGetRequest("/network-success")
-		if e != nil {
-			return err(fmt.Sprintf("Failed to get network logs: %s", e.Error()))
-}
-
-		return ok(string(data))
-	})
-
-func HandleTakeScreenshot(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	return withServerConnection(func() (ToolResponse, error) {
-}
-		url := fmt.Sprintf("http://%s:%d/capture-screenshot", server.host, server.port)
-		resp, e := http.DefaultClient.Post(url, "application/json", nil)
-		if e != nil {
-			return err(fmt.Sprintf("Failed to take screenshot: %s", e.Error()))
+		target := fmt.Sprintf("http://%s:%d/console-logs", discoveredHost, discoveredPort)
+		resp, fetchErr := client.Get(target)
+		if fetchErr != nil {
+			return err(fetchErr.Error())
 }
 
 		defer resp.Body.Close()
 
 		if resp.StatusCode != http.StatusOK {
-			var result struct {
-				Error string `json:"error"`
-			}
-			if e := json.NewDecoder(resp.Body).Decode(&result); e != nil {
-				return err(fmt.Sprintf("Error taking screenshot: %s", resp.Status))
+			return err(fmt.Sprintf("Server returned status: %d", resp.StatusCode))
 }
 
-			return err(fmt.Sprintf("Error taking screenshot: %s", result.Error))
+		var logs []interface{}
+		if decodeErr := json.NewDecoder(resp.Body).Decode(&logs); decodeErr != nil {
+			return err(decodeErr.Error())
+}
+
+		return ok(jsonString(logs))
+	})
+
+func HandleGetConsoleErrors(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	return withServerConnection(ctx, func() (ToolResponse, error) {
+}
+		target := fmt.Sprintf("http://%s:%d/console-errors", discoveredHost, discoveredPort)
+		resp, fetchErr := client.Get(target)
+		if fetchErr != nil {
+			return err(fetchErr.Error())
+}
+
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			return err(fmt.Sprintf("Server returned status: %d", resp.StatusCode))
+}
+
+		var errors []interface{}
+		if decodeErr := json.NewDecoder(resp.Body).Decode(&errors); decodeErr != nil {
+			return err(decodeErr.Error())
+}
+
+		return ok(jsonString(errors))
+	})
+
+func HandleGetNetworkErrors(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	return withServerConnection(ctx, func() (ToolResponse, error) {
+}
+		target := fmt.Sprintf("http://%s:%d/network-errors", discoveredHost, discoveredPort)
+		resp, fetchErr := client.Get(target)
+		if fetchErr != nil {
+			return err(fetchErr.Error())
+}
+
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			return err(fmt.Sprintf("Server returned status: %d", resp.StatusCode))
+}
+
+		var errors []interface{}
+		if decodeErr := json.NewDecoder(resp.Body).Decode(&errors); decodeErr != nil {
+			return err(decodeErr.Error())
+}
+
+		return ok(jsonString(errors))
+	})
+
+func HandleGetNetworkLogs(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	return withServerConnection(ctx, func() (ToolResponse, error) {
+}
+		target := fmt.Sprintf("http://%s:%d/network-success", discoveredHost, discoveredPort)
+		resp, fetchErr := client.Get(target)
+		if fetchErr != nil {
+			return err(fetchErr.Error())
+}
+
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			return err(fmt.Sprintf("Server returned status: %d", resp.StatusCode))
+}
+
+		var logs []interface{}
+		if decodeErr := json.NewDecoder(resp.Body).Decode(&logs); decodeErr != nil {
+			return err(decodeErr.Error())
+}
+
+		return ok(jsonString(logs))
+	})
+
+func HandleTakeScreenshot(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	return withServerConnection(ctx, func() (ToolResponse, error) {
+}
+		target := fmt.Sprintf("http://%s:%d/capture-screenshot", discoveredHost, discoveredPort)
+		resp, fetchErr := client.Post(target, "application/json", nil)
+		if fetchErr != nil {
+			return err(fetchErr.Error())
+}
+
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			body, _ := io.ReadAll(resp.Body)
+			return err(fmt.Sprintf("Server returned status: %d, body: %s", resp.StatusCode, string(body)))
+}
+
+		var result struct {
+			Success bool   `json:"success"`
+			Error   string `json:"error"`
+		}
+		if decodeErr := json.NewDecoder(resp.Body).Decode(&result); decodeErr != nil {
+			return err(decodeErr.Error())
+}
+
+		if !result.Success {
+			return err(result.Error)
 }
 
 		return ok("Successfully saved screenshot")
 	})
 
 func HandleGetSelectedElement(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	return withServerConnection(func() (ToolResponse, error) {
+	return withServerConnection(ctx, func() (ToolResponse, error) {
 }
-		data, e := makeGetRequest("/selected-element")
-		if e != nil {
-			return err(fmt.Sprintf("Failed to get selected element: %s", e.Error()))
+		target := fmt.Sprintf("http://%s:%d/selected-element", discoveredHost, discoveredPort)
+		resp, fetchErr := client.Get(target)
+		if fetchErr != nil {
+			return err(fetchErr.Error())
 }
 
-		return ok(string(data))
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			return err(fmt.Sprintf("Server returned status: %d", resp.StatusCode))
+}
+
+		var element struct {
+			TagName     string `json:"tagName"`
+			TextContent string `json:"textContent"`
+			Attributes  []struct {
+				Name  string `json:"name"`
+				Value string `json:"value"`
+			} `json:"attributes"`
+			XPath string `json:"xpath"`
+		}
+		if decodeErr := json.NewDecoder(resp.Body).Decode(&element); decodeErr != nil {
+			return err(decodeErr.Error())
+}
+
+		return ok(jsonString(element))
 	})
 
-func init() {
-	// Initialize server port from file if exists
-	server.port = getDefaultServerPort()
+func HandleRunAccessibilityAudit(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	return withServerConnection(ctx, func() (ToolResponse, error) {
+}
+		target := fmt.Sprintf("http://%s:%d/run-accessibility-audit", discoveredHost, discoveredPort)
+		resp, fetchErr := client.Post(target, "application/json", nil)
+		if fetchErr != nil {
+			return err(fetchErr.Error())
+}
+
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			body, _ := io.ReadAll(resp.Body)
+			return err(fmt.Sprintf("Server returned status: %d, body: %s", resp.StatusCode, string(body)))
+}
+
+		var audit struct {
+			Score    float64 `json:"score"`
+			Issues   []struct {
+				Description string `json:"description"`
+				Severity   string `json:"severity"`
+				Help       string `json:"help"`
+			} `json:"issues"`
+		}
+		if decodeErr := json.NewDecoder(resp.Body).Decode(&audit); decodeErr != nil {
+			return err(decodeErr.Error())
+}
+
+		return ok(jsonString(audit))
+	})
+
+func HandleRunPerformanceAudit(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	return withServerConnection(ctx, func() (ToolResponse, error) {
+}
+		target := fmt.Sprintf("http://%s:%d/run-performance-audit", discoveredHost, discoveredPort)
+		resp, fetchErr := client.Post(target, "application/json", nil)
+		if fetchErr != nil {
+			return err(fetchErr.Error())
+}
+
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			body, _ := io.ReadAll(resp.Body)
+			return err(fmt.Sprintf("Server returned status: %d, body: %s", resp.StatusCode, string(body)))
+}
+
+		var audit struct {
+			Score    float64 `json:"score"`
+			Metrics  []struct {
+				Name  string  `json:"name"`
+				Value float64 `json:"value"`
+				Unit  string  `json:"unit"`
+			} `json:"metrics"`
+			Issues []struct {
+				Description string `json:"description"`
+				Severity   string `json:"severity"`
+				Help       string `json:"help"`
+			} `json:"issues"`
+		}
+		if decodeErr := json.NewDecoder(resp.Body).Decode(&audit); decodeErr != nil {
+			return err(decodeErr.Error())
+}
+
+		return ok(jsonString(audit))
+	})
+
+func HandleRunSEOAudit(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	return withServerConnection(ctx, func() (ToolResponse, error) {
+}
+		target := fmt.Sprintf("http://%s:%d/run-seo-audit", discoveredHost, discoveredPort)
+		resp, fetchErr := client.Post(target, "application/json", nil)
+		if fetchErr != nil {
+			return err(fetchErr.Error())
+}
+
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			body, _ := io.ReadAll(resp.Body)
+			return err(fmt.Sprintf("Server returned status: %d, body: %s", resp.StatusCode, string(body)))
+}
+
+		var audit struct {
+			Score    float64 `json:"score"`
+			Issues   []struct {
+				Description string `json:"description"`
+				Severity   string `json:"severity"`
+				Help       string `json:"help"`
+			} `json:"issues"`
+		}
+		if decodeErr := json.NewDecoder(resp.Body).Decode(&audit); decodeErr != nil {
+			return err(decodeErr.Error())
+}
+
+		return ok(jsonString(audit))
+	})
+
+func HandleRunBestPracticesAudit(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	return withServerConnection(ctx, func() (ToolResponse, error) {
+}
+		target := fmt.Sprintf("http://%s:%d/run-best-practices-audit", discoveredHost, discoveredPort)
+		resp, fetchErr := client.Post(target, "application/json", nil)
+		if fetchErr != nil {
+			return err(fetchErr.Error())
+}
+
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			body, _ := io.ReadAll(resp.Body)
+			return err(fmt.Sprintf("Server returned status: %d, body: %s", resp.StatusCode, string(body)))
+}
+
+		var audit struct {
+			Score    float64 `json:"score"`
+			Issues   []struct {
+				Description string `json:"description"`
+				Severity   string `json:"severity"`
+				Help       string `json:"help"`
+			} `json:"issues"`
+		}
+		if decodeErr := json.NewDecoder(resp.Body).Decode(&audit); decodeErr != nil {
+			return err(decodeErr.Error())
+}
+
+		return ok(jsonString(audit))
+	})
+
+func HandleRunNextJSAudit(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	router, _ :=getString(args, "router")
+	if router == "" {
+		router = "auto"
+	}
+
+	return withServerConnection(ctx, func() (ToolResponse, error) {
+}
+		target := fmt.Sprintf("http://%s:%d/run-nextjs-audit", discoveredHost, discoveredPort)
+		data := url.Values{}
+		data.Set("router", router)
+
+		resp, fetchErr := client.PostForm(target, data)
+		if fetchErr != nil {
+			return err(fetchErr.Error())
+}
+
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			body, _ := io.ReadAll(resp.Body)
+			return err(fmt.Sprintf("Server returned status: %d, body: %s", resp.StatusCode, string(body)))
+}
+
+		var audit struct {
+			Score    float64 `json:"score"`
+			Issues   []struct {
+				Description string `json:"description"`
+				Severity   string `json:"severity"`
+				Help       string `json:"help"`
+			} `json:"issues"`
+			Recommendations []string `json:"recommendations"`
+		}
+		if decodeErr := json.NewDecoder(resp.Body).Decode(&audit); decodeErr != nil {
+			return err(decodeErr.Error())
+}
+
+		return ok(jsonString(audit))
+	})
+
+func HandleRunAuditMode(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	return withServerConnection(ctx, func() (ToolResponse, error) {
+}
+		target := fmt.Sprintf("http://%s:%d/run-audit-mode", discoveredHost, discoveredPort)
+		resp, fetchErr := client.Post(target, "application/json", nil)
+		if fetchErr != nil {
+			return err(fetchErr.Error())
+}
+
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			body, _ := io.ReadAll(resp.Body)
+			return err(fmt.Sprintf("Server returned status: %d, body: %s", resp.StatusCode, string(body)))
+}
+
+		var result struct {
+			Accessibility  interface{} `json:"accessibility"`
+			Performance    interface{} `json:"performance"`
+			SEO           interface{} `json:"seo"`
+			BestPractices interface{} `json:"bestPractices"`
+			NextJS        interface{} `json:"nextjs"`
+		}
+		if decodeErr := json.NewDecoder(resp.Body).Decode(&result); decodeErr != nil {
+			return err(decodeErr.Error())
+}
+
+		return ok(jsonString(result))
+	})
+
+func HandleRunDebuggerMode(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	return withServerConnection(ctx, func() (ToolResponse, error) {
+}
+		target := fmt.Sprintf("http://%s:%d/run-debugger-mode", discoveredHost, discoveredPort)
+		resp, fetchErr := client.Post(target, "application/json", nil)
+		if fetchErr != nil {
+			return err(fetchErr.Error())
+}
+
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			body, _ := io.ReadAll(resp.Body)
+			return err(fmt.Sprintf("Server returned status: %d, body: %s", resp.StatusCode, string(body)))
+}
+
+		var result struct {
+			ConsoleLogs    []interface{} `json:"consoleLogs"`
+			NetworkLogs    []interface{} `json:"networkLogs"`
+			SelectedElement interface{} `json:"selectedElement"`
+			AuditResults   interface{}  `json:"auditResults"`
+		}
+		if decodeErr := json.NewDecoder(resp.Body).Decode(&result); decodeErr != nil {
+			return err(decodeErr.Error())
+}
+
+		return ok(jsonString(result))
+	})
+
+func jsonString(v interface{}) string {
+	b, _ := json.MarshalIndent(v, "", "  ")
+	return string(b)
 }

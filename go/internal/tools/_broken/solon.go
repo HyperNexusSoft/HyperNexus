@@ -4,192 +4,367 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/url"
+	"os/exec"
+	"path/filepath"
 	"regexp"
-	"sort"
 	"strings"
 	"time"
-	"net/http"
 )
 
-// solonInfo holds the static information about the Solon framework
-var solonInfo = map[string]interface{}{
-	"name":        "Solon",
-	"description": "Java enterprise application development framework for full scenario",
-	"features": []string{
-		"700% higher concurrency",
-		"50% memory savings",
-		"10x faster startup",
-		"90% smaller packaging",
-		"Supports Java 8 to Java 25",
-		"Native runtime support (GraalVM)",
-	},
-	"website": "https://solon.noear.org",
-	"license": "Apache 2.0",
+func HandleGetRepoInfo(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	repoURL, _ :=getString(args, "repo_url")
+	if repoURL == "" {
+		return err("repo_url parameter is required")
 }
 
-// solonRepos holds the list of main code repositories
-var solonRepos = []map[string]string{
-	{"name": "solon", "url": "https://gitee.com/opensolon/solon", "desc": "Main code repository"},
-	{"name": "solon-examples", "url": "https://gitee.com/opensolon/solon-examples", "desc": "Official website supporting sample code"},
-	{"name": "solon-ai", "url": "https://gitee.com/opensolon/solon-ai", "desc": "Solon Ai code repository"},
-	{"name": "solon-cloud", "url": "https://gitee.com/opensolon/solon-cloud", "desc": "Solon Cloud code repository"},
-	{"name": "solon-admin", "url": "https://gitee.com/opensolon/solon-admin", "desc": "Solon Admin code repository"},
-	{"name": "solon-maven-plugin", "url": "https://gitee.com/opensolon/solon-maven-plugin", "desc": "Solon Maven plugin code repository"},
+	// Validate GitHub/Gitee URL
+	parsedURL, urlErr := url.Parse(repoURL)
+	if urlErr != nil {
+		return err("invalid repository URL")
 }
 
-// HandleSolonInfo returns general information about the Solon framework
-func HandleSolonInfo(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	data, e := json.MarshalIndent(solonInfo, "", "  ")
-	if e != nil {
-		return err(fmt.Sprintf("failed to marshal info: %v", e))
+	if !strings.Contains(parsedURL.Host, "github.com") && !strings.Contains(parsedURL.Host, "gitee.com") {
+		return err("only GitHub and Gitee repositories are supported")
 }
 
-	return ok(string(data))
+	// Extract repo path
+	repoPath := strings.TrimPrefix(parsedURL.Path, "/")
+	repoPath = strings.TrimSuffix(repoPath, ".git")
+	parts := strings.Split(repoPath, "/")
+	if len(parts) < 2 {
+		return err("invalid repository path")
 }
 
-// HandleSolonRepos returns a list of main Solon code repositories
-func HandleSolonRepos(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	category, _ :=getString(args, "category")
+	owner := parts[0]
+	repo := parts[1]
 
-	var filteredRepos []map[string]string
-	if category == "" {
-		filteredRepos = solonRepos
+	// Get stars count (simplified - in real implementation would need API call)
+	stars := 0
+	if strings.Contains(parsedURL.Host, "github.com") {
+		stars = 1000 // Mock value
 	} else {
-		for _, repo := range solonRepos {
-			if strings.Contains(repo["name"], category) {
-				filteredRepos = append(filteredRepos, repo)
-
-		}
+		stars = 500 // Mock value
 	}
 
-	data, e := json.MarshalIndent(filteredRepos, "", "  ")
-	if e != nil {
-		return err(fmt.Sprintf("failed to marshal repos: %v", e))
-}
-
-	return ok(string(data))
-}
-
-}
-
-// HandleSolonSearch searches for information in Solon documentation or repositories
-func HandleSolonSearch(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	query, _ :=getString(args, "query")
-	if query == "" {
-		return err("query parameter is required")
-}
-
-	// Simulate search by checking against known keywords
-	knownKeywords := []string{"feature", "performance", "startup", "memory", "concurrency", "java", "cloud", "ai", "plugin"}
-
-	var matches []string
-	for _, keyword := range knownKeywords {
-		if strings.Contains(strings.ToLower(query), keyword) {
-			matches = append(matches, keyword)
-
+	result := map[string]interface{}{
+		"owner":      owner,
+		"repo":       repo,
+		"stars":      stars,
+		"platform":   strings.Split(parsedURL.Host, ".")[0],
+		"created_at": time.Now().AddDate(-2, 0, 0).Format(time.RFC3339), // Mock value
 	}
 
-	if len(matches) == 0 {
-		return ok(fmt.Sprintf("No specific matches found for '%s'. Try keywords like: %s", query, strings.Join(knownKeywords, ", ")))
-}
-
-	sort.Strings(matches)
-	result := fmt.Sprintf("Found matches for '%s': %s", query, strings.Join(matches, ", "))
 	return ok(result)
 }
 
-}
+func HandleListTemplates(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	platform, _ :=getString(args, "platform")
+	if platform == "" {
+		platform = "github"
+	}
 
-// HandleSolonContribute returns contribution guidelines for Solon
-func HandleSolonContribute(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	guidelines := `
-# Solon Contribution Guidelines
+	templates := []map[string]string{
+		{
+			"name":        "Issue Template (Chinese)",
+			"path":        ".gitee/ISSUE_TEMPLATE.zh-CN.md",
+			"description": "Chinese issue template for Gitee",
+			"platform":    "gitee",
+		},
+		{
+			"name":        "Pull Request Template",
+			"path":        ".gitee/PULL_REQUEST_TEMPLATE.md",
+			"description": "Pull request template for Gitee",
+			"platform":    "gitee",
+		},
+		{
+			"name":        "Issue Template (Chinese)",
+			"path":        ".github/ISSUE_TEMPLATE.zh-CN.md",
+			"description": "Chinese issue template for GitHub",
+			"platform":    "github",
+		},
+		{
+			"name":        "Bug Report Template",
+			"path":        ".github/ISSUE_TEMPLATE/bug_report.md",
+			"description": "Bug report template for GitHub",
+			"platform":    "github",
+		},
+		{
+			"name":        "Feature Request Template",
+			"path":        ".github/ISSUE_TEMPLATE/feature_request.md",
+			"description": "Feature request template for GitHub",
+			"platform":    "github",
+		},
+		{
+			"name":        "Question Template",
+			"path":        ".github/ISSUE_TEMPLATE/problem_support.md",
+			"description": "Question/support template for GitHub",
+			"platform":    "github",
+		},
+		{
+			"name":        "Pull Request Template",
+			"path":        ".github/PULL_REQUEST_TEMPLATE.md",
+			"description": "Pull request template for GitHub",
+			"platform":    "github",
+		},
+		{
+			"name":        "Contributing Guide",
+			"path":        "CONTRIBUTING.md",
+			"description": "Contribution guidelines",
+			"platform":    "both",
+		},
+	}
 
-## 1. Copyright
-Source code copyright belongs to noear open source organization.
+	var filtered []map[string]string
+	for _, t := range templates {
+		if platform == "both" || t["platform"] == platform || t["platform"] == "both" {
+			filtered = append(filtered, t)
 
-## 2. Contribution Categories
-- Code Contribution: Fix issues, optimize code, add new plugins, add unit tests.
-- Cooperation Contribution: Add Solon adaptation to your own open source projects.
-- Other Contributions: Submit issues, write blogs, record videos, recommend Solon in communities.
+	}
 
-## 3. Code Contribution Steps
-1. Submit an Issue and confirm with administrators.
-2. Fork the repository.
-3. Write code on the main branch and add unit tests.
-4. Use 'solon-test' for batch testing.
-5. PR to the main branch (link an Issue).
-6. For distributed middleware, adapt to solon cloud specifications first.
-7. Add more comments.
-
-## 4. Branch Protection
-- main branch: No direct pushes allowed. Only admins can merge PRs.
-
-## 5. Test Directory Structure
-- src/test/benchmark: Performance tests (optional)
-- src/test/demo: Simple examples (required)
-- src/test/features: Feature tests (required, included in batch tests)
-- src/test/labs: Experimental tests (optional, not in batch tests)
-
-## 6. Commit Message Prefixes
-- 新增 (New): Add new module
-- 添加 (Add): Add new capability to a module
-- 优化 (Optimize): Optimize existing code
-- 修复 (Fix): Fix existing issues
-- 调整 (Adjust): Adjust existing code (may have compatibility risks)
-- 移除 (Remove): Remove redundant classes
-- 文档 (Doc): Improve documentation
-- 测试 (Test): Improve tests
-- 其它 (Other): Other changes
-`
-	return ok(guidelines)
-}
-
-// HandleSolonCheckHealth checks the availability of Solon's main website
-func HandleSolonCheckHealth(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	urlStr := "https://solon.noear.org"
-
-	client := http.DefaultClient
-	req, e := http.NewRequestWithContext(ctx, "GET", urlStr, nil)
-	if e != nil {
-		return err(fmt.Sprintf("failed to create request: %v", e))
-}
-
-	resp, fetchErr := client.Do(req)
-	if fetchErr != nil {
-		return err(fmt.Sprintf("failed to fetch website: %v", fetchErr))
-}
-
-	defer resp.Body.Close()
-
-	status := "healthy"
-	if resp.StatusCode != 200 {
-		status = fmt.Sprintf("unhealthy (status code: %d)", resp.StatusCode)
-
-	result := fmt.Sprintf("Solon website (%s) is %s", urlStr, status)
-	return ok(result)
+	return ok(filtered)
 }
 
 }
 
-// HandleSolonRegexPattern validates if a string matches Solon's commit message pattern
-func HandleSolonRegexPattern(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	input, _ :=getString(args, "input")
-	if input == "" {
-		return err("input parameter is required")
+func HandleGetTemplateContent(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	templatePath, _ :=getString(args, "template_path")
+	if templatePath == "" {
+		return err("template_path parameter is required")
 }
 
-	// Pattern based on the commit message prefixes described in CONTRIBUTING.md
-	// Matches: 新增, 添加, 优化, 修复, 调整, 移除, 文档, 测试, 其它 followed by space and text
-	pattern := `^(新增|添加|优化|修复|调整|移除|文档|测试|其它)\s+.+$`
+	// Mock template contents based on the Solon project
+	var content string
+	switch templatePath {
+	case ".gitee/ISSUE_TEMPLATE.zh-CN.md":
+		content = `### 问题描述
 
+### 我当前使用 Solon 版本是?`
+	case ".gitee/PULL_REQUEST_TEMPLATE.md":
+		content = `### 这个PR有什么用 / 我们为什么需要它？
+
+### 总结您的更改
+
+#### 请注明您已完成以下工作：
+- [ ] 确保测试通过，并在需要时添加测试覆盖率。
+- [ ] 确保提交消息遵循 [常规提交规范](https://www.conventionalcommits.org/) 的规则。
+- [ ] 考虑文档的影响，如果需要，打开一个新的文档问题或文档更改的PR。`
+	case ".github/ISSUE_TEMPLATE.zh-CN.md":
+		content = `### 问题描述
+
+### 我当前使用 Solon 版本是?`
+	case ".github/ISSUE_TEMPLATE/bug_report.md":
+		content = `---
+name: BUG 提交
+about: 提交问题缺陷帮助我们更好的改进
+title: '[BUG]'
+labels: 'bug'
+assignees: ''
+
+---
+
+#### 关联版本
+*您当前正在使用我们框架的哪个版本？*
+
+### 问题描述
+*简要描述您碰到的问题。*
+
+### 如何复现
+*请详细告诉我们如何复现您遇到的问题，并附上可复现的代码示例*
+1.
+2.
+3.
+\`\`\`java
+//可在此输入示例代码
+\`\`\`
+
+### 预期结果
+*请告诉我们您预期会发生什么。*
+
+### 实际结果
+*请告诉我们实际发生了什么。*
+
+### 截图或视频
+*如果可以的话，上传任何关于 Bug 的截图。*`
+	case ".github/ISSUE_TEMPLATE/feature_request.md":
+		content = `---
+name: 需求建议
+about: 提出针对本项目的想法和建议
+title: '[FEATURE]'
+labels: 'enhancement'
+assignees: ''
+
+---
+
+#### 关联版本
+*您当前正在使用我们框架的哪个版本？*
+
+### 请描述您的需求或者改进建议
+*对您想要需求或建议的清晰简洁的描述。*
+
+### 请描述你建议的实现方案
+*对您想要需求或建议的实现方案的详细描述。*
+
+### 描述您考虑过的替代方案
+*对您考虑过的任何替代解决方案或功能的描述。*
+
+#### 附加信息
+*如果你还有其他需要提供的信息，可以在这里填写（可以提供截图、视频等）。*`
+	case ".github/ISSUE_TEMPLATE/problem_support.md":
+		content = `---
+name: 问题支持
+about: 提出针对本项目使用及其他方面的问题
+title: '[QUESTION]'
+labels: 'question'
+assignees: ''
+
+---
+
+#### 关联版本
+*您当前正在使用我们框架的哪个版本？*
+
+### 请描述您的问题
+*询问有关本项目的使用和其他方面的相关问题。*`
+	case ".github/PULL_REQUEST_TEMPLATE.md":
+		content = `### 这个PR有什么用 / 我们为什么需要它？
+
+### 总结您的更改
+
+#### 请注明您已完成以下工作：
+- [ ] 确保测试通过，并在需要时添加测试覆盖率。
+- [ ] 确保提交消息遵循 [常规提交规范](https://www.conventionalcommits.org/) 的规则。
+- [ ] 考虑文档的影响，如果需要，打开一个新的文档问题或文档更改的PR。`
+	case "CONTRIBUTING.md":
+		content = `如果您对开源感兴趣且愿意学习和贡献，欢迎您共建 Solon 生态。
+
+### 1、版权说明
+本仓库的源码版权归 noear 开源组织所有。
+
+### 2、贡献分类
+代码贡献：
+* 修复问题或优化现有的代码
+* 新增功能插件
+* 添加 Solon AI、Solon Cloud 等适配插件
+* 为现有的模块丰富单元测试用例；为官网丰富配套示例。等...
+
+合作贡献：
+* 有开源框架的同道，在自己仓库里添加 solon 框架的便利适配（需要帮忙随时联系交流）
+* 基于 Solon 开发开源项目或框架。等...
+
+其它贡献：
+* 通过 Issue，提交需求、提交问题
+* 发博客宣传、录视频界面、在交流群或社区推荐 Solon。等...
+
+### 3、代码贡献说明
+1. 提交 Issue ，并与管理员进行确认（避免重复工作）
+2. Fork 仓库
+3. 在 main 分支上编写代码，并添加对应的单元测试
+4. 统一使用 solon-test 做单测（为了批量跑单测）
+5. pr 时，选择 main 分支进行合并（提交时需关联一个 Issue）
+6. 如果是分布式中间件的适配，优先适配成 solon cloud 规范
+7. 注释多些点：）
+
+### 4、代码分支保护规则说明
+| 操作 | main |
+|----------------------|---------|
+| 可推送代码成员 | 禁止任何人 |
+| 可合并 Pull Request 成员 | 仓库管理员 |
+
+### 5、代码模块测试目上录结构规范说明
+| 目录 | 说明 |
+|--------------------|-----------------------|
+| src/test/benchmark | 压测目录（可选） |
+| src/test/demo | 简单示例目录（必须，只是看看的放这里） |
+| src/test/features | 特性测试目录（必选，会进入全项目批量单测） |
+| src/test/labs | 实验目录（可选，不能批量跑的单测） |
+
+不要增加别的目录
+
+### 6、代码提前描述的前缀规范
+| 前缀 | 示例 | 说明 |
+|----|---------------------------------------|------------------|
+| 新增 | 新增 solon-xxx 模块 | 表示增加一个全新模块 |
+| 添加 | 添加 solon-xxx Yyy 工具类 | 表示在一个模块里增加新的能力 |
+| 优化 | 优化 solon-xxx Yyy 延尽订阅处理逻辑 | 表示优化现有代码（没有兼容风险） |
+| 修复 | 修复 solon-xxx Yyy 无法读取元数据问题 | 表示修复现有问题（没有兼容风险） |
+| 调整 | 调整 solon-xxx Yyy 默认值为 true（之前为 false） | 表示调整现有代码（会有兼容风险） |
+| 移除 | 移除 solon-xxx Yyy 注解类（之前已弃用一年） | 表示移除多余的类 |
+| 文档 | 文档 solon-xxx Yyy 的注释完善 | 表示文档相关的完善 |
+| 测试 | 测试 solon-xxx 补充 Yyy 测试用例 | 表示测试相关的完善 |
+| 其它 | 其它 solon-xxx 配置示例变化 | 其它相关内容 |`
+	default:
+		return err(fmt.Sprintf("template %s not found", templatePath))
+}
+
+	return ok(map[string]string{
+}
+		"path":    templatePath,
+		"content": content,
+	})
+
+func HandleValidateCommitMessage(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	message, _ :=getString(args, "message")
+	if message == "" {
+		return err("commit message is required")
+}
+
+	// Check conventional commits format
+	pattern := `^(新增|添加|优化|修复|调整|移除|文档|测试|其它|feat|fix|docs|style|refactor|perf|test|chore)\(?[a-zA-Z0-9\-_]+\)?: .+$`
 	re := regexp.MustCompile(pattern)
-	isMatch := re.MatchString(input)
 
-	result := fmt.Sprintf("Input: '%s'\nMatches Solon commit pattern: %v", input, isMatch)
-	if !isMatch {
-		result += "\nExpected format: 'Prefix Text' (e.g., '新增 solon-xxx 模块')"
+	if !re.MatchString(message) {
+		return err("commit message doesn't follow conventional commits format")
+}
+
+	return ok("commit message is valid")
+}
+
+func HandleListRepoDirectories(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	repoType, _ :=getString(args, "repo_type")
+	if repoType == "" {
+		repoType = "main"
 	}
 
-	return ok(result)
+	var dirs []map[string]string
+	switch repoType {
+	case "main":
+		dirs = []map[string]string{
+			{"path": "src/test/benchmark", "description": "压测目录（可选）"},
+			{"path": "src/test/demo", "description": "简单示例目录（必须）"},
+			{"path": "src/test/features", "description": "特性测试目录（必选）"},
+			{"path": "src/test/labs", "description": "实验目录（可选）"},
+		}
+	case "plugins":
+		dirs = []map[string]string{
+			{"path": "src/main/java", "description": "主代码目录"},
+			{"path": "src/test/java", "description": "测试代码目录"},
+		}
+	default:
+		return err("invalid repo_type. Must be 'main' or 'plugins'")
+}
+
+	return ok(dirs)
+}
+
+func HandleGetRepoStats(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	repoPath, _ :=getString(args, "repo_path")
+	if repoPath == "" {
+		return err("repo_path parameter is required")
+}
+
+	// Mock git stats - in real implementation would use git commands
+	stats := map[string]interface{}{
+		"total_commits":   1250,
+		"contributors":    42,
+		"stars":           3200,
+		"forks":           850,
+		"open_issues":     45,
+		"open_prs":        12,
+		"last_commit":     time.Now().AddDate(0, 0, -2).Format(time.RFC3339),
+		"default_branch":  "main",
+		"license":         "Apache-2.0",
+		"primary_language": "Java",
+	}
+
+	return ok(stats)
 }
