@@ -3,136 +3,222 @@ package tools
 import (
 	"context"
 	"fmt"
+	"io"
+	"net/http"
+	"net/url"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"regexp"
+	"sort"
+	"strconv"
 	"strings"
+	"time"
 )
 
-// HandleRunCommand executes a shell command and returns its combined output
+// HandlePing implements the ping tool to verify connectivity.
+func HandlePing(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	return ok("pong")
+}
+
+// HandleListDir implements the list_directory tool to list files in a directory.
+func HandleListDir(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	path, _ :=getString(args, "path")
+	if path == "" {
+		return err("path argument is required")
+}
+
+	entries, apiErr := os.ReadDir(path)
+	if apiErr != nil {
+		return err(apiErr.Error())
+}
+
+	var names []string
+	for _, entry := range entries {
+		names = append(names, entry.Name())
+
+	sort.Strings(names)
+
+	result := fmt.Sprintf("Directory contents of %s:\n%s", path, strings.Join(names, "\n"))
+	return ok(result)
+}
+
+}
+
+// HandleReadFile implements the read_file tool to read file contents.
+func HandleReadFile(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	path, _ :=getString(args, "path")
+	if path == "" {
+		return err("path argument is required")
+}
+
+	content, apiErr := os.ReadFile(path)
+	if apiErr != nil {
+		return err(apiErr.Error())
+}
+
+	return ok(string(content))
+}
+
+// HandleWriteFile implements the write_file tool to write content to a file.
+func HandleWriteFile(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	path, _ :=getString(args, "path")
+	content, _ :=getString(args, "content")
+
+	if path == "" {
+		return err("path argument is required")
+}
+
+	apiErr := os.WriteFile(path, []byte(content), 0644)
+	if apiErr != nil {
+		return err(apiErr.Error())
+}
+
+	return ok(fmt.Sprintf("Successfully wrote %d bytes to %s", len(content), path))
+}
+
+// HandleRunCommand implements the run_command tool to execute shell commands.
 func HandleRunCommand(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	cmdStr, _ :=getString(args, "command")
-	cmdArgs := []string{}
-	if rawArgs, found := args["args"]; found {
-		if argSlice, found := rawArgs.([]interface{}); found {
-			for _, a := range argSlice {
-				if s, found := a.(string); found {
-					cmdArgs = append(cmdArgs, s)
+	command, _ :=getString(args, "command")
+	if command == "" {
+		return err("command argument is required")
+}
 
-			}
-		}
-	}
+	// Parse command into args
+	parts := strings.Fields(command)
+	if len(parts) == 0 {
+		return err("command cannot be empty")
+}
 
-	cmd := exec.Command(cmdStr, cmdArgs...)
-	output, runErr := cmd.CombinedOutput()
-	if runErr != nil {
-		return err(fmt.Sprintf("Command execution failed: %s\nOutput: %s", runErr.Error(), string(output)))
+	cmd := exec.CommandContext(ctx, parts[0], parts[1:]...)
+	output, apiErr := cmd.CombinedOutput()
+	if apiErr != nil {
+		// Return the output even if there was an error, as it might contain useful info
+		return ok(fmt.Sprintf("Command failed with error: %v\nOutput:\n%s", apiErr, string(output)))
 }
 
 	return ok(string(output))
 }
 
+// HandleFetch implements the fetch tool to make HTTP requests.
+func HandleFetch(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	urlStr, _ :=getString(args, "url")
+	if urlStr == "" {
+		return err("url argument is required")
 }
 
-// HandleGetSystemInfo retrieves basic system information
-func HandleGetSystemInfo(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	hostname, hostErr := os.Hostname()
-	if hostErr != nil {
-		return err(fmt.Sprintf("Failed to retrieve hostname: %s", hostErr.Error()))
+	// Validate URL
+	if _, apiErr := url.Parse(urlStr); apiErr != nil {
+		return err("invalid url format")
 }
 
-	var osInfo string
-	// Try Unix-like uname first
-	unameCmd := exec.Command("uname", "-a")
-	if unameOut, unameErr := unameCmd.CombinedOutput(); unameErr == nil {
-		osInfo = string(unameOut)
-	} else {
-		// Fallback to Windows ver command
-		verCmd := exec.Command("cmd", "/c", "ver")
-		if verOut, verErr := verCmd.CombinedOutput(); verErr == nil {
-			osInfo = string(verOut)
-		} else {
-			osInfo = "Unknown operating system"
+	client := http.DefaultClient
+	req, apiErr := http.NewRequestWithContext(ctx, "GET", urlStr, nil)
+	if apiErr != nil {
+		return err(apiErr.Error())
+}
+
+	resp, apiErr := client.Do(req)
+	if apiErr != nil {
+		return err(apiErr.Error())
+}
+
+	defer resp.Body.Close()
+
+	body, apiErr := io.ReadAll(resp.Body)
+	if apiErr != nil {
+		return err(apiErr.Error())
+}
+
+	return ok(fmt.Sprintf("Status: %s\nBody:\n%s", resp.Status, string(body)))
+}
+
+// HandleSearchFile implements the search_file tool to find files by pattern.
+func HandleSearchFile(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	root, _ :=getString(args, "root")
+	pattern, _ :=getString(args, "pattern")
+
+	if root == "" {
+		root = "."
+	}
+	if pattern == "" {
+		return err("pattern argument is required")
+}
+
+	compiledPattern, apiErr := regexp.Compile(pattern)
+	if apiErr != nil {
+		return err(fmt.Sprintf("invalid regex pattern: %v", apiErr))
+}
+
+	var matches []string
+	apiErr = filepath.Walk(root, func(path string, info os.FileInfo, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
 		}
-	}
+		if compiledPattern.MatchString(info.Name()) {
+			matches = append(matches, path)
 
-	cwd, cwdErr := os.Getwd()
-	if cwdErr != nil {
-		cwd = "Unknown"
-	}
+		return nil
+	})
 
-	info := fmt.Sprintf("Hostname: %s\nOS Information: %s\nCurrent Working Directory: %s",
-		hostname, strings.TrimSpace(osInfo), cwd)
-	return ok(info)
+	if apiErr != nil {
+		return err(apiErr.Error())
 }
 
-// HandleListDirectory lists contents of a directory with metadata
-func HandleListDirectory(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	dirPath, _ :=getString(args, "path")
-	if dirPath == "" {
-		var cwdErr error
-		dirPath, cwdErr = os.Getwd()
-		if cwdErr != nil {
-			return err(fmt.Sprintf("Failed to get current working directory: %s", cwdErr.Error()))
-
-	}
-
-	entries, readErr := os.ReadDir(dirPath)
-	if readErr != nil {
-		return err(fmt.Sprintf("Failed to read directory: %s", readErr.Error()))
+	if len(matches) == 0 {
+		return ok("No matches found.")
 }
 
-	var result strings.Builder
-	result.WriteString(fmt.Sprintf("Contents of directory: %s\n", dirPath))
-	result.WriteString("Name\tType\tSize\n")
-
-	for _, entry := range entries {
-		info, statErr := entry.Info()
-		if statErr != nil {
-			continue
-		}
-
-		var size string
-		if info.IsDir() {
-			size = "<dir>"
-		} else {
-			size = fmt.Sprintf("%d", info.Size())
-
-		result.WriteString(fmt.Sprintf("%s\t%s\t%s\n",
-			entry.Name(),
-			info.Mode().String(),
-			size,
-		))
-
-	return ok(result.String())
+	sort.Strings(matches)
+	return ok(strings.Join(matches, "\n"))
 }
 
 }
-}
-}
 
-// HandleCreateFile creates a new file with given content
-func HandleCreateFile(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	filePath, _ :=getString(args, "path")
-	if filePath == "" {
-		return err("File path cannot be empty")
+// HandleGetEnv implements the get_env tool to retrieve environment variables.
+func HandleGetEnv(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	key, _ :=getString(args, "key")
+	if key == "" {
+		return err("key argument is required")
 }
 
-	content, _ :=getString(args, "content")
-	if content == "" {
-		return err("Content cannot be empty")
+	val, exists := os.LookupEnv(key)
+	if !exists {
+		return err(fmt.Sprintf("Environment variable %s not found", key))
 }
 
-	file, createErr := os.Create(filePath)
-	if createErr != nil {
-		return err(fmt.Sprintf("Failed to create file: %s", createErr.Error()))
+	return ok(val)
 }
 
-	defer file.Close()
+// HandleSetEnv implements the set_env tool to set environment variables for the current process.
+func HandleSetEnv(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	key, _ :=getString(args, "key")
+	value, _ :=getString(args, "value")
 
-	_, writeErr := file.WriteString(content)
-	if writeErr != nil {
-		return err(fmt.Sprintf("Failed to write to file: %s", writeErr.Error()))
+	if key == "" {
+		return err("key argument is required")
 }
 
-	return ok(fmt.Sprintf("File created successfully: %s", filePath))
+	apiErr := os.Setenv(key, value)
+	if apiErr != nil {
+		return err(apiErr.Error())
+}
+
+	return ok(fmt.Sprintf("Environment variable %s set to %s", key, value))
+}
+
+// HandleSleep implements the sleep tool to pause execution.
+func HandleSleep(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	durationStr, _ :=getString(args, "seconds")
+	if durationStr == "" {
+		return err("seconds argument is required")
+}
+
+	seconds, parseErr := strconv.ParseFloat(durationStr, 64)
+	if parseErr != nil {
+		return err("invalid seconds value")
+}
+
+	time.Sleep(time.Duration(seconds * float64(time.Second)))
+	return ok(fmt.Sprintf("Slept for %.2f seconds", seconds))
 }

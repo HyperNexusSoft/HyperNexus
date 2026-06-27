@@ -1,180 +1,112 @@
 package tools
 
 import (
-	"context"
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"net/url"
+	"os"
+	"regexp"
 	"strconv"
 	"strings"
-	"time"
 )
 
-// Client is a shared HTTP client with a 30-second timeout.
-var Client = http.DefaultClient
+// HandleSearchChunks searches a file for lines matching a regex pattern
+func HandleSearchChunks(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	filePath, _ :=getString(args, "file")
+	pattern, _ :=getString(args, "pattern")
 
-// HandleSearch performs a search query against the ChunkHound API.
-func HandleSearch(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	query, _ :=getString(args, "query")
-	if query == "" {
-		return err("query parameter is required")
+	content, readErr := os.ReadFile(filePath)
+	if readErr != nil {
+		return err(readErr.Error())
 }
 
-	limit, _ :=getInt(args, "limit")
-	if limit == 0 {
-		limit = 10
+	re, regexErr := regexp.Compile(pattern)
+	if regexErr != nil {
+		return err(regexErr.Error())
+}
+
+	lines := strings.Split(string(content), "\n")
+	var matches []string
+	for _, line := range lines {
+		if re.MatchString(line) {
+			matches = append(matches, line)
+
 	}
 
-	baseURL := "https://api.chunkhound.example/search"
-	params := url.Values{}
-	params.Set("q", query)
-	params.Set("limit", strconv.Itoa(limit))
-
-	fullURL := baseURL + "?" + params.Encode()
-
-	req, reqErr := http.NewRequestWithContext(ctx, "GET", fullURL, nil)
-	if reqErr != nil {
-		return err(fmt.Sprintf("failed to create request: %v", reqErr))
-}
-
-	resp, fetchErr := Client.Do(req)
-	if fetchErr != nil {
-		return err(fmt.Sprintf("failed to fetch data: %v", fetchErr))
-}
-
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return err(fmt.Sprintf("API returned status: %d", resp.StatusCode))
-}
-
-	var result map[string]interface{}
-	parseErr := json.NewDecoder(resp.Body).Decode(&result)
-	if parseErr != nil {
-		return err(fmt.Sprintf("failed to parse response: %v", parseErr))
-}
-
-	// Format the result as a readable string
-	resultStr := fmt.Sprintf("Found %d results for '%s'", limit, query)
-	if data, found := result["data"]; found {
-		resultStr += fmt.Sprintf("\nData: %v", data)
-
-	return ok(resultStr)
+	result := strings.Join(matches, "\n")
+	return ok(result)
 }
 
 }
 
-// HandleGetChunk retrieves a specific chunk by ID.
-func HandleGetChunk(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	chunkID, _ :=getString(args, "chunk_id")
-	if chunkID == "" {
-		return err("chunk_id parameter is required")
+// HandleCountChunks counts the number of lines (chunks) in a file
+func HandleCountChunks(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	filePath, _ :=getString(args, "file")
+
+	content, readErr := os.ReadFile(filePath)
+	if readErr != nil {
+		return err(readErr.Error())
 }
 
-	baseURL := "https://api.chunkhound.example/chunks/" + url.QueryEscape(chunkID)
-
-	req, reqErr := http.NewRequestWithContext(ctx, "GET", baseURL, nil)
-	if reqErr != nil {
-		return err(fmt.Sprintf("failed to create request: %v", reqErr))
+	lines := strings.Split(string(content), "\n")
+	count := len(lines)
+	return ok(strconv.Itoa(count))
 }
 
-	resp, fetchErr := Client.Do(req)
-	if fetchErr != nil {
-		return err(fmt.Sprintf("failed to fetch chunk: %v", fetchErr))
+// HandleExtractChunks extracts specific line ranges from a file
+func HandleExtractChunks(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	filePath, _ :=getString(args, "file")
+	start, _ :=getInt(args, "start")
+	end, _ :=getInt(args, "end")
+
+	content, readErr := os.ReadFile(filePath)
+	if readErr != nil {
+		return err(readErr.Error())
 }
 
-	defer resp.Body.Close()
-
-	if resp.StatusCode == http.StatusNotFound {
-		return err(fmt.Sprintf("chunk with ID '%s' not found", chunkID))
+	lines := strings.Split(string(content), "\n")
+	if start < 0 {
+		start = 0
+	}
+	if end >= len(lines) {
+		end = len(lines) - 1
+	}
+	if start > end {
+		return err("start cannot be greater than end")
 }
 
-	if resp.StatusCode != http.StatusOK {
-		return err(fmt.Sprintf("API returned status: %d", resp.StatusCode))
+	extracted := lines[start : end+1]
+	result := strings.Join(extracted, "\n")
+	return ok(result)
 }
 
-	var chunkData map[string]interface{}
-	parseErr := json.NewDecoder(resp.Body).Decode(&chunkData)
-	if parseErr != nil {
-		return err(fmt.Sprintf("failed to parse chunk data: %v", parseErr))
+// HandleFilterChunks filters file lines by inclusion/exclusion patterns
+func HandleFilterChunks(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	filePath, _ :=getString(args, "file")
+	include, _ :=getString(args, "include")
+	exclude, _ :=getString(args, "exclude")
+
+	content, readErr := os.ReadFile(filePath)
+	if readErr != nil {
+		return err(readErr.Error())
 }
 
-	content, _ := chunkData["content"].(string)
-	return ok(fmt.Sprintf("Chunk ID: %s\nContent: %s", chunkID, content))
+	includeRe, includeErr := regexp.Compile(include)
+	if includeErr != nil {
+		return err(includeErr.Error())
 }
 
-// HandleListSources lists available data sources.
-func HandleListSources(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	baseURL := "https://api.chunkhound.example/sources"
-
-	req, reqErr := http.NewRequestWithContext(ctx, "GET", baseURL, nil)
-	if reqErr != nil {
-		return err(fmt.Sprintf("failed to create request: %v", reqErr))
+	excludeRe, excludeErr := regexp.Compile(exclude)
+	if excludeErr != nil {
+		return err(excludeErr.Error())
 }
 
-	resp, fetchErr := Client.Do(req)
-	if fetchErr != nil {
-		return err(fmt.Sprintf("failed to fetch sources: %v", fetchErr))
+	lines := strings.Split(string(content), "\n")
+	var filtered []string
+	for _, line := range lines {
+		if includeRe.MatchString(line) && !excludeRe.MatchString(line) {
+			filtered = append(filtered, line)
+
+	}
+
+	result := strings.Join(filtered, "\n")
+	return ok(result)
 }
-
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return err(fmt.Sprintf("API returned status: %d", resp.StatusCode))
-}
-
-	var sources []map[string]interface{}
-	parseErr := json.NewDecoder(resp.Body).Decode(&sources)
-	if parseErr != nil {
-		return err(fmt.Sprintf("failed to parse sources: %v", parseErr))
-}
-
-	if len(sources) == 0 {
-		return ok("No sources found.")
-}
-
-	var sb strings.Builder
-	sb.WriteString("Available Sources:\n")
-	for i, src := range sources {
-		name, _ := src["name"].(string)
-		id, _ := src["id"].(string)
-		sb.WriteString(fmt.Sprintf("%d. %s (ID: %s)\n", i+1, name, id))
-
-	return ok(sb.String())
-}
-
-}
-
-// HandleStats retrieves general statistics about the index.
-func HandleStats(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	baseURL := "https://api.chunkhound.example/stats"
-
-	req, reqErr := http.NewRequestWithContext(ctx, "GET", baseURL, nil)
-	if reqErr != nil {
-		return err(fmt.Sprintf("failed to create request: %v", reqErr))
-}
-
-	resp, fetchErr := Client.Do(req)
-	if fetchErr != nil {
-		return err(fmt.Sprintf("failed to fetch stats: %v", fetchErr))
-}
-
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return err(fmt.Sprintf("API returned status: %d", resp.StatusCode))
-}
-
-	var stats map[string]interface{}
-	parseErr := json.NewDecoder(resp.Body).Decode(&stats)
-	if parseErr != nil {
-		return err(fmt.Sprintf("failed to parse stats: %v", parseErr))
-}
-
-	totalChunks, _ := stats["total_chunks"].(float64)
-	totalSources, _ := stats["total_sources"].(float64)
-	lastUpdated, _ := stats["last_updated"].(string)
-
-	return ok(fmt.Sprintf("Total Chunks: %.0f\nTotal Sources: %.0f\nLast Updated: %s", totalChunks, totalSources, lastUpdated))
 }

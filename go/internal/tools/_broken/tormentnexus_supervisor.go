@@ -2,129 +2,53 @@ package tools
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
+	"net/url"
+	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
+	"sort"
 	"strconv"
 	"strings"
+	"time"
 )
 
-func HandleProcessList(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	cmd := exec.CommandContext(ctx, "ps", "aux")
-	output, runErr := cmd.CombinedOutput()
-	if runErr != nil {
-		return err(fmt.Sprintf("failed to execute ps command: %v", runErr))
+func HandleSupervisorStatus(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	cmd := exec.Command("pgrep", "-f", "torment-nexus")
+	output, execErr := cmd.Output()
+	if execErr != nil {
+		return ok("supervisor: stopped")
 }
 
-	return ok(string(output))
+	if len(output) > 0 {
+		return ok("supervisor: running")
 }
 
-func HandleServiceStatus(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	serviceName, _ :=getString(args, "service_name")
-	if serviceName == "" {
-		return err("service_name parameter is required")
+	return ok("supervisor: stopped")
 }
 
-	cmd := exec.CommandContext(ctx, "systemctl", "status", serviceName)
-	output, runErr := cmd.CombinedOutput()
-	if runErr != nil {
-		return ok(string(output))
+func HandleSupervisorRestart(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	cmd := exec.Command("systemctl", "restart", "torment-nexus")
+	restartErr := cmd.Run()
+	if restartErr == nil {
+		return ok("supervisor restart initiated via systemctl")
 }
 
-	return ok(string(output))
+	killCmd := exec.Command("pkill", "-f", "torment-nexus")
+	killErr := killCmd.Run()
+	if killErr != nil && !strings.Contains(killErr.Error(), "exit status 1") {
+		return err(fmt.Sprintf("failed to stop supervisor: %v", killErr))
 }
 
-func HandleServiceControl(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	serviceName, _ :=getString(args, "service_name")
-	action, _ :=getString(args, "action")
-
-	if serviceName == "" {
-		return err("service_name parameter is required")
+	startCmd := exec.Command("torment-nexus", "--supervisor")
+	startErr := startCmd.Start()
+	if startErr != nil {
+		return err(fmt.Sprintf("failed to start supervisor: %v", startErr))
 }
 
-	if action == "" {
-		return err("action parameter is required")
-}
-
-	validActions := map[string]bool{
-		"start":   true,
-		"stop":    true,
-		"restart": true,
-		"reload":  true,
-	}
-	if !validActions[action] {
-		return err(fmt.Sprintf("invalid action: %s. Valid actions are: start, stop, restart, reload", action))
-}
-
-	cmd := exec.CommandContext(ctx, "systemctl", action, serviceName)
-	output, runErr := cmd.CombinedOutput()
-	if runErr != nil {
-		return err(fmt.Sprintf("failed to %s service %s: %v", action, serviceName, runErr))
-}
-
-	return ok(fmt.Sprintf("Service %s %sed successfully", serviceName, action))
-}
-
-func HandleLogTail(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	logPath, _ :=getString(args, "path")
-	lines, _ :=getInt(args, "lines")
-
-	if logPath == "" {
-		return err("path parameter is required")
-}
-
-	if lines == 0 {
-		lines = 20
-	}
-
-	absPath, pathErr := filepath.Abs(logPath)
-	if pathErr != nil {
-		return err(fmt.Sprintf("failed to resolve path: %v", pathErr))
-}
-
-	cmd := exec.CommandContext(ctx, "tail", "-n", strconv.Itoa(lines), absPath)
-	output, runErr := cmd.CombinedOutput()
-	if runErr != nil {
-		return err(fmt.Sprintf("failed to tail log file: %v", runErr))
-}
-
-	return ok(string(output))
-}
-
-func HandleNetworkCheck(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	target, _ :=getString(args, "target")
-	if target == "" {
-		target = "8.8.8.8"
-	}
-
-	cmd := exec.CommandContext(ctx, "ping", "-c", "4", target)
-	output, runErr := cmd.CombinedOutput()
-	if runErr != nil {
-		return err(fmt.Sprintf("ping failed: %v", runErr))
-}
-
-	return ok(string(output))
-}
-
-func HandleSystemInfo(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	commands := map[string][]string{
-		"hostname": {"hostname"},
-		"uptime":   {"uptime"},
-		"os":       {"uname", "-a"},
-		"cpu":      {"lscpu"},
-		"memory":   {"free", "-h"},
-	}
-
-	var result strings.Builder
-	for name, cmdArgs := range commands {
-		cmd := exec.CommandContext(ctx, cmdArgs[0], cmdArgs[1:]...)
-		output, runErr := cmd.CombinedOutput()
-		if runErr != nil {
-			result.WriteString(fmt.Sprintf("%s: error executing command: %v\n", name, runErr))
-			continue
-		}
-		result.WriteString(fmt.Sprintf("=== %s ===\n%s\n\n", strings.ToUpper(name), string(output)))
-
-	return ok(result.String())
-}
+	return ok("supervisor restart initiated")
 }

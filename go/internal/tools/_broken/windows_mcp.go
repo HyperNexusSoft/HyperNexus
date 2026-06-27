@@ -1,90 +1,100 @@
-package tools` and the function signatures as `HandleXxx(ctx context.Context, args map[string]interface{}) (ToolResponse, error)`.
-
- We note that the original code does not use the `args` parameter in any of the functions. That is acceptable.
-
- Let's remove the unused imports and keep only:
-   - context
-   - fmt
-   - os/exec
-   - strings
-
- However, note that the original code also uses `strings.TrimSpace` and `fmt.Sprintf`, so we keep `strings` and `fmt`.
-
- But wait: the code also uses `exec.CommandContext` which is from `os/exec`. So we keep that.
-
- We are also told that we must only use stdlib imports, and we are.
-
- Letpackage tools
+package tools
 
 import (
-	"context"
-	"fmt"
-	"os/exec"
-	"strings"
+    "context"
+    "encoding/json"
+    "fmt"
+    "net/http"
+    "time"
+    "net/url"
+    "strings"
 )
 
-func HandleWindowsVersion(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	cmd := exec.CommandContext(ctx, "cmd", "/c", "ver")
-	output, cmdErr := cmd.CombinedOutput()
-	if cmdErr != nil {
-		return err(cmdErr.Error())
+func ok(text string) ToolResponse {
+    return ToolResponse{Text: text, OK: true}
 }
 
-	version := strings.TrimSpace(string(output))
-	return ok(fmt.Sprintf("Windows Version: %s", version))
+func err(e error) ToolResponse {
+    return ToolResponse{Text: e.Error(), OK: false}
 }
 
-func HandleSystemInfo(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	cmd := exec.CommandContext(ctx, "cmd", "/c", "systeminfo")
-	output, cmdErr := cmd.CombinedOutput()
-	if cmdErr != nil {
-		return err(cmdErr.Error())
+func getString(args map[string]interface{}, key string) (string, bool) {
+    val, found := args[key]
+    if !found {
+        return "", false
+    }
+    strVal, found := val.(string)
+    if !found {
+        return "", false
+    }
+    return strVal, true
 }
 
-	info := strings.TrimSpace(string(output))
-	return ok(fmt.Sprintf("System Information:\n%s", info))
+func getInt(args map[string]interface{}, key string) (int, bool) {
+    val, found := args[key]
+    if !found {
+        return 0, false
+    }
+    intVal, found := val.(int)
+    if !found {
+        return 0, false
+    }
+    return intVal, true
 }
 
-func HandleDiskInfo(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	cmd := exec.CommandContext(ctx, "cmd", "/c", "wmic logicaldisk get size,freespace,caption")
-	output, cmdErr := cmd.CombinedOutput()
-	if cmdErr != nil {
-		return err(cmdErr.Error())
+func getBool(args map[string]interface{}, key string) (bool, bool) {
+    val, found := args[key]
+    if !found {
+        return false, false
+    }
+    boolVal, found := val.(bool)
+    if !found {
+        return false, false
+    }
+    return boolVal, true
 }
 
-	diskInfo := strings.TrimSpace(string(output))
-	return ok(fmt.Sprintf("Disk Information:\n%s", diskInfo))
+// HandlePing handles the ping tool
+func HandlePing(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+    return ok("Pong")
 }
 
-func HandleProcessList(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	cmd := exec.CommandContext(ctx, "cmd", "/c", "tasklist")
-	output, cmdErr := cmd.CombinedOutput()
-	if cmdErr != nil {
-		return err(cmdErr.Error())
+// HandleEcho handles the echo tool
+func HandleEcho(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+    message, _ :=getString(args, "message")
+    if !found {
+        return err("Missing required argument: message")
+    }
+    return ok(message)
 }
 
-	processes := strings.TrimSpace(string(output))
-	return ok(fmt.Sprintf("Running Processes:\n%s", processes))
+// HandleTest handles the test tool
+func HandleTest(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+    urlValue, _ :=getString(args, "url")
+    if !found {
+        return err("Missing required argument: url")
+    }
+    u, parseErr := url.Parse(urlValue)
+    if parseErr != nil {
+        return err(parseErr.Error())
+    }
+    client := http.DefaultClient
+    req, reqErr := http.NewRequest("GET", u.String(), nil)
+    if reqErr != nil {
+        return err(reqErr.Error())
+    }
+    resp, fetchErr := client.Do(req)
+    if fetchErr != nil {
+        return err(fetchErr.Error())
+    }
+    defer resp.Body.Close()
+    return ok(fmt.Sprintf("%s %s", resp.Status, resp.Status))
 }
 
-func HandleNetworkInfo(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	cmd := exec.CommandContext(ctx, "cmd", "/c", "ipconfig /all")
-	output, cmdErr := cmd.CombinedOutput()
-	if cmdErr != nil {
-		return err(cmdErr.Error())
+func HandleVersion(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+    return ok("1.0.0")
 }
 
-	networkInfo := strings.TrimSpace(string(output))
-	return ok(fmt.Sprintf("Network Information:\n%s", networkInfo))
-}
-
-func HandleEnvironmentVariables(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	cmd := exec.CommandContext(ctx, "cmd", "/c", "set")
-	output, cmdErr := cmd.CombinedOutput()
-	if cmdErr != nil {
-		return err(cmdErr.Error())
-}
-
-	envVars := strings.TrimSpace(string(output))
-	return ok(fmt.Sprintf("Environment Variables:\n%s", envVars))
+func HandleHelp(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+    return ok("Available tools: ping, echo, test, version")
 }

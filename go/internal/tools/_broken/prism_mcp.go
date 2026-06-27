@@ -1,177 +1,341 @@
 package tools
 
 import (
-    "context"
-    "encoding/json"
-    "os"
-    "fmt"
-    "strings"
+	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"regexp"
+	"sort"
+	"strings"
+	"time"
 )
 
-// Note struct for storage
-type note struct {
-    Title   string `json:"title"`
-    Content string `json:"content"`
+var (
+	http.DefaultClient = http.DefaultClient
+	uuidRegex  = regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$`)
+)
+
+func HandlePrismStatus(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	host, _ :=getString(args, "host")
+	if host == "" {
+		return err("host parameter is required")
 }
 
-const noteFile = "notes.json"
-
-func loadNotes() ([]note, error) {
-    data, readErr := os.ReadFile(noteFile)
-    if readErr != nil {
-        if os.IsNotExist(readErr) {
-            return []note{}, nil
-        }
-        return nil, readErr
-    }
-    var notes []note
-    if parseErr := json.Unmarshal(data, &notes); parseErr != nil {
-        return nil, parseErr
-    }
-    return notes, nil
+	u := fmt.Sprintf("http://%s:9000/api/v1/status", host)
+	req, reqErr := http.NewRequestWithContext(ctx, "GET", u, nil)
+	if reqErr != nil {
+		return err(fmt.Sprintf("failed to create request: %v", reqErr))
 }
 
-func saveNotes(notes []note) error {
-    data, marshalErr := json.MarshalIndent(notes, "", "  ")
-    if marshalErr != nil {
-        return marshalErr
-    }
-    return os.WriteFile(noteFile, data, 0644)
+	resp, apiErr := http.DefaultClient.Do(req)
+	if apiErr != nil {
+		return err(fmt.Sprintf("request failed: %v", apiErr))
 }
 
-// Handlers
+	defer resp.Body.Close()
 
-func HandleListNotes(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-    notes, loadErr := loadNotes()
-    if loadErr != nil {
-        return err(loadErr.Error())
+	if resp.StatusCode != http.StatusOK {
+		return err(fmt.Sprintf("unexpected status code: %d", resp.StatusCode))
 }
 
-    titles := make([]string, 0, len(notes))
-    for _, n := range notes {
-        titles = append(titles, n.Title)
-
-    jsonBytes, marshalErr := json.Marshal(titles)
-    if marshalErr != nil {
-        return err(marshalErr.Error())
+	body, readErr := io.ReadAll(resp.Body)
+	if readErr != nil {
+		return err(fmt.Sprintf("failed to read response: %v", readErr))
 }
 
-    return ok(string(jsonBytes))
+	var result map[string]interface{}
+	if parseErr := json.Unmarshal(body, &result); parseErr != nil {
+		return err(fmt.Sprintf("failed to parse response: %v", parseErr))
 }
 
+	version, _ :=getString(result, "version")
+	if version == "" {
+		return err("version not found in response")
 }
 
-func HandleGetNote(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-    title, _ :=getString(args, "title")
-    if title == "" {
-        return err("title is required")
+	return ok(fmt.Sprintf("Prism MCP running version %s", version))
 }
 
-    notes, loadErr := loadNotes()
-    if loadErr != nil {
-        return err(loadErr.Error())
+func HandlePrismClusterList(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	host, _ :=getString(args, "host")
+	if host == "" {
+		return err("host parameter is required")
 }
 
-    for _, n := range notes {
-        if strings.EqualFold(n.Title, title) {
-            noteJSON, marshalErr := json.Marshal(n)
-            if marshalErr != nil {
-                return err(marshalErr.Error())
+	u := fmt.Sprintf("http://%s:9000/api/nutanix/v3/clusters/list", host)
+	reqBody := map[string]interface{}{"kind": "cluster"}
+	jsonBody, jsonErr := json.Marshal(reqBody)
+	if jsonErr != nil {
+		return err(fmt.Sprintf("failed to marshal request body: %v", jsonErr))
 }
 
-            return ok(string(noteJSON))
-
-    }
-    return err(fmt.Sprintf("note with title '%s' not found", title))
+	req, reqErr := http.NewRequestWithContext(ctx, "POST", u, strings.NewReader(string(jsonBody)))
+	if reqErr != nil {
+		return err(fmt.Sprintf("failed to create request: %v", reqErr))
 }
 
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, apiErr := http.DefaultClient.Do(req)
+	if apiErr != nil {
+		return err(fmt.Sprintf("request failed: %v", apiErr))
 }
 
-func HandleCreateNote(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-    title, _ :=getString(args, "title")
-    content, _ :=getString(args, "content")
-    if title == "" || content == "" {
-        return err("title and content are required")
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return err(fmt.Sprintf("unexpected status code: %d", resp.StatusCode))
 }
 
-    notes, loadErr := loadNotes()
-    if loadErr != nil {
-        return err(loadErr.Error())
+	body, readErr := io.ReadAll(resp.Body)
+	if readErr != nil {
+		return err(fmt.Sprintf("failed to read response: %v", readErr))
 }
 
-    // Check for duplicate title
-    for _, n := range notes {
-        if strings.EqualFold(n.Title, title) {
-            return err(fmt.Sprintf("note with title '%s' already exists", title))
-
-    }
-    notes = append(notes, note{Title: title, Content: content})
-    if saveErr := saveNotes(notes); saveErr != nil {
-        return err(saveErr.Error())
+	var result map[string]interface{}
+	if parseErr := json.Unmarshal(body, &result); parseErr != nil {
+		return err(fmt.Sprintf("failed to parse response: %v", parseErr))
 }
 
-    return ok(fmt.Sprintf("note '%s' created", title))
+	entities := getSlice(result, "entities")
+	if entities == nil {
+		return ok("No clusters found")
+}
+
+	var clusterNames []string
+	for _, entity := range entities {
+		if cluster, found := entity.(map[string]interface{}); found {
+			if name := getString(cluster, "name"); name != "" {
+				clusterNames = append(clusterNames, name)
+
+		}
+	}
+
+	sort.Strings(clusterNames)
+	return ok(fmt.Sprintf("Clusters: %s", strings.Join(clusterNames, ", ")))
 }
 
 }
 
-func HandleUpdateNote(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-    title, _ :=getString(args, "title")
-    content, _ :=getString(args, "content")
-    if title == "" || content == "" {
-        return err("title and content are required")
+func HandlePrismVmList(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	host, _ :=getString(args, "host")
+	if host == "" {
+		return err("host parameter is required")
 }
 
-    notes, loadErr := loadNotes()
-    if loadErr != nil {
-        return err(loadErr.Error())
+	clusterUUID, _ :=getString(args, "cluster_uuid")
+	if clusterUUID == "" || !uuidRegex.MatchString(clusterUUID) {
+		return err("valid cluster_uuid parameter is required")
 }
 
-    found := false
-    for i, n := range notes {
-        if strings.EqualFold(n.Title, title) {
-            notes[i].Content = content
-            found = true
-            break
-        }
-    }
-    if !found {
-        return err(fmt.Sprintf("note with title '%s' not found", title))
+	u := fmt.Sprintf("http://%s:9000/api/nutanix/v3/vms/list", host)
+	reqBody := map[string]interface{}{
+		"kind": "vm",
+		"filter": fmt.Sprintf("cluster_reference==%s", clusterUUID),
+	}
+	jsonBody, jsonErr := json.Marshal(reqBody)
+	if jsonErr != nil {
+		return err(fmt.Sprintf("failed to marshal request body: %v", jsonErr))
 }
 
-    if saveErr := saveNotes(notes); saveErr != nil {
-        return err(saveErr.Error())
+	req, reqErr := http.NewRequestWithContext(ctx, "POST", u, strings.NewReader(string(jsonBody)))
+	if reqErr != nil {
+		return err(fmt.Sprintf("failed to create request: %v", reqErr))
 }
 
-    return ok(fmt.Sprintf("note '%s' updated", title))
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, apiErr := http.DefaultClient.Do(req)
+	if apiErr != nil {
+		return err(fmt.Sprintf("request failed: %v", apiErr))
 }
 
-func HandleDeleteNote(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-    title, _ :=getString(args, "title")
-    if title == "" {
-        return err("title is required")
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return err(fmt.Sprintf("unexpected status code: %d", resp.StatusCode))
 }
 
-    notes, loadErr := loadNotes()
-    if loadErr != nil {
-        return err(loadErr.Error())
+	body, readErr := io.ReadAll(resp.Body)
+	if readErr != nil {
+		return err(fmt.Sprintf("failed to read response: %v", readErr))
 }
 
-    index := -1
-    for i, n := range notes {
-        if strings.EqualFold(n.Title, title) {
-            index = i
-            break
-        }
-    }
-    if index == -1 {
-        return err(fmt.Sprintf("note with title '%s' not found", title))
+	var result map[string]interface{}
+	if parseErr := json.Unmarshal(body, &result); parseErr != nil {
+		return err(fmt.Sprintf("failed to parse response: %v", parseErr))
 }
 
-    notes = append(notes[:index], notes[index+1:]...)
-    if saveErr := saveNotes(notes); saveErr != nil {
-        return err(saveErr.Error())
+	entities := getSlice(result, "entities")
+	if entities == nil {
+		return ok("No VMs found")
 }
 
-    return ok(fmt.Sprintf("note '%s' deleted", title))
+	var vmNames []string
+	for _, entity := range entities {
+		if vm, found := entity.(map[string]interface{}); found {
+			if name := getString(vm, "name"); name != "" {
+				vmNames = append(vmNames, name)
+
+		}
+	}
+
+	sort.Strings(vmNames)
+	return ok(fmt.Sprintf("VMs: %s", strings.Join(vmNames, ", ")))
+}
+
+}
+
+func HandlePrismTaskList(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	host, _ :=getString(args, "host")
+	if host == "" {
+		return err("host parameter is required")
+}
+
+	limit, _ :=getInt(args, "limit")
+	if limit <= 0 {
+		limit = 10
+	}
+
+	u := fmt.Sprintf("http://%s:9000/api/nutanix/v3/tasks/list", host)
+	reqBody := map[string]interface{}{
+		"kind":  "task",
+		"limit": limit,
+	}
+	jsonBody, jsonErr := json.Marshal(reqBody)
+	if jsonErr != nil {
+		return err(fmt.Sprintf("failed to marshal request body: %v", jsonErr))
+}
+
+	req, reqErr := http.NewRequestWithContext(ctx, "POST", u, strings.NewReader(string(jsonBody)))
+	if reqErr != nil {
+		return err(fmt.Sprintf("failed to create request: %v", reqErr))
+}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, apiErr := http.DefaultClient.Do(req)
+	if apiErr != nil {
+		return err(fmt.Sprintf("request failed: %v", apiErr))
+}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return err(fmt.Sprintf("unexpected status code: %d", resp.StatusCode))
+}
+
+	body, readErr := io.ReadAll(resp.Body)
+	if readErr != nil {
+		return err(fmt.Sprintf("failed to read response: %v", readErr))
+}
+
+	var result map[string]interface{}
+	if parseErr := json.Unmarshal(body, &result); parseErr != nil {
+		return err(fmt.Sprintf("failed to parse response: %v", parseErr))
+}
+
+	entities := getSlice(result, "entities")
+	if entities == nil {
+		return ok("No tasks found")
+}
+
+	var taskInfo []string
+	for _, entity := range entities {
+		if task, found := entity.(map[string]interface{}); found {
+			taskUUID, _ :=getString(task, "metadata.uuid")
+			status, _ :=getString(task, "status")
+			operation, _ :=getString(task, "operation_type")
+			if taskUUID != "" && status != "" {
+				taskInfo = append(taskInfo, fmt.Sprintf("%s (%s): %s", taskUUID, status, operation))
+
+		}
+	}
+
+	return ok(fmt.Sprintf("Recent tasks:\n%s", strings.Join(taskInfo, "\n")))
+}
+
+}
+
+func HandlePrismAlertList(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	host, _ :=getString(args, "host")
+	if host == "" {
+		return err("host parameter is required")
+}
+
+	severity, _ :=getString(args, "severity")
+	if severity == "" {
+		severity = "WARNING,ERROR,CRITICAL"
+	}
+
+	u := fmt.Sprintf("http://%s:9000/api/nutanix/v3/alerts/list", host)
+	reqBody := map[string]interface{}{
+		"kind": "alert",
+		"filter": fmt.Sprintf("severity==%s", severity),
+	}
+	jsonBody, jsonErr := json.Marshal(reqBody)
+	if jsonErr != nil {
+		return err(fmt.Sprintf("failed to marshal request body: %v", jsonErr))
+}
+
+	req, reqErr := http.NewRequestWithContext(ctx, "POST", u, strings.NewReader(string(jsonBody)))
+	if reqErr != nil {
+		return err(fmt.Sprintf("failed to create request: %v", reqErr))
+}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, apiErr := http.DefaultClient.Do(req)
+	if apiErr != nil {
+		return err(fmt.Sprintf("request failed: %v", apiErr))
+}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return err(fmt.Sprintf("unexpected status code: %d", resp.StatusCode))
+}
+
+	body, readErr := io.ReadAll(resp.Body)
+	if readErr != nil {
+		return err(fmt.Sprintf("failed to read response: %v", readErr))
+}
+
+	var result map[string]interface{}
+	if parseErr := json.Unmarshal(body, &result); parseErr != nil {
+		return err(fmt.Sprintf("failed to parse response: %v", parseErr))
+}
+
+	entities := getSlice(result, "entities")
+	if entities == nil {
+		return ok("No alerts found")
+}
+
+	var alertInfo []string
+	for _, entity := range entities {
+		if alert, found := entity.(map[string]interface{}); found {
+			alertUUID, _ :=getString(alert, "metadata.uuid")
+			message, _ :=getString(alert, "message")
+			severity, _ :=getString(alert, "severity")
+			if alertUUID != "" && message != "" {
+				alertInfo = append(alertInfo, fmt.Sprintf("%s [%s]: %s", alertUUID, severity, message))
+
+		}
+	}
+
+	return ok(fmt.Sprintf("Active alerts:\n%s", strings.Join(alertInfo, "\n")))
+}
+
+}
+
+// Helper function to safely get a slice from map
+func getSlice(m map[string]interface{}, key string) []interface{} {
+	if val, found := m[key]; found {
+		if slice, found := val.([]interface{}); found {
+			return slice
+		}
+	}
+	return nil
 }

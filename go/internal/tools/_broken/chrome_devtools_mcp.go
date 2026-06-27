@@ -7,20 +7,15 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"os"
 	"strings"
 	"time"
 )
 
 func HandleListPages(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	// Default Chrome DevTools URL
-	devtoolsURL := "http://127.0.0.1:9222"
-	if val, exists := os.LookupEnv("CHROME_DEVTOOLS_URL"); exists {
-		devtoolsURL = val
-	}
-
+	const apiURL = "http://localhost:9222/json/list"
 	client := http.DefaultClient
-	resp, fetchErr := client.Get(devtoolsURL + "/json/list")
+
+	resp, fetchErr := client.Get(apiURL)
 	if fetchErr != nil {
 		return err(fmt.Sprintf("failed to fetch pages: %v", fetchErr))
 }
@@ -28,14 +23,17 @@ func HandleListPages(ctx context.Context, args map[string]interface{}) (ToolResp
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body)
-		return err(fmt.Sprintf("devtools API error: %s - %s", resp.Status, string(body)))
+		return err(fmt.Sprintf("API returned non-200 status: %d", resp.StatusCode))
+}
+
+	body, readErr := io.ReadAll(resp.Body)
+	if readErr != nil {
+		return err(fmt.Sprintf("failed to read response body: %v", readErr))
 }
 
 	var pages []map[string]interface{}
-	decodeErr := json.NewDecoder(resp.Body).Decode(&pages)
-	if decodeErr != nil {
-		return err(fmt.Sprintf("failed to decode pages: %v", decodeErr))
+	if parseErr := json.Unmarshal(body, &pages); parseErr != nil {
+		return err(fmt.Sprintf("failed to parse JSON response: %v", parseErr))
 }
 
 	var result strings.Builder
@@ -46,7 +44,7 @@ func HandleListPages(ctx context.Context, args map[string]interface{}) (ToolResp
 		title, _ :=getString(page, "title")
 		url, _ :=getString(page, "url")
 		id, _ :=getString(page, "id")
-		result.WriteString(fmt.Sprintf("Page %d: %s\nURL: %s\nID: %s", i+1, title, url, id))
+		result.WriteString(fmt.Sprintf("Page %d: %s (%s) [id: %s]", i+1, title, url, id))
 
 	return ok(result.String())
 }
@@ -65,69 +63,36 @@ func HandleBrowsePage(ctx context.Context, args map[string]interface{}) (ToolRes
 		return err(fmt.Sprintf("invalid URL: %v", parseErr))
 }
 
-	// Default Chrome DevTools URL
-	devtoolsURL := "http://127.0.0.1:9222"
-	if val, exists := os.LookupEnv("CHROME_DEVTOOLS_URL"); exists {
-		devtoolsURL = val
-	}
+	if !strings.HasPrefix(parsedURL.Scheme, "http") {
+		return err("URL must start with http:// or https://")
+}
 
-	// First get available pages to find a target
+	const apiURL = "http://localhost:9222/json/new"
 	client := http.DefaultClient
-	resp, fetchErr := client.Get(devtoolsURL + "/json/list")
+
+	resp, fetchErr := client.Get(fmt.Sprintf("%s?%s", apiURL, url.QueryEscape(targetURL)))
 	if fetchErr != nil {
-		return err(fmt.Sprintf("failed to fetch pages: %v", fetchErr))
+		return err(fmt.Sprintf("failed to create new page: %v", fetchErr))
 }
 
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body)
-		return err(fmt.Sprintf("devtools API error: %s - %s", resp.Status, string(body)))
+		return err(fmt.Sprintf("API returned non-200 status: %d", resp.StatusCode))
 }
 
-	var pages []map[string]interface{}
-	decodeErr := json.NewDecoder(resp.Body).Decode(&pages)
-	if decodeErr != nil {
-		return err(fmt.Sprintf("failed to decode pages: %v", decodeErr))
+	body, readErr := io.ReadAll(resp.Body)
+	if readErr != nil {
+		return err(fmt.Sprintf("failed to read response body: %v", readErr))
 }
 
-	var targetPage map[string]interface{}
-	for _, page := range pages {
-		if strings.HasPrefix(getString(page, "url"), "about:") {
-			targetPage = page
-			break
-		}
-	}
-
-	if targetPage == nil {
-		return err("no available blank page found")
+	var result map[string]interface{}
+	if parseErr := json.Unmarshal(body, &result); parseErr != nil {
+		return err(fmt.Sprintf("failed to parse JSON response: %v", parseErr))
 }
 
-	wsURL, _ :=getString(targetPage, "webSocketDebuggerUrl")
-	if wsURL == "" {
-		return err("no websocket debugger URL found for target page")
-}
-
-	// Navigate to the target URL
-	navigateData := map[string]interface{}{
-		"url": parsedURL.String(),
-	}
-	jsonData, _ := json.Marshal(navigateData)
-
-	navigateURL := strings.Replace(wsURL, "ws://", "http://", 1) + "/go"
-	navResp, navErr := client.Post(navigateURL, "application/json", strings.NewReader(string(jsonData)))
-	if navErr != nil {
-		return err(fmt.Sprintf("failed to navigate: %v", navErr))
-}
-
-	defer navResp.Body.Close()
-
-	if navResp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(navResp.Body)
-		return err(fmt.Sprintf("navigation failed: %s - %s", navResp.Status, string(body)))
-}
-
-	return ok(fmt.Sprintf("Successfully navigated to %s", parsedURL.String()))
+	pageID, _ :=getString(result, "id")
+	return ok(fmt.Sprintf("Successfully navigated to %s (page ID: %s)", targetURL, pageID))
 }
 
 func HandleTakeScreenshot(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
@@ -136,269 +101,44 @@ func HandleTakeScreenshot(ctx context.Context, args map[string]interface{}) (Too
 		return err("page_id parameter is required")
 }
 
-	// Default Chrome DevTools URL
-	devtoolsURL := "http://127.0.0.1:9222"
-	if val, exists := os.LookupEnv("CHROME_DEVTOOLS_URL"); exists {
-		devtoolsURL = val
-	}
-
+	const apiURL = "http://localhost:9222/json/captureScreenshot"
 	client := http.DefaultClient
 
-	// Get the websocket URL for the page
-	pageInfoURL := fmt.Sprintf("%s/json/list/%s", devtoolsURL, pageID)
-	resp, fetchErr := client.Get(pageInfoURL)
+	reqBody := map[string]interface{}{
+		"id": pageID,
+	}
+	jsonBody, marshalErr := json.Marshal(reqBody)
+	if marshalErr != nil {
+		return err(fmt.Sprintf("failed to marshal request body: %v", marshalErr))
+}
+
+	resp, fetchErr := client.Post(apiURL, "application/json", strings.NewReader(string(jsonBody)))
 	if fetchErr != nil {
-		return err(fmt.Sprintf("failed to fetch page info: %v", fetchErr))
+		return err(fmt.Sprintf("failed to take screenshot: %v", fetchErr))
 }
 
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body)
-		return err(fmt.Sprintf("devtools API error: %s - %s", resp.Status, string(body)))
+		return err(fmt.Sprintf("API returned non-200 status: %d", resp.StatusCode))
 }
 
-	var pageInfo map[string]interface{}
-	decodeErr := json.NewDecoder(resp.Body).Decode(&pageInfo)
-	if decodeErr != nil {
-		return err(fmt.Sprintf("failed to decode page info: %v", decodeErr))
-}
-
-	wsURL, _ :=getString(pageInfo, "webSocketDebuggerUrl")
-	if wsURL == "" {
-		return err("no websocket debugger URL found for target page")
-}
-
-	// Capture screenshot
-	captureURL := strings.Replace(wsURL, "ws://", "http://", 1) + "/screenshot"
-	captureResp, captureErr := client.Get(captureURL)
-	if captureErr != nil {
-		return err(fmt.Sprintf("failed to capture screenshot: %v", captureErr))
-}
-
-	defer captureResp.Body.Close()
-
-	if captureResp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(captureResp.Body)
-		return err(fmt.Sprintf("screenshot failed: %s - %s", captureResp.Status, string(body)))
-}
-
-	// Read the image data
-	imageData, readErr := io.ReadAll(captureResp.Body)
+	body, readErr := io.ReadAll(resp.Body)
 	if readErr != nil {
-		return err(fmt.Sprintf("failed to read screenshot data: %v", readErr))
+		return err(fmt.Sprintf("failed to read response body: %v", readErr))
 }
 
-	// Save to temporary file
-	tempFile, tempErr := os.CreateTemp("", "screenshot-*.png")
-	if tempErr != nil {
-		return err(fmt.Sprintf("failed to create temp file: %v", tempErr))
+	var result map[string]interface{}
+	if parseErr := json.Unmarshal(body, &result); parseErr != nil {
+		return err(fmt.Sprintf("failed to parse JSON response: %v", parseErr))
 }
 
-	defer tempFile.Close()
-
-	_, writeErr := tempFile.Write(imageData)
-	if write有了writeErr != nil {
-		return err(fmt.Sprintf("failed to write screenshot: %v", writeErr))
+	data, _ :=getString(result, "data")
+	if data == "" {
+		return err("no screenshot data returned")
 }
 
-	return ok(fmt.Sprintf("Screenshot saved to %s", tempFile.Name()))
-}
-
-func HandleGetConsoleMessages(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	pageID, _ :=getString(args, "page_id")
-	if pageID == "" {
-		return err("page_id parameter is required")
-}
-
-	// Default Chrome DevTools URL
-	devtoolsURL := "http://127.0.0.1:9222"
-	if val, exists := os.LookupEnv("CHROME_DEVTOOLS_URL"); exists {
-		devtoolsURL = val
-	}
-
-	client := http.DefaultClient
-
-	// Get the websocket URL for the page
-	pageInfoURL := fmt.Sprintf("%s/json/list/%s", devtoolsURL, pageID)
-	resp, fetchErr := client.Get(pageInfoURL)
-	if fetchErr != nil {
-		return err(fmt.Sprintf("failed to fetch page info: %v", fetchErr))
-}
-
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body)
-		return err(fmt.Sprintf("devtools API error: %s - %s", resp.Status, string(body)))
-}
-
-	var pageInfo map[string]interface{}
-	decodeErr := json.NewDecoder(resp.Body).Decode(&pageInfo)
-	if decodeErr != nil {
-		return err(fmt.Sprintf("failed to decode page info: %v", decodeErr))
-}
-
-	wsURL, _ :=getString(pageInfo, "webSocketDebuggerUrl")
-	if wsURL == "" {
-		return err("no websocket debugger URL found for target page")
-}
-
-	// Enable console messages
-	enableURL := strings.Replace(wsURL, "ws://", "http://", 1) + "/console/enable"
-	enableResp, enableErr := client.Post(enableURL, "application/json", strings.NewReader("{}"))
-	if enableErr != nil {
-		return err(fmt.Sprintf("failed to enable console: %v", enableErr))
-}
-
-	defer enableResp.Body.Close()
-
-	if enableResp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(enableResp.Body)
-		return err(fmt.Sprintf("console enable failed: %s - %s", enableResp.Status, string(body)))
-}
-
-	// Get console messages
-	consoleURL := strings.Replace(wsURL, "ws://", "http://", 1) + "/console/messages"
-	consoleResp, consoleErr := client.Get(consoleURL)
-	if consoleErr != nil {
-		return err(fmt.Sprintf("failed to get console messages: %v", consoleErr))
-}
-
-	defer consoleResp.Body.Close()
-
-	if consoleResp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(consoleResp.Body)
-		return err(fmt.Sprintf("console messages failed: %s - %s", consoleResp.Status, string(body)))
-}
-
-	var messages struct {
-		Messages []map[string]interface{} `json:"messages"`
-	}
-	decodeMsgErr := json.NewDecoder(consoleResp.Body).Decode(&messages)
-	if decodeMsgErr != nil {
-		return err(fmt.Sprintf("failed to decode console messages: %v", decodeMsgErr))
-}
-
-	var result strings.Builder
-	for i, msg := range messages.Messages {
-		if i > 0 {
-			result.WriteString("\n")
-
-		text, _ :=getString(msg, "text")
-		level, _ :=getString(msg, "level")
-		source, _ :=getString(msg, "url")
-		line, _ :=getInt(msg, "lineNumber")
-		col, _ :=getInt(msg, "columnNumber")
-
-		result.WriteString(fmt.Sprintf("Message %d [%s]: %s\nSource: %s:%d:%d", i+1, level, text, source, line, col))
-
-	if len(messages.Messages) == 0 {
-		return ok("No console messages found")
-}
-
-	return ok(result.String())
-}
-
-}
-}
-
-func HandleGetNetworkRequests(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	pageID, _ :=getString(args, "page_id")
-	if pageID == "" {
-		return err("page_id parameter is required")
-}
-
-	// Default Chrome DevTools URL
-	devtoolsURL := "http://127.0.0.1:9222"
-	if val, exists := os.LookupEnv("CHROME_DEVTOOLS_URL"); exists {
-		devtoolsURL = val
-	}
-
-	client := http.DefaultClient
-
-	// Get the websocket URL for the page
-	pageInfoURL := fmt.Sprintf("%s/json/list/%s", devtoolsURL, pageID)
-	resp, fetchErr := client.Get(pageInfoURL)
-	if fetchErr != nil {
-		return err(fmt.Sprintf("failed to fetch page info: %v", fetchErr))
-}
-
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body)
-		return err(fmt.Sprintf("devtools API error: %s - %s", resp.Status, string(body)))
-}
-
-	var pageInfo map[string]interface{}
-	decodeErr := json.NewDecoder(resp.Body).Decode(&pageInfo)
-	if decodeErr != nil {
-		return err(fmt.Sprintf("failed to decode page info: %v", decodeErr))
-}
-
-	wsURL, _ :=getString(pageInfo, "webSocketDebuggerUrl")
-	if wsURL == "" {
-		return err("no websocket debugger URL found for target page")
-}
-
-	// Enable network monitoring
-	enableURL := strings.Replace(wsURL, "ws://", "http://", 1) + "/network/enable"
-	enableResp, enableErr := client.Post(enableURL, "application/json", strings.NewReader("{}"))
-	if enableErr != nil {
-		return err(fmt.Sprintf("failed to enable network: %v", enableErr))
-}
-
-	defer enableResp.Body.Close()
-
-	if enableResp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(enableResp.Body)
-		return err(fmt.Sprintf("network enable failed: %s - %s", enableResp.Status, string(body)))
-}
-
-	// Get network requests
-	networkURL := strings.Replace(wsURL, "ws://", "http://", 1) + "/network/requests"
-	networkResp, networkErr := client.Get(networkURL)
-	if networkErr != nil {
-		return err(fmt.Sprintf("failed to get network requests: %v", networkErr))
-}
-
-	defer networkResp.Body.Close()
-
-	if networkResp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(networkResp.Body)
-		return err(fmt.Sprintf("network requests failed: %s - %s", networkResp.Status, string(body)))
-}
-
-	var requests struct {
-		Requests []map[string]interface{} `json:"requests"`
-	}
-	decodeReqErr := json.NewDecoder(networkResp.Body).Decode(&requests)
-	if decodeReqErr != nil {
-		return err(fmt.Sprintf("failed to decode network requests: %v", decodeReqErr))
-}
-
-	var result strings.Builder
-	for i, req := range requests.Requests {
-		if i > 0 {
-			result.WriteString("\n")
-
-		method, _ :=getString(req, "method")
-		url, _ :=getString(req, "url")
-		status, _ :=getInt(req, "status")
-		mime, _ :=getString(req, "mimeType")
-		size, _ :=getInt(req, "encodedDataLength")
-
-		result.WriteString(fmt.Sprintf("Request %d: %s %s\nStatus: %d\nType: %s\nSize: %d bytes", i+1, method, url, status, mime, size))
-
-	if len(requests.Requests) == 0 {
-		return ok("No network requests found")
-}
-
-	return ok(result.String())
-}
-
-}
+	return ok(fmt.Sprintf("Screenshot captured (base64 data length: %d)", len(data)))
 }
 
 func HandleGetPerformanceMetrics(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
@@ -407,110 +147,216 @@ func HandleGetPerformanceMetrics(ctx context.Context, args map[string]interface{
 		return err("page_id parameter is required")
 }
 
-	// Default Chrome DevTools URL
-	devtoolsURL := "http://127.0.0.1:9222"
-	if val, exists := os.LookupEnv("CHROME_DEVTOOLS_URL"); exists {
-		devtoolsURL = val
-	}
-
+	const apiURL = "http://localhost:9222/json/getPerformanceMetrics"
 	client := http.DefaultClient
 
-	// Get the websocket URL for the page
-	pageInfoURL := fmt.Sprintf("%s/json/list/%s", devtoolsURL, pageID)
-	resp, fetchErr := client.Get(pageInfoURL)
+	reqBody := map[string]interface{}{
+		"id": pageID,
+	}
+	jsonBody, marshalErr := json.Marshal(reqBody)
+	if marshalErr != nil {
+		return err(fmt.Sprintf("failed to marshal request body: %v", marshalErr))
+}
+
+	resp, fetchErr := client.Post(apiURL, "application/json", strings.NewReader(string(jsonBody)))
 	if fetchErr != nil {
-		return err(fmt.Sprintf("failed to fetch page info: %v", fetchErr))
+		return err(fmt.Sprintf("failed to get performance metrics: %v", fetchErr))
 }
 
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body)
-		return err(fmt.Sprintf("devtools API error: %s - %s", resp.Status, string(body)))
+		return err(fmt.Sprintf("API returned non-200 status: %d", resp.StatusCode))
 }
 
-	var pageInfo map[string]interface{}
-	decodeErr := json.NewDecoder(resp.Body).Decode(&pageInfo)
-	if decodeErr != nil {
-		return err(fmt.Sprintf("failed to decode page info: %v", decodeErr))
+	body, readErr := io.ReadAll(resp.Body)
+	if readErr != nil {
+		return err(fmt.Sprintf("failed to read response body: %v", readErr))
 }
 
-	wsURL, _ :=getString(pageInfo, "webSocketDebuggerUrl")
-	if wsURL == "" {
-		return err("no websocket debugger URL found for target page")
+	var result map[string]interface{}
+	if parseErr := json.Unmarshal(body, &result); parseErr != nil {
+		return err(fmt.Sprintf("failed to parse JSON response: %v", parseErr))
 }
 
-	// Start performance tracing
-	traceURL := strings.Replace(wsURL, "ws://", "http://", 1) + "/performance/start"
-	traceResp, traceErr := client.Post(traceURL, "application/json", strings.NewReader("{}"))
-	if traceErr != nil {
-		return err(fmt.Sprintf("failed to start performance tracing: %v", traceErr))
+	metrics := getSlice(result, "metrics")
+	if metrics == nil {
+		return err("no metrics returned")
 }
 
-	defer traceResp.Body.Close()
+	var output strings.Builder
+	for _, metric := range metrics {
+		m := metric.(map[string]interface{})
+		name, _ :=getString(m, "name")
+		value := getFloat64(m, "value")
+		output.WriteString(fmt.Sprintf("%s: %.2f\n", name, value))
 
-	if traceResp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(traceResp.Body)
-		return err(fmt.Sprintf("performance tracing start failed: %s - %s", traceResp.Status, string(body)))
+	return ok(output.String())
 }
 
-	// Wait a moment for data collection
-	time.Sleep(2 * time.Second)
-
-	// Stop performance tracing and get metrics
-	metricsURL := strings.Replace(wsURL, "ws://", "http://", 1) + "/performance/metrics"
-	metricsResp, metricsErr := client.Get(metricsURL)
-	if metricsErr != nil {
-		return err(fmt.Sprintf("failed to get performance metrics: %v", metricsErr))
 }
 
-	defer metricsResp.Body.Close()
-
-	if metricsResp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(metricsResp.Body)
-		return err(fmt.Sprintf("performance metrics failed: %s - %s", metricsResp.Status, string(body)))
+func HandleEvaluateJavascript(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	pageID, _ :=getString(args, "page_id")
+	if pageID == "" {
+		return err("page_id parameter is required")
 }
 
-	var metrics struct {
-		Metrics []map[string]interface{} `json:"metrics"`
+	expression, _ :=getString(args, "expression")
+	if expression == "" {
+		return err("expression parameter is required")
+}
+
+	const apiURL = "http://localhost:9222/json/evaluate"
+	client := http.DefaultClient
+
+	reqBody := map[string]interface{}{
+		"id":         pageID,
+		"expression": expression,
 	}
-	decodeMetricsErr := json.NewDecoder(metricsResp.Body).Decode(&metrics)
-	if decodeMetricsErr != nil {
-		return err(fmt.Sprintf("failed to decode performance metrics: %v", decodeMetricsErr))
+	jsonBody, marshalErr := json.Marshal(reqBody)
+	if marshalErr != nil {
+		return err(fmt.Sprintf("failed to marshal request body: %v", marshalErr))
 }
 
-	var result strings.Builder
-	for _, metric := range metrics.Metrics {
-		name, _ :=getString(metric, "name")
-		value := getFloat(metric, "value")
-		result.WriteString(fmt.Sprintf("%s: %.2f\n", name, value))
-
-	if len(metrics.Metrics) == 0 {
-		return ok("No performance metrics found")
+	resp, fetchErr := client.Post(apiURL, "application/json", strings.NewReader(string(jsonBody)))
+	if fetchErr != nil {
+		return err(fmt.Sprintf("failed to evaluate JavaScript: %v", fetchErr))
 }
 
-	return ok(result.String())
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return err(fmt.Sprintf("API returned non-200 status: %d", resp.StatusCode))
+}
+
+	body, readErr := io.ReadAll(resp.Body)
+	if readErr != nil {
+		return err(fmt.Sprintf("failed to read response body: %v", readErr))
+}
+
+	var result map[string]interface{}
+	if parseErr := json.Unmarshal(body, &result); parseErr != nil {
+		return err(fmt.Sprintf("failed to parse JSON response: %v", parseErr))
+}
+
+	resultValue, _ :=getString(result, "result")
+	if resultValue == "" {
+		return err("no result returned from JavaScript evaluation")
+}
+
+	return ok(fmt.Sprintf("JavaScript evaluation result: %s", resultValue))
+}
+
+func HandleGetNetworkRequests(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	pageID, _ :=getString(args, "page_id")
+	if pageID == "" {
+		return err("page_id parameter is required")
+}
+
+	const apiURL = "http://localhost:9222/json/getNetworkRequests"
+	client := http.DefaultClient
+
+	reqBody := map[string]interface{}{
+		"id": pageID,
+	}
+	jsonBody, marshalErr := json.Marshal(reqBody)
+	if marshalErr != nil {
+		return err(fmt.Sprintf("failed to marshal request body: %v", marshalErr))
+}
+
+	resp, fetchErr := client.Post(apiURL, "application/json", strings.NewReader(string(jsonBody)))
+	if fetchErr != nil {
+		return err(fmt.Sprintf("failed to get network requests: %v", fetchErr))
+}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return err(fmt.Sprintf("API returned non-200 status: %d", resp.StatusCode))
+}
+
+	body, readErr := io.ReadAll(resp.Body)
+	if readErr != nil {
+		return err(fmt.Sprintf("failed to read response body: %v", readErr))
+}
+
+	var result map[string]interface{}
+	if parseErr := json.Unmarshal(body, &result); parseErr != nil {
+		return err(fmt.Sprintf("failed to parse JSON response: %v", parseErr))
+}
+
+	requests := getSlice(result, "requests")
+	if requests == nil {
+		return err("no network requests returned")
+}
+
+	var output strings.Builder
+	for i, req := range requests {
+		r := req.(map[string]interface{})
+		if i > 0 {
+			output.WriteString("\n")
+
+		method, _ :=getString(r, "method")
+		url, _ :=getString(r, "url")
+		status, _ :=getInt(r, "status")
+		output.WriteString(fmt.Sprintf("Request %d: %s %s [%d]", i+1, method, url, status))
+
+	return ok(output.String())
 }
 
 }
+}
 
-// Helper function to get float value from map
-func getFloat(m map[string]interface{}, key string) float64 {
+// Helper functions for type conversion
+func getSlice(m map[string]interface{}, key string) []interface{} {
+	if val, found := m[key]; found {
+		if slice, found := val.([]interface{}); found {
+			return slice
+		}
+	}
+	return nil
+}
+
+func getFloat64(m map[string]interface{}, key string) float64 {
 	if val, found := m[key]; found {
 		switch v := val.(type) {
 		case float64:
 			return v
 }
+		case float32:
+			return float64(v)
+}
 		case int:
 			return float64(v)
 }
+		case int32:
+			return float64(v)
 		case int64:
 			return float64(v)
+
+	}
+	return 0
 }
-		case string:
-			var f float64
-			fmt.Sscanf(v, "%f", &f)
-			return f
+
+func getInt(m map[string]interface{}, key string) int {
+	if val, found := m[key]; found {
+		switch v := val.(type) {
+		case int:
+			return v
+}
+		case int32:
+			return int(v)
+		case int64:
+			return int(v)
+		case float64:
+			return int(v)
+		case float32:
+			return int(v)
+		case json.Number:
+			if i, e := v.Int64(); e == nil {
+				return int(i)
+
 		}
 	}
 	return 0

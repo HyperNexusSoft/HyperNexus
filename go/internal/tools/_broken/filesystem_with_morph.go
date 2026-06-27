@@ -3,12 +3,15 @@ package tools
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
+// HandleReadFile reads and returns the contents of a file
 func HandleReadFile(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
 	path, _ :=getString(args, "path")
 	if path == "" {
@@ -23,6 +26,7 @@ func HandleReadFile(ctx context.Context, args map[string]interface{}) (ToolRespo
 	return ok(string(content))
 }
 
+// HandleWriteFile writes content to a file at the specified path
 func HandleWriteFile(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
 	path, _ :=getString(args, "path")
 	content, _ :=getString(args, "content")
@@ -32,22 +36,19 @@ func HandleWriteFile(ctx context.Context, args map[string]interface{}) (ToolResp
 }
 
 	dir := filepath.Dir(path)
-	if dir != "" && dir != "." {
-		if mkErr := os.MkdirAll(dir, 0755); mkErr != nil {
-			return err(mkErr.Error())
-
-	}
+	if dirErr := os.MkdirAll(dir, 0755); dirErr != nil {
+		return err(dirErr.Error())
+}
 
 	writeErr := os.WriteFile(path, []byte(content), 0644)
 	if writeErr != nil {
 		return err(writeErr.Error())
 }
 
-	return ok("File written successfully: " + path)
+	return ok(fmt.Sprintf("Successfully wrote to %s", path))
 }
 
-}
-
+// HandleListDirectory lists contents of a directory
 func HandleListDirectory(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
 	path, _ :=getString(args, "path")
 	if path == "" {
@@ -62,15 +63,21 @@ func HandleListDirectory(ctx context.Context, args map[string]interface{}) (Tool
 	var result []map[string]interface{}
 	for _, entry := range entries {
 		info, infoErr := entry.Info()
-		item := map[string]interface{}{
-			"name":  entry.Name(),
-			"is_dir": entry.IsDir(),
+		if infoErr != nil {
+			continue
 		}
-		if infoErr == nil {
-			item["size"] = info.Size()
-			item["mod_time"] = info.ModTime().Format("2006-01-02 15:04:05")
-
-		result = append(result, item)
+		entryType := "file"
+		if entry.IsDir() {
+			entryType = "directory"
+		} else if info.Mode()&os.ModeSymlink != 0 {
+			entryType = "symlink"
+		}
+		result = append(result, map[string]interface{}{
+			"name":    entry.Name(),
+			"type":    entryType,
+			"size":    info.Size(),
+			"modTime": info.ModTime().Format(time.RFC3339),
+		})
 
 	jsonBytes, jsonErr := json.Marshal(result)
 	if jsonErr != nil {
@@ -81,154 +88,186 @@ func HandleListDirectory(ctx context.Context, args map[string]interface{}) (Tool
 }
 
 }
-}
 
+// HandleCreateDirectory creates a new directory
 func HandleCreateDirectory(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
 	path, _ :=getString(args, "path")
+	recursive, _ :=getBool(args, "recursive")
+
 	if path == "" {
 		return err("path is required")
 }
 
-	mkErr := os.MkdirAll(path, 0755)
-	if mkErr != nil {
-		return err(mkErr.Error())
-}
-
-	return ok("Directory created successfully: " + path)
-}
-
-func HandleDeletePath(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	path, _ :=getString(args, "path")
-	if path == "" {
-		return err("path is required")
-}
-
-	info, statErr := os.Stat(path)
-	if statErr != nil {
-		return err(statErr.Error())
-}
-
-	var delErr error
-	if info.IsDir() {
-		delErr = os.RemoveAll(path)
+	var mkdirErr error
+	if recursive {
+		mkdirErr = os.MkdirAll(path, 0755)
 	} else {
-		delErr = os.Remove(path)
+		mkdirErr = os.Mkdir(path, 0755)
 
-	if delErr != nil {
-		return err(delErr.Error())
+	if mkdirErr != nil {
+		return err(mkdirErr.Error())
 }
 
-	return ok("Deleted successfully: " + path)
-}
-
-}
-
-func HandleMovePath(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	source, _ :=getString(args, "source")
-	dest, _ :=getString(args, "destination")
-
-	if source == "" || dest == "" {
-		return err("source and destination are required")
-}
-
-	moveErr := os.Rename(source, dest)
-	if moveErr != nil {
-		return err(moveErr.Error())
-}
-
-	return ok("Moved successfully from " + source + " to " + dest)
-}
-
-func HandleCopyFile(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	source, _ :=getString(args, "source")
-	dest, _ :=getString(args, "destination")
-
-	if source == "" || dest == "" {
-		return err("source and destination are required")
-}
-
-	srcFile, openErr := os.Open(source)
-	if openErr != nil {
-		return err(openErr.Error())
-}
-
-	defer srcFile.Close()
-
-	dir := filepath.Dir(dest)
-	if dir != "" && dir != "." {
-		if mkErr := os.MkdirAll(dir, 0755); mkErr != nil {
-			return err(mkErr.Error())
-
-	}
-
-	dstFile, createErr := os.Create(dest)
-	if createErr != nil {
-		return err(createErr.Error())
-}
-
-	defer dstFile.Close()
-
-	_, copyErr := io.Copy(dstFile, srcFile)
-	if copyErr != nil {
-		return err(copyErr.Error())
-}
-
-	srcInfo, statErr := os.Stat(source)
-	if statErr == nil {
-		os.Chmod(dest, srcInfo.Mode())
-
-	return ok("Copied successfully from " + source + " to " + dest)
+	return ok(fmt.Sprintf("Directory created: %s", path))
 }
 
 }
-}
 
-func HandlePathExists(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+// HandleDeleteFile deletes a file or directory
+func HandleDeleteFile(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
 	path, _ :=getString(args, "path")
+	recursive, _ :=getBool(args, "recursive")
+
 	if path == "" {
 		return err("path is required")
 }
 
-	_, statErr := os.Stat(path)
-	if statErr != nil {
-		if os.IsNotExist(statErr) {
-			return ok("false")
-		}
-		return err(statErr.Error())
+	info, stat
+
+[Switched to Model: gpt-oss-120b | Provider: cerebras via Global Random Retry]
+
+We need to implement a Go-native MCP tool module for "filesystem-with-morph". We need to study original MCP server source code above, but we don't have it in the prompt. However, we can infer typical filesystem tool functions: maybe list directory, read file, write file, delete file, move/rename, etc. "with-morph" maybe includes morphing files? Not sure.
+
+We need to implement 2-6 handlers. Provide simple implementations using stdlib. Must use ok() and err("error") functions defined elsewhere (parity.go). Also getString, getInt, getBool exist.
+
+We need to avoid redeclaring ToolResponse, ok, e, etc.
+
+We need to output GO_FILE with package tools and code, and MANIFEST JSON with filename, server_name, handlers list.
+
+We need to implement handlers with signature: func HandleXxx(ctx context.Context, args map[string]interface{}) (ToolResponse, error)
+
+We need to use getString(args, "key") etc.
+
+We need to import needed packages.
+
+We need to ensure no variable named e is used (shadowing). Use apiErr etc.
+
+Implement maybe:
+
+- HandleReadFile: reads a file path given, returns content as text.
+
+- HandleWriteFile: writes content to file path.
+
+- HandleListDir: lists entries in a directory.
+
+- HandleDeleteFile: deletes a file.
+
+- HandleMoveFile: moves/renames a file.
+
+That's 5 handlers.
+
+Implement each with proper error handling.
+
+Return ok(string) where string is maybe JSON or plain text.
+
+We need to use TextContent? Not sure. The ok function likely expects a TextContent struct? But we can just pass string.
+
+We'll assume ok takes a string.
+
+Implementation details:
+
+- getString(args, "path") for file path.
+
+- For write, also getString(args, "content").
+
+- For list, maybe getString(args, "path") and return JSON array of names.
+
+- For delete, getString(args, "path").
+
+- For move, getString(args, "src") and getString(args, "dst").
+
+Make sure to use context maybe for cancellation? Not needed.
+
+Use os.ReadFile, os.WriteFile, os.Remove, os.Rename, os.ReadDir.
+
+Return errors via err(e.Error()).
+
+Make sure to import context, os, fmt, encoding/json, strings maybe.
+
+Ok.
+
+Now produce manifest: list handlers with tool===GO_FILE===
+package tools
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+)
+
 }
 
-	return ok("true")
-}
-
-func HandleGetFileInfo(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+// HandleReadFile reads the content of a file and returns it as text.
+// Expected args:
+//   "path": string – absolute or relative file path.
+func HandleListDir(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
 	path, _ :=getString(args, "path")
 	if path == "" {
-		return err("path is required")
+		return err("missing 'path' argument")
 }
 
-	info, statErr := os.Stat(path)
-	if statErr != nil {
-		return err(statErr.Error())
+	absPath, apiErr := filepath.Abs(path)
+	if apiErr != nil {
+		return err(fmt.Sprintf("failed to resolve absolute path: %v", apiErr))
 }
 
-	result := map[string]interface{}{
-		"name":    filepath.Base(path),
-		"size":    info.Size(),
-		"is_dir":  info.IsDir(),
-		"mode":    info.Mode().String(),
-		"mod_time": info.ModTime().Format("2006-01-02 15:04:05"),
-	}
+	entries, readErr := os.ReadDir(absPath)
+	if readErr != nil {
+		return err(fmt.Sprintf("failed to read directory: %v", readErr))
+}
 
-	if !info.IsDir() {
-		ext := filepath.Ext(path)
-		result["extension"] = ext
-		result["name_without_ext"] = strings.TrimSuffix(filepath.Base(path), ext)
+	names := make([]string, 0, len(entries))
+	for _, e := range entries {
+		names = append(names, e.Name())
 
-	jsonBytes, jsonErr := json.Marshal(result)
-	if jsonErr != nil {
-		return err(jsonErr.Error())
+	jsonBytes, marshalErr := json.Marshal(names)
+	if marshalErr != nil {
+		return err(fmt.Sprintf("failed to marshal result: %v", marshalErr))
 }
 
 	return ok(string(jsonBytes))
 }
+
+}
+
+// HandleDeleteFile removes a file from the filesystem.
+// Expected args:
+//   "path": string – file path to delete.
+func HandleMoveFile(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	src, _ :=getString(args, "src")
+	if src == "" {
+		return err("missing 'src' argument")
+}
+
+	dst, _ :=getString(args, "dst")
+	if dst == "" {
+		return err("missing 'dst' argument")
+}
+
+	absSrc, srcErr := filepath.Abs(src)
+	if srcErr != nil {
+		return err(fmt.Sprintf("failed to resolve source path: %v", srcErr))
+}
+
+	absDst, dstErr := filepath.Abs(dst)
+	if dstErr != nil {
+		return err(fmt.Sprintf("failed to resolve destination path: %v", dstErr))
+}
+
+	// Ensure destination directory exists
+	destDir := filepath.Dir(absDst)
+	if mkErr := os.MkdirAll(destDir, 0755); mkErr != nil {
+		return err(fmt.Sprintf("failed to create destination directories: %v", mkErr))
+}
+
+	renameErr := os.Rename(absSrc, absDst)
+	if renameErr != nil {
+		return err(fmt.Sprintf("failed to move file: %v", renameErr))
+}
+
+	return ok(fmt.Sprintf("moved %s to %s", absSrc, absDst))
+
 }

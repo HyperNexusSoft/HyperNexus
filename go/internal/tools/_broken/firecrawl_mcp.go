@@ -1,335 +1,519 @@
-
-Wait, I removed `net/url` and `strconv` but kept `os`. Let me double check if `os` is used... Yes, for `os.Getenv`. Good.
-
-Actually, I need to reconsider the imports. The reviewer flagged `net/url`, `os`, and `strconv` as unused, but I'm using `os` for the environment variable calls. Let me verify which ones are actually needed by checking the code for `url.Parse`, `strconv` conversions, and `os.Getenv` calls.
-
-Since I'm calling `os.Getenv` for both `getAPIKey` and `getAPIURL`, `os` is necessary. The other two packages aren't referenced anywhere, so they should be removed. I also notice `defaultVersion` is declared but never used, which could be cleaned up, though the reviewer didn't specifically flag it. Let me finalize the import list and complete the function implementations.
-
 package tools
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-    "io"
-    "net/http"
-    "os"
-    "strings"
-    "time"
+	"bytes"
+	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"strings"
+	"time"
 )
 
 const (
-    defaultAPIURL = "https://api.firecrawl.dev"
+	firecrawlAPIURL = "https://api.firecrawl.dev"
+	defaultTimeout  = 30 * time.Second
 )
 
 var http.DefaultClient = http.DefaultClient
 
-func getAPIKey() string {
-    return os.Getenv("FIRECRAWL_API_KEY")
+func HandleScrape(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	urlStr, _ :=getString(args, "url")
+	if urlStr == "" {
+		return err("url is required")
 }
 
-func getAPIURL() string {
-    if url := os.Getenv("FIRECRAWL_API_URL"); url != "" {
-        return url
-    }
-    return defaultAPIURL
+	onlyMainContent, _ :=getBool(args, "onlyMainContent")
+	formats, _ :=getString(args, "formats")
+	maxAge, _ :=getInt(args, "maxAge")
+	extract, _ :=getString(args, "extract")
+	timeout, _ :=getInt(args, "timeout")
+	if timeout == 0 {
+		timeout = 30
+	}
+
+	apiURL := os.Getenv("FIRECRAWL_API_URL")
+	if apiURL == "" {
+		apiURL = firecrawlAPIURL
+	}
+
+	reqURL := fmt.Sprintf("%s/v1/scrape", apiURL)
+	reqBody := map[string]interface{}{
+		"url":             urlStr,
+		"onlyMainContent": onlyMainContent,
+	}
+	if formats != "" {
+		reqBody["formats"] = formats
+	}
+	if maxAge > 0 {
+		reqBody["cache"] = map[string]int{"maxAge": maxAge}
+	}
+	if extract != "" {
+		reqBody["extract"] = extract
+	}
+
+	jsonBody, jsonErr := json.Marshal(reqBody)
+	if jsonErr != nil {
+		return err(fmt.Sprintf("failed to marshal request body: %v", jsonErr))
 }
 
-func HandleMap(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-    url, _ :=getString(args, "url")
-    if url == "" {
-        return err("url parameter is required")
+	req, reqErr := http.NewRequestWithContext(ctx, "POST", reqURL, bytes.NewReader(jsonBody))
+	if reqErr != nil {
+		return err(fmt.Sprintf("failed to create request: %v", reqErr))
 }
 
-    apiKey := getAPIKey()
-    if apiKey == "" {
-        return err("FIRECRAWL_API_KEY is not set")
+	apiKey := os.Getenv("FIRECRAWL_API_KEY")
+	if apiKey != "" {
+		req.Header.Set("Authorization", "Bearer "+apiKey)
+
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, respErr := http.DefaultClient.Do(req)
+	if respErr != nil {
+		return err(fmt.Sprintf("request failed: %v", respErr))
 }
 
-    baseURL := getAPIURL()
-    apiURL := baseURL + "/v1/map"
+	defer resp.Body.Close()
 
-    bodyMap := map[string]interface{}{
-        "url": url,
-    }
-    if search := getString(args, "search"); search != "" {
-        bodyMap["search"] = search
-    }
-    if limit := getInt(args, "limit"); limit > 0 {
-        bodyMap["limit"] = limit
-    }
-
-    reqBody, marshalErr := json.Marshal(bodyMap)
-    if marshalErr != nil {
-        return err(fmt.Sprintf("marshal error: %v", marshalErr))
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return err(fmt.Sprintf("API error: %s - %s", resp.Status, string(body)))
 }
 
-    req, reqErr := http.NewRequestWithContext(ctx, "POST", apiURL, strings.NewReader(string(reqBody)))
-    if reqErr != nil {
-        return err(fmt.Sprintf("request creation error: %v", reqErr))
+	var result map[string]interface{}
+	if decodeErr := json.NewDecoder(resp.Body).Decode(&result); decodeErr != nil {
+		return err(fmt.Sprintf("failed to decode response: %v", decodeErr))
 }
 
-    req.Header.Set("Content-Type", "application/json")
-    req.Header.Set("Authorization", "Bearer "+apiKey)
-
-    resp, doErr := http.DefaultClient.Do(req)
-    if doErr != nil {
-        return err(fmt.Sprintf("API request failed: %v", doErr))
+	if markdown, found := result["markdown"].(string); found {
+		return ok(markdown)
 }
 
-    defer resp.Body.Close()
-
-    body, readErr := io.ReadAll(resp.Body)
-    if readErr != nil {
-        return err(fmt.Sprintf("response read error: %v", readErr))
+	return ok(fmt.Sprintf("%v", result))
 }
 
-    if resp.StatusCode != 200 {
-        return err(fmt.Sprintf("API error (status %d): %s", resp.StatusCode, string(body)))
-}
-
-    var apiResp struct {
-        Success bool     `json:"success"`
-        Links   []string `json:"links"`
-    }
-    if parseErr := json.Unmarshal(body, &apiResp); parseErr != nil {
-        return err(fmt.Sprintf("parse error: %v", parseErr))
-}
-
-    if !apiResp.Success {
-        return err("API returned unsuccessful response")
-}
-
-    if len(apiResp.Links) == 0 {
-        return ok("No links found.")
-}
-
-    return ok(strings.Join(apiResp.Links, "\n"))
-}
-
-func HandleCrawl(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-    url, _ :=getString(args, "url")
-    if url == "" {
-        return err("url parameter is required")
-}
-
-    apiKey := getAPIKey()
-    if apiKey == "" {
-        return err("FIRECRAWL_API_KEY is not set")
-}
-
-    baseURL := getAPIURL()
-    apiURL := baseURL + "/v2/crawl"
-
-    bodyMap := map[string]interface{}{
-        "url": url,
-    }
-    if maxDepth := getInt(args, "maxDepth"); maxDepth > 0 {
-        bodyMap["maxDepth"] = maxDepth
-    }
-    if maxPages := getInt(args, "maxPages"); maxPages > 0 {
-        bodyMap["maxPages"] = maxPages
-    }
-
-    reqBody, marshalErr := json.Marshal(bodyMap)
-    if marshalErr != nil {
-        return err(fmt.Sprintf("marshal error: %v", marshalErr))
-}
-
-    req, reqErr := http.NewRequestWithContext(ctx, "POST", apiURL, strings.NewReader(string(reqBody)))
-    if reqErr != nil {
-        return err(fmt.Sprintf("request creation error: %v", reqErr))
-}
-
-    req.Header.Set("Content-Type", "application/json")
-    req.Header.Set("Authorization", "Bearer "+apiKey)
-
-    resp, doErr := http.DefaultClient.Do(req)
-    if doErr != nil {
-        return err(fmt.Sprintf("API request failed: %v", doErr))
-}
-
-    defer resp.Body.Close()
-
-    body, readErr := io.ReadAll(resp.Body)
-    if readErr != nil {
-        return err(fmt.Sprintf("response read error: %v", readErr))
-}
-
-    if resp.StatusCode != 200 {
-        return err(fmt.Sprintf("API error (status %d): %s", resp.StatusCode, string(body)))
-}
-
-    var apiResp struct {
-        Success bool `json:"success"`
-        Data    struct {
-            ID string `json:"id"`
-        } `json:"data"`
-    }
-    if parseErr := json.Unmarshal(body, &apiResp); parseErr != nil {
-        return err(fmt.Sprintf("parse error: %v", parseErr))
-}
-
-    if !apiResp.Success {
-        return err("API returned unsuccessful response")
-}
-
-    crawlID := apiResp.Data.ID
-    statusURL := baseURL + "/v2/crawl/" + crawlID
-
-    return ok(fmt.Sprintf("Crawl started. ID: %s\nCheck status at: %s", crawlID, statusURL))
 }
 
 func HandleSearch(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-    query, _ :=getString(args, "query")
-    if query == "" {
-        return err("query parameter is required")
+	query, _ :=getString(args, "query")
+	if query == "" {
+		return err("query is required")
 }
 
-    apiKey := getAPIKey()
-    if apiKey == "" {
-        return err("FIRECRAWL_API_KEY is not set")
+	page, _ :=getInt(args, "page")
+	if page == 0 {
+		page = 1
+	}
+
+	apiURL := os.Getenv("FIRECRAWL_API_URL")
+	if apiURL == "" {
+		apiURL = firecrawlAPIURL
+	}
+
+	reqURL := fmt.Sprintf("%s/v1/search", apiURL)
+	reqBody := map[string]interface{}{
+		"query": query,
+		"page":  page,
+	}
+
+	jsonBody, jsonErr := json.Marshal(reqBody)
+	if jsonErr != nil {
+		return err(fmt.Sprintf("failed to marshal request body: %v", jsonErr))
 }
 
-    baseURL := getAPIURL()
-    apiURL := baseURL + "/v2/search"
-
-    bodyMap := map[string]interface{}{
-        "query": query,
-    }
-    if limit := getInt(args, "limit"); limit > 0 {
-        bodyMap["limit"] = limit
-    }
-
-    reqBody, marshalErr := json.Marshal(bodyMap)
-    if marshalErr != nil {
-        return err(fmt.Sprintf("marshal error: %v", marshalErr))
+	req, reqErr := http.NewRequestWithContext(ctx, "POST", reqURL, bytes.NewReader(jsonBody))
+	if reqErr != nil {
+		return err(fmt.Sprintf("failed to create request: %v", reqErr))
 }
 
-    req, reqErr := http.NewRequestWithContext(ctx, "POST", apiURL, strings.NewReader(string(reqBody)))
-    if reqErr != nil {
-        return err(fmt.Sprintf("request creation error: %v", reqErr))
+	apiKey := os.Getenv("FIRECRAWL_API_KEY")
+	if apiKey != "" {
+		req.Header.Set("Authorization", "Bearer "+apiKey)
+
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, respErr := http.DefaultClient.Do(req)
+	if respErr != nil {
+		return err(fmt.Sprintf("request failed: %v", respErr))
 }
 
-    req.Header.Set("Content-Type", "application/json")
-    req.Header.Set("Authorization", "Bearer "+apiKey)
+	defer resp.Body.Close()
 
-    resp, doErr := http.DefaultClient.Do(req)
-    if doErr != nil {
-        return err(fmt.Sprintf("API request failed: %v", doErr))
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return err(fmt.Sprintf("API error: %s - %s", resp.Status, string(body)))
 }
 
-    defer resp.Body.Close()
-
-    body, readErr := io.ReadAll(resp.Body)
-    if readErr != nil {
-        return err(fmt.Sprintf("response read error: %v", readErr))
+	var result map[string]interface{}
+	if decodeErr := json.NewDecoder(resp.Body).Decode(&result); decodeErr != nil {
+		return err(fmt.Sprintf("failed to decode response: %v", decodeErr))
 }
 
-    if resp.StatusCode != 200 {
-        return err(fmt.Sprintf("API error (status %d): %s", resp.StatusCode, string(body)))
+	if data, found := result["data"].([]interface{}); found {
+		var output strings.Builder
+		for i, item := range data {
+			if m, found := item.(map[string]interface{}); found {
+				output.WriteString(fmt.Sprintf("Result %d:\n", i+1))
+				if title, found := m["title"].(string); found {
+					output.WriteString(fmt.Sprintf("Title: %s\n", title))
+
+				if url, found := m["url"].(string); found {
+					output.WriteString(fmt.Sprintf("URL: %s\n", url))
+
+				if desc, found := m["description"].(string); found {
+					output.WriteString(fmt.Sprintf("Description: %s\n", desc))
+
+				if content, found := m["content"].(string); found {
+					output.WriteString(fmt.Sprintf("Content: %s\n\n", content))
+
+			}
+		}
+		return ok(output.String())
 }
 
-    var apiResp struct {
-        Success bool `json:"success"`
-        Data    []struct {
-            URL     string `json:"url"`
-            Title   string `json:"title"`
-            Content string `json:"content"`
-        } `json:"data"`
-    }
-    if parseErr := json.Unmarshal(body, &apiResp); parseErr != nil {
-        return err(fmt.Sprintf("parse error: %v", parseErr))
-}
-
-    if !apiResp.Success {
-        return err("API returned unsuccessful response")
-}
-
-    if len(apiResp.Data) == 0 {
-        return ok("No search results found.")
-}
-
-    var sb strings.Builder
-    for _, result := range apiResp.Data {
-        sb.WriteString(fmt.Sprintf("URL: %s\nTitle: %s\nContent: %s\n\n", result.URL, result.Title, result.Content))
-
-    return ok(sb.String())
+	return ok(fmt.Sprintf("%v", result))
 }
 
 }
-
-func HandleScrape(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-    urlToScrape, _ :=getString(args, "url")
-    if urlToScrape == "" {
-        return err("url parameter is required")
+}
+}
+}
 }
 
-    apiKey := getAPIKey()
-    if apiKey == "" {
-        return err("FIRECRAWL_API_KEY is not set")
+func HandleMap(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	urlStr, _ :=getString(args, "url")
+	if urlStr == "" {
+		return err("url is required")
 }
 
-    baseURL := getAPIURL()
-    apiURL := baseURL + "/v2/scrape"
+	apiURL := os.Getenv("FIRECRAWL_API_URL")
+	if apiURL == "" {
+		apiURL = firecrawlAPIURL
+	}
 
-    bodyMap := map[string]interface{}{
-        "url": urlToScrape,
-    }
-    if formats := getString(args, "formats"); formats != "" {
-        bodyMap["formats"] = strings.Split(formats, ",")
+	reqURL := fmt.Sprintf("%s/v1/map", apiURL)
+	reqBody := map[string]interface{}{
+		"url": urlStr,
+	}
 
-    if onlyMain := getBool(args, "onlyMainContent"); onlyMain {
-        bodyMap["onlyMainContent"] = true
-    }
-
-    reqBody, marshalErr := json.Marshal(bodyMap)
-    if marshalErr != nil {
-        return err(fmt.Sprintf("failed to marshal request: %v", marshalErr))
+	jsonBody, jsonErr := json.Marshal(reqBody)
+	if jsonErr != nil {
+		return err(fmt.Sprintf("failed to marshal request body: %v", jsonErr))
 }
 
-    req, reqErr := http.NewRequestWithContext(ctx, "POST", apiURL, strings.NewReader(string(reqBody)))
-    if reqErr != nil {
-        return err(fmt.Sprintf("failed to create request: %v", reqErr))
+	req, reqErr := http.NewRequestWithContext(ctx, "POST", reqURL, bytes.NewReader(jsonBody))
+	if reqErr != nil {
+		return err(fmt.Sprintf("failed to create request: %v", reqErr))
 }
 
-    req.Header.Set("Content-Type", "application/json")
-    req.Header.Set("Authorization", "Bearer "+apiKey)
+	apiKey := os.Getenv("FIRECRAWL_API_KEY")
+	if apiKey != "" {
+		req.Header.Set("Authorization", "Bearer "+apiKey)
 
-    resp, doErr := http.DefaultClient.Do(req)
-    if doErr != nil {
-        return err(fmt.Sprintf("API request failed: %v", doErr))
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, respErr := http.DefaultClient.Do(req)
+	if respErr != nil {
+		return err(fmt.Sprintf("request failed: %v", respErr))
 }
 
-    defer resp.Body.Close()
+	defer resp.Body.Close()
 
-    body, readErr := io.ReadAll(resp.Body)
-    if readErr != nil {
-        return err(fmt.Sprintf("failed to read response: %v", readErr))
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return err(fmt.Sprintf("API error: %s - %s", resp.Status, string(body)))
 }
 
-    if resp.StatusCode != 200 {
-        return err(fmt.Sprintf("API error (status %d): %s", resp.StatusCode, string(body)))
+	var result map[string]interface{}
+	if decodeErr := json.NewDecoder(resp.Body).Decode(&result); decodeErr != nil {
+		return err(fmt.Sprintf("failed to decode response: %v", decodeErr))
 }
 
-    var apiResp struct {
-        Success bool `json:"success"`
-        Data    struct {
-            Markdown string `json:"markdown"`
-        } `json:"data"`
-    }
-    if parseErr := json.Unmarshal(body, &apiResp); parseErr != nil {
-        return err(fmt.Sprintf("failed to parse response: %v", parseErr))
+	if links, found := result["links"].([]interface{}); found {
+		var output strings.Builder
+		output.WriteString("Discovered links:\n")
+		for _, link := range links {
+			if l, found := link.(string); found {
+				output.WriteString(l + "\n")
+
+		}
+		return ok(output.String())
 }
 
-    if !apiResp.Success {
-        return err("API returned unsuccessful response")
+	return ok(fmt.Sprintf("%v", result))
 }
 
-    if apiResp.Data.Markdown == "" {
-        return ok("No content extracted.")
+}
 }
 
-    return ok(apiResp.Data.Markdown)
+func HandleCrawl(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	urlStr, _ :=getString(args, "url")
+	if urlStr == "" {
+		return err("url is required")
+}
+
+	limit, _ :=getInt(args, "limit")
+	if limit == 0 {
+		limit = 100
+	}
+
+	apiURL := os.Getenv("FIRECRAWL_API_URL")
+	if apiURL == "" {
+		apiURL = firecrawlAPIURL
+	}
+
+	reqURL := fmt.Sprintf("%s/v1/crawl", apiURL)
+	reqBody := map[string]interface{}{
+		"url":   urlStr,
+		"limit": limit,
+	}
+
+	jsonBody, jsonErr := json.Marshal(reqBody)
+	if jsonErr != nil {
+		return err(fmt.Sprintf("failed to marshal request body: %v", jsonErr))
+}
+
+	req, reqErr := http.NewRequestWithContext(ctx, "POST", reqURL, bytes.NewReader(jsonBody))
+	if reqErr != nil {
+		return err(fmt.Sprintf("failed to create request: %v", reqErr))
+}
+
+	apiKey := os.Getenv("FIRECRAWL_API_KEY")
+	if apiKey != "" {
+		req.Header.Set("Authorization", "Bearer "+apiKey)
+
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, respErr := http.DefaultClient.Do(req)
+	if respErr != nil {
+		return err(fmt.Sprintf("request failed: %v", respErr))
+}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return err(fmt.Sprintf("API error: %s - %s", resp.Status, string(body)))
+}
+
+	var result map[string]interface{}
+	if decodeErr := json.NewDecoder(resp.Body).Decode(&result); decodeErr != nil {
+		return err(fmt.Sprintf("failed to decode response: %v", decodeErr))
+}
+
+	if jobID, found := result["jobId"].(string); found {
+		return ok(fmt.Sprintf("Crawl started with job ID: %s", jobID))
+}
+
+	return ok(fmt.Sprintf("%v", result))
+}
+
+}
+
+func HandleCheckCrawlStatus(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	jobID, _ :=getString(args, "jobId")
+	if jobID == "" {
+		return err("jobId is required")
+}
+
+	apiURL := os.Getenv("FIRECRAWL_API_URL")
+	if apiURL == "" {
+		apiURL = firecrawlAPIURL
+	}
+
+	reqURL := fmt.Sprintf("%s/v1/crawl/status/%s", apiURL, jobID)
+
+	req, reqErr := http.NewRequestWithContext(ctx, "GET", reqURL, nil)
+	if reqErr != nil {
+		return err(fmt.Sprintf("failed to create request: %v", reqErr))
+}
+
+	apiKey := os.Getenv("FIRECRAWL_API_KEY")
+	if apiKey != "" {
+		req.Header.Set("Authorization", "Bearer "+apiKey)
+
+	resp, respErr := http.DefaultClient.Do(req)
+	if respErr != nil {
+		return err(fmt.Sprintf("request failed: %v", respErr))
+}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return err(fmt.Sprintf("API error: %s - %s", resp.Status, string(body)))
+}
+
+	var result map[string]interface{}
+	if decodeErr := json.NewDecoder(resp.Body).Decode(&result); decodeErr != nil {
+		return err(fmt.Sprintf("failed to decode response: %v", decodeErr))
+}
+
+	if status, found := result["status"].(string); found {
+		if status == "completed" {
+			if data, found := result["data"].([]interface{}); found {
+				var output strings.Builder
+				output.WriteString(fmt.Sprintf("Crawl completed. Found %d pages:\n", len(data)))
+				for i, item := range data {
+					if m, found := item.(map[string]interface{}); found {
+						if url, found := m["url"].(string); found {
+							output.WriteString(fmt.Sprintf("%d: %s\n", i+1, url))
+
+					}
+				}
+				return ok(output.String())
+
+		}
+		return ok(fmt.Sprintf("Crawl status: %s", status))
+}
+
+	return ok(fmt.Sprintf("%v", result))
+}
+
+}
+}
+}
+
+func HandleParse(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	filePath, _ :=getString(args, "filePath")
+	uploadRef, _ :=getString(args, "uploadRef")
+
+	if filePath == "" && uploadRef == "" {
+		return err("either filePath or uploadRef is required")
+}
+
+	apiURL := os.Getenv("FIRECRAWL_API_URL")
+	if apiURL == "" {
+		apiURL = firecrawlAPIURL
+	}
+
+	if uploadRef != "" {
+		// Second call with uploadRef
+		reqURL := fmt.Sprintf("%s/v1/parse", apiURL)
+		reqBody := map[string]interface{}{
+			"uploadRef": uploadRef,
+		}
+
+		jsonBody, jsonErr := json.Marshal(reqBody)
+		if jsonErr != nil {
+			return err(fmt.Sprintf("failed to marshal request body: %v", jsonErr))
+}
+
+		req, reqErr := http.NewRequestWithContext(ctx, "POST", reqURL, bytes.NewReader(jsonBody))
+		if reqErr != nil {
+			return err(fmt.Sprintf("failed to create request: %v", reqErr))
+}
+
+		apiKey := os.Getenv("FIRECRAWL_API_KEY")
+		if apiKey != "" {
+			req.Header.Set("Authorization", "Bearer "+apiKey)
+
+		req.Header.Set("Content-Type", "application/json")
+
+		resp, respErr := http.DefaultClient.Do(req)
+		if respErr != nil {
+			return err(fmt.Sprintf("request failed: %v", respErr))
+}
+
+		defer resp.Body.Close()
+
+		if resp.StatusCode != http.StatusOK {
+			body, _ := io.ReadAll(resp.Body)
+			return err(fmt.Sprintf("API error: %s - %s", resp.Status, string(body)))
+}
+
+		var result map[string]interface{}
+		if decodeErr := json.NewDecoder(resp.Body).Decode(&result); decodeErr != nil {
+			return err(fmt.Sprintf("failed to decode response: %v", decodeErr))
+}
+
+		if markdown, found := result["markdown"].(string); found {
+			return ok(markdown)
+}
+
+		return ok(fmt.Sprintf("%v", result))
+}
+
+	// First call with filePath - return upload instructions
+	fileInfo, statErr := os.Stat(filePath)
+	if statErr != nil {
+		return err(fmt.Sprintf("failed to access file: %v", statErr))
+}
+
+	if fileInfo.Size() > 10*1024*1024 { // 10MB limit
+		return err("file size exceeds 10MB limit")
+}
+
+	uploadRef = fmt.Sprintf("local-file-%d", time.Now().UnixNano())
+	return ok(fmt.Sprintf(`To parse this file, you need to upload it first.
+}
+Upload reference: %s
+Next tool call should use: {"uploadRef": "%s"}`, uploadRef, uploadRef))
+
+}
+
+func HandleExtract(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	urlStr, _ :=getString(args, "url")
+	if urlStr == "" {
+		return err("url is required")
+}
+
+	schema := args["schema"]
+	if schema == nil {
+		return err("schema is required")
+}
+
+	apiURL := os.Getenv("FIRECRAWL_API_URL")
+	if apiURL == "" {
+		apiURL = firecrawlAPIURL
+	}
+
+	reqURL := fmt.Sprintf("%s/v1/extract", apiURL)
+	reqBody := map[string]interface{}{
+		"url":    urlStr,
+		"schema": schema,
+	}
+
+	jsonBody, jsonErr := json.Marshal(reqBody)
+	if jsonErr != nil {
+		return err(fmt.Sprintf("failed to marshal request body: %v", jsonErr))
+}
+
+	req, reqErr := http.NewRequestWithContext(ctx, "POST", reqURL, bytes.NewReader(jsonBody))
+	if reqErr != nil {
+		return err(fmt.Sprintf("failed to create request: %v", reqErr))
+}
+
+	apiKey := os.Getenv("FIRECRAWL_API_KEY")
+	if apiKey != "" {
+		req.Header.Set("Authorization", "Bearer "+apiKey)
+
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, respErr := http.DefaultClient.Do(req)
+	if respErr != nil {
+		return err(fmt.Sprintf("request failed: %v", respErr))
+}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return err(fmt.Sprintf("API error: %s - %s", resp.Status, string(body)))
+}
+
+	var result map[string]interface{}
+	if decodeErr := json.NewDecoder(resp.Body).Decode(&result); decodeErr != nil {
+		return err(fmt.Sprintf("failed to decode response: %v", decodeErr))
+}
+
+	if data, found := result["data"]; found {
+		jsonData, _ := json.MarshalIndent(data, "", "  ")
+		return ok(string(jsonData))
+}
+
+	return ok(fmt.Sprintf("%v", result))
 }
 }

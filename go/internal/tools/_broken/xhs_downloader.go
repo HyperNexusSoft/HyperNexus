@@ -1,343 +1,330 @@
-package tools
+package tools". No explanation.")
+
+We should also check for any other issues: The code uses getString, getInt, getBool, ok, e, TextContent, etc. Those are pre-defined in parity.go, so fine.
+
+Now, let's produce the fixed code:
+
+- Remove "fmt" import (unused)
+- Remove "os/exec" import (unused)
+- Remove any stray characters (the backslash and comma are already not present in the provided code, but just in case, ensure the import block is clean)
+- Fix the typo "erno" in HandleXHSBatchDownload: delete that word.
+
+Also, check for "io" imports: used in io.ReadAll. "net/http" used. "net/url" used. "os" used in os.UserHomeDir, os.Stat. "path/filepath" used. "strconv" used. "strings" used. "time" used.
+
+So only "fmt" and "os/exec" are unused.
+
+Now, produce the final code.
+
+But note: The original code has "fmt" imported but not used. In the provided code, it's there. The error message didn't mention fmt, but it's a compilation error. We'll remove it.
+
+Also, ensure no other typos.
+
+Let's write the fixed code.package tools
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
-	"regexp"
-	"sort"
+	"strconv"
 	"strings"
 	"time"
 )
 
-var (
-	xhsURLPattern = regexp.MustCompile(`(https?://(www\.)?xiaohongshu\.com/(explore|discovery/item|user/profile)/([a-zA-Z0-9]+))|(https?://xhslink\.com/([a-zA-Z0-9]+))`)
-)
+const xhsBaseURL = "http://127.0.0.1:5556"
 
-type xhsNoteInfo struct {
-	ID          string   `json:"id"`
-	Title       string   `json:"title"`
-	Description string   `json:"description"`
-	Author      string   `json:"author"`
-	Images      []string `json:"images"`
-	Videos      []string `json:"videos"`
-	LivePhotos  []struct {
-		Image string `json:"image"`
-		Video string `json:"video"`
-	} `json:"live_photos"`
-	PublishTime time.Time `json:"publish_time"`
+var xhsClient = http.DefaultClient
+
+type xhsDetailRequest struct {
+	URL      string `json:"url"`
+	Download bool   `json:"download,omitempty"`
+	Index    []int  `json:"index,omitempty"`
 }
 
-func HandleExtractNote(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	noteURL, _ :=getString(args, "url")
-	if noteURL == "" {
+type xhsDetailResponse struct {
+	Title       string   `json:"title,omitempty"`
+	Description string   `json:"description,omitempty"`
+	Author      string   `json:"author,omitempty"`
+	Tags        []string `json:"tags,omitempty"`
+	Images      []string `json:"images,omitempty"`
+	Videos      []string `json:"videos,omitempty"`
+	Downloaded  bool     `json:"downloaded,omitempty"`
+	Error       string   `json:"error,omitempty"`
+}
+
+func xhsAPICall(ctx context.Context, endpoint string, payload interface{}) (map[string]interface{}, error) {
+	var body io.Reader
+	if payload != nil {
+		jsonData, marshalErr := json.Marshal(payload)
+		if marshalErr != nil {
+			return nil, marshalErr
+		}
+		body = bytes.NewBuffer(jsonData)
+
+	req, reqErr := http.NewRequestWithContext(ctx, "POST", xhsBaseURL+endpoint, body)
+	if reqErr != nil {
+		return nil, reqErr
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, apiErr := xhsClient.Do(req)
+	if apiErr != nil {
+		return nil, apiErr
+	}
+	defer resp.Body.Close()
+
+	respBody, readErr := io.ReadAll(resp.Body)
+	if readErr != nil {
+		return nil, readErr
+	}
+
+	var result map[string]interface{}
+	if parseErr := json.Unmarshal(respBody, &result); parseErr != nil {
+		return nil, parseErr
+	}
+	return result, nil
+}
+
+}
+
+// HandleXHSDownload downloads XHS content from a given URL
+func HandleXHSDownload(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	urlStr, _ :=getString(args, "url")
+	if urlStr == "" {
 		return err("url parameter is required")
 }
 
 	download, _ :=getBool(args, "download")
-	indexList := getIndexList(args)
 
-	client := http.DefaultClient
+	var index []int
+	if idxRaw, found := args["index"]; found {
+		switch v := idxRaw.(type) {
+		case []interface{}:
+			for _, item := range v {
+				switch n := item.(type) {
+				case float64:
+					index = append(index, int(n))
+				case int:
+					index = append(index, n)
 
-	// First resolve the actual note URL if it's a short link
-	resolvedURL, resolveErr := resolveXHSURL(client, noteURL)
-	if resolveErr != nil {
-		return err(fmt.Sprintf("failed to resolve URL: %v", resolveErr))
-}
-
-	// Extract note ID from URL
-	noteID, extractErr := extractNoteID(resolvedURL)
-	if extractErr != nil {
-		return err(fmt.Sprintf("failed to extract note ID: %v", extractErr))
-}
-
-	// Fetch note details
-	noteInfo, fetchErr := fetchNoteDetails(client, noteID)
-	if fetchErr != nil {
-		return err(fmt.Sprintf("failed to fetch note details: %v", fetchErr))
-}
-
-	if download {
-		downloadErr := downloadNoteFiles(client, noteInfo, indexList)
-		if downloadErr != nil {
-			return err(fmt.Sprintf("failed to download note files: %v", downloadErr))
-
+			}
+		}
 	}
 
-	response, jsonErr := json.Marshal(noteInfo)
-	if jsonErr != nil {
-		return err(fmt.Sprintf("failed to marshal response: %v", jsonErr))
+	reqPayload := xhsDetailRequest{
+		URL:      urlStr,
+		Download: download,
+		Index:    index,
+	}
+
+	result, apiErr := xhsAPICall(ctx, "/xhs/detail", reqPayload)
+	if apiErr != nil {
+		return err("XHS API call failed: " + apiErr.Error())
 }
 
-	return ok(string(response))
+	if errMsg, found := result["error"].(string); ok && errMsg != "" {
+		return err("XHS API error: " + errMsg)
+}
+
+	resultJSON, marshalErr := json.MarshalIndent(result, "", "  ")
+	if marshalErr != nil {
+		return err("failed to marshal response: " + marshalErr.Error())
+}
+
+	return ok(string(resultJSON))
 }
 
 }
 
-func HandleDownloadNote(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	noteURL, _ :=getString(args, "url")
-	if noteURL == "" {
+// HandleXHSExtract extracts XWWW information without downloading
+func HandleXHSExtract(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	urlStr, _ :=getString(args, "url")
+	if urlStr == "" {
 		return err("url parameter is required")
 }
 
-	indexList := getIndexList(args)
+	reqPayload := xhsDetailRequest{
+		URL:      urlStr,
+		Download: false,
+	}
 
-	client := http.DefaultClient
-
-	// First resolve the actual note URL if it's a short link
-	resolvedURL, resolveErr := resolveXHSURL(client, noteURL)
-	if resolveErr != nil {
-		return err(fmt.Sprintf("failed to resolve URL: %v", resolveErr))
+	result, apiErr := xhsAPICall(ctx, "/xhs/detail", reqPayload)
+	if apiErr != nil {
+		return err("XHS API call failed: " + apiErr.Error())
 }
 
-	// Extract note ID from URL
-	noteID, extractErr := extractNoteID(resolvedURL)
-	if extractErr != nil {
-		return err(fmt.Sprintf("failed to extract note ID: %v", extractErr))
+	if errMsg, found := result["error"].(string); ok && errMsg != "" {
+		return err("XHS API error: " + errMsg)
 }
 
-	// Fetch note details
-	noteInfo, fetchErr := fetchNoteDetails(client, noteID)
-	if fetchErr != nil {
-		return err(fmt.Sprintf("failed to fetch note details: %v", fetchErr))
+	resultJSON, marshalErr := json.MarshalIndent(result, "", "  ")
+	if marshalErr != nil {
+		return err("failed to marshal response: " + marshalErr.Error())
 }
 
-	downloadErr := downloadNoteFiles(client, noteInfo, indexList)
-	if downloadErr != nil {
-		return err(fmt.Sprintf("failed to download note files: %v", downloadErr))
+	return ok(string(resultJSON))
 }
 
-	return ok(fmt.Sprintf("Successfully downloaded note %s", noteID))
-}
-
-func HandleBatchExtractNotes(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	urls, _ :=getString(args, "urls")
-	if urls == "" {
+// HandleXHSBatchDownload downloads multiple XHS URLs
+func HandleXHSBatchDownload(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	urlsRaw, found := args["urls"]
+	if !found {
 		return err("urls parameter is required")
 }
 
-	urlList := strings.Split(urls, " ")
-	if len(urlList) == 0 {
-		return err("no URLs provided")
+	var urls []string
+	switch v := urlsRaw.(type) {
+	case []interface{}:
+		for _, item := range v {
+			if s, found := item.(string); ok && s != "" {
+				urls = append(urls, s)
+
+		}
+	case string:
+		for _, s := range strings.Split(v, " ") {
+			s = strings.TrimSpace(s)
+			if s != "" {
+				urls = append(urls, s)
+
+		}
+	}
+
+	if len(urls) == 0 {
+		return err("no valid URLs provided")
 }
 
 	download, _ :=getBool(args, "download")
-	client := http.DefaultClient
 
-	var results []xhsNoteInfo
-	var errorMessages []string
+	results := make([]map[string]interface{}, 0, len(urls))
+	var failed []string
 
-	for _, urlStr := range urlList {
-		if urlStr == "" {
+	for _, urlStr := range urls {
+		reqPayload := xhsDetailRequest{
+			URL:      urlStr,
+			Download: download,
+		}
+
+		result, apiErr := xhsAPICall(ctx, "/xhs/detail", reqPayload)
+		if apiErr != nil {
+			failed = append(failed, urlStr+": "+apiErr.Error())
 			continue
 		}
 
-		// First resolve the actual note URL if it's a short link
-		resolvedURL, resolveErr := resolveXHSURL(client, urlStr)
-		if resolveErr != nil {
-			errorMessages = append(errorMessages, fmt.Sprintf("failed to resolve URL %s: %v", urlStr, resolveErr))
-			continue
-		}
+		results = append(results, result)
 
-		// Extract note ID from URL
-		noteID, extractErr := extractNoteID(resolvedURL)
-		if extractErr != nil {
-			errorMessages = append(errorMessages, fmt.Sprintf("failed to extract note ID from %s: %v", urlStr, extractErr))
-			continue
-		}
-
-		// Fetch note details
-		noteInfo, fetchErr := fetchNoteDetails(client, noteID)
-		if fetchErr != nil {
-			errorMessages = append(errorMessages, fmt.Sprintf("failed to fetch note details for %s: %v", noteID, fetchErr))
-			continue
-		}
-
-		if download {
-			downloadErr := downloadNoteFiles(client, noteInfo, nil)
-			if downloadErr != nil {
-				errorMessages = append(errorMessages, fmt.Sprintf("failed to download note files for %s: %v", noteID, downloadErr))
-
-		}
-
-		results = append(results, *noteInfo)
-
-	if len(errorMessages) > 0 {
-		return ok(fmt.Sprintf("Completed with errors:\n%s\n\nSuccessfully processed %d notes",
-}
-			strings.Join(errorMessages, "\n"), len(results)))
-
-	response, jsonErr := json.Marshal(results)
-	if jsonErr != nil {
-		return err(fmt.Sprintf("failed to marshal response: %v", jsonErr))
-}
-
-	return ok(string(response))
-}
-
-}
-}
-
-func resolveXHSURL(client *http.Client, urlStr string) (string, error) {
-	// Check if it's a short URL
-	if strings.Contains(urlStr, "xhslink.com") {
-		req, reqErr := http.NewRequest("GET", urlStr, nil)
-		if reqErr != nil {
-			return "", fmt.Errorf("failed to create request: %v", reqErr)
-}
-
-		resp, respErr := client.Do(req)
-		if respErr != nil {
-			return "", fmt.Errorf("failed to resolve short URL: %v", respErr)
-}
-
-		defer resp.Body.Close()
-
-		if resp.StatusCode != http.StatusFound {
-			return "", fmt.Errorf("unexpected status code: %d", resp.StatusCode)
-}
-
-		return resp.Header.Get("Location"), nil
+	output := map[string]interface{}{
+		"results": results,
+		"count":   len(results),
 	}
 
-	return urlStr, nil
-}
-
-func extractNoteID(urlStr string) (string, error) {
-	matches := xhsURLPattern.FindStringSubmatch(urlStr)
-	if len(matches) == 0 {
-		return "", fmt.Errorf("invalid XHS URL format")
-}
-
-	// The note ID is either the 4th or 6th group in the regex
-	if matches[4] != "" {
-		return matches[4], nil
+	if len(failed) > 0 {
+		output["failed"] = failed
 	}
-	return matches[6], nil
+
+	resultJSON, marshalErr := json.MarshalIndent(output, "", "  ")
+	if marshalErr != nil {
+		return err("failed to marshal response: " + marshalErr.Error())
 }
 
-func fetchNoteDetails(client *http.Client, noteID string) (*xhsNoteInfo, error) {
-	// This is a simplified version - in a real implementation, you would:
-	// 1. Make API requests to XHS endpoints
-	// 2. Parse the JSON response
-	// 3. Extract the note details
-
-	// For this example, we'll return mock data
-	return &xhsNoteInfo{
-}
-		ID:          noteID,
-		Title:       "Sample Note Title",
-		Description: "This is a sample note description",
-		Author:      "SampleAuthor",
-		Images:      []string{"https://example.com/image1.jpg", "https://example.com/image2.jpg"},
-		Videos:      []string{"https://example.com/video1.mp4"},
-		PublishTime: time.Now(),
-	}, nil
+	return ok(string(resultJSON))
 }
 
-func downloadNoteFiles(client *http.Client, note *xhsNoteInfo, indexList []int) error {
-	// Create download directory
-	dirName := filepath.Join("downloads", note.Author, note.ID)
-	if e := os.MkdirAll(dirName, 0755); e != nil {
-		return fmt.Errorf("failed to create directory: %v", e)
+}
+}
 }
 
-	// Download images
-	if len(indexList) == 0 {
-		indexList = makeRange(0, len(note.Images)-1)
+// HandleXHSGetDownloadPath returns the default download path for XHS-Downloader
+func HandleXHSGetDownloadPath(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	homeDir, homeErr := os.UserHomeDir()
+	if homeErr != nil {
+		return err("failed to get user home directory: " + homeErr.Error())
+}
 
-	for _, idx := range indexList {
-		if idx < 0 || idx >= len(note.Images) {
-			continue
-		}
+	// Check common paths
+	paths := []string{
+		filepath.Join(homeDir, "XHS-Downloader", "Download"),
+		filepath.Join(homeDir, "Downloads", "XHS-Downloader"),
+		filepath.Join(homeDir, ".local", "share", "XHS-Downloader", "Download"),
+	}
 
-		imageURL := note.Images[idx]
-		fileName := filepath.Join(dirName, fmt.Sprintf("image_%d.jpg", idx+1))
-		if e := downloadFile(client, imageURL, fileName); e != nil {
-			return fmt.Errorf("failed to download image %d: %v", idx+1, e)
+	// Try to find existing path
+	for _, p := range paths {
+		if _, statErr := os.Stat(p); statErr == nil {
+			return ok(p)
 
 	}
 
-	// Download videos
-	for i, videoURL := range note.Videos {
-		fileName := filepath.Join(dirName, fmt.Sprintf("video_%d.mp4", i+1))
-		if e := downloadFile(client, videoURL, fileName); e != nil {
-			return fmt.Errorf("failed to download video %d: %v", i+1, e)
+	// Return default if none exists
+	return ok(paths[0])
+}
 
+}
+
+// HandleXHSSearch searches XHS content (uses local API if available)
+func HandleXHSSearch(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	query, _ :=getString(args, "query")
+	if query == "" {
+		return err("query parameter is required")
+}
+
+	limit, _ :=getInt(args, "limit")
+	if limit <= 0 {
+		limit = 10
 	}
 
-	// Download live photos
-	for i, live := range note.LivePhotos {
-		imageFile := filepath.Join(dirName, fmt.Sprintf("live_image_%d.jpg", i+1))
-		videoFile := filepath.Join(dirName, fmt.Sprintf("live_video_%d.mp4", i+1))
+	// Build search URL for XHS web
+	searchURL := "https://www.xiaohongshu.com/search_result?keyword=" + url.QueryEscape(query)
 
-		if e := downloadFile(client, live.Image, imageFile); e != nil {
-			return fmt.Errorf("failed to download live photo image %d: %v", i+1, e)
-}
-
-		if e := downloadFile(client, live.Video, videoFile); e != nil {
-			return fmt.Errorf("failed to download live photo video %d: %v", i+1, e)
-
+	// Return search URL and instructions
+	result := map[string]interface{}{
+		"search_url": searchURL,
+		"query":      query,
+		"limit":      limit,
+		"note":       "XHS-Downloader API does not expose search directly. Use the search URL to find content, then extract individual URLs with xhs_extract or xhs_download.",
 	}
 
-	return nil
+	resultJSON, marshalErr := json.MarshalIndent(result, "", "  ")
+	if marshalErr != nil {
+		return err("failed to marshal response: " + marshalErr.Error())
 }
 
-}
-}
+	return ok(string(resultJSON))
 }
 
-func downloadFile(client *http.Client, fileURL, filePath string) error {
-	resp, e := client.Get(fileURL)
-	if e != nil {
-		return fmt.Errorf("failed to download file: %v", e)
+// HandleXHSCheckServer checks if XHS-Downloader server is running
+func HandleXHSCheckServer(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	req, reqErr := http.NewRequestWithContext(ctx, "GET", xhsBaseURL+"/docs", nil)
+	if reqErr != nil {
+		return err("failed to create request: " + reqErr.Error())
+}
+
+	resp, apiErr := xhsClient.Do(req)
+	if apiErr != nil {
+		// Try to start server if not running
+		return ok("XHS-Downloader server is not running at " + xhsBaseURL + ". Please start it with: python main.py api")
 }
 
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("bad status code: %d", resp.StatusCode)
-}
-
-	out, e := os.Create(filePath)
-	if e != nil {
-		return fmt.Errorf("failed to create file: %v", e)
-}
-
-	defer out.Close()
-
-	_, e = io.Copy(out, resp.Body)
-	if e != nil {
-		return fmt.Errorf("failed to save file: %v", e)
-}
-
-	return nil
-}
-
-func getIndexList(args map[string]interface{}) []int {
-	var indexList []int
-	if indexVal, found := args["index"].([]interface{}); found {
-		for _, v := range indexVal {
-			if i, found := v.(float64); found {
-				indexList = append(indexList, int(i))
-
-		}
-		sort.Ints(indexList)
-
-	return indexList
-}
-
-}
-}
-
-func makeRange(min, max int) []int {
-	a := make([]int, max-min+1)
-	for i := range a {
-		a[i] = min + i
+	status := "running"
+	if resp.StatusCode != 200 {
+		status = "unavailable (status: " + strconv.Itoa(resp.StatusCode) + ")"
 	}
-	return a
+
+	result := map[string]interface{}{
+		"server_url": xhsBaseURL,
+		"status":     status,
+		"docs_url":   xhsBaseURL + "/docs",
+	}
+
+	resultJSON, marshalErr := json.MarshalIndent(result, "", "  ")
+	if marshalErr != nil {
+		return err("failed to marshal response: " + marshalErr.Error())
+}
+
+	return ok(string(resultJSON))
 }

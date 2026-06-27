@@ -7,179 +7,258 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
+	"regexp"
+	"sort"
 )
 
-const yfinanceBaseURL = "https://query1.finance.yahoo.com/v8/finance/chart/"
+// ToolResponse, ok, e, getString, getInt, getBool は parity.go で定義されていると仮定します。
 
-func HandleYahooFinanceQuote(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+func HandleX(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	// 引数の取得
+	apiKey, _ :=getString(args, "api_key")
 	symbol, _ :=getString(args, "symbol")
-	if symbol == "" {
-		return err("symbol is required")
-}
 
-	period, _ :=getString(args, "period")
-	if period == "" {
-		period = "1d"
+	// URLの作成
+	url := fmt.Sprintf("https://api.yfinance.com/quote/%s?apikey=%s", symbol, apiKey)
+
+	// HTTPクライアントの設定
+	client := http.DefaultClient
+
+	// リクエストの送信
+	req, e := http.NewRequest("GET", url, nil)
+	if e != nil {
+		return nil, e
 	}
 
-	interval, _ :=getString(args, "interval")
-	if interval == "" {
-		interval = "1m"
+	// リクエストの実行
+	resp, fetchErr := client.Do(req)
+	if fetchErr != nil {
+		return nil, fetchErr
+	}
+	defer resp.Body.Close()
+
+	// レスポンスの読み取り
+	body, readErr := io.ReadAll(resp.Body)
+	if readErr != nil {
+		return nil, readErr
 	}
 
-	apiURL := fmt.Sprintf("%s%s?period=%s&interval=%s", yfinanceBaseURL, symbol, period, interval)
+	// JSONのパース
+	var data map[string]interface{}
+	parseErr := json.Unmarshal(body, &data)
+	if parseErr != nil {
+		return nil, parseErr
+	}
 
-	client := http.Client{Timeout: 30 * time.Second}
-	resp, fetchErr := client.Get(apiURL)
-	if fetchErr != nil {
-		return err(fetchErr.Error())
+	// データの整形
+	price, found := data["regularMarketPrice"].(float64)
+	if !found {
+		return nil, fmt.Errorf("failed to get price")
 }
 
+	// レスポンスの作成
+	return ok(fmt.Sprintf("Price for %s: %.2f", symbol, price))
+}
+
+func HandleY(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	// 引数の取得
+	apiKey, _ :=getString(args, "api_key")
+	symbol, _ :=getString(args, "symbol")
+
+	// URLの作成
+	url := fmt.Sprintf("https://api.yfinance.com/quote/%s/history?apikey=%s", symbol, apiKey)
+
+	// HTTPクライアントの設定
+	client := http.DefaultClient
+
+	// リクエストの送信
+	req, e := http.NewRequest("GET", url, nil)
+	if e != nil {
+		return nil, e
+	}
+
+	// リクエストの実行
+	resp, fetchErr := client.Do(req)
+	if fetchErr != nil {
+		return nil, fetchErr
+	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return err(fmt.Sprintf("API request failed with status: %s", resp.Status))
-}
-
+	// レスポンスの読み取り
 	body, readErr := io.ReadAll(resp.Body)
 	if readErr != nil {
-		return err(readErr.Error())
-}
+		return nil, readErr
+	}
 
-	var result map[string]interface{}
-	parseErr := json.Unmarshal(body, &result)
+	// JSONのパース
+	var data map[string]interface{}
+	parseErr := json.Unmarshal(body, &data)
 	if parseErr != nil {
-		return err(parseErr.Error())
+		return nil, parseErr
+	}
+
+	// データの整形
+	var prices []float64
+	for _, item := range data["prices"].([]interface{}) {
+		price, found := item.(map[string]interface{})["regularMarketPrice"].(float64)
+		if found {
+			prices = append(prices, price)
+
+	}
+
+	// レスポンスの作成
+	return ok(fmt.Sprintf("Historical prices for %s: %v", symbol, prices))
 }
 
-	chart, found := result["chart"].(map[string]interface{})
-	if !found {
-		return err("invalid API response format")
 }
 
-	indicators, found := chart["indicators"].(map[string]interface{})
-	if !found {
-		return err("invalid indicators format")
-}
+func HandleZ(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	// 引数の取得
+	apiKey, _ :=getString(args, "api_key")
+	symbol, _ :=getString(args, "symbol")
 
-	quote, found := indicators["quote"].([]interface{})
-	if !ok || len(quote) == 0 {
-		return err("no quote data available")
-}
+	// URLの作成
+	url := fmt.Sprintf("https://api.yfinance.com/quote/%s/profile?apikey=%s", symbol, apiKey)
 
-	quoteData, found := quote[0].(map[string]interface{})
-	if !found {
-		return err("invalid quote data format")
-}
+	// HTTPクライアントの設定
+	client := http.DefaultClient
 
-	open, found := quoteData["open"].([]interface{})
-	if !ok || len(open) == 0 {
-		return err("no open price data available")
-}
+	// リクエストの送信
+	req, e := http.NewRequest("GET", url, nil)
+	if e != nil {
+		return nil, e
+	}
 
-	close, found := quoteData["close"].([]interface{})
-	if !ok || len(close) == 0 {
-		return err("no close price data available")
-}
-
-	high, found := quoteData["high"].([]interface{})
-	if !ok || len(high) == 0 {
-		return err("no high price data available")
-}
-
-	low, found := quoteData["low"].([]interface{})
-	if !ok || len(low) == 0 {
-		return err("no low price data available")
-}
-
-	volume, found := quoteData["volume"].([]interface{})
-	if !ok || len(volume) == 0 {
-		return err("no volume data available")
-}
-
-	response := fmt.Sprintf("Symbol: %s\n", symbol)
-	response += fmt.Sprintf("Period: %s\n", period)
-	response += fmt.Sprintf("Interval: %s\n", interval)
-	response += fmt.Sprintf("Open: %v\n", open[0])
-	response += fmt.Sprintf("Close: %v\n", close[0])
-	response += fmt.Sprintf("High: %v\n", high[0])
-	response += fmt.Sprintf("Low: %v\n", low[0])
-	response += fmt.Sprintf("Volume: %v\n", volume[0])
-
-	return ok(response)
-}
-
-func HandleYahooFinanceSearch(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	query, _ :=getString(args, "query")
-	if query == "" {
-		return err("query is required")
-}
-
-	apiURL := fmt.Sprintf("https://query1.finance.yahoo.com/v1/finance/search?q=%s", url.QueryEscape(query))
-
-	client := http.Client{Timeout: 30 * time.Second}
-	resp, fetchErr := client.Get(apiURL)
+	// リクエストの実行
+	resp, fetchErr := client.Do(req)
 	if fetchErr != nil {
-		return err(fetchErr.Error())
-}
-
+		return nil, fetchErr
+	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return err(fmt.Sprintf("API request failed with status: %s", resp.Status))
-}
-
+	// レスポンスの読み取り
 	body, readErr := io.ReadAll(resp.Body)
 	if readErr != nil {
-		return err(readErr.Error())
-}
+		return nil, readErr
+	}
 
-	var result map[string]interface{}
-	parseErr := json.Unmarshal(body, &result)
+	// JSONのパース
+	var data map[string]interface{}
+	parseErr := json.Unmarshal(body, &data)
 	if parseErr != nil {
-		return err(parseErr.Error())
-}
+		return nil, parseErr
+	}
 
-	quotes, found := result["quotes"].([]interface{})
+	// データの整形
+	companyName, found := data["longName"].(string)
 	if !found {
-		return err("invalid API response format")
+		return nil, fmt.Errorf("failed to get company name")
 }
 
-	if len(quotes) == 0 {
-		return ok("No results found")
+	// レスポンスの作成
+	return ok(fmt.Sprintf("Company name for %s: %s", symbol, companyName))
 }
 
-	var response strings.Builder
-	response.WriteString("Search results for: " + query + "\n\n")
+func HandleA(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	// 引数の取得
+	apiKey, _ :=getString(args, "api_key")
+	symbol, _ :=getString(args, "symbol")
 
-	for _, quote := range quotes {
-		q, found := quote.(map[string]interface{})
-		if !found {
+	// URLの作成
+	url := fmt.Sprintf("https://api.yfinance.com/quote/%s/options?apikey=%s", symbol, apiKey)
+
+	// HTTPクライアントの設定
+	client := http.DefaultClient
+
+	// リクエストの送信
+	req, e := http.NewRequest("GET", url, nil)
+	if e != nil {
+		return nil, e
+	}
+
+	// リクエストの実行
+	resp, fetchErr := client.Do(req)
+	if fetchErr != nil {
+		return nil, fetchErr
+	}
+	defer resp.Body.Close()
+
+	// レスポンスの読み取り
+	body, readErr := io.ReadAll(resp.Body)
+	if readErr != nil {
+		return nil, readErr
+	}
+
+	// JSONのパース
+	var data map[string]interface{}
+	parseErr := json.Unmarshal(body, &data)
+	if parseErr != nil {
+		return nil, parseErr
+	}
+
+	// データの整形
+	var options []string
+	for _, item := range data["options"].([]interface{}) {
+		options = append(options, item.(map[string]interface{})["symbol"].(string))
+
+	// レスポンスの作成
+	return ok(fmt.Sprintf("Options for %s: %v", symbol, options))
+}
+
+}
+
+func HandleB(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	// 引数の取得
+	apiKey, _ :=getString(args, "api_key")
+	symbol, _ :=getString(args, "symbol")
+
+	// URLの作成
+	url := fmt.Sprintf("https://api.yfinance.com/quote/%s/technicals?apikey=%s", symbol, apiKey)
+
+	// HTTPクライアントの設定
+	client := http.DefaultClient
+
+	// リクエストの送信
+	req, e := http.NewRequest("GET", url, nil)
+	if e != nil {
+		return nil, e
+	}
+
+	// リクエストの実行
+	resp, fetchErr := client.Do(req)
+	if fetchErr != nil {
+		return nil, fetchErr
+	}
+	defer resp.Body.Close()
+
+	// レスポンスの読み取り
+	body, readErr := io.ReadAll(resp.Body)
+	if readErr != nil {
+		return nil, readErr
+	}
+
+	// JSONのパース
+	var data map[string]interface{}
+	parseErr := json.Unmarshal(body, &data)
+	if parseErr != nil {
+		return nil, parseErr
+	}
+
+	// データの整形
+	var technicals map[string]interface{}
+	for key, value := range data {
+		if key == "symbol" {
 			continue
 		}
+		technicals[key] = value
+	}
 
-		symbol, found := q["symbol"].(string)
-		if !found {
-			continue
-		}
-
-		name, found := q["name"].(string)
-		if !found {
-			name = ""
-		}
-
-		exchange, found := q["exchange"].(string)
-		if !found {
-			exchange = ""
-		}
-
-		response.WriteString(fmt.Sprintf("Symbol: %s\n", symbol))
-		response.WriteString(fmt.Sprintf("Name: %s\n", name))
-		response.WriteString(fmt.Sprintf("Exchange: %s\n", exchange))
-		response.WriteString("--------------------\n")
-
-	return ok(response.String())
-}
+	// レスポンスの作成
+	return ok(fmt.Sprintf("Technical indicators for %s: %v", symbol, technicals))
 }

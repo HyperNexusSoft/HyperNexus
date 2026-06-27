@@ -7,163 +7,107 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"regexp"
-	"sort"
 	"strings"
 	"time"
 )
 
+// HandleFetchURL fetches the content of a given URL and returns it as text.
 func HandleFetchURL(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	targetURL, _ :=getString(args, "url")
-	if targetURL == "" {
-		return err("url parameter is required")
-}
-
-	parsedURL, parseErr := url.Parse(targetURL)
-	if parseErr != nil {
-		return err(fmt.Sprintf("invalid URL: %v", parseErr))
-}
-
-	if parsedURL.Scheme != "http" && parsedURL.Scheme != "https" {
-		return err("URL must start with http:// or https://")
+	urlStr, _ :=getString(args, "url")
+	if urlStr == "" {
+		return err("missing 'url' parameter")
 }
 
 	client := http.DefaultClient
-	req, reqErr := http.NewRequestWithContext(ctx, "GET", targetURL, nil)
+	req, reqErr := http.NewRequestWithContext(ctx, "GET", urlStr, nil)
 	if reqErr != nil {
-		return err(fmt.Sprintf("failed to create request: %v", reqErr))
+		return err(reqErr.Error())
 }
 
-	req.Header.Set("User-Agent", "Scrapling/1.0")
-	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
 	resp, fetchErr := client.Do(req)
 	if fetchErr != nil {
-		return err(fmt.Sprintf("failed to fetch URL: %v", fetchErr))
+		return err(fetchErr.Error())
 }
 
 	defer resp.Body.Close()
-	if resp.StatusCode >= 400 {
-		return err(fmt.Sprintf("HTTP error: %d %s", resp.StatusCode, resp.Status))
+
+	if resp.StatusCode != http.StatusOK {
+		return err(fmt.Sprintf("failed to fetch URL: status code %d", resp.StatusCode))
 }
 
 	body, readErr := io.ReadAll(resp.Body)
 	if readErr != nil {
-		return err(fmt.Sprintf("failed to read response body: %v", readErr))
+		return err(readErr.Error())
 }
 
 	return ok(string(body))
 }
 
-func HandleExtractLinks(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	htmlContent, _ :=getString(args, "html")
-	baseURL, _ :=getString(args, "base_url")
-	if htmlContent == "" {
-		return err("html parameter is required")
+// HandleParseJSON parses a JSON string and returns a specific key's value.
+func HandleParseJSON(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	jsonStr, _ :=getString(args, "json")
+	key, _ :=getString(args, "key")
+	if jsonStr == "" || key == "" {
+		return err("missing 'json' or 'key' parameter")
 }
 
-	linkRegex := regexp.MustCompile(`<a\s+[^>]*href=["']([^"']*)["'][^>]*>`)")
-	matches := linkRegex.FindAllStringSubmatch(htmlContent, -1)
-	var links []string
-	seen := make(map[string]bool)
-	for _, match := range matches {
-		if len(match) < 2 {
-			continue
-		}
-		rawLink := strings.TrimSpace(match[1])
-		if rawLink == "" || strings.HasPrefix(rawLink, "javascript:") || strings.HasPrefix(rawLink, "mailto:") || strings.HasPrefix(rawLink, "tel:") {
-			continue
-		}
-		if baseURL != "" {
-			parsedBase, parseErr := url.Parse(baseURL)
-			if parseErr == nil {
-				parsedLink, parseErr := url.Parse(rawLink)
-				if parseErr == nil {
-					resolved := parsedBase.ResolveReference(parsedLink)
-					rawLink = resolved.String()
-
-			}
-		}
-		if !seen[rawLink] {
-			seen[rawLink] = true
-			links = append(links, rawLink)
-
-	}
-	sort.Strings(links)
-	return ok(strings.Join(links, "\n"))
+	var data map[string]interface{}
+	parseErr := json.Unmarshal([]byte(jsonStr), &data)
+	if parseErr != nil {
+		return err(parseErr.Error())
 }
 
-}
-}
-
-func HandleExtractText(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	htmlContent, _ :=getString(args, "html")
-	if htmlContent == "" {
-		return err("html parameter is required")
+	value, exists := data[key]
+	if !exists {
+		return err(fmt.Sprintf("key '%s' not found in JSON", key))
 }
 
-	reScript := regexp.MustCompile(`(?is)<(script|style).*?>.*?</\1>`)
-	cleanHTML := reScript.ReplaceAllString(htmlContent, "")
-	reTags := regexp.MustCompile(`<[^>]+>`)
-	textContent := reTags.ReplaceAllString(cleanHTML, " ")
-	reSpace := regexp.MustCompile(`\s+`)
-	textContent = reSpace.ReplaceAllString(textContent, " ")
-	textContent = strings.TrimSpace(textContent)
-	return ok(textContent)
+	return ok(fmt.Sprintf("%v", value))
 }
 
-func HandleExtractMeta(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	htmlContent, _ :=getString(args, "html")
-	metaName, _ :=getString(args, "name")
-	property, _ :=getString(args, "property")
-	if htmlContent == "" {
-		return err("html parameter is required")
+// HandleExtractDomain extracts the domain from a given URL.
+func HandleExtractDomain(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	urlStr, _ :=getString(args, "url")
+	if urlStr == "" {
+		return err("missing 'url' parameter")
 }
 
-	var metaRegex *regexp.Regexp
-	if metaName != "" {
-		metaRegex = regexp.MustCompile(fmt.Sprintf(`<meta\s+[^>]*name=["']%s["'][^>]*content=["']([^"']*)["']`, regexp.QuoteMeta(metaName)))")
-	} else if property != "" {
-		metaRegex = regexp.MustCompile(fmt.Sprintf(`<meta\s+[^>]*property=["']%s["'][^>]*content=["']([^"']*)["']`, regexp.QuoteMeta(property)))")
-	} else {
-		return err("either name or property parameter must be specified")
+	parsedURL, parseErr := url.Parse(urlStr)
+	if parseErr != nil {
+		return err(parseErr.Error())
 }
 
-	match := metaRegex.FindStringSubmatch(htmlContent)
-	if len(match) < 2 {
-		return ok("")
+	domain := parsedURL.Hostname()
+	if domain == "" {
+		return err("failed to extract domain from URL")
 }
 
-	return ok(match[1])
+	return ok(domain)
 }
 
-func HandleCheckURLStatus(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	targetURL, _ :=getString(args, "url")
-	if targetURL == "" {
-		return err("url parameter is required")
+// HandleSearchText searches for a keyword in a given text and returns the count of occurrences.
+func HandleSearchText(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	text, _ :=getString(args, "text")
+	keyword, _ :=getString(args, "keyword")
+	if text == "" || keyword == "" {
+		return err("missing 'text' or 'keyword' parameter")
 }
 
-	client := http.DefaultClient,
-	}
-	req, reqErr := http.NewRequestWithContext(ctx, "HEAD", targetURL, nil)
-	if reqErr != nil {
-		return err(fmt.Sprintf("failed to create request: %v", reqErr))
+	count := strings.Count(text, keyword)
+	return ok(fmt.Sprintf("keyword '%s' found %d times", keyword, count))
 }
 
-	resp, fetchErr := client.Do(req)
-	if fetchErr != nil {
-		return err(fmt.Sprintf("failed to check URL status: %v", fetchErr))
+// HandleValidateURL validates if a given string is a properly formatted URL.
+func HandleValidateURL(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
+	urlStr, _ :=getString(args, "url")
+	if urlStr == "" {
+		return err("missing 'url' parameter")
 }
 
-	defer resp.Body.Close()
-	result := map[string]interface{}{
-		"status_code": resp.StatusCode,
-		"status":      resp.Status,
-		"final_url":   resp.Request.URL.String(),
-	}
-	jsonResult, jsonErr := json.Marshal(result)
-	if jsonErr != nil {
-		return err(fmt.Sprintf("failed to marshal result: %v", jsonErr))
+	_, parseErr := url.ParseRequestURI(urlStr)
+	if parseErr != nil {
+		return ok("false")
 }
 
-	return ok(string(jsonResult))
+	return ok("true")
 }
