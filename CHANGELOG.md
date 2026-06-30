@@ -1,27 +1,58 @@
 # Changelog
 
+## [1.0.0-alpha.193] - 2026-06-30
+
+### Added
+
+- **LimboPanel component**: New L4 Limbo Vault section in Memory Explorer with keyword search, memory resurrection, and entry count stats
+- **Cold Archive stats**: Memory Search page now fetches and displays L3 cold archive count alongside L4 limbo stats
+
+### Fixed
+
+- **FTS5 index rebuild**: Rewrote row-by-row rebuild loop to a single `INSERT FROM SELECT` with `COALESCE` for NULL-safe column handling
+- **FTS5 startup blocking**: Made FTS index rebuild async (goroutine) so server startup is instant
+- **FTS search returns total count**: `GET /api/memory/fts-search` now includes a `total` field with the total matching document count
+- **Dashboard port references**: Updated health/connectivity view to reflect Go sidecar on port 7778, Dashboard on 7779; removed references to decommissioned TS control plane (ports 3001, 4100)
+- **Swarm SSE connection**: Removed dead 3001 port check; SSE now always connects to Go sidecar `/api/sse`
+
+## [1.0.0-alpha.192] - 2026-06-29
+
+### Added
+
+- **Memory Search pagination shows X of Y**: Added total result count display alongside current page range
+
+### Fixed
+
+- **TypeScript 5.9.3 Map regression**: Replaced `Map<string, T>` with `Record<string, T>` plain objects on Brain page to work around compiler regression
+- **Go sidecar port conflict**: Ensured server consistently listens on port 7778
+
 ## [1.0.0-alpha.191] - 2026-06-26
 
 ### Added
+
 - **Batched tRPC Native Acceleration**: Refactored Next.js `route.ts` to inspect batched (comma-separated) procedures. If all procedures in the batch are marked as native, the request completely bypasses the TS control plane and resolves against the Go-native endpoints directly.
 - **Wails Desktop Asset Integration**: Configured `next.config.js` to build a static export (`output: "export"`) when `NEXT_EXPORT` is set. Added `copy-assets.js` script to copy Next.js static output recursively to the Wails assets directory. Registered `build:wails` script and set it in `wails.json`.
 - **SSE Stream Realignment**: Re-routed the swarm monitoring EventSource connection in the web dashboard to connect directly to the Go sidecar's `/api/sse` endpoint on port `7778`, removing reliance on the legacy TS server on port `3001`.
 
 ### Fixed
+
 - **Watchdog Refinement**: Removed the critical port check for `ts_control_plane` (port `7787`) from `watchdog.py` to prevent unnecessary restart flags for the decommissioned TS service.
 - **Go Compilation Repairs**: Disabled duplicate experimental `deepcontext.go` and `tavily_mcp.go` files by renaming to `.bak` and resolved syntax/import errors in `notebooklm.go`.
 
 ## [1.0.0-alpha.190] - 2026-06-26
 
 ### Added
+
 - **tRPC Route Native Acceleration**: Promoted 8 more tRPC procedures to the `GO_NATIVE_PROCEDURES` fast path in Next.js backend router, reducing latency on dashboard telemetry, session listing, provider cost history, LLM generation, and memory observation retrieval.
 
 ## [1.0.0-alpha.189] - 2026-06-26
 
 ### Added
+
 - **Wails Desktop GUI App Skeleton**: Created `main.go` and `app.go` targets under `go/cmd/tormentnexus-gui` mapping embedded assets and bootstrap configurations.
 
 ### Fixed
+
 - **tRPC Upstream Routing**: Updated default service discovery configurations to use the active control plane port `7787` for tRPC requests, resolving dashboard-blocking `502 Bad Gateway` timeouts.
 - **Go Sidecar EventBus Payload**: Updated the global event subscriber callback inside the HTTP server to correctly read `ev.Payload` instead of the undefined `ev.Data` field.
 - **Go Tooling Cleanups**: Disabled unused/broken experimental tool implementations by renaming them to `.bak` and rewrote `exa.go` to fix assignment mismatches.
@@ -29,15 +60,18 @@
 ## [1.0.0-alpha.188] - 2026-06-26
 
 ### Added
+
 - **MCP Bridge Native Tool Integration**: Exposed all internal Go-native tools (like `probe`, `read_file`, `search_semantic`, etc.) via the `/api/mcp/tools` registry on the Go sidecar.
 - **Relational Memory Tools**: Implemented full GraphRAG relation mapping and search inside `mem0` (add relation), `mem1` (traverse relations), and `mem2` (stats/get relations) tool handlers using the SQLite-backed `RelationStore`.
 
 ### Fixed
+
 - **Dashboard Always-On Toggles**: Updated the always-on status matching logic to respect user configuration settings from `always-on-tools.json`, allowing built-in accessory and native tools to be properly toggled on or off in the dashboard.
 
 ## [1.0.0-alpha.187] - 2026-06-26
 
 ### Added
+
 - **Windows System Tray**: Native Win32 system tray application in Go (`systray_windows.go` and `systray_stub.go` fallback for headless Linux) with real-time I/O flash alerts.
 - **Spaced Repetition reviews**: Implemented SuperMemo SM-2 memory card scheduler in Go with React dashboard review panel.
 - **Mesh Discovery Encryption**: AES-GCM symmetric encryption for UDP peer-to-peer mesh discovery packets.
@@ -45,31 +79,37 @@
 ## [1.0.0-alpha.186] - 2026-06-26
 
 ### Added
+
 - **L3 Cold Archive Integration Unit Tests**: Added `TestL3ColdArchiveIntegration` in `vector_sqlite_test.go` checking L3 demotion, fallback keyword search, and promotion to L2.
 
 ### Fixed
+
 - **SQLite DateTime Formatting**: Formatted Go `time.Time` fields to UTC ISO-8601 strings in database INSERT commands to avoid SQLite `julianday()` returning `NULL` values.
 - **Cache Eviction on Archive**: Evicted memories from `s.l1Cache` when they are archived/demoted to L3, preventing L1 from returning stale working copies instead of searching L3.
 
 ## [1.0.0-alpha.185] - 2026-06-26
 
 ### Fixed
+
 - **Dashboard Type Safety**: Handled array checks dynamically using `Array.isArray` in the web application telemetry and home client.
 
 ## [1.0.0-alpha.184] - 2026-06-26
 
 ### Fixed
+
 - **Dynamic CORS Middleware**: Extended Go sidecar HTTP API server to support wildcard origins on localhost.
 
 ## [1.0.0-alpha.183] - 2026-06-26
 
 ### Added
+
 - **L3 Cold Archive Integration**: Implemented decaying memory archiver tier moving memories < 10.0 heat to `l3_cold_archive.db` and falling back to L3 on query sparse matches.
 - **Submodule Cleanup**: Cleaned up obsolete git submodule entries under `submodules/`.
 
 ## [1.0.0-alpha.182] - 2026-06-26
 
 ### Added
+
 - **Glama & Smithery Sync**: Fallback preset scraper for tool catalogs using Glama APIs.
 - **Playwright Automation**: Real browser interactions implemented inside the Go sidecar.
 - **Enterprise Middleware Partitioning**: Separated RBAC/SSO validations and JSONL audit logging.
@@ -78,15 +118,18 @@
 ## [1.0.0-alpha.181] - 2026-06-26
 
 ### Added
+
 - **ChunkHound & Probe Go Integration**: Re-implemented and integrated `probe` and `chunkhound` (`code_research`, `search_semantic`, `search_regex`) as native Go tool handlers in `go/internal/tools/` and registered them inside the registry.
 - **Fetch Handlers registration**: Added registration for native `fetch`, `get`, and `post` handlers inside `registry.go`.
 
 ### Fixed
+
 - **Fetch compilation**: Corrected broken imports, compiler comments, and syntax errors inside `fetch.go` to restore compilation.
 
 ## [1.0.0-alpha.180] - 2026-06-26
 
 ### Added
+
 - **tRPC Route Delegation**: Mapped legacy TypeScript procedures to Go HTTP REST handlers inside `route.ts`.
 - **WebSocket Telemetry Replay**: Added event replay buffer to the `WSBroker` inside `mcp_websocket.go`.
 - **Git LFS Migration**: Configured `.gitattributes` to track SQLite databases via Git LFS.
@@ -94,11 +137,13 @@
 ## [1.0.0-alpha.177] - 2026-06-26
 
 ### Fixed
+
 - **Traffic Inspector WebSocket Port**: Configured `TrafficInspector.tsx` to default to port `3001` (where the MCP bridge runs) instead of Next.js server port `3000` to prevent WebSocket handshake errors.
 
 ## [1.0.0-alpha.176] - 2026-06-26
 
 ### Fixed
+
 - **Sidebar Keypress TypeError**: Added existence check for `event.key` in keydown handler in `Sidebar.tsx` to prevent crashes when processing system keystrokes.
 - **TS Control Plane Crash**: Fixed context binding bug in `start.ts` by replacing `this.cleanup()` with outer-scope `cleanup()` in uncaught exception and unhandled rejection event handlers.
 - **Go Sidecar Compilation**: Fixed missing nested braces in `filesystem.go` and resolved empty file EOF issue in `dbhub.go`. Cleared syntax-broken tools to successfully restore 100% clean compilation.
@@ -107,37 +152,44 @@
 ## [1.0.0-alpha.175] - 2026-06-26
 
 ### Fixed
+
 - **Sidebar Hydration Mismatch**: Added a mounted state check in `Sidebar.tsx` active path checking to prevent mismatch between server and client query parameter rendering.
 - **Duplicate React Keys**: Updated tool rendering lists across `catalog/view.tsx`, `ai-tools/view.tsx`, `inspector/view.tsx`, `observability/view.tsx`, `search/view.tsx`, `docs/tools/page.tsx` and the main dashboard snapshot map to combine names/uuids with indices, successfully silencing all duplicate key warnings in the browser console.
 
 ## [1.0.0-alpha.174] - 2026-06-26
 
 ### Fixed
+
 - **Duplicate React Keys**: Appended loop indices to React elements inside `always-on/view.tsx` to ensure all elements are assigned unique keys and silence duplicate key console warnings.
 
 ## [1.0.0-alpha.173] - 2026-06-26
 
 ### Fixed
+
 - **Dashboard Tab Render Redirection Loop**: Restored original page files to `view.tsx` and modified the unified hubs to import from `./subpath/view` instead of `./subpath/page`, preventing infinite client-side redirect loops and resolving the empty tabs issue.
 
 ## [1.0.0-alpha.172] - 2026-06-26
 
 ### Changed
+
 - **Premium Tab Animations**: Refactored the System & Operations Control dashboard tabs using `framer-motion` layout animations and transition pills for a high-end, dynamic dark-mode user experience.
 
 ## [1.0.0-alpha.171] - 2026-06-26
 
 ### Fixed
+
 - **Go Sidecar Tool Self-Healing**: Automatically parsed compile-breaking tools (such as `lamda.go`, `browser_tools_mcp.go`, `xhs_downloader.go`, `skillseekers.go`, `chrome_devtools_mcp.go`, `housing_assist.go`, `ngss_standards_explorer.go`, `github.go`, `context7.go`, `supabase.go`, `playwright.go`, `qasper.go`, and `market_russia.go`), quarantined them, and reset their DB state to pending for auto-regeneration. Verified that Go sidecar now compiles 100% cleanly.
 
 ## [1.0.0-alpha.170] - 2026-06-26
 
 ### Changed
+
 - **Dashboard Condensation & Consolidation**: Condensed all 60+ individual subpages and routes within the TormentNexus web dashboard into 3 major hub pages (System & Operations `/dashboard`, MCP Tool Services `/dashboard/mcp`, and Agent Swarm `/dashboard/swarm`). Added instant client-side fallback redirects for backward compatibility. Updated sidebar navigation configuration and active link status checks to support query parameters.
 
 ## [1.0.0-alpha.165] - 2026-06-26
 
 ### Added
+
 - **Database Restoration & Merge**: Safely merged `imported_sessions` (+410), `imported_session_memories` (+57,144), and `links_backlog` (+17,341) from `bobbybookmarks/tormentnexus.db` into the active workspace database, resolving data loss issues.
 - **Accessory Tools Integration**: Integrated built-in root accessory tools (such as `bash`, `search`, `repomap`, and file actions) into the sidecar's `/api/mcp/tools` registry, enabling custom always-on configuration from the dashboard.
 - **Node Heap Limit Configuration**: Updated `start-ts.bat` to declare `set NODE_OPTIONS=--max-old-space-size=8192` to resolve JavaScript heap out-of-memory errors during build runs.
@@ -145,18 +197,21 @@
 ## [1.0.0-alpha.164] - 2026-06-26
 
 ### Added
+
 - **Submodules Ingestion**: Extracted, verified, and ingested 35 reference repositories under `submodules/` from BobbyBookmarks discussions data to enable feature analysis.
 - **Dashboard Sidebar Consolidation**: Streamlined dashboard navigation inside `apps/web/src/components/mcp/nav-config.ts` into a clean tabbed layout with 4 core diagnostics sections.
 
 ## [1.0.0-alpha.163] - 2026-06-26
 
 ### Added
+
 - **Context-Aware Syntax Tree (cAST) Chunker**: Implemented syntax-aware code chunking for Go, Python, and TypeScript/JavaScript in the `ctxharvester` package. Preprends structural context headers (packages, imports, class signatures) to each code block chunk to optimize vector space search and LLM contextual recall (inspired by the high-value Chunkhound bookmark).
 - **SQLite Trigger Hardening**: Standardized the `relations_ad` delete triggers in `relations.go` to standard SQL `DELETE` syntax, preventing virtual table driver logic errors.
 
 ## [1.0.0-alpha.162] - 2026-06-26
 
 ### Fixed
+
 - **Go Sidecar Redeclaration Conflicts**: Cleaned up and quarantined redeclared package-level helpers (`ok`, `err`, `getString`, `getInt`, `getBool`) inside `quantdinger.go` and `enscango.go` that were causing package-level compiler errors.
 - **Port 4100 Startup**: Started and verified the TypeScript Control Plane on port `4100` in the background for full swarm and dashboard orchestration.
 - **Next.js Web Server Health**: Fixed compile errors caused by Turbopack cache corruption and compiler locks, ensuring `200 OK` on root paths.
@@ -164,6 +219,7 @@
 ## [1.0.0-alpha.161] - 2026-06-25
 
 ### Fixed
+
 - **FTS5 SQLite Triggers**: Corrected trigger syntax in L3 cold archive memory store (`cold_archive.go`) to use direct DELETE statements, avoiding CGO-specific delete triggers that cause logic errors on standard SQLite virtual tables.
 - **Go Sidecar Compilation**: Fixed a duplicate definition of `SearchResult` in the `memorystore` package by renaming the one in `fts_search.go` to `FTSMemorySearchResult`.
 - **Corrupted Tool Files**: Sanitized and removed corrupted tool files (`browser_tools_mcp.go` and `osaurus.go`) containing raw LLM commentary, and reset their DB state to `pending`.
@@ -172,6 +228,7 @@
 ## [1.0.0-alpha.160] - 2026-06-25
 
 ### Changed
+
 - **Dashboard Consolidation**: Unified `/dashboard/brain` and `/dashboard/memory` pages into a single, comprehensive "Brain & Memory" dashboard at `/dashboard/brain`. Merged the Cognitive Graph, URL Ingestion, Expert Agents, Memory Vault, Observations Log, and Ingestion Hydration controls under tabs.
 - **Memory Redirection**: Replaced the redundant `/dashboard/memory` page with a seamless client-side redirect component to guide users to the new unified Brain & Memory hub.
 - **Sidebar & Nav cleanup**: Removed the duplicate "Memory Store" link from `nav-config.ts` and renamed "Cognitive Brain" to "Brain & Memory".
@@ -180,12 +237,14 @@
 ## [1.0.0-alpha.157] - 2026-06-25
 
 ### Changed
+
 - **Dashboard Consolidation**: Refactored the sidebar menu layout in `nav-config.ts`, reducing 40+ cluttered items to a clean, well-grouped set of core categories.
 - **Background Swarms & Scrapers**: Started the background watchdog daemon which initiates the `swarm_v7.py` code generator agent and the `bobbybookmarks_sync.py` scrapers.
 
 ## [1.0.0-alpha.156] - 2026-06-25
 
 ### Added
+
 - **Advanced Metadata Classification**: Added `memory_kind`, `category`, `tags`, and `source_url` columns to `L2VaultRecord` and SQLite database schemas.
 - **Metadata-Filtered Semantic Search**: Extended Go-native semantic search to process structured JSON query payloads (`QueryPayload`), allowing query filtering by kind or category.
 - **Reinforcement Scoring Logic**: Implemented `ReinforceMemory` to dynamically adjust memory heat and relevance based on success/failure metrics from action execution.
@@ -194,6 +253,7 @@
 ## [1.0.0-alpha.155] - 2026-06-25
 
 ### Added
+
 - **Pure Go Vector Search**: Replaced CGO-based `sqlite-vec` virtual tables with standard SQLite tables and a native Go-native cosine similarity scanner (`cosineSim`, `encodeVec`, `decodeVec`).
 - **BobbyBookmarks Tiered Cache Integration**: Implemented in-process L1 caching (hot cache) for active working memory records with heat-based eviction (`evictColdestL1Locked`) to manage memory promotion/demotion.
 - **Compiler Sanitization & Reset**: Ran the self-healing compiler reset loop to clean up syntax issues in generated browser/hacking tools, ensuring a 100% green compilation state.
@@ -201,7 +261,8 @@
 ## [1.0.0-alpha.153] - 2026-06-24
 
 ### Changed
-- **Dashboard Consolidation**: 
+
+- **Dashboard Consolidation**:
   - Unified `/dashboard/config` and `/dashboard/settings` into a single Settings tabbed page.
   - Merged `/dashboard/knowledge` and `/dashboard/brain` into a unified Cognitive Graph and Ingest tabbed workspace under `/dashboard/brain`.
   - Consolidated `/dashboard/director`, `/dashboard/council`, `/dashboard/supervisor`, `/dashboard/squads`, and `/dashboard/swarm` into a single, comprehensive Swarm & Agent Command Center under `/dashboard/swarm`.
@@ -212,11 +273,13 @@
 ## [1.0.0-alpha.149] - 2026-06-24
 
 ### Added
+
 - **Self-Healing Go Compiler Loop**: Implemented `compiler_reset.py` to automatically execute `go build`, parse compilation errors, remove faulty generated Go files, reset their database status to `'pending'`, and loop until clean compilation is achieved.
 - **Deduplicated Skill Ingestion**: Developed `ingest_all_user_skills.py` to scrape 2,956 home directory skills into `.tormentnexus/skills.db` using Jaccard similarity at a 90% threshold, yielding 2,948 canonical and 8 duplicate entries.
 - **New Documentation Draft**: Added `docs/COMPILER_HEALING_AND_SKILLS.md` covering the self-healing compiler loop and the Jaccard-deduplicated skill registry.
 
 ### Changed
+
 - **Workspace Simplification**: Created `archive_cleaner.py` and consolidated obsolete, temporary, and old version files from the root workspace into structured, git-ignored subdirectories within `/archive/`.
 - **LM Studio Integration**: Updated `~/.lmstudio/mcp.json` configuration to default to `tormentnexus` supervisor instead of `hypercode` as its MCP server.
 - **Version bump**: Synchronized all monorepo dependencies and workspaces to version `1.0.0-alpha.149`.

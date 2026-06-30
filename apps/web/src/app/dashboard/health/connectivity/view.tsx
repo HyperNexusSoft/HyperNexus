@@ -161,7 +161,7 @@ export default function ServiceConnectivityPage() {
               return;
             }
           } catch {
-            continue;
+            // Connectivity fetch is best-effort
           }
         }
 
@@ -231,23 +231,13 @@ export default function ServiceConnectivityPage() {
         <CardContent className="p-4">
           <div className="flex items-center justify-center gap-4 text-sm text-zinc-400 flex-wrap">
             <span className="flex items-center gap-1.5">
-              <Wifi className="h-4 w-4 text-blue-400" />
-              tRPC Core (:{discovery?.trpcUpstreams?.[0]?.split(':')?.pop()?.replace('/trpc', '') ?? '4100'})
-            </span>
-            <span>→</span>
-            <span className="flex items-center gap-1.5">
               <Server className="h-4 w-4 text-emerald-400" />
-              Go Sidecar (:{discovery?.goSidecarPort ?? 4300})
+              Go Sidecar (:{discovery?.goSidecarPort ?? 7778})
             </span>
             <span>→</span>
             <span className="flex items-center gap-1.5">
               <Activity className="h-4 w-4 text-purple-400" />
-              Dashboard (:{discovery?.dashboardPort ?? 3000})
-            </span>
-            <span>|</span>
-            <span className="flex items-center gap-1.5">
-              <Wifi className="h-4 w-4 text-cyan-400" />
-              Bridge (:{discovery?.bridgePort ?? 3001})
+              Dashboard (:{discovery?.dashboardPort ?? 7779})
             </span>
           </div>
         </CardContent>
@@ -261,7 +251,7 @@ export default function ServiceConnectivityPage() {
             icon={Wifi}
             service={trpc}
             details={{
-              'Default ports': '4100, 4000, 3847',
+              'Default ports': '7778, 7779, 4000',
             }}
           />
         )}

@@ -163,7 +163,9 @@ export default function MemorySearchPage() {
 					className="text-xs text-zinc-600"
 					title={`Showing results ${offset + 1}-${offset + results.length}`}
 				>
-					Page {Math.floor(offset / PAGE_SIZE) + 1} ({offset + 1}–{offset + results.length}{total > 0 ? ` / ${total}` : ""})
+					Page {Math.floor(offset / PAGE_SIZE) + 1} ({offset + 1}–
+					{offset + results.length}
+					{total > 0 ? ` / ${total}` : ""})
 				</p>
 			)}
 
@@ -249,7 +251,10 @@ export default function MemorySearchPage() {
 
 			{/* L4 Limbo Vault Section */}
 			<details className="border border-zinc-800 rounded-lg p-4 bg-zinc-900/30">
-				<summary className="cursor-pointer text-sm font-medium text-zinc-400 hover:text-zinc-200 select-none" title="The L4 Limbo vault stores memories that were discarded, lost, or decayed. Memories can be resurrected back to the L2 vault.">
+				<summary
+					className="cursor-pointer text-sm font-medium text-zinc-400 hover:text-zinc-200 select-none"
+					title="The L4 Limbo vault stores memories that were discarded, lost, or decayed. Memories can be resurrected back to the L2 vault."
+				>
 					L4 Limbo Vault
 				</summary>
 				<div className="mt-4">

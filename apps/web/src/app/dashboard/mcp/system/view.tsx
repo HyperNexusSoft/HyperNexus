@@ -100,7 +100,7 @@ export default function SystemStatusDashboard() {
                     status="Active"
                     icon={Network}
                     color="text-blue-500"
-                    detail="Port 3000 / 3001"
+                    detail="Port 7778 / 7779"
                 />
                 <StatusCard
                     title="Startup Readiness"
