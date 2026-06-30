@@ -33,6 +33,7 @@ import {
 	Command,
 	Snowflake,
 	FileUp,
+	TrendingUp,
 } from "lucide-react";
 
 export interface NavItem {
@@ -146,6 +147,13 @@ export const MAIN_DASHBOARD_NAV: NavItem[] = [
 		icon: Database,
 		variant: "ghost",
 		tooltip: "Full-text search across 86K+ memories with L4 limbo management",
+	},
+	{
+		title: "Memory Analytics",
+		href: "/dashboard/memory-analytics",
+		icon: TrendingUp,
+		variant: "ghost",
+		tooltip: "Memory system overview: tier stats, heat distribution, kind breakdown, lifecycle pipeline",
 	},
 	{
 		title: "Context & Sessions",
