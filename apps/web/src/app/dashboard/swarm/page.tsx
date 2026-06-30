@@ -293,7 +293,7 @@ export function SwarmDashboardOverview() {
 		const eventSource = new EventSource(
 			sseBase.includes("3001")
 				? `${sseBase}/api/mesh/stream`
-				: `${sseBase}/api/sse`
+				: `${sseBase}/api/sse`,
 		);
 
 		eventSource.onopen = () => setStreamStatus("online");

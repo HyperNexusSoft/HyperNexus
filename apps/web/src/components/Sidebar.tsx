@@ -761,6 +761,7 @@ export function Sidebar({ className }: SidebarProps) {
                                             <div key={item.href} className="group flex items-center gap-1">
                                                 <Link
                                                     href={item.href}
+                                                    title={(item as any).tooltip || item.title}
                                                     className={cn(
                                                         "flex-1 flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-zinc-800 hover:text-white transition-colors",
                                                         isActive(item.href) ? "bg-zinc-800 text-white" : "text-zinc-400",
