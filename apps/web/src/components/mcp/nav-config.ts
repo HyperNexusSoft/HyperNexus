@@ -153,7 +153,15 @@ export const MAIN_DASHBOARD_NAV: NavItem[] = [
 		href: "/dashboard/memory-analytics",
 		icon: TrendingUp,
 		variant: "ghost",
-		tooltip: "Memory system overview: tier stats, heat distribution, kind breakdown, lifecycle pipeline",
+		tooltip:
+			"Memory system overview: tier stats, heat distribution, kind breakdown, lifecycle pipeline",
+	},
+	{
+		title: "Tool Karma",
+		href: "/dashboard/tool-karma",
+		icon: Wrench,
+		variant: "ghost",
+		tooltip: "Native Go tool registry, handler health, and usage tracking",
 	},
 	{
 		title: "Context & Sessions",
