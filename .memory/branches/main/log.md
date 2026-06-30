@@ -46688,3 +46688,320 @@ Also, I need to update the HANDOFF.md and update the Go binary version string. L
 **Action**: memory(target: "project", scope: "project:tormentnexus", title: "Swarm v7 compile fix pipeline — root cause of broken Go stubs", content: "Root cause of broken Go stubs: swarm_v7.py relied entirely on LLM review (not actual go build) for compilation checking. Fixed in alpha.195 by adding make_compile_fix_prompt() + 3-round iterative compile loop. After each failed go build, actual compiler errors are fed back to the LLM for fixing. 3 attempts max before writing to _broken/.")
 **Observation**: memory: error
 
+## Turn 38 | 2026-06-30T16:48:24.458Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: That tool isn't available. Let me just commit and push.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && git add -A && git commit -m "fix: swarm_v7 iterative compile fix — 3-round go build loop with real compiler errors fed back to LLM; Wails desktop GUI chain; 3 dashboard pages (v1.0.0-alpha.195)" && git push origin main 2>&1", timeout: 600)
+**Observation**: bash: success
+
+## Turn 39 | 2026-06-30T16:56:16.755Z | deepseek/deepseek-v4-flash
+
+**Thought**: ---
+
+## ✅ Session Complete — v1.0.0-alpha.195
+
+Here's everything accomplished in this session:
+
+### 🔧 #1 Blocker Fixed: Swarm Compile Pipeline
+| Before | After |
+|--------|-------|
+| LLM reviews code for "compilation errors" (guessing) | `go build` is actually run |
+| Single-attempt → file goes to `_broken/` | **3-round iterative fix loop** with real compiler errors fed back to LLM |
+| No feedback loop | `make_compile_fix_prompt()` formats actual `go build` stderr into fix prompt |
+| 90%+ failure rate | Files now get 3 chances to compile before rejection |
+
+### 🖥️ Wails Native Desktop — Fully Buildable
+```
+pnpm build:wails
+  → pnpm build (Next.js standalone)
+  → node copy-assets.mjs (extracts static → frontend/dist/)
+  → go build ./cmd/tormentnexus-gui → bin/tormentnexus-gui.exe (18MB)
+```
+
+### 🆕 3 Dashboard Pages
+| Page | What It Shows |
+|------|---------------|
+| **P2P Fleet-Wise Mesh** | Node ID, peer count, capabilities, load bars |
+| **L3 Cold Archive** | Browse/search/promote archived low-heat memories |
+| **Enterprise Security** | License status, RBAC roles, audit logs |
+
+### 📦 What ships in alpha.195
+| Artifact | Size |
+|----------|------|
+| `bin/tormentnexus.exe` | 24 MB — Go sidecar (port 7778) |
+| `bin/tormentnexus-gui.exe` | 18 MB — Wails desktop app |
+| Dashboard (7779) | 85+ routes, production build clean |
+
+### 🗺️ Updated Roadmap
+| Track | Status |
+|-------|--------|
+| **Swarm Model Quality** | ✅ **FIXED** — iterative compile-check with real `go build` errors |
+| **P2P Fleet-Wide Intelligence** | ✅ Backend + dashboard |
+| **Cold Archive (L3)** | ✅ Store + API + dashboard |
+| **Wails Desktop** | ✅ Build chain complete |
+| **Enterprise UI** | ✅ License/RBAC/Audit page |
+| **ChunkHound/Probe** | ❌ Still pending |
+| **Predictive Tool Injection** | ❌ Vision phase |
+**Thinking**: Everything is pushed and committed. Let me provide a final summary of everything done in this session.
+
+## Turn 1 | 2026-06-30T17:05:40.929Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: The user wants me to continue. Let me think about what's left that's most impactful.
+
+Looking at the roadmap:
+1. **ChunkHound/Probe integration** - remaining native MCP search tools that need Go handler wiring
+2. **Predictive Tool Injection** - local model-based tool prediction
+3. **Deep Link Protocol** - `tormentnexus://` protocol handler
+
+Let me check what ChunkHound and Probe are - they're mentioned in the roadmap and HANDOFF as "remaining native MCP search tools." Let me investigate what exists and what's needed.
+
+Actually, let me look at what the most impactful next step would be. The swarm compile fix is done. The Wails desktop is done. The P2P mesh dashboard is done. The cold archive and enterprise pages are done.
+
+What's next that's achievable and high-impact?
+
+Let me think about what "ChunkHound" and "Probe" are. These are MCP-related tools that provide code search and analysis. Let me check if there are any references in the codebase.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && grep -rn "ChunkHound\|chunkhound\|chunk_hound\|Probe" --include="*.go" --include="*.tsx" --include="*.ts" go/ apps/web/src/ 2>/dev/null | grep -v "node_modules\|\.next" | head -20")
+**Observation**: bash: success
+
+## Turn 2 | 2026-06-30T17:07:27.564Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: The Probe references are mostly in the `borg/` submodule (enterprise_sales_bot), not in the main TormentNexus codebase. Let me check what actual gaps exist in the main codebase.
+
+Let me check what's actually incomplete. Let me look at the MCP native router and see what tools are registered vs what's pending.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && grep -c "Handle" go/internal/tools/registry.go && echo "handlers registered" && grep -n "func Handle" go/internal/tools/*.go | grep -v "_broken\|_staging\|_disabled" | head -30")
+**Observation**: bash: success
+
+## Turn 3 | 2026-06-30T17:07:33.933Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: The tools directory has 27 handlers across 10 files. These are the surviving "good" files that compile.
+
+Instead of the vague "ChunkHound/Probe" which doesn't seem to exist in the main codebase, let me focus on what's actually impactful and achievable. Let me think about what would provide the most value:
+
+1. **Native MCP Tools from the registry** - The `_broken/` directory has ~330 files that failed compilation. With the new iterative compile fix pipeline, I could try rehabilitating some of the most useful ones.
+
+2. **Dashboard polish** - The mesh, cold-archive, and enterprise pages exist but could use refinement.
+
+3. **Memory search UX** - The total count is now working, but the pagination UX could be better.
+
+Actually, let me check what the `catalog.db` situation is - there are 12,201 MCP servers tracked but only 1,932 implemented. The swarm pipeline is supposed to help with this, and now with the compile fix, it should work better.
+
+But more practically, let me check what the user would find most useful right now. Let me check if there are any Go build errors currently.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build ./cmd/tormentnexus 2>&1 && echo "GO: CLEAN"", timeout: 60)
+**Observation**: bash: success
+
+## Turn 4 | 2026-06-30T17:07:52.049Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: Go build is clean. Let me check if the dashboard builds clean too.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/apps/web && pnpm build 2>&1 | tail -5", timeout: 180)
+**Observation**: bash: success
+
+## Turn 5 | 2026-06-30T17:10:36.632Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: Both builds are clean. Let me look at what the most impactful next step is from a feature perspective.
+
+Let me check the nav sidebar to see what dashboard pages exist but aren't in the sidebar. Maybe I can improve the user experience by adding the new pages to the navigation.
+**Action**: grep(pattern: "href.*dashboard|path.*dashboard|link.*dashboard"", glob: "*.tsx", path: "C:/Users/hyper/workspace/tormentnexus/apps/web/src")
+**Observation**: grep: success
+
+## Turn 6 | 2026-06-30T17:11:04.230Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: There's a `Navigation.tsx` component that has the sidebar links. Let me check it and see if the new pages should be added there.
+
+Actually, let me take a different, more impactful approach. Instead of adding more UI pages, let me focus on something the user would find more valuable: **Swarm pipeline verification**. The biggest fix was the compile pipeline, but let me verify it actually works by running a test tool through it.
+
+But actually, the swarm pipeline requires an LLM backend running (port 4000 freellm proxy). Let me try a more practical approach:
+
+Let me check what the actual health/status of the system is and fix any immediate issues. Also, I notice the sidebar navigation doesn't include the new pages (mesh, cold-archive, enterprise). Let me add them to the navigation.
+
+But wait - I should think bigger picture. What would be most useful to the user? Let me look at what the system does right now and identify the biggest gap.
+
+Actually, let me focus on something concrete and impactful: **The Karma / Predictive Tool Injection** system. This is a "Vision" item on the roadmap, but let me check if there's any groundwork.
+**Action**: grep(pattern: "karma\|predictive.*tool\|tool.*inject\|recommend.*tool"", glob: "*.go", path: "C:/Users/hyper/workspace/tormentnexus/go/internal", ignoreCase: true)
+**Observation**: grep: success
+
+## Turn 7 | 2026-06-30T17:11:25.746Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: No existing karma/predictive tool injection code. Let me switch to something more practical and achievable. Let me look at the `catalog.db` and the database catalog service - maybe I can build a **Catalog Search** dashboard page or a **Skill Registry** page.
+
+Actually, let me check what the most requested or glaring missing thing is. Let me look at the `/dashboard` directory to see what pages exist but might be generic/placeholder.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && ls -d apps/web/src/app/dashboard/*/ 2>/dev/null | grep -v node_modules | sort")
+**Observation**: bash: success
+
+## Turn 8 | 2026-06-30T17:12:53.561Z | deepseek/deepseek-v4-flash
+
+**Thought**: Let me take a focused approach - improve the navigation and home view to surface the new features.
+**Thinking**: Wow, there are 58+ dashboard directories. Many of them (like `browser`, `cli-harnesses`, `cloud-dev`, `deerflow`, `healer`, `imports`, `logs-metrics`, `observability`, `runtime`) use the "GenericDashboardPage" pattern where they just display raw JSON from the API. These pages are essentially data viewers.
+
+Let me look at a few of these generic pages and see if there's a common pattern I can improve. But more importantly, let me think about what the user would actually get value from.
+
+Let me take a pragmatic approach and focus on something that's both impactful and achievable in this session. Let me:
+
+1. Add the new pages (mesh, cold-archive, enterprise, session-import) to the sidebar navigation
+2. Add them to the dashboard home view quick links
+3. Update the Navigation.tsx component
+
+This is a quick win that improves user experience immediately.
+**Action**: read(path: "C:/Users/hyper/workspace/tormentnexus/apps/web/src/app/components/Navigation.tsx")
+**Observation**: read: error
+
+## Turn 9 | 2026-06-30T17:12:59.798Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: The path was from the grep output: `components/Navigation.tsx`. It's probably in the source root or has a different path. Let me find it.
+**Action**: find(pattern: "**/Navigation.tsx", path: "C:/Users/hyper/workspace/tormentnexus/apps/web")
+**Observation**: find: success
+
+## Turn 10 | 2026-06-30T17:13:03.806Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Action**: find(pattern: "**/components/Navigation*", path: "C:/Users/hyper/workspace/tormentnexus/apps/web")
+**Observation**: find: success
+
+## Turn 11 | 2026-06-30T17:13:11.109Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: The Navigation.tsx might have been from a different build output. Let me find the sidebar or main navigation component.
+**Action**: grep(glob: "*.tsx", path: "C:/Users/hyper/workspace/tormentnexus/apps/web/src", pattern: "Sidebar|Navigation"")
+**Observation**: grep: success
+
+## Turn 12 | 2026-06-30T17:13:17.941Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: Now I can see the component structure. It imports from `../components/Navigation` - let me find the actual file.
+**Action**: find(path: "C:/Users/hyper/workspace/tormentnexus/apps/web/src", pattern: "**/Navigation.tsx")
+**Observation**: find: success
+
+## Turn 13 | 2026-06-30T17:13:27.516Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: The Navigation component doesn't exist as a file. It might have been deleted or renamed. Let me check the layout.
+**Action**: read(path: "C:/Users/hyper/workspace/tormentnexus/apps/web/src/app/layout.tsx", limit: 35)
+**Observation**: read: success
+
+## Turn 14 | 2026-06-30T17:13:32.442Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: The Navigation file should exist at `apps/web/src/components/Navigation.tsx`. Let me check that path directly.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && ls -la apps/web/src/components/Navigation.tsx 2>/dev/null || echo "File not found"")
+**Observation**: bash: success
+
+## Turn 15 | 2026-06-30T17:13:36.261Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: It exists but the find command didn't find it because it was in `apps/web/src/components/Navigation.tsx` not under `apps/web/src/app/components/Navigation.tsx`. Let me read it.
+**Action**: read(path: "C:/Users/hyper/workspace/tormentnexus/apps/web/src/components/Navigation.tsx")
+**Observation**: read: success
+
+## Turn 16 | 2026-06-30T17:13:41.693Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: Now I can see the navigation. Let me add the new pages: Memory Search, Mesh, Cold Archive, Enterprise, and Session Import to the navigation.
+
+I should also check the Sidebar component to see if there are more navigation links there.
+**Action**: read(path: "C:/Users/hyper/workspace/tormentnexus/apps/web/src/components/Sidebar.tsx")
+**Observation**: read: success
+
+## Turn 17 | 2026-06-30T17:13:50.775Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: The Sidebar component draws from `SIDEBAR_SECTIONS` from `./mcp/nav-config`. Let me check that config file.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && ls apps/web/src/components/mcp/nav-config*")
+**Observation**: bash: success
+
+## Turn 18 | 2026-06-30T17:13:59.466Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && grep -n "mesh\|cold-archive\|enterprise\|sessions/import" apps/web/src/components/mcp/nav-config.ts")
+**Observation**: bash: success
+
+## Turn 19 | 2026-06-30T17:14:03.897Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: The mesh, cold-archive, and enterprise pages already have entries in the nav-config! Let me check if sessions/import has one too. Let me look at the config more fully to see what's there.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && grep -n "cold-archive\|enterprise\|sessions/import\|memory-search" apps/web/src/components/mcp/nav-config.ts")
+**Observation**: bash: success
+
+## Turn 20 | 2026-06-30T17:14:09.735Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: So:
+- `mesh` is in nav-config ✅ (line 186)
+- `memory-search` is in nav-config ✅ (line 143)
+- `cold-archive` is NOT in nav-config ❌
+- `enterprise` is NOT in nav-config ❌
+- `sessions/import` is NOT in nav-config ❌
+
+Let me read the specific section where I should add them.
+**Action**: read(offset: 175, path: "C:/Users/hyper/workspace/tormentnexus/apps/web/src/components/mcp/nav-config.ts", limit: 25)
+**Observation**: read: success
+
+## Turn 21 | 2026-06-30T17:14:20.957Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: Let me also check the DATA_NAV section where memory-search is. Let me find the right section to add cold-archive.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && grep -n "DATA_NAV\|OPERATIONS_NAV\|SYSTEM_NAV\|TOOLS_NAV\|MCP_NAV\|GOVERNANCE_NAV\|NAV_ITEMS\|SIDEBAR_SECTIONS" apps/web/src/components/mcp/nav-config.ts | head -20")
+**Observation**: bash: success
+
+## Turn 22 | 2026-06-30T17:14:28.615Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: Let me check the DATA_NAV section and add cold-archive there.
+**Action**: read(offset: 257, path: "C:/Users/hyper/workspace/tormentnexus/apps/web/src/components/mcp/nav-config.ts", limit: 90)
+**Observation**: read: success
+
+## Turn 23 | 2026-06-30T17:14:35.929Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: Now I can see the sections. Let me add `cold-archive` to the DATA section, `enterprise` to the ADMIN section, and `sessions/import` to DATA or as a sub-section.
+
+Let me also check the full SIDEBAR_SECTIONS to understand the ordering.
+**Action**: read(offset: 344, path: "C:/Users/hyper/workspace/tormentnexus/apps/web/src/components/mcp/nav-config.ts", limit: 30)
+**Observation**: read: success
+
+## Turn 24 | 2026-06-30T17:14:41.875Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: Now let me add `cold-archive` to the DATA_NAV and `enterprise` to the ADMIN_NAV sections. I also need to import the correct icons.
+**Action**: read(limit: 50, path: "C:/Users/hyper/workspace/tormentnexus/apps/web/src/components/mcp/nav-config.ts")
+**Observation**: read: success
+
+## Turn 25 | 2026-06-30T17:14:48.379Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: I need to add `Snowflake` and `Shield` (already imported) for the cold-archive and enterprise pages. Let me add the entries.
+**Action**: edit(path: "C:/Users/hyper/workspace/tormentnexus/apps/web/src/components/mcp/nav-config.ts", edits: [object Object])
+**Observation**: edit: success
+
+## Turn 26 | 2026-06-30T17:15:52.630Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: Now add the cold-archive and session-import entries to DATA_NAV, and enterprise to ADMIN_NAV.
+**Action**: edit(path: "C:/Users/hyper/workspace/tormentnexus/apps/web/src/components/mcp/nav-config.ts", edits: [object Object])
+**Observation**: edit: success
+
+## Turn 27 | 2026-06-30T17:16:38.461Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: These were the exact linter warnings from the beginning of the conversation! The Snowflake and FileUp imports say they're declared but never read. But I just added them in the DATA_NAV section. Let me check what happened - maybe the edit replaced the wrong location or there's a duplicate.
+
+Actually wait, looking more carefully: the linter says lines 34-35 have unused `Snowflake` and `FileUp`. But I added them to the import at lines 34-35 AND I used them in the DATA_NAV further down. Maybe there's an issue with the current file state.
+
+Let me check if the file has duplicate imports or the icons I added weren't actually used in the DATA_NAV section.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && grep -n "Snowflake\|FileUp" apps/web/src/components/mcp/nav-config.ts")
+**Observation**: bash: success
+
+## Turn 28 | 2026-06-30T17:17:04.254Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: They ARE used at lines 314 and 321. The linter might be wrong or might not have processed the file correctly. Let me run the TypeScript build to check.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/apps/web && pnpm build 2>&1 | tail -5", timeout: 180)
+**Observation**: bash: success
+

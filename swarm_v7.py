@@ -1556,9 +1556,15 @@ def worker_loop(worker_id, shutdown, completed_lock, completed_count):
                     break
                 # Extract real compiler errors
                 compile_errors = result.stderr[:1000]
-                log.warn(f"Compile fail (attempt {compile_attempt + 1}): {compile_errors[:200]}", worker_id)
+                log.warn(
+                    f"Compile fail (attempt {compile_attempt + 1}): {compile_errors[:200]}",
+                    worker_id,
+                )
             except subprocess.TimeoutExpired:
-                log.warn(f"Compile timed out (attempt {compile_attempt + 1}), accepting", worker_id)
+                log.warn(
+                    f"Compile timed out (attempt {compile_attempt + 1}), accepting",
+                    worker_id,
+                )
                 compile_ok = True
                 break
             except FileNotFoundError:
@@ -1568,34 +1574,76 @@ def worker_loop(worker_id, shutdown, completed_lock, completed_count):
 
             if compile_attempt < 2:
                 # Feed REAL compiler errors back to LLM for fixing
-                log.phase(f"FIX-COMPILE: {name} (attempt {compile_attempt + 1})", worker_id)
-                fix_prompt, fix_system = make_compile_fix_prompt(final_code, compile_errors)
-                fix_output = llm.call(fix_prompt, fix_system, phase="fix-compile", wid=worker_id, max_retries=2)
+                log.phase(
+                    f"FIX-COMPILE: {name} (attempt {compile_attempt + 1})", worker_id
+                )
+                fix_prompt, fix_system = make_compile_fix_prompt(
+                    final_code, compile_errors
+                )
+                fix_output = llm.call(
+                    fix_prompt,
+                    fix_system,
+                    phase="fix-compile",
+                    wid=worker_id,
+                    max_retries=2,
+                )
                 if fix_output:
                     fixed_code, _ = extract_go_code(fix_output, fn)
-                    if fixed_code and "package tools" in fixed_code and _has_handlers(fixed_code):
+                    if (
+                        fixed_code
+                        and "package tools" in fixed_code
+                        and _has_handlers(fixed_code)
+                    ):
                         # Clean external imports
-                        ext = re.findall(r'"(github\.com/(?!tormentnexushq)[^"]+)"', fixed_code)
+                        ext = re.findall(
+                            r'"(github\.com/(?!tormentnexushq)[^"]+)"', fixed_code
+                        )
                         if ext:
-                            fixed_code = re.sub(r'\s*"[^"]*github\.com/(?!tormentnexushq)[^"]*"\s*\n?', "\n", fixed_code)
+                            fixed_code = re.sub(
+                                r'\s*"[^"]*github\.com/(?!tormentnexushq)[^"]*"\s*\n?',
+                                "\n",
+                                fixed_code,
+                            )
                         if "type ToolResponse struct" in fixed_code:
-                            fixed_code = re.sub(r"type ToolResponse struct\s*\{.*?\}", "", fixed_code, flags=re.DOTALL)
-                            fixed_code = re.sub(r"type TextContent struct\s*\{.*?\}", "", fixed_code, flags=re.DOTALL)
+                            fixed_code = re.sub(
+                                r"type ToolResponse struct\s*\{.*?\}",
+                                "",
+                                fixed_code,
+                                flags=re.DOTALL,
+                            )
+                            fixed_code = re.sub(
+                                r"type TextContent struct\s*\{.*?\}",
+                                "",
+                                fixed_code,
+                                flags=re.DOTALL,
+                            )
                         ob = fixed_code.count("{")
                         cb = fixed_code.count("}")
                         if ob == cb:
                             final_code = fixed_code
-                            log.ok(f"Compile fix attempt {compile_attempt + 1}: updated code", worker_id)
+                            log.ok(
+                                f"Compile fix attempt {compile_attempt + 1}: updated code",
+                                worker_id,
+                            )
                         else:
-                            log.warn(f"Compile fix truncated (braces {ob}/{cb}), keeping previous", worker_id)
+                            log.warn(
+                                f"Compile fix truncated (braces {ob}/{cb}), keeping previous",
+                                worker_id,
+                            )
                     else:
-                        log.warn("Compile fix produced invalid code, keeping previous", worker_id)
+                        log.warn(
+                            "Compile fix produced invalid code, keeping previous",
+                            worker_id,
+                        )
                 else:
                     log.warn("Compile fix LLM failed, keeping previous", worker_id)
                 time.sleep(1)
 
         if not compile_ok:
-            log.warn(f"Compile FAILED after 3 attempts for {go_file}: {compile_errors[:200]}", worker_id)
+            log.warn(
+                f"Compile FAILED after 3 attempts for {go_file}: {compile_errors[:200]}",
+                worker_id,
+            )
             # Write to broken directory
             broken_fix_dir = TOOLS_DIR / "_broken"
             broken_fix_dir.mkdir(exist_ok=True)

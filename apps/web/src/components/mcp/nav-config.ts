@@ -31,6 +31,8 @@ import {
 	Cpu,
 	DownloadCloud,
 	Command,
+	Snowflake,
+	FileUp,
 } from "lucide-react";
 
 export interface NavItem {
@@ -305,6 +307,20 @@ export const DATA_NAV: NavItem[] = [
 		icon: GitBranch,
 		variant: "ghost",
 		tooltip: "Git history, commit log, repository change tracking",
+	},
+	{
+		title: "Cold Archive",
+		href: "/dashboard/cold-archive",
+		icon: Snowflake,
+		variant: "ghost",
+		tooltip: "L3 cold storage for low-heat memories: browse, search, promote",
+	},
+	{
+		title: "Session Import",
+		href: "/dashboard/sessions/import",
+		icon: FileUp,
+		variant: "ghost",
+		tooltip: "Scan and import sessions from external tools into the memory vault",
 	},
 ];
 
