@@ -391,7 +391,7 @@ export default function MemoryHydrationPage() {
 						const Icon = SECTION_ICONS[entry.section] || Database;
 						const color = SECTION_COLORS[entry.section] || "text-zinc-400";
 						return (
-							<Card key={entry.id} className="bg-zinc-900 border-zinc-800">
+							<Card key={`${entry.section}-${entry.key}-${entry.id}`} className="bg-zinc-900 border-zinc-800">
 								<CardContent className="p-4">
 									<div className="flex items-start gap-3">
 										<Icon className={`h-4 w-4 mt-0.5 ${color}`} />
@@ -414,9 +414,9 @@ export default function MemoryHydrationPage() {
 											</pre>
 											{entry.tags && entry.tags.length > 0 && (
 												<div className="flex flex-wrap gap-1 mt-2">
-													{entry.tags.map((tag) => (
+													{entry.tags.map((tag, idx) => (
 														<span
-															key={tag}
+															key={`${tag}-${idx}`}
 															className="text-[10px] bg-zinc-950 border border-zinc-800 px-1.5 py-0.5 rounded text-zinc-500"
 														>
 															{tag}

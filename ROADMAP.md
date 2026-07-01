@@ -1,6 +1,6 @@
 # ROADMAP: TormentNexus Kernel & TormentNexus Dashboard
 
-_Last updated: 2026-06-17, version 1.0.0-alpha.132_
+_Last updated: 2026-07-01, version 1.0.0-alpha.210_
 
 ## Status Legend
 - **Stable** — Production-intended, tested, maintained

@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.0-alpha.210] - 2026-07-01
+
+### Fixed
+- **React Key Warnings**: Resolved React duplicate key errors in Memory Hydration view (`view.tsx`) by constructing unique composite keys (`${entry.section}-${entry.key}-${entry.id}`) for queried memory rows and (`${tag}-${idx}`) for mapped memory tags.
+
 ## [1.0.0-alpha.209] - 2026-07-01
 
 ### Added
