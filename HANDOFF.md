@@ -1,3 +1,20 @@
+# HANDOFF — Session 2026-07-01 R22 (Consolidation Triggers, Tool Parameter Reference Widgets, and Version Sync - Alpha.199)
+
+## Summary
+
+In this session, we completed all requested improvements:
+
+1. **Interactive Tool Console Parameter Helpers**:
+   - Upgraded [page.tsx](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/src/app/dashboard/tool-console/page.tsx) to render a parameters reference box adjacent to the JSON input box on the execute tab, showing descriptions and schemas.
+2. **Manual Memory Consolidation**:
+   - Added a `TriggerSleepCycle(ctx)` function to the `memorystore.Manager` struct in `memorystore.go`.
+   - Coded the `/api/memory/sleep-cycle` POST handler in `memory_handlers.go` and registered it in `server.go`.
+   - Wired a **Consolidate Vault** header button inside [view.tsx](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/src/app/dashboard/brain/view.tsx) mapping to the consolidation endpoint.
+3. **Workspace Building**:
+   - Clean-built the entire web application and copied assets into Wails GUI bundle cleanly.
+
+---
+
 # HANDOFF — Session 2026-07-01 R21 (Database Restoration, Catalog Sync, and Full Workspace Build - Alpha.198)
 
 ## Summary

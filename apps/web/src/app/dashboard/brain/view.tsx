@@ -202,6 +202,25 @@ export default function CognitiveBrainDashboard() {
 	const [selectedSessionId, setSelectedSessionId] = useState<string | null>(
 		null,
 	);
+	const [consolidating, setConsolidating] = useState(false);
+
+	const handleConsolidate = async () => {
+		setConsolidating(true);
+		try {
+			const res = await fetch("/api/go/api/memory/sleep-cycle", { method: "POST" });
+			if (res.ok) {
+				toast.success("Memory consolidation & sleep cycle executed successfully!");
+				// Invalidate the cache to refresh data
+				utils.memory.invalidate();
+			} else {
+				toast.error("Failed to consolidate memory vault");
+			}
+		} catch {
+			toast.error("Error calling memory consolidation endpoint");
+		}
+		setConsolidating(false);
+	};
+
 	const trimmedSearchQuery = searchQuery.trim();
 	const hasSearchQuery = trimmedSearchQuery.length > 0;
 
@@ -705,11 +724,26 @@ export default function CognitiveBrainDashboard() {
 		<div className="h-full w-full p-6 flex flex-col space-y-6 overflow-hidden bg-black text-slate-100">
 			{/* Header */}
 			<header className="flex flex-wrap justify-between items-center border-b border-zinc-800 pb-4 shrink-0 gap-4">
-				<div>
-					<h1 className="text-3xl font-bold bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 bg-clip-text text-transparent flex items-center gap-2">
-						<Brain className="h-8 w-8 text-pink-500 animate-pulse" />
-						TormentNexus Cognitive Hub
-					</h1>
+				<div className="flex flex-col gap-1">
+					<div className="flex items-center gap-4">
+						<h1 className="text-3xl font-bold bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 bg-clip-text text-transparent flex items-center gap-2">
+							<Brain className="h-8 w-8 text-pink-500 animate-pulse" />
+							TormentNexus Cognitive Hub
+						</h1>
+						<button
+							onClick={handleConsolidate}
+							disabled={consolidating}
+							className="px-3 py-1 bg-emerald-700/80 hover:bg-emerald-600 rounded text-xs font-semibold text-white flex items-center gap-1.5 transition-colors disabled:opacity-50"
+							title="Run SM-2 Spaced Repetition consolidation, forgetting curve decay, and reflection loops manually"
+						>
+							{consolidating ? (
+								<Loader2 className="w-3.5 h-3.5 animate-spin" />
+							) : (
+								<Sparkles className="w-3.5 h-3.5 text-emerald-300" />
+							)}
+							{consolidating ? "Consolidating..." : "Consolidate Vault"}
+						</button>
+					</div>
 					<p className="text-zinc-400 text-sm">
 						Unified control plane for Vector Memory, Knowledge Graphs, Web
 						Ingestion, and Expert Systems.

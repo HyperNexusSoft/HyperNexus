@@ -161,3 +161,21 @@ func (s *Server) handleMemorySpacedRepetitionReview(w http.ResponseWriter, r *ht
 	}
 	writeJSON(w, http.StatusOK, map[string]any{"success": true})
 }
+
+func (s *Server) handleMemorySleepCycle(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeJSON(w, http.StatusMethodNotAllowed, map[string]any{"success": false, "error": "method not allowed"})
+		return
+	}
+	if s.memoryManager == nil {
+		writeJSON(w, http.StatusServiceUnavailable, map[string]any{"success": false, "error": "memory manager not initialized"})
+		return
+	}
+	err := s.memoryManager.TriggerSleepCycle(r.Context())
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"success": true})
+}
+

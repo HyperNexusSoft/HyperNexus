@@ -64,6 +64,26 @@ func (m *Manager) startSleepCycleEngine() {
 	}()
 }
 
+func (m *Manager) TriggerSleepCycle(ctx context.Context) error {
+	if m.vs == nil {
+		return fmt.Errorf("vector store uninitialized")
+	}
+	limbo, limboErr := NewLimboVault(m.vs.db)
+	if limboErr != nil {
+		limbo = nil
+	}
+
+	_ = m.vs.ForgettingCurveDecay(ctx)
+	_ = m.vs.ConsolidateMemories(ctx)
+	_ = m.vs.MentalModelReflection(ctx)
+	if limbo != nil {
+		_ = BuryOrphanedMemories(ctx, m.vs.db, limbo)
+		_ = DreamCycle(ctx, m.vs.db)
+		_, _ = limbo.HardDelete(ctx, 90*24*time.Hour)
+	}
+	return nil
+}
+
 func (m *Manager) Close() error {
 	if m.vs != nil {
 		return m.vs.Close()

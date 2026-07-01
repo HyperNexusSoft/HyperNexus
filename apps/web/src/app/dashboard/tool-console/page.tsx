@@ -319,16 +319,43 @@ export default function ToolConsolePage() {
 								<div className="p-3">
 									{activeTab === "execute" && (
 										<div className="space-y-3">
-											<div>
-												<label className="text-xs text-zinc-500 block mb-1">
-													Arguments (JSON)
-												</label>
-												<textarea
-													value={args}
-													onChange={(e) => setArgs(e.target.value)}
-													className="w-full h-28 bg-zinc-950 border border-zinc-800 rounded p-2 text-xs font-mono text-zinc-300 focus:outline-none focus:border-zinc-600"
-													spellCheck={false}
-												/>
+											<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+												<div>
+													<label className="text-xs text-zinc-500 block mb-1">
+														Arguments (JSON)
+													</label>
+													<textarea
+														value={args}
+														onChange={(e) => setArgs(e.target.value)}
+														className="w-full h-32 bg-zinc-950 border border-zinc-800 rounded p-2 text-xs font-mono text-zinc-300 focus:outline-none focus:border-zinc-600"
+														spellCheck={false}
+													/>
+												</div>
+												<div className="bg-zinc-950 border border-zinc-800 rounded p-3 text-xs max-h-32 overflow-y-auto">
+													<label className="text-xs text-zinc-400 font-medium block mb-1 flex items-center gap-1.5">
+														<Wrench className="w-3.5 h-3.5 text-orange-400" />
+														Parameters Helper & Descriptions
+													</label>
+													{Object.keys(schemaProps).length === 0 ? (
+														<p className="text-zinc-600 italic">No parameters required</p>
+													) : (
+														<div className="space-y-1.5 mt-2">
+															{Object.entries(schemaProps).map(([key, val]) => (
+																<div key={key} className="flex flex-col gap-0.5 border-b border-zinc-900 pb-1 last:border-0" title={(val as any).description || "No parameter description available"}>
+																	<div className="flex items-center justify-between">
+																		<span className="font-mono text-zinc-300">{key}</span>
+																		<span className="text-zinc-500 font-mono text-2xs">{(val as any).type || "string"}</span>
+																	</div>
+																	{((val as any).description) && (
+																		<p className="text-zinc-500 text-2xs truncate">
+																			{((val as any).description)}
+																		</p>
+																	)}
+																</div>
+															))}
+														</div>
+													)}
+												</div>
 											</div>
 											<div className="flex items-center gap-2">
 												<button
