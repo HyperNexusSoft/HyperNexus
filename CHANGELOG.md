@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.0-alpha.204] - 2026-07-01
+
+### Fixed
+- **Proxy Route Remapping**: Introduced a path translation map in `/api/go/[...path]/route.ts` that redirects legacy endpoints (e.g. `/api/go/api/imports`, `/api/go/api/healer`) to corrected Go backend targets (e.g. `/api/import/summary`, `/api/healer/history`), resolving all console 404 proxy errors.
+- **Unique DOM Keys**: Resolved React unique-key console warnings in mapped lists across `/dashboard/swarm` and `/dashboard/tool-karma` by ensuring resilient ID fallbacks.
+- **Detail Sections Metadata Types**: Fixed compilation type errors in `memory-dashboard-frontend-utils.tsx` by explicitly defining `MemoryDetailSection` structures and expanding `MemoryRecord` metadata formats.
+
+### Added
+- **Subpage Consolidation**: Redirected all nested route directories (`/dashboard/mcp/*`, `/dashboard/memory/*`, `/dashboard/code/*`, `/dashboard/health/*`) to use centralized single-page controllers via tab navigation components.
+
 ## [1.0.0-alpha.196] - 2026-06-30
 
 ### Fixed

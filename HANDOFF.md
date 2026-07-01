@@ -1,3 +1,21 @@
+# HANDOFF — Session 2026-07-01 R27 (Subpage Consolidation and Version Sync - Alpha.204)
+
+## Summary
+
+In this session, we completed the following updates:
+
+1. **Dashboard Subpage Consolidation**:
+   - Redirected all legacy subpages (`/dashboard/mcp/*`, `/dashboard/memory/*`, `/dashboard/code/*`, `/dashboard/health/*`) to use unified single-page tab controllers, preventing navigation fragmentation and keeping the dashboard streamlined.
+2. **Reverse Proxy Route Remapping**:
+   - Implemented a path remapping utility inside `/api/go/[...path]/route.ts` to map legacy/incorrect endpoints (e.g., `/api/go/api/imports`, `/api/go/api/healer`) directly to valid Go backend routes (`/api/import/summary`, `/api/healer/history`), resolving all proxy `404 Not Found` console bugs.
+3. **DOM Key & telemetry Fallback Improvements**:
+   - Resolved React unique key console warnings in `tool-karma` and `swarm` map loops by adding fallback key generators.
+4. **Version Bump and Build**:
+   - Synchronized all monorepo dependencies and configurations cleanly to `1.0.0-alpha.204`.
+   - Verified compile safety with a successful Next production static build.
+
+---
+
 # HANDOFF — Session 2026-07-01 R26 (Premium Layout Enhancements and Version Sync - Alpha.203)
 
 ## Summary
