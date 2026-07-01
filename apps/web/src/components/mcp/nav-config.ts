@@ -383,12 +383,12 @@ export const ADMIN_NAV: NavItem[] = [
 
 export const SIDEBAR_SECTIONS: NavSection[] = [
 	{
-		title: "MCP Control",
-		items: META_MCP_NAV,
-	},
-	{
 		title: "Agent Core",
 		items: MAIN_DASHBOARD_NAV,
+	},
+	{
+		title: "MCP Control",
+		items: META_MCP_NAV,
 	},
 	{
 		title: "Infrastructure",

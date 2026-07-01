@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.0-alpha.212] - 2026-07-01
+
+### Added
+- **High-Value Dashboard Reorganization**: Rearranged the home client tabs to put the highest value features first (Memory & Skills, followed by Go MCP & Tools) and defaulted active loading to Memory & Skills. Reordered sidebar sections in `nav-config.ts` to highlight Agent Core above MCP Control.
+
 ## [1.0.0-alpha.211] - 2026-07-01
 
 ### Added

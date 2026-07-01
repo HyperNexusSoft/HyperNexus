@@ -46,9 +46,9 @@ const SESSION_STATUS_PRIORITY: Record<
 };
 
 const TABS = [
-	{ id: "page-a", label: "Recovery & Sync" },
-	{ id: "page-b", label: "Go MCP & Tools" },
 	{ id: "page-c", label: "Memory & Skills" },
+	{ id: "page-b", label: "Go MCP & Tools" },
+	{ id: "page-a", label: "Recovery & Sync" },
 	{ id: "page-d", label: "Prompts & Deployments" },
 ] as const;
 
@@ -85,7 +85,7 @@ export function DashboardHomeClient() {
 function DashboardHomeClientContent() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const activeTab = searchParams.get("tab") || "page-a";
+	const activeTab = searchParams.get("tab") || "page-c";
 
 	const handleTabChange = (tabId: string) => {
 		router.replace(`/dashboard?tab=${tabId}`);

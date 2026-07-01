@@ -1,6 +1,6 @@
 {
   "name": "@tormentnexus/memory",
-  "version": "1.0.0-alpha.211",
+  "version": "1.0.0-alpha.212",
   "private": true,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

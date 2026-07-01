@@ -1,3 +1,21 @@
+# HANDOFF — Session 2026-07-01 R32 (Dashboard High-Value Feature Reorganization - Alpha.212)
+
+## Summary
+
+In this session, we rearranged the dashboard features to focus prominently on highest value components:
+
+1. **Dashboard Home Navigation Order**:
+   - Reordered `TABS` in [DashboardHomeClient.tsx](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/src/app/dashboard/DashboardHomeClient.tsx) to place **Memory & Skills** and **Go MCP & Tools** first.
+   - Updated default active landing tab from `page-a` to the high-value `page-c` (**Memory & Skills**).
+2. **Sidebar Category Prioritization**:
+   - Reordered `SIDEBAR_SECTIONS` in [nav-config.ts](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/src/components/mcp/nav-config.ts) to render **Agent Core** above **MCP Control**.
+3. **Build Validation**:
+   - Verified clean compilation after refactoring (`pnpm -C apps/web exec tsc --noEmit`).
+4. **Version Sync**:
+   - Bumped monorepo and package version numbers to `1.0.0-alpha.212`.
+
+---
+
 # HANDOFF — Session 2026-07-01 R31 (Dashboard Subpage Redirects Middleware - Alpha.211)
 
 ## Summary
