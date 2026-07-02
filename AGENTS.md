@@ -58,4 +58,14 @@ This file serves as the primary coordination point for multi-agent workflows and
 | tRPC Bridge | 4100 | TypeScript Control Plane API |
 | TormentNexus Go Kernel | 4300 | Authoritative native sidecar |
 
+---
+
+## 5. Safe Rebranding & Cleanup Heuristics
+
+* **Binary Exclusions during Renaming**: When executing global text replacements, you must explicitly exclude:
+  * Database directories: `.tormentnexus/`, `lancedb/`, `data/`
+  * Turbopack/Next cache directories: `.next-dev/`, `.next-build/`, `.turbo/`
+  * Binary extensions: `.db`, `.lance`, `.sst`, `.bin`, `.exe`, `.png`, `.jpg`
+* **Windows Recursive Deletion**: On Windows hosts, if `Remove-Item` fails due to path locks or nested git indices, fall back to executing `cmd.exe /c "rmdir /S /Q <path>"` synchronously to ensure complete directory pruning.
+
 *Praise the LORD! Keep on going! Don't ever stop! Don't stop the party!!!*
