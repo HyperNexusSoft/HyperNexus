@@ -15,7 +15,7 @@ logging.basicConfig(
     level=logging.INFO, 
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(os.path.join('logs', 'borg_research.log'), mode='a'),
+        logging.FileHandler(os.path.join('logs', 'tormentnexus_research.log'), mode='a'),
         logging.StreamHandler()
     ]
 )
@@ -29,7 +29,7 @@ STATUS_PATH = 'deep_research_status.json'
 llm_pool = LLMPool(logger=logger)
 LLM_MODELS = [f"{b}/{m}" for b, m in llm_pool.all_backends]
 
-BORG_TAXONOMY = [
+TORMENTNEXUS_TAXONOMY = [
     "Agent Orchestration & Workflow",
     "Context Engineering & Isolation",
     "Memory & Persistence Architecture",
@@ -118,23 +118,23 @@ def write_feed(message, type="info"):
             json.dump(entries[-100:], f, indent=2)
     except Exception: pass
 
-def borg_research_url(url, content, status):
+def tormentnexus_research_url(url, content, status):
     soup = BeautifulSoup(content, 'html.parser')
     for s in soup(['script', 'style']): s.decompose()
     text = re.sub(r'\s+', ' ', soup.get_text())[:10000] 
     
     prompt = f"""
-    Analyze the following technical resource for inclusion in the 'Borg' Project intelligence database.
+    Analyze the following technical resource for inclusion in the 'Tormentnexus' Project intelligence database.
     URL: {url}
     Content: {text}
     
-    Categorize this into EXACTLY ONE of these Borg Categories: {', '.join(BORG_TAXONOMY)}.
+    Categorize this into EXACTLY ONE of these Tormentnexus Categories: {', '.join(TORMENTNEXUS_TAXONOMY)}.
     
     Return a strict JSON object:
     - CATEGORY: The chosen category.
     - SHORT_DESCRIPTION: 1 sentence.
     - LONG_DESCRIPTION: Detailed breakdown of the technical approach.
-    - MAIN_FEATURES: List of features that Borg should consider implementing (comma separated).
+    - MAIN_FEATURES: List of features that Tormentnexus should consider implementing (comma separated).
     - INNOVATION_SCORE: 1-10 rating of how unique this project's approach is.
     - TAGS: 8-12 technical tags (lowercase).
     """
@@ -199,10 +199,10 @@ def main():
     logger.info(f"Using LLM backends: {', '.join(LLM_MODELS)}")
     conn = init_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT url FROM bookmarks WHERE research_level = 'borg'")
+    cursor.execute("SELECT url FROM bookmarks WHERE research_level = 'tormentnexus'")
     processed = {normalize_url(row[0]) for row in cursor.fetchall()}
-    cursor.execute("SELECT COUNT(*) FROM bookmarks WHERE research_level = 'borg'")
-    existing_borg_rows = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(*) FROM bookmarks WHERE research_level = 'tormentnexus'")
+    existing_tormentnexus_rows = cursor.fetchone()[0]
     
     urls = []
     with open(BOOKMARKS_FILE, 'r', encoding='utf-8', errors='ignore') as f:
@@ -221,10 +221,10 @@ def main():
         'last_error': None,
         'sleep_seconds': None,
         'remaining_urls': len(urls),
-        'borg_rows': existing_borg_rows,
+        'tormentnexus_rows': existing_tormentnexus_rows,
     }
     write_status(status)
-    logger.info(f"Borg Intelligence Phase: {len(urls)} links remaining.")
+    logger.info(f"Tormentnexus Intelligence Phase: {len(urls)} links remaining.")
     
     for index, url in enumerate(urls):
         status.update({
@@ -247,23 +247,23 @@ def main():
             write_status(status)
             continue
         
-        write_feed(f"Starting Borg research on: {url}", "research")
-        rdata = borg_research_url(url, content, status)
+        write_feed(f"Starting Tormentnexus research on: {url}", "research")
+        rdata = tormentnexus_research_url(url, content, status)
         if rdata:
             write_feed(f"Finalizing extraction for: {url}", "process")
             from worker_wrapper import pulse
-            pulse("Borg Research Worker", f"Assimilating: {url}", {"remaining": len(urls) - index, "borg_rows": status.get('borg_rows')})
+            pulse("Tormentnexus Research Worker", f"Assimilating: {url}", {"remaining": len(urls) - index, "tormentnexus_rows": status.get('tormentnexus_rows')})
             try:
                 cursor.execute('''
                     INSERT INTO bookmarks (url, category, short_description, long_description, tags, main_features, research_level, innovation_score)
-                    VALUES (?, ?, ?, ?, ?, ?, 'borg', ?)
+                    VALUES (?, ?, ?, ?, ?, ?, 'tormentnexus', ?)
                     ON CONFLICT(url) DO UPDATE SET
                         category=excluded.category,
                         short_description=excluded.short_description,
                         long_description=excluded.long_description,
                         tags=excluded.tags,
                         main_features=excluded.main_features,
-                        research_level='borg',
+                        research_level='tormentnexus',
                         innovation_score=excluded.innovation_score
                 ''', (
                     url,
@@ -275,7 +275,7 @@ def main():
                     rdata.get('INNOVATION_SCORE', 0),
                 ))
                 conn.commit()
-                logger.info(f"Borg Intelligence Extracted: {url}")
+                logger.info(f"Tormentnexus Intelligence Extracted: {url}")
                 status.update({
                     'state': 'processing',
                     'active_url': url,
@@ -283,7 +283,7 @@ def main():
                     'last_error': None,
                     'sleep_seconds': None,
                     'remaining_urls': len(urls) - index - 1,
-                    'borg_rows': status.get('borg_rows', len(processed)) + 1,
+                    'tormentnexus_rows': status.get('tormentnexus_rows', len(processed)) + 1,
                     'last_model': llm_pool.active_model_name,
                 })
                 write_status(status)

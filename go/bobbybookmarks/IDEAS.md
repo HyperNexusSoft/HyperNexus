@@ -1,7 +1,7 @@
 # Ideas & Expansions
 
 ## 1. Decentralized Scraping Swarm
-- **Pivot:** Instead of centralizing the research worker on a single instance, create a distributed scraping task queue that can be operated by lightweight client worker nodes. Nodes pull target URLs from an external Redis/Supabase instance and return results into `borg.db`.
+- **Pivot:** Instead of centralizing the research worker on a single instance, create a distributed scraping task queue that can be operated by lightweight client worker nodes. Nodes pull target URLs from an external Redis/Supabase instance and return results into `tormentnexus.db`.
 
 ## 2. Graph Database Transition
 - **Refactor:** Migrate the complex relational logic of `tormentnexus.db` and the lost `catalog.db` relationships into Neo4j or another graph-based database to more easily construct the Knowledge Graph backbone highlighted in `VISION.md`.

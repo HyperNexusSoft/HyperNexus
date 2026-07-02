@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Borg Research Worker v2.5 - Robust enrichment with bulletproof multi-format parsing"""
+"""Tormentnexus Research Worker v2.5 - Robust enrichment with bulletproof multi-format parsing"""
 import os, re, json, sqlite3, requests, time, logging, sys
 from datetime import datetime
 from bs4 import BeautifulSoup, Comment
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 ATLAS_DB = 'atlas.db'
 LMSTUDIO_URL = "http://localhost:1234/v1/chat/completions"
 
-BORG_TAXONOMY = [
+TORMENTNEXUS_TAXONOMY = [
     "Agent Orchestration & Workflow",
     "Context Engineering & Isolation",
     "Memory & Persistence Architecture",
@@ -233,7 +233,7 @@ def parse_llm_response(raw):
 
     # Fallback: try to match taxonomy in text
     if 'CATEGORY' not in result:
-        for cat in BORG_TAXONOMY:
+        for cat in TORMENTNEXUS_TAXONOMY:
             if cat.lower() in stripped.lower():
                 result['CATEGORY'] = cat
                 break
@@ -316,7 +316,7 @@ def build_prompt(url, fit_text, gh_meta=None):
         if 'topics' in gh_meta:
             prompt += "Topics: " + ", ".join(gh_meta['topics']) + "\n"
     prompt += "\nContent:\n" + fit_text + "\n\n"
-    prompt += "Categories: " + ", ".join(BORG_TAXONOMY) + "\n\n"
+    prompt += "Categories: " + ", ".join(TORMENTNEXUS_TAXONOMY) + "\n\n"
     prompt += (
         "Return JSON with these fields:\n"
         "- CATEGORY: one of the above categories\n"
@@ -376,7 +376,7 @@ def main():
         ORDER BY e.is_github DESC, e.id DESC""")
     all_entries = a.fetchall()
 
-    logger.info(f"Borg Research Worker v2.5 starting")
+    logger.info(f"Tormentnexus Research Worker v2.5 starting")
     logger.info(f"Entries to research: {len(all_entries):,}")
 
     accepted = 0
@@ -498,7 +498,7 @@ def main():
              new_innov, quality, signal, is_standout, '', eid))
 
         mapped = CAT_MAP.get(category, category)
-        if mapped and mapped in BORG_TAXONOMY:
+        if mapped and mapped in TORMENTNEXUS_TAXONOMY:
             reclassify_entry(a, eid, mapped)
 
         atl.commit()

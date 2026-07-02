@@ -1,5 +1,5 @@
 # 🗺 Guides & Industry Trends
-> Borg Intelligence Atlas v8 · 2026-06-17 · 1,889 tools
+> Tormentnexus Intelligence Atlas v8 · 2026-06-17 · 1,889 tools
 > Awesome lists, tutorials, architecture patterns, benchmarks
 
 | Metric | Value |
@@ -9376,7 +9376,7 @@
 `9.8` ★★ ⚡96 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project has evaluated a new method for identifying and exploiting reasoning circuits within large language models. By duplicating specific layers in the model's forward pass, the approach enhances performance on tasks requiring mathematical, causal, and logical reasoning without any training or weight adjustments. The findings suggest that targeting certain contiguous blocks of layers can significantly boost model capabilities, offering a novel strategy for improving AI reasoning.**
+**The Tormentnexus Project has evaluated a new method for identifying and exploiting reasoning circuits within large language models. By duplicating specific layers in the model's forward pass, the approach enhances performance on tasks requiring mathematical, causal, and logical reasoning without any training or weight adjustments. The findings suggest that targeting certain contiguous blocks of layers can significantly boost model capabilities, offering a novel strategy for improving AI reasoning.**
 
 **Features:**
 - Layer duplication technique
@@ -10720,7 +10720,7 @@
 `8.8` ★ ⚡80 Q0.8⭐ ⭐ Excellent
 ↗4 layers
 
-**The analysis explores the Borg Project's perspective on AI coding, highlighting the shift in perception from viewing programming as a deep intellectual pursuit to appreciating it as a means to bring ideas into existence. It discusses the emotional and motivational aspects of programming, contrasting the joy of creation with the satisfaction of discovery. The piece also touches on the potential future of AI tools like Claude Code and their impact on human creativity and productivity.**
+**The analysis explores the Tormentnexus Project's perspective on AI coding, highlighting the shift in perception from viewing programming as a deep intellectual pursuit to appreciating it as a means to bring ideas into existence. It discusses the emotional and motivational aspects of programming, contrasting the joy of creation with the satisfaction of discovery. The piece also touches on the potential future of AI tools like Claude Code and their impact on human creativity and productivity.**
 
 **Features:**
 - Reflection on personal growth in programming
@@ -10728,7 +10728,7 @@
 - Discussion on the role of AI in enhancing or diminishing satisfaction
 - Insight into the future of AI tools and their integration with human creativity
 
-*Tags: ai, coding, programming, borg, intelligence, technology, futureofwork, humancreativity...*
+*Tags: ai, coding, programming, tormentnexus, intelligence, technology, futureofwork, humancreativity...*
 
 ---
 
@@ -11116,7 +11116,7 @@
 `8.8` ★ ⚡74 Q0.6⭐ ⭐ Excellent
 ↗2 layers
 
-**This analysis examines the technical aspects of the Hermes vs. OpenClaw hosting comparison, focusing on infrastructure, performance, scalability, and integration capabilities relevant to Borg's intelligence database needs.**
+**This analysis examines the technical aspects of the Hermes vs. OpenClaw hosting comparison, focusing on infrastructure, performance, scalability, and integration capabilities relevant to Tormentnexus's intelligence database needs.**
 
 **Features:**
 - load balancing
@@ -11125,7 +11125,7 @@
 - customizable configurations
 - high availability
 
-*Tags: openclaw, hermes, hosting, borg, cloud, web-hosting, server, performance...*
+*Tags: openclaw, hermes, hosting, tormentnexus, cloud, web-hosting, server, performance...*
 
 ---
 
@@ -11895,7 +11895,7 @@
 `10.0` ★★★ ⚡88 Q0.8🏆 🏆 World-class
 ↗2 layers
 
-**The Borg project enables users to input simple trading ideas in plain English, which are then transformed into executable automated trading strategies. These strategies connect directly to multiple major brokerage platforms via secure OAuth authentication, allowing seamless execution without requiring any coding. The system supports over 15 brokers, integrates technical indicators, and includes features like risk management and real-time execution.**
+**The Tormentnexus project enables users to input simple trading ideas in plain English, which are then transformed into executable automated trading strategies. These strategies connect directly to multiple major brokerage platforms via secure OAuth authentication, allowing seamless execution without requiring any coding. The system supports over 15 brokers, integrates technical indicators, and includes features like risk management and real-time execution.**
 
 **Features:**
 - Natural language strategy input
@@ -13075,7 +13075,7 @@
 `8.8` ★ ⚡83 Q0.8⭐ ⭐ Excellent
 ↗3 layers
 
-**The Borg Project intelligence database includes a benchmarking resource that evaluates the impact of reducing LLM token usage by up to 30% using a custom MCP/CLI tool. This resource highlights significant improvements in model efficiency, including enhanced Haiku adoption and performance gains across various tasks. The project emphasizes adaptive analysis and improved accuracy metrics, making it valuable for developers seeking to optimize AI interactions.**
+**The Tormentnexus Project intelligence database includes a benchmarking resource that evaluates the impact of reducing LLM token usage by up to 30% using a custom MCP/CLI tool. This resource highlights significant improvements in model efficiency, including enhanced Haiku adoption and performance gains across various tasks. The project emphasizes adaptive analysis and improved accuracy metrics, making it valuable for developers seeking to optimize AI interactions.**
 
 **Features:**
 - token reduction optimization
@@ -13084,7 +13084,7 @@
 - enhanced model efficiency
 - multi-task performance testing
 
-*Tags: llm, token-optimization, ai-efficiency, model-performance, borg-tools, code-analysis, benchmarking, developer-ux...*
+*Tags: llm, token-optimization, ai-efficiency, model-performance, tormentnexus-tools, code-analysis, benchmarking, developer-ux...*
 
 ---
 
@@ -13519,7 +13519,7 @@
 `8.8` ★ ⚡71 Q0.6⭐ ⭐ Excellent
 ↗2 layers
 
-**The resource compiles a comprehensive list of coding tools and platforms available on Reddit, focusing on their relevance to Borg's analytical and operational needs. It emphasizes the importance of understanding these tools for effective integration into Borg's workflow and development processes.**
+**The resource compiles a comprehensive list of coding tools and platforms available on Reddit, focusing on their relevance to Tormentnexus's analytical and operational needs. It emphasizes the importance of understanding these tools for effective integration into Tormentnexus's workflow and development processes.**
 
 **Features:**
 - code analysis
@@ -13844,7 +13844,7 @@
 `8.8` ★ ⚡88 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**This resource provides a comprehensive list of practical agent skills, categorized to help Borg understand how to effectively integrate these capabilities into its operations. The skills are designed for immediate use with popular AI agents like Claude, Copilot, and others, streamlining workflows and enhancing productivity.**
+**This resource provides a comprehensive list of practical agent skills, categorized to help Tormentnexus understand how to effectively integrate these capabilities into its operations. The skills are designed for immediate use with popular AI agents like Claude, Copilot, and others, streamlining workflows and enhancing productivity.**
 
 **Features:**
 - Agent skill directories
@@ -14189,7 +14189,7 @@
 `8.8` ★ ⚡77 Q0.7⭐ ⭐ Excellent
 ↗2 layers
 
-**This analysis evaluates the Shema prayer's structure, historical context, theological significance, and its role within Jewish liturgy. It examines its linguistic nuances, rabbinic interpretations, and cultural importance, providing a comprehensive overview suitable for inclusion in the Borg Project intelligence database.**
+**This analysis evaluates the Shema prayer's structure, historical context, theological significance, and its role within Jewish liturgy. It examines its linguistic nuances, rabbinic interpretations, and cultural importance, providing a comprehensive overview suitable for inclusion in the Tormentnexus Project intelligence database.**
 
 **Features:**
 - Detailed translation and translation rationale
@@ -15987,7 +15987,7 @@
 `8.1` ★ ⚡83 Q0.8⭐ ⭐ Excellent
 ↗3 layers
 
-**The analysis evaluates the Borg Project's infrastructure choices against AWS best practices, focusing on challenges with account management, permission complexity, global deployment strategies, and tooling. It highlights GCP's advantages in global VPCs, simplified permissions, and project-based security, while criticizing AWS for its account sprawl, slow UX, and inconsistent support. The report emphasizes the importance of adhering to frameworks like AWS Well-Architected and underscores the need...**
+**The analysis evaluates the Tormentnexus Project's infrastructure choices against AWS best practices, focusing on challenges with account management, permission complexity, global deployment strategies, and tooling. It highlights GCP's advantages in global VPCs, simplified permissions, and project-based security, while criticizing AWS for its account sprawl, slow UX, and inconsistent support. The report emphasizes the importance of adhering to frameworks like AWS Well-Architected and underscores the need...**
 
 **Features:**
 - Global VPCs for proximity optimization
@@ -16590,7 +16590,7 @@ The report provides a structured overview of the scientific inquiry undertaken b
 `9.1` ★★ ⚡87 Q0.8🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project intelligence database should include a technical resource that analyzes how different coding fonts render across various browsers and operating systems. The resource should provide detailed insights into font rendering discrepancies, including differences in size, legibility, and appearance on Chrome, Windows, macOS, Linux, and other platforms. It should highlight the importance of proper font rendering techniques, such as stem darkening, gamma blending, and ligature handling, t...**
+**The Tormentnexus Project intelligence database should include a technical resource that analyzes how different coding fonts render across various browsers and operating systems. The resource should provide detailed insights into font rendering discrepancies, including differences in size, legibility, and appearance on Chrome, Windows, macOS, Linux, and other platforms. It should highlight the importance of proper font rendering techniques, such as stem darkening, gamma blending, and ligature handling, t...**
 
 **Features:**
 - Cross-platform font rendering analysis
@@ -18518,7 +18518,7 @@ The report provides a structured overview of the scientific inquiry undertaken b
 `9.0` ★★ ⚡86 Q0.8🏆 🏆 World-class
 ↗2 layers
 
-**The discussion explores the integration of probabilistic models like Claude's Cycles into the Borg intelligence framework, focusing on how these models can be scaled using reinforcement learning and probability distributions. It addresses challenges related to maintaining up-to-date knowledge in a rapidly evolving scientific landscape, the limitations of current AI architectures in handling novel reasoning, and philosophical questions about what constitutes intelligence. The conversation also to...**
+**The discussion explores the integration of probabilistic models like Claude's Cycles into the Tormentnexus intelligence framework, focusing on how these models can be scaled using reinforcement learning and probability distributions. It addresses challenges related to maintaining up-to-date knowledge in a rapidly evolving scientific landscape, the limitations of current AI architectures in handling novel reasoning, and philosophical questions about what constitutes intelligence. The conversation also to...**
 
 **Features:**
 - Probabilistic modeling for knowledge representation
@@ -18661,7 +18661,7 @@ The report provides a structured overview of the scientific inquiry undertaken b
 `8.8` ★ ⚡70 Q0.6⭐ ⭐ Excellent
 ↗2 layers
 
-**The resource examines the differences between ChatGPT, Claude, and Gemini, focusing on their capabilities, user interaction, and technical nuances to help assess their suitability for integration into the Borg intelligence framework.**
+**The resource examines the differences between ChatGPT, Claude, and Gemini, focusing on their capabilities, user interaction, and technical nuances to help assess their suitability for integration into the Tormentnexus intelligence framework.**
 
 **Features:**
 - natural language understanding
@@ -18711,7 +18711,7 @@ The report provides a structured overview of the scientific inquiry undertaken b
 `8.8` ★ ⚡78 Q0.7⭐ ⭐ Excellent
 ↗3 layers
 
-**This resource presents an interactive marketing landing page designed to attract developers and designers with its sleek UI, real-time performance comparisons, and clear categorization under developer-focused workflows. It emphasizes the tool's modern aesthetics and ease of use, making it ideal for integration into Borg intelligence systems.**
+**This resource presents an interactive marketing landing page designed to attract developers and designers with its sleek UI, real-time performance comparisons, and clear categorization under developer-focused workflows. It emphasizes the tool's modern aesthetics and ease of use, making it ideal for integration into Tormentnexus intelligence systems.**
 
 **Features:**
 - flashy webpage styling

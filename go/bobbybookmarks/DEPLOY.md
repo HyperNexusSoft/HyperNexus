@@ -1,7 +1,7 @@
 # Deployment Instructions
 
 ## Environment Setup
-The Borg Intelligence Harvester is intended to run primarily via background scripts and web interfaces.
+The Tormentnexus Intelligence Harvester is intended to run primarily via background scripts and web interfaces.
 
 ### Python Backend
 Dependencies are managed via `pip`:

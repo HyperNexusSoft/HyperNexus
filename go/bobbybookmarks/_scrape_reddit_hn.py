@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Borg Link Scraper — scrape Reddit & HackerNews discussion pages for embedded URLs"""
+"""Tormentnexus Link Scraper — scrape Reddit & HackerNews discussion pages for embedded URLs"""
 import sys
 import io
 import os
@@ -204,7 +204,7 @@ def load_existing_urls():
     return existing
 
 def main():
-    logger.info("Borg Link Scraper starting")
+    logger.info("Tormentnexus Link Scraper starting")
     
     # Load source URLs
     try:

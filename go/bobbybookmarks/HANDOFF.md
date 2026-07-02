@@ -1,4 +1,4 @@
-# Borg Conversation Data Loss — Final Investigation Report
+# Tormentnexus Conversation Data Loss — Final Investigation Report
 
 ## Findings
 
@@ -23,19 +23,19 @@ After a thorough investigation of the current repository state, the filesystem, 
 We do have several database files remaining in the root:
 *   `bookmarks.db` (~61MB)
 *   `atlas.db` (~23MB)
-*   `borg.db` (~3.4MB)
+*   `tormentnexus.db` (~3.4MB)
 *   `tormentnexus.db` (~2.8MB)
 *   `metamcp.db` (~356KB)
 
 Checking the counts in these databases:
 *   `tormentnexus.db:imported_sessions` has 364 rows.
-*   `borg.db:imported_sessions` has 548 rows.
+*   `tormentnexus.db:imported_sessions` has 548 rows.
 *   Both databases have 0 `sessions` and 0 `published_mcp_servers`.
 
 ## Session Recovery Verification
 
 As part of the recovery process from session `5781053154188114867`, we explicitly verified the integrity of the databases and the health of the remaining codebase:
-* Validated `bookmarks.db`, `atlas.db`, `borg.db`, `tormentnexus.db`, and `metamcp.db` using `PRAGMA integrity_check`, yielding an `ok` status for all.
+* Validated `bookmarks.db`, `atlas.db`, `tormentnexus.db`, `tormentnexus.db`, and `metamcp.db` using `PRAGMA integrity_check`, yielding an `ok` status for all.
 * Ran `cd backend && go build -buildvcs=false ./cmd/api` successfully.
 * Ran `cd backend && go test -buildvcs=false ./internal/...` successfully (with no regressions found).
 * Re-synchronized the versioning (verified `v1.0.1` in `VERSION.md`).

@@ -218,7 +218,7 @@ Classifies inbound messages into: `Technical`, `Pricing`, `Objection`, `MeetingR
 
 Generates hyper-personalized replies using three context sources:
 
-1. **TormentNexus documentation** loaded from `borg/docs/ARCHITECTURE.md` (pseudo-RAG) — injected for technical intent
+1. **TormentNexus documentation** loaded from `tormentnexus/docs/ARCHITECTURE.md` (pseudo-RAG) — injected for technical intent
 2. **Pricing context** from `CalculateQuote()` — Enterprise=$50K, Mid-Market=$15K, SMB=$5K
 3. **Self-Improving Prompts loop** — injects successful past interactions as few-shot examples
 

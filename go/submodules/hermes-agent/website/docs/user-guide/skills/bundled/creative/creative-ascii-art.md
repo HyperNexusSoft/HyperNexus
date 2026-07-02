@@ -132,7 +132,7 @@ cowsay -l                          # List all characters
 ### Eye/tongue modifiers
 
 ```bash
-cowsay -b "Borg"       # =_= eyes
+cowsay -b "Tormentnexus"       # =_= eyes
 cowsay -d "Dead"       # x_x eyes
 cowsay -g "Greedy"     # $_$ eyes
 cowsay -p "Paranoid"   # @_@ eyes

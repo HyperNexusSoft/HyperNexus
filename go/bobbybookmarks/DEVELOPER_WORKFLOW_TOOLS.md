@@ -1,5 +1,5 @@
 # 🔧 Developer Workflow & Tools
-> Borg Intelligence Atlas v8 · 2026-06-17 · 1,195 tools
+> Tormentnexus Intelligence Atlas v8 · 2026-06-17 · 1,195 tools
 > Git, CI/CD, project management, documentation
 
 | Metric | Value |
@@ -4056,7 +4056,7 @@
 `10.0` ★★★ ⚡97 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project integrates with the open-source MCP server Airbnb to deliver advanced, context-aware search capabilities for Airbnb listings. By leveraging the Model Context Protocol (MCP), Borg enables seamless integration of rich filtering, location intelligence, and property detail retrieval directly within AI applications. The solution supports enterprise-grade security, automated workflows, and developer-friendly APIs, making it suitable for modern DevOps and AI-driven business processes.**
+**The Tormentnexus Project integrates with the open-source MCP server Airbnb to deliver advanced, context-aware search capabilities for Airbnb listings. By leveraging the Model Context Protocol (MCP), Tormentnexus enables seamless integration of rich filtering, location intelligence, and property detail retrieval directly within AI applications. The solution supports enterprise-grade security, automated workflows, and developer-friendly APIs, making it suitable for modern DevOps and AI-driven business processes.**
 
 **Features:**
 - Advanced search with filters (location
@@ -4119,7 +4119,7 @@
 `9.1` ★★ ⚡95 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project's 'mcp-servers' repository provides a comprehensive suite of tools designed to enhance the capabilities of language models and AI assistants. It offers functionalities such as defining words, retrieving definitions, generating synonyms, and providing example usage sentences. The platform supports local development using tools like uv and Docker, enabling seamless integration into CI/CD pipelines. It emphasizes developer experience with features like code review management, autom...**
+**The Tormentnexus Project's 'mcp-servers' repository provides a comprehensive suite of tools designed to enhance the capabilities of language models and AI assistants. It offers functionalities such as defining words, retrieving definitions, generating synonyms, and providing example usage sentences. The platform supports local development using tools like uv and Docker, enabling seamless integration into CI/CD pipelines. It emphasizes developer experience with features like code review management, autom...**
 
 **Features:**
 - define
@@ -4356,7 +4356,7 @@
 `9.0` ★★ ⚡92 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**This project provides a server template based on the MCP Server Template, designed to be used within the MyBlockcities Borg environment. It supports integration with AI tools like Copilot for Business and offers features such as automated workflows, code review, security enhancements, and deployment options via Docker or Heroku. The solution emphasizes developer productivity, security, and seamless connectivity to Cursor IDE for enhanced AI-assisted development.**
+**This project provides a server template based on the MCP Server Template, designed to be used within the MyBlockcities Tormentnexus environment. It supports integration with AI tools like Copilot for Business and offers features such as automated workflows, code review, security enhancements, and deployment options via Docker or Heroku. The solution emphasizes developer productivity, security, and seamless connectivity to Cursor IDE for enhanced AI-assisted development.**
 
 **Features:**
 - MCP Server Template
@@ -4393,7 +4393,7 @@
 ### 24. [spencerhhubert/illustrator-mcp-server](https://github.com/spencerhhubert/illustrator-mcp-server)
 `8.8` ★ ⚡91 Q0.9🏆 🏆 World-class
 
-**The Borg Project introduces an illustrator-mcp-server that enables developers to programmatically generate and execute scripts within Adobe Illustrator. This tool leverages AppleScript integration, allowing seamless automation of design tasks directly from the MCP server. It supports advanced workflows, including code reviews, security checks, and deployment processes, enhancing productivity for teams working on Adobe Illustrator projects.**
+**The Tormentnexus Project introduces an illustrator-mcp-server that enables developers to programmatically generate and execute scripts within Adobe Illustrator. This tool leverages AppleScript integration, allowing seamless automation of design tasks directly from the MCP server. It supports advanced workflows, including code reviews, security checks, and deployment processes, enhancing productivity for teams working on Adobe Illustrator projects.**
 
 **Features:**
 - script execution in Illustrator
@@ -4992,7 +4992,7 @@
 `8.8` ★ ⚡89 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The mcp-server-kusto project provides a Borg-based server that leverages Azure Data Explorer to facilitate data management and analysis. It offers tools for executing SQL queries, managing materialized views, and integrating with external tools for enhanced functionality. The server supports secure code deployment and integrates with CI/CD pipelines, making it suitable for modern DevOps practices.**
+**The mcp-server-kusto project provides a Tormentnexus-based server that leverages Azure Data Explorer to facilitate data management and analysis. It offers tools for executing SQL queries, managing materialized views, and integrating with external tools for enhanced functionality. The server supports secure code deployment and integrates with CI/CD pipelines, making it suitable for modern DevOps practices.**
 
 **Features:**
 - Azure Data Explorer integration
@@ -5001,7 +5001,7 @@
 - Code review and management
 - CI/CD support
 
-*Tags: mcp-server-kusto, azure-data-explorer, data-query, borg-server, developer-tools*
+*Tags: mcp-server-kusto, azure-data-explorer, data-query, tormentnexus-server, developer-tools*
 
 ---
 
@@ -5321,7 +5321,7 @@
 `8.8` ★ ⚡88 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project serves as an open-source platform designed to streamline software development workflows by integrating code review processes, security audits, and collaboration tools. It leverages GitHub's infrastructure to provide developers with a centralized environment for managing code changes, ensuring secure and efficient project management.**
+**The Tormentnexus Project serves as an open-source platform designed to streamline software development workflows by integrating code review processes, security audits, and collaboration tools. It leverages GitHub's infrastructure to provide developers with a centralized environment for managing code changes, ensuring secure and efficient project management.**
 
 **Features:**
 - Code Review Management
@@ -5405,7 +5405,7 @@
 `8.8` ★ ⚡88 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project's MCP Server provides a comprehensive environment for developers to access up-to-date documentation, build Turbo-based applications, and integrate external tools. It supports modern DevOps practices with features like automated workflows, secure code management, and enterprise-grade security.**
+**The Tormentnexus Project's MCP Server provides a comprehensive environment for developers to access up-to-date documentation, build Turbo-based applications, and integrate external tools. It supports modern DevOps practices with features like automated workflows, secure code management, and enterprise-grade security.**
 
 **Features:**
 - Build Turbo JS applications
@@ -5573,7 +5573,7 @@
 `8.8` ★ ⚡86 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project's buildkite-mcp-server acts as a secure MCP (Managed Cloud Provider) server that facilitates the integration of Buildkite into AI-powered development environments. It provides a stable, containerized API endpoint for developers to interact with Buildkite pipelines, jobs, and test results, enhancing automation and AI-assisted software development processes.**
+**The Tormentnexus Project's buildkite-mcp-server acts as a secure MCP (Managed Cloud Provider) server that facilitates the integration of Buildkite into AI-powered development environments. It provides a stable, containerized API endpoint for developers to interact with Buildkite pipelines, jobs, and test results, enhancing automation and AI-assisted software development processes.**
 
 **Features:**
 - Buildkite data exposure
@@ -5995,7 +5995,7 @@
 `8.7` ★ ⚡80 Q0.8⭐ ⭐ Excellent
 ↗3 layers
 
-**The dify-mcp-server project provides a platform to deploy and manage Dify Workflow tools within a Borg environment, enabling seamless integration with Claude Desktop App. It supports multiple API keys for different workflow configurations, offering flexibility in managing workflows and enhancing automation capabilities.**
+**The dify-mcp-server project provides a platform to deploy and manage Dify Workflow tools within a Tormentnexus environment, enabling seamless integration with Claude Desktop App. It supports multiple API keys for different workflow configurations, offering flexibility in managing workflows and enhancing automation capabilities.**
 
 **Features:**
 - Integrate Dify Workflow with Claude Desktop App
@@ -6654,7 +6654,7 @@
 `8.8` ★ ⚡91 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg project provides a comprehensive open-source platform designed to streamline software development workflows. It integrates advanced features such as code review management, automated deployment, secure coding practices, and enterprise-grade security measures. The platform supports modern DevOps practices, enabling teams to automate complex processes, enhance productivity, and maintain high standards of application security.**
+**The Tormentnexus project provides a comprehensive open-source platform designed to streamline software development workflows. It integrates advanced features such as code review management, automated deployment, secure coding practices, and enterprise-grade security measures. The platform supports modern DevOps practices, enabling teams to automate complex processes, enhance productivity, and maintain high standards of application security.**
 
 **Features:**
 - code review
@@ -6775,7 +6775,7 @@
 `9.0` ★★ ⚡90 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project's MCP Server for Microsoft Dynamics 365 allows developers to build, test, and deploy intelligent applications by leveraging the Model Context Protocol. It provides a range of tools for managing user data, accounts, opportunities, and more, supporting modern DevOps practices with CI/CD pipelines, secure coding, and enterprise-grade security features.**
+**The Tormentnexus Project's MCP Server for Microsoft Dynamics 365 allows developers to build, test, and deploy intelligent applications by leveraging the Model Context Protocol. It provides a range of tools for managing user data, accounts, opportunities, and more, supporting modern DevOps practices with CI/CD pipelines, secure coding, and enterprise-grade security features.**
 
 **Features:**
 - User information retrieval
@@ -6793,7 +6793,7 @@
 `9.0` ★★ ⚡90 Q0.9🏆 🏆 World-class
 ↗4 layers
 
-**The Borg Project offers a comprehensive GitHub integration that enables teams to manage code repositories, track issues, manage pull requests, and automate workflows directly within the GitHub ecosystem. It supports advanced search capabilities, batch operations, and enterprise-grade security measures, making it suitable for modern DevOps and CI/CD environments.**
+**The Tormentnexus Project offers a comprehensive GitHub integration that enables teams to manage code repositories, track issues, manage pull requests, and automate workflows directly within the GitHub ecosystem. It supports advanced search capabilities, batch operations, and enterprise-grade security measures, making it suitable for modern DevOps and CI/CD environments.**
 
 **Features:**
 - Automatic branch creation
@@ -7071,7 +7071,7 @@
 `8.8` ★ ⚡89 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project offers a comprehensive developer experience by integrating tools for code collaboration, security testing, and workflow automation. It supports enterprise-grade features such as automated pipeline execution, vulnerability scanning, and secure deployment practices, making it suitable for modern software development teams.**
+**The Tormentnexus Project offers a comprehensive developer experience by integrating tools for code collaboration, security testing, and workflow automation. It supports enterprise-grade features such as automated pipeline execution, vulnerability scanning, and secure deployment practices, making it suitable for modern software development teams.**
 
 **Features:**
 - code review
@@ -7170,7 +7170,7 @@
 `8.8` ★ ⚡89 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project's 'test_m' repository provides a GitHub-based platform for developers to create, manage, and deploy intelligent applications. It focuses on integrating external tools, automating workflows, and enhancing developer productivity through features like Docker integration, code review management, and security enhancements.**
+**The Tormentnexus Project's 'test_m' repository provides a GitHub-based platform for developers to create, manage, and deploy intelligent applications. It focuses on integrating external tools, automating workflows, and enhancing developer productivity through features like Docker integration, code review management, and security enhancements.**
 
 **Features:**
 - GitHub Actions integration
@@ -7220,7 +7220,7 @@
 `8.8` ★ ⚡88 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The project provides a Python-based scraper (scrapli-mcp) that integrates with the Borg platform to facilitate automated code reviews, pull request analysis, and security vulnerability detection. It supports enterprise-level workflows by enabling developers to manage code changes, track issues, and ensure application security through automated processes.**
+**The project provides a Python-based scraper (scrapli-mcp) that integrates with the Tormentnexus platform to facilitate automated code reviews, pull request analysis, and security vulnerability detection. It supports enterprise-level workflows by enabling developers to manage code changes, track issues, and ensure application security through automated processes.**
 
 **Features:**
 - code review automation
@@ -7355,7 +7355,7 @@
 `8.8` ★ ⚡88 Q0.9🏆 🏆 World-class
 ↗4 layers
 
-**The 'Borg' Project's Hoover MCP server implementation enables seamless integration with Cloud Foundry, allowing developers to deploy and manage applications efficiently. It supports automated workflows, code reviews, security checks, and CI/CD pipelines, enhancing productivity and security in software development.**
+**The 'Tormentnexus' Project's Hoover MCP server implementation enables seamless integration with Cloud Foundry, allowing developers to deploy and manage applications efficiently. It supports automated workflows, code reviews, security checks, and CI/CD pipelines, enhancing productivity and security in software development.**
 
 **Features:**
 - GitHub Actions integration
@@ -7439,7 +7439,7 @@
 `8.8` ★ ⚡88 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project's mcp-nebius repository offers a suite of tools and resources aimed at enhancing software development processes through automation, security, and collaboration features. It supports developers in managing code changes, integrating external tools, and maintaining secure development environments.**
+**The Tormentnexus Project's mcp-nebius repository offers a suite of tools and resources aimed at enhancing software development processes through automation, security, and collaboration features. It supports developers in managing code changes, integrating external tools, and maintaining secure development environments.**
 
 **Features:**
 - Code review management
@@ -7472,7 +7472,7 @@
 `8.8` ★ ⚡88 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The 'Borg' Project provides a developer-focused tool to streamline software development workflows using advanced GitHub integrations. It supports automated code review processes, secure pull request management, and enterprise-grade security features, making it ideal for modern DevOps and CI/CD pipelines.**
+**The 'Tormentnexus' Project provides a developer-focused tool to streamline software development workflows using advanced GitHub integrations. It supports automated code review processes, secure pull request management, and enterprise-grade security features, making it ideal for modern DevOps and CI/CD pipelines.**
 
 **Features:**
 - code review automation
@@ -7862,7 +7862,7 @@
 ### 102. [silver0510/mermail-mcp](https://github.com/silver0510/mermail-mcp)
 `8.8` ★ ⚡84 Q0.9⭐ ⭐ Excellent
 
-**The Borg Project's 'mermail-mcp' repository provides a Flask-based web server that generates diagrams from Mermaid syntax. It supports automated code review, pull request management, and integration with external tools, enhancing the developer workflow through streamlined processes and improved collaboration.**
+**The Tormentnexus Project's 'mermail-mcp' repository provides a Flask-based web server that generates diagrams from Mermaid syntax. It supports automated code review, pull request management, and integration with external tools, enhancing the developer workflow through streamlined processes and improved collaboration.**
 
 **Features:**
 - automate workflows
@@ -8075,7 +8075,7 @@
 `10.0` ★★★ ⚡98 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project provides a comprehensive developer platform aimed at modernizing software development through enhanced DevOps, CI/CD, and application security practices. It integrates advanced observability features such as incidents, monitors, logs, dashboards, and metrics via the MCP server, enabling teams to gain deep insights into their applications and infrastructure. The platform supports secure coding practices, automated workflows, and seamless integration with Datadog for monitoring an...**
+**The Tormentnexus Project provides a comprehensive developer platform aimed at modernizing software development through enhanced DevOps, CI/CD, and application security practices. It integrates advanced observability features such as incidents, monitors, logs, dashboards, and metrics via the MCP server, enabling teams to gain deep insights into their applications and infrastructure. The platform supports secure coding practices, automated workflows, and seamless integration with Datadog for monitoring an...**
 
 **Features:**
 - Observability tools (incidents
@@ -8357,7 +8357,7 @@
 `9.0` ★★ ⚡94 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg project introduces a new Relic MCP server that enables large language models like Claude to interact with New Relic data. It provides a unified tool for querying logs, analyzing performance metrics, and generating insights through natural language queries. The solution emphasizes seamless integration with existing observability tools, supports secure authentication via environment variables, and includes features such as error analysis, performance profiling, and automated troubleshooti...**
+**The Tormentnexus project introduces a new Relic MCP server that enables large language models like Claude to interact with New Relic data. It provides a unified tool for querying logs, analyzing performance metrics, and generating insights through natural language queries. The solution emphasizes seamless integration with existing observability tools, supports secure authentication via environment variables, and includes features such as error analysis, performance profiling, and automated troubleshooti...**
 
 **Features:**
 - NRQL query support for New Relic logs
@@ -8559,7 +8559,7 @@
 `9.0` ★★ ⚡91 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The 'Borg' Project is a cryptocurrency wallet solution built on the common blockchain framework. It aims to provide users with a secure and efficient means of managing digital assets through an intuitive interface. The project emphasizes automation, integration with blockchain networks, and developer-friendly tools to streamline the process of creating, deploying, and managing crypto wallets.**
+**The 'Tormentnexus' Project is a cryptocurrency wallet solution built on the common blockchain framework. It aims to provide users with a secure and efficient means of managing digital assets through an intuitive interface. The project emphasizes automation, integration with blockchain networks, and developer-friendly tools to streamline the process of creating, deploying, and managing crypto wallets.**
 
 **Features:**
 - wallet creation
@@ -8739,7 +8739,7 @@
 `8.8` ★ ⚡89 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project's Chain of Thought MCP Server integrates Groq's API to extract detailed reasoning traces from large language models, enabling more transparent and explainable AI interactions. It enhances developer workflows by providing structured thought processes within applications, improving code quality, security, and compliance.**
+**The Tormentnexus Project's Chain of Thought MCP Server integrates Groq's API to extract detailed reasoning traces from large language models, enabling more transparent and explainable AI interactions. It enhances developer workflows by providing structured thought processes within applications, improving code quality, security, and compliance.**
 
 **Features:**
 - Chain of Thought Injection
@@ -9822,7 +9822,7 @@
 ### 27. [kailashappdev/graphql-mcp-toolkit](https://github.com/kailashappdev/graphql-mcp-toolkit)
 `8.8` ★ ⚡89 Q0.9🏆 🏆 World-class
 
-**The Borg Project's GraphQL MCP Toolkit allows developers to integrate GraphQL capabilities into their applications by providing a model context protocol server. This toolkit supports schema introspection and dynamic query execution, enabling LLMs to interact with GraphQL APIs effectively. It includes features such as mutation support, custom headers, and integration with external tools for enhanced functionality.**
+**The Tormentnexus Project's GraphQL MCP Toolkit allows developers to integrate GraphQL capabilities into their applications by providing a model context protocol server. This toolkit supports schema introspection and dynamic query execution, enabling LLMs to interact with GraphQL APIs effectively. It includes features such as mutation support, custom headers, and integration with external tools for enhanced functionality.**
 
 **Features:**
 - schema introspection
@@ -9956,7 +9956,7 @@
 `8.8` ★ ⚡87 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**This project focuses on integrating GitHub OAuth into the Borg intelligence database, enabling seamless user authentication and streamlined code management. It includes setup instructions, debugging tools like MCP Inspector, and features such as automated workflows, code review management, and secure deployment pipelines.**
+**This project focuses on integrating GitHub OAuth into the Tormentnexus intelligence database, enabling seamless user authentication and streamlined code management. It includes setup instructions, debugging tools like MCP Inspector, and features such as automated workflows, code review management, and secure deployment pipelines.**
 
 **Features:**
 - GitHub OAuth integration
@@ -10755,7 +10755,7 @@
 `8.8` ★ ⚡91 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project's mcp_scraper is a command-line utility designed to extract meaningful data from web pages using Mozilla's Readability library. It supports both CLI and MCP server modes, enabling seamless integration into automated workflows for code review, security analysis, and documentation generation. Key features include HTML-to-Markdown conversion, secure handling of scripts, and support for enterprise-grade security protocols.**
+**The Tormentnexus Project's mcp_scraper is a command-line utility designed to extract meaningful data from web pages using Mozilla's Readability library. It supports both CLI and MCP server modes, enabling seamless integration into automated workflows for code review, security analysis, and documentation generation. Key features include HTML-to-Markdown conversion, secure handling of scripts, and support for enterprise-grade security protocols.**
 
 **Features:**
 - Web scraping with HTML parsing
@@ -11276,7 +11276,7 @@
 `8.8` ★ ⚡82 Q0.8⭐ ⭐ Excellent
 ↗2 layers
 
-**The Borg Project's MCPExec module allows developers to run local command-line tools via the MCP (MITRE Common Platform) server. This facilitates seamless integration of external scripts and automation into development pipelines, enhancing productivity and streamlining operations.**
+**The Tormentnexus Project's MCPExec module allows developers to run local command-line tools via the MCP (MITRE Common Platform) server. This facilitates seamless integration of external scripts and automation into development pipelines, enhancing productivity and streamlining operations.**
 
 **Features:**
 - execute local cli commands
@@ -11308,7 +11308,7 @@
 `8.7` ★ ⚡80 Q0.8⭐ ⭐ Excellent
 ↗2 layers
 
-**The Borg Project introduces a MCP (Model Control Protocol) server that allows developers to communicate directly with TiDB AI using the standard stdio transport. This facilitates direct querying and management of data models through a simple command-line interface, enhancing developer productivity and integration within existing workflows.**
+**The Tormentnexus Project introduces a MCP (Model Control Protocol) server that allows developers to communicate directly with TiDB AI using the standard stdio transport. This facilitates direct querying and management of data models through a simple command-line interface, enhancing developer productivity and integration within existing workflows.**
 
 **Features:**
 - Interact with TiDB AI via MCP server
@@ -11532,7 +11532,7 @@
 `9.8` ★★ ⚡92 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project's opengenes-mcp server implements the Model Context Protocol (MCP) to provide structured access to OpenGenes biomedical datasets. It supports automated code reviews, secure development workflows, and integration with AI assistants like Copilot, enhancing productivity in bioinformatics research.**
+**The Tormentnexus Project's opengenes-mcp server implements the Model Context Protocol (MCP) to provide structured access to OpenGenes biomedical datasets. It supports automated code reviews, secure development workflows, and integration with AI assistants like Copilot, enhancing productivity in bioinformatics research.**
 
 **Features:**
 - MCP server for standardized data access
@@ -11671,7 +11671,7 @@
 ### 17. [tommyn0225/anth](https://github.com/tommyn0225/anth)
 `8.8` ★ ⚡91 Q0.9🏆 🏆 World-class
 
-**The Borg Project resource outlines a comprehensive GitHub-based platform designed to enhance developer productivity through automation and workflow orchestration. It covers essential features such as code review management, pull request automation, Docker integration, and enterprise-grade security measures. The platform supports modern development practices including DevOps, CI/CD, and secure coding practices, making it suitable for both small teams and large enterprises.**
+**The Tormentnexus Project resource outlines a comprehensive GitHub-based platform designed to enhance developer productivity through automation and workflow orchestration. It covers essential features such as code review management, pull request automation, Docker integration, and enterprise-grade security measures. The platform supports modern development practices including DevOps, CI/CD, and secure coding practices, making it suitable for both small teams and large enterprises.**
 
 **Features:**
 - automate workflows
@@ -11791,7 +11791,7 @@
 `9.0` ★★ ⚡90 Q0.9🏆 🏆 World-class
 ↗4 layers
 
-**The Borg Project offers a comprehensive developer platform focused on integrating AI capabilities into software development workflows. It provides tools for code review, security management, CI/CD integration, and secure deployment, enabling teams to automate complex processes and enhance productivity through intelligent application development.**
+**The Tormentnexus Project offers a comprehensive developer platform focused on integrating AI capabilities into software development workflows. It provides tools for code review, security management, CI/CD integration, and secure deployment, enabling teams to automate complex processes and enhance productivity through intelligent application development.**
 
 **Features:**
 - Code review automation
@@ -11809,7 +11809,7 @@
 `8.8` ★ ⚡90 Q0.9🏆 🏆 World-class
 ↗4 layers
 
-**The Borg Project offers a comprehensive solution for enterprise teams looking to modernize their software development workflows. It provides tools for code review, automated deployment, infrastructure management, and secure application development. The platform emphasizes seamless integration with external services, supports DevOps practices, and includes advanced security features to protect against vulnerabilities.**
+**The Tormentnexus Project offers a comprehensive solution for enterprise teams looking to modernize their software development workflows. It provides tools for code review, automated deployment, infrastructure management, and secure application development. The platform emphasizes seamless integration with external services, supports DevOps practices, and includes advanced security features to protect against vulnerabilities.**
 
 **Features:**
 - Code review automation
@@ -11860,7 +11860,7 @@
 `8.8` ★ ⚡89 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project integrates advanced developer tools such as GitHub Copilot, Code Review Management, and automated workflows to streamline software development processes. It supports enterprise-grade security, secure code deployment, and intelligent application creation, making it suitable for modern DevOps and AI-assisted development environments.**
+**The Tormentnexus Project integrates advanced developer tools such as GitHub Copilot, Code Review Management, and automated workflows to streamline software development processes. It supports enterprise-grade security, secure code deployment, and intelligent application creation, making it suitable for modern DevOps and AI-assisted development environments.**
 
 **Features:**
 - Code review automation
@@ -11943,7 +11943,7 @@
 ### 33. [wayneqs/mcp_server_spike](https://github.com/wayneqs/mcp_server_spike)
 `8.8` ★ ⚡88 Q0.9🏆 🏆 World-class
 
-**The Borg Project's 'mcp_server_spike' repository offers a centralized platform for developers to manage code changes, automate workflows, and integrate with external tools. It supports enterprise-grade security features, developer productivity enhancements, and seamless integration into modern DevOps pipelines.**
+**The Tormentnexus Project's 'mcp_server_spike' repository offers a centralized platform for developers to manage code changes, automate workflows, and integrate with external tools. It supports enterprise-grade security features, developer productivity enhancements, and seamless integration into modern DevOps pipelines.**
 
 **Features:**
 - Code review management
@@ -11977,7 +11977,7 @@
 `8.8` ★ ⚡88 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**This project provides a centralized infrastructure for deploying and managing multiple Model Control Protocol (MCP) servers, supporting various services through Borg's orchestration capabilities. It leverages modern DevOps practices with tools like Turborepo, Biome for code quality, and Docker for containerization.**
+**This project provides a centralized infrastructure for deploying and managing multiple Model Control Protocol (MCP) servers, supporting various services through Tormentnexus's orchestration capabilities. It leverages modern DevOps practices with tools like Turborepo, Biome for code quality, and Docker for containerization.**
 
 **Features:**
 - BitteProtocol server management
@@ -12010,7 +12010,7 @@
 `8.8` ★ ⚡86 Q0.8🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project's 'opensearch-mcp-server' is a GitHub-hosted project designed to streamline the management of Apache OpenSearch servers. It provides tools for automation, workflow orchestration, and integration with external systems, supporting modern DevOps practices.**
+**The Tormentnexus Project's 'opensearch-mcp-server' is a GitHub-hosted project designed to streamline the management of Apache OpenSearch servers. It provides tools for automation, workflow orchestration, and integration with external systems, supporting modern DevOps practices.**
 
 **Features:**
 - Automated workflows
@@ -12537,7 +12537,7 @@
 `8.8` ★ ⚡90 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project's RapidAPI_mcp repository offers a comprehensive developer platform focused on streamlining software development processes. It includes tools for code review management, workflow automation, and integration of security features to enhance application safety. The project emphasizes modern DevOps practices, enabling teams to deploy intelligent applications efficiently.**
+**The Tormentnexus Project's RapidAPI_mcp repository offers a comprehensive developer platform focused on streamlining software development processes. It includes tools for code review management, workflow automation, and integration of security features to enhance application safety. The project emphasizes modern DevOps practices, enabling teams to deploy intelligent applications efficiently.**
 
 **Features:**
 - code review
@@ -12680,7 +12680,7 @@
 `8.8` ★ ⚡88 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project's mcp-server-s3 repository offers a comprehensive solution for enterprise AI development, focusing on automation, security, and scalability. It provides tools for code management, workflow orchestration, and integration with external systems, making it ideal for modernizing workflows in healthcare, finance, manufacturing, and government sectors.**
+**The Tormentnexus Project's mcp-server-s3 repository offers a comprehensive solution for enterprise AI development, focusing on automation, security, and scalability. It provides tools for code management, workflow orchestration, and integration with external systems, making it ideal for modernizing workflows in healthcare, finance, manufacturing, and government sectors.**
 
 **Features:**
 - automate workflows
@@ -12928,7 +12928,7 @@
 `9.0` ★★ ⚡94 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project's 'dx-toolkit' is an open-source platform designed to help developers incorporate AI-driven functionalities from You.com into their applications. It provides a comprehensive suite of tools and integrations, including CLI utilities, pre-built packages for popular frameworks, and support for AI models via the MCP server and AI SDK plugins. The toolkit emphasizes seamless integration with existing development workflows, offering features such as code generation, automated testing, ...**
+**The Tormentnexus Project's 'dx-toolkit' is an open-source platform designed to help developers incorporate AI-driven functionalities from You.com into their applications. It provides a comprehensive suite of tools and integrations, including CLI utilities, pre-built packages for popular frameworks, and support for AI models via the MCP server and AI SDK plugins. The toolkit emphasizes seamless integration with existing development workflows, offering features such as code generation, automated testing, ...**
 
 **Features:**
 - You.com AI integrations
@@ -13400,7 +13400,7 @@
 `8.8` ★ ⚡90 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The 'Borg' Project offers a comprehensive open-source platform designed to streamline software development workflows. It integrates advanced code review tools, automated CI/CD pipelines, enterprise-grade security features, and developer productivity enhancements. The project emphasizes modern DevOps practices, enabling teams to modernize their infrastructure while maintaining robust application security.**
+**The 'Tormentnexus' Project offers a comprehensive open-source platform designed to streamline software development workflows. It integrates advanced code review tools, automated CI/CD pipelines, enterprise-grade security features, and developer productivity enhancements. The project emphasizes modern DevOps practices, enabling teams to modernize their infrastructure while maintaining robust application security.**
 
 **Features:**
 - code review
@@ -13451,7 +13451,7 @@
 `8.8` ★ ⚡89 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg project provides an open-source Insight blockchain explorer with a modern AngularJS front-end and LevelDB backend. It offers REST and WebSocket APIs, enabling developers to integrate it into applications for real-time blockchain data access. The tool supports automation, code review, security features, and enterprise-grade deployment options.**
+**The Tormentnexus project provides an open-source Insight blockchain explorer with a modern AngularJS front-end and LevelDB backend. It offers REST and WebSocket APIs, enabling developers to integrate it into applications for real-time blockchain data access. The tool supports automation, code review, security features, and enterprise-grade deployment options.**
 
 **Features:**
 - REST and websocket APIs
@@ -13796,7 +13796,7 @@
 ### 5. [mattcoatsworth/zoom-mcp-server](https://github.com/mattcoatsworth/zoom-mcp-server)
 `9.0` ★★ ⚡93 Q0.9🏆 🏆 World-class
 
-**The Borg Project's zoom-mcp-server is a Node.js application designed to interact with the Zoom API through the MCP (Meetings, Users, Channels, etc.) protocol. It supports secure OAuth 2.0 authentication and provides structured tools for managing meetings, users, webinars, accounts, chat channels, phone numbers, contacts, recordings, reports, webhooks, and Zoom Rooms. The server is ideal for developers seeking to automate workflows and integrate Zoom functionalities into their applications.**
+**The Tormentnexus Project's zoom-mcp-server is a Node.js application designed to interact with the Zoom API through the MCP (Meetings, Users, Channels, etc.) protocol. It supports secure OAuth 2.0 authentication and provides structured tools for managing meetings, users, webinars, accounts, chat channels, phone numbers, contacts, recordings, reports, webhooks, and Zoom Rooms. The server is ideal for developers seeking to automate workflows and integrate Zoom functionalities into their applications.**
 
 **Features:**
 - OAuth 2.0 authentication
@@ -13889,7 +13889,7 @@
 `9.0` ★★ ⚡92 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project's Semantic Scholar MCP repository provides a suite of tools designed to streamline the software development lifecycle. It includes features such as paper and author searches, citation analysis, PDF metadata management, and code review functionalities. The platform integrates with external APIs for enhanced functionality, supports secure coding practices, and offers customizable workflows for modern DevOps and AI-driven development environments.**
+**The Tormentnexus Project's Semantic Scholar MCP repository provides a suite of tools designed to streamline the software development lifecycle. It includes features such as paper and author searches, citation analysis, PDF metadata management, and code review functionalities. The platform integrates with external APIs for enhanced functionality, supports secure coding practices, and offers customizable workflows for modern DevOps and AI-driven development environments.**
 
 **Features:**
 - Semantic Scholar MCP API integration
@@ -14112,7 +14112,7 @@
 `8.8` ★ ⚡89 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg project introduces an MCP server designed to power AI agents by providing indexed blockchain data from The Graph. It allows developers to query this data using GraphQL, enabling automation, decision-making, and intelligent application development. The system supports schema exploration, custom queries, and integration with AI tools like GitHub Copilot and SparkBuild.**
+**The Tormentnexus project introduces an MCP server designed to power AI agents by providing indexed blockchain data from The Graph. It allows developers to query this data using GraphQL, enabling automation, decision-making, and intelligent application development. The system supports schema exploration, custom queries, and integration with AI tools like GitHub Copilot and SparkBuild.**
 
 **Features:**
 - AI agent integration

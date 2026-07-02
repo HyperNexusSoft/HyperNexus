@@ -23,9 +23,9 @@ type RAGResponseGenerator struct {
 func NewRAGResponseGenerator(database *db.DB, provider llm.LLMProvider) *RAGResponseGenerator {
 	// Documentation path resolution to support both root execution and package-level tests
 	docsPaths := []string{
-		"borg/docs/ARCHITECTURE.md",
-		"../../borg/docs/ARCHITECTURE.md",
-		"../../../borg/docs/ARCHITECTURE.md",
+		"tormentnexus/docs/ARCHITECTURE.md",
+		"../../tormentnexus/docs/ARCHITECTURE.md",
+		"../../../tormentnexus/docs/ARCHITECTURE.md",
 	}
 
 	var content []byte

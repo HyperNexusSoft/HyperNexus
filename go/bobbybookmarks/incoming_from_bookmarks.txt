@@ -226,11 +226,11 @@ https://bsky.app/profile/avitek.bsky.social/post/3mdowe3dyic2g
 https://blackboard.sh/blog/electrobun-v1/
 https://blog.brokk.ai/new-year-clean-branch/
 https://blog.brokk.ai/
-https://build.nvidia.com/cyborg
+https://build.nvidia.com/cytormentnexus
 https://blog.brokk.ai/why-gemini-3-flash-is-the-model-openai-is-afraid-of/
 https://build.nvidia.com/blueprints
 https://build.nvidia.com/explore/discover
-https://build.nvidia.com/cyborg/cyborg-enterprise-rag
+https://build.nvidia.com/cytormentnexus/cytormentnexus-enterprise-rag
 https://build.nvidia.com/crewai/code-documentation-for-software-development
 https://build.nvidia.com/crewai
 https://build.nvidia.com/iguazio

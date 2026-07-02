@@ -1,7 +1,7 @@
-# Borg Intelligence Harvester (BobbyBookmarks) - RUNBOOK
+# Tormentnexus Intelligence Harvester (BobbyBookmarks) - RUNBOOK
 
 ## Overview
-This runbook provides actionable instructions for agents or developers tasked with operating, maintaining, or expanding the Borg Intelligence Harvester system. The system automates the ingestion, LLM-powered enrichment, and data hygiene of AI/developer tools.
+This runbook provides actionable instructions for agents or developers tasked with operating, maintaining, or expanding the Tormentnexus Intelligence Harvester system. The system automates the ingestion, LLM-powered enrichment, and data hygiene of AI/developer tools.
 
 For deeper architectural context, please refer to the core governance documents: `VISION.md`, `ROADMAP.md`, `MEMORY.md`, and `CHANGELOG.md`.
 
@@ -13,7 +13,7 @@ For deeper architectural context, please refer to the core governance documents:
 Never terminate active background processes (`deep_research.py`, etc.) unless instructed to do so or if diagnosing a critical failure. The system is designed for continuous, autonomous execution.
 
 ### Ingestion Pipeline
-The ingestion pipeline pulls URLs from `incoming_resources.txt`, feeds them to the LLM-powered parser, and stores them safely in SQLite (`atlas.db`, `borg.db`, etc.).
+The ingestion pipeline pulls URLs from `incoming_resources.txt`, feeds them to the LLM-powered parser, and stores them safely in SQLite (`atlas.db`, `tormentnexus.db`, etc.).
 
 * **To run the ingest manually:**
   ```bash
@@ -25,7 +25,7 @@ The ingestion pipeline pulls URLs from `incoming_resources.txt`, feeds them to t
   Clear the `failed_bookmarks.txt` before restarting the script.
 
 ### Data Deduplication & Hygiene
-SQLite databases are used extensively (`bookmarks.db`, `atlas.db`, `borg.db`, `tormentnexus.db`, `metamcp.db`).
+SQLite databases are used extensively (`bookmarks.db`, `atlas.db`, `tormentnexus.db`, `tormentnexus.db`, `metamcp.db`).
 * Data deduplication is enforced by standard scripts.
 * *Example (Prompts)*: If re-indexing external prompts, use Jaccard similarity at a 90% threshold.
   ```bash
@@ -63,7 +63,7 @@ If the system crashes or a new session is resumed, always check the integrity of
   ```bash
   sqlite3 bookmarks.db "PRAGMA integrity_check;"
   sqlite3 atlas.db "PRAGMA integrity_check;"
-  sqlite3 borg.db "PRAGMA integrity_check;"
+  sqlite3 tormentnexus.db "PRAGMA integrity_check;"
   sqlite3 tormentnexus.db "PRAGMA integrity_check;"
   ```
   *If a database fails the integrity check or is entirely missing, refer to `HANDOFF.md` for historical data loss context and manually reconstruct what is viable programmatically.*

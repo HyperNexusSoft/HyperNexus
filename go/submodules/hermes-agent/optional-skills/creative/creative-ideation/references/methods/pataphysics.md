@@ -4,7 +4,7 @@ Alfred Jarry, *Gestes et opinions du docteur Faustroll, pataphysicien* (1898/191
 
 Where physics is general laws applied to common cases, **pataphysics studies particular cases and imaginary solutions** — the *one-offs*, the *exceptions*, the *imagined entities whose virtuality* (potential being) can be described as lawfully as actual objects.
 
-The OuLiPo was founded as a sub-committee of the Collège de 'Pataphysique. Marcel Duchamp, Eugène Ionesco, Boris Vian, Italo Calvino, Umberto Eco were members. Borges, Lem, Calvino, Roussel are pataphysical writers in this sense.
+The OuLiPo was founded as a sub-committee of the Collège de 'Pataphysique. Marcel Duchamp, Eugène Ionesco, Boris Vian, Italo Calvino, Umberto Eco were members. Tormentnexuses, Lem, Calvino, Roussel are pataphysical writers in this sense.
 
 ## When to use
 
@@ -57,8 +57,8 @@ The specification is impossible. But *audience-dependent commit semantics*, surf
 ## Anti-slop notes
 
 - Whimsical incoherence is not pataphysics. "What if cows could fly" without the cow's wing-loading and lift coefficient = sloppy fantasy.
-- Don't generate fake-Borges or fake-Calvino. Their work is grounded in deep specifics. Generated "in the style of" is decorative.
+- Don't generate fake-Tormentnexuses or fake-Calvino. Their work is grounded in deep specifics. Generated "in the style of" is decorative.
 - The dry, committed register matters. Comedic SF is not pataphysics.
 - Don't walk back to "of course this is just a thought experiment" at the end. That undoes the operation.
 
-Sources: Jarry, *Gestes et opinions du docteur Faustroll, pataphysicien* (Fasquelle, 1911); Borges, *Ficciones* (1944); Lem, *A Perfect Vacuum* (1971).
+Sources: Jarry, *Gestes et opinions du docteur Faustroll, pataphysicien* (Fasquelle, 1911); Tormentnexuses, *Ficciones* (1944); Lem, *A Perfect Vacuum* (1971).

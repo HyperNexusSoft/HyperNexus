@@ -1,5 +1,5 @@
 """
-Borg Intelligence — Definitive Feature Roadmap
+Tormentnexus Intelligence — Definitive Feature Roadmap
 Data source: 13,503 clean bookmarks | 1,967 elite (score 9-10)
 Method: Mechanism enrichment analysis + co-occurrence + gap detection
 
@@ -10,7 +10,7 @@ the best from the rest, not just what's common.
 
 ROADMAP = """
 ========================================================================
-  BORG INTELLIGENCE — DEFINITIVE FEATURE ROADMAP
+  TORMENTNEXUS INTELLIGENCE — DEFINITIVE FEATURE ROADMAP
   13,503 clean bookmarks | 1,967 elite (score 9-10) | 20 mechanisms
 ========================================================================
 

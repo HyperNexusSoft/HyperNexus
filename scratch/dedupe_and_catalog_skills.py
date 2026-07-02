@@ -6,11 +6,11 @@ import sqlite3
 import yaml
 
 ROOT_DIR = r"c:\Users\hyper\workspace"
-TARGET_DIR = r"c:\Users\hyper\workspace\borg\.tormentnexus\skills"
+TARGET_DIR = r"c:\Users\hyper\workspace\tormentnexus\.tormentnexus\skills"
 MAIN_SKILL_MD = r"c:\Users\hyper\workspace\SKILL.md"
 
 BOOKMARKS_DB = r"c:\Users\hyper\workspace\bobbybookmarks\bookmarks.db"
-CATALOG_DB = r"c:\Users\hyper\workspace\borg\catalog.db"
+CATALOG_DB = r"c:\Users\hyper\workspace\tormentnexus\catalog.db"
 
 IGNORED_DIRS = {
     "node_modules", ".venv", ".git", ".ruff_cache", ".pytest_cache", 
@@ -150,7 +150,7 @@ def main():
     search_dirs = [
         r"c:\Users\hyper\workspace\.agent\skills",
         r"c:\Users\hyper\workspace\.agent\plugins",
-        r"c:\Users\hyper\workspace\borg\.borg\skills"
+        r"c:\Users\hyper\workspace\tormentnexus\.tormentnexus\skills"
     ]
     print(f"Scanning target directories: {search_dirs}...")
     for s_dir in search_dirs:

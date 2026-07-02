@@ -1,5 +1,5 @@
 # 🤖 AI Agents & Frameworks
-> Borg Intelligence Atlas v8 · 2026-06-17 · 4,675 tools
+> Tormentnexus Intelligence Atlas v8 · 2026-06-17 · 4,675 tools
 > Coding agents, GUI agents, research agents, AI OS, security agents
 
 | Metric | Value |
@@ -25,7 +25,7 @@
 4. **[chenningling/redbook-search-comment-mcp](https://github.com/chenningling/redbook-search-comment-mcp)** ⚡95 · 🏆 World-class — A Python-based RedBook Search Comment MCP Server for enhancing user interaction with Xiaohongshu not...
 5. **[felores/docs_scraper_mcp](https://github.com/felores/docs_scraper_mcp)** ⚡95 · 🏆 World-class — A Python toolkit for extracting clean, focused documentation from web pages using AI-ready formats.
 6. **[chaindead/telegram-mcp](https://github.com/chaindead/telegram-mcp)** ⚡95 · 🏆 World-class — Telegram MCP enables AI assistants to manage dialogs, messages, drafts, and read statuses securely w...
-7. **[smallnest/mcp-prompt-server-go](https://github.com/smallnest/mcp-prompt-server-go)** ⚡95 · 🏆 World-class — A Borg project providing a powerful Model Context Protocol (MCP) prompt server to deliver predefined...
+7. **[smallnest/mcp-prompt-server-go](https://github.com/smallnest/mcp-prompt-server-go)** ⚡95 · 🏆 World-class — A Tormentnexus project providing a powerful Model Context Protocol (MCP) prompt server to deliver predefined...
 8. **[spences10/mcp-omnisearch](https://github.com/spences10/mcp-omnisearch)** ⚡95 · 🏆 World-class — MCP Omnisearch integrates advanced AI search and retrieval tools to unify functionality from Tavily,...
 9. **[sunriseapps/imagesorcery-mcp](https://github.com/sunriseapps/imagesorcery-mcp)** ⚡95 · 🏆 World-class — ImageSorcery MCP is an open-source computer vision toolset enabling local image processing and AI-dr...
 10. **[bmorphism/hypernym-mcp-server](https://github.com/bmorphism/hypernym-mcp-server)** ⚡95 · 🏆 World-class — A developer-focused platform enabling seamless integration of Hypernym AI's semantic analysis and co...
@@ -20280,7 +20280,7 @@ The project includes specific instructions for installation using `vLLM` and `tr
 ### 21. [testdino-inc/testdino-mcp](https://github.com/testdino-inc/testdino-mcp)
 `9.6` ★★ ⚡90 Q0.8🏆 🏆 World-class
 
-**This technical resource describes the Borg Intelligence database's testdino-mcp project, highlighting its role as an MCP server that allows users to interact with TestDino through conversational commands. It supports features such as health checks, test run management, AI-assisted debugging, and comprehensive test case auditing.**
+**This technical resource describes the Tormentnexus Intelligence database's testdino-mcp project, highlighting its role as an MCP server that allows users to interact with TestDino through conversational commands. It supports features such as health checks, test run management, AI-assisted debugging, and comprehensive test case auditing.**
 
 **Features:**
 - Health Check
@@ -20314,7 +20314,7 @@ The project includes specific instructions for installation using `vLLM` and `tr
 
 ---
 
-### 23. [robertpelloni/borg](https://github.com/robertpelloni/borg/compare/e961682f56394fe0089ec7841a2da5b4607351fe...92c86e4cb6fc4ac5f2d9637cfce418d2efa10524)
+### 23. [robertpelloni/tormentnexus](https://github.com/robertpelloni/tormentnexus/compare/e961682f56394fe0089ec7841a2da5b4607351fe...92c86e4cb6fc4ac5f2d9637cfce418d2efa10524)
 `9.0` ★★ ⚡89 Q0.8🏆 🏆 World-class
 
 **The project focuses on advancing autonomous system functionality by introducing key technical features such as an upgraded HealerService with a healing loop, verified immune system integration for code integrity, skills progressive disclosure for better user experience, enhanced Go API capabilities, and improved documentation. These developments aim to streamline workflows and improve system reliability.**
@@ -26323,7 +26323,7 @@ The tool offers simple CLI usage for text conversion and includes options for vo
 `9.0` ★★ ⚡91 Q0.8🏆 🏆 World-class
 ↗4 layers
 
-**The Borg Intelligence database, hosted on GitHub, is an experimental research platform leveraging the Model Context Protocol (MCP). It integrates advanced query caching, context-aware learning, and code pattern detection to enhance software development workflows. The project supports multiple programming languages, including Java, JavaScript, Go, Rust, and more, and includes features such as API detection across various frameworks, memory optimization, and intelligent documentation analysis.**
+**The Tormentnexus Intelligence database, hosted on GitHub, is an experimental research platform leveraging the Model Context Protocol (MCP). It integrates advanced query caching, context-aware learning, and code pattern detection to enhance software development workflows. The project supports multiple programming languages, including Java, JavaScript, Go, Rust, and more, and includes features such as API detection across various frameworks, memory optimization, and intelligent documentation analysis.**
 
 **Features:**
 - Context-aware caching for improved performance
@@ -42403,7 +42403,7 @@ The structure hints at a high-density data representation, with sharp transition
 ### 30. [eyaltoledano/claude-task-master](https://github.com/eyaltoledano/claude-task-master/issues/1681)
 `9.0` ★★ ⚡89 Q0.9🏆 🏆 World-class
 
-**This technical resource highlights a significant security and privacy concern regarding the default telemetry settings in the Borg Intelligence database. The configuration captures all AI prompts, responses, and outputs at full resolution, including PII, without user consent. This 'anonymous telemetry' approach is problematic as it records sensitive data indiscriminately. The issue stems from a fragile opt-out mechanism that may fail silently, leading to unintended data collection. Recommendatio...**
+**This technical resource highlights a significant security and privacy concern regarding the default telemetry settings in the Tormentnexus Intelligence database. The configuration captures all AI prompts, responses, and outputs at full resolution, including PII, without user consent. This 'anonymous telemetry' approach is problematic as it records sensitive data indiscriminately. The issue stems from a fragile opt-out mechanism that may fail silently, leading to unintended data collection. Recommendatio...**
 
 **Features:**
 - Full AI prompt and response capture
@@ -42471,7 +42471,7 @@ The structure hints at a high-density data representation, with sharp transition
 ### 34. [suthio/redash-mcp](https://github.com/suthio/redash-mcp)
 `9.0` ★★ ⚡88 Q0.8🏆 🏆 World-class
 
-**This resource introduces a Borg-based integration between Redash and AI assistants, enabling users to leverage artificial intelligence for enhanced data exploration. It provides a seamless way to connect Redash dashboards and queries with AI tools like Claude, thereby enriching the user experience with intelligent insights.**
+**This resource introduces a Tormentnexus-based integration between Redash and AI assistants, enabling users to leverage artificial intelligence for enhanced data exploration. It provides a seamless way to connect Redash dashboards and queries with AI tools like Claude, thereby enriching the user experience with intelligent insights.**
 
 **Features:**
 - Connect to Redash instances via the Redash API
@@ -50456,7 +50456,7 @@ The simulation tracks agent lifespans, actions, and the interplay between rescue
 
 ---
 
-### 217. [posts from cyborgs, Transhuman, Nootropics, Cyberpunk, transhumanism](http://goo.gl/vFWcxv)
+### 217. [posts from cytormentnexuss, Transhuman, Nootropics, Cyberpunk, transhumanism](http://goo.gl/vFWcxv)
 `5.0` ★ ⚡65 Q0.8✓ ✓ Solid
 
 **This resource showcases the Reddit front page, illustrating how a community forum can serve as a hub for diverse discussions on topics ranging from cyberpunk aesthetics to the philosophical implications of connecting human consciousness with collective intelligence networks. It demonstrates the power of user-generated content and community interaction within a digital space.**
@@ -60690,7 +60690,7 @@ The paper outlines a policy decision where substantial human writing is required
 `9.6` ★★ ⚡89 Q0.8🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Intelligence database provides a comprehensive set of tools for managing Kafka, Flink SQL, Schema Registry, Connectors, Tableflow, and more. It supports AI-driven interactions with Confluent Platform services, making it suitable for developers and AI engineers working on distributed systems.**
+**The Tormentnexus Intelligence database provides a comprehensive set of tools for managing Kafka, Flink SQL, Schema Registry, Connectors, Tableflow, and more. It supports AI-driven interactions with Confluent Platform services, making it suitable for developers and AI engineers working on distributed systems.**
 
 **Features:**
 - Kafka integration
@@ -63877,7 +63877,7 @@ This tool provides an integrated solution for developers needing to leverage AI 
 `10.0` ★★★ ⚡92 Q0.8🏆 🏆 World-class
 ↗3 layers
 
-**This technical resource provides comprehensive documentation on the Borg Intelligence database, detailing its architecture, integration capabilities, and usage instructions. It emphasizes the use of advanced AI tools like Claude Code, Gemini CLI, and Codex to enhance developer workflows through knowledge graph queries and context-aware assistance.**
+**This technical resource provides comprehensive documentation on the Tormentnexus Intelligence database, detailing its architecture, integration capabilities, and usage instructions. It emphasizes the use of advanced AI tools like Claude Code, Gemini CLI, and Codex to enhance developer workflows through knowledge graph queries and context-aware assistance.**
 
 **Features:**
 - Graphify integration for code navigation and querying

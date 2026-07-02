@@ -151,7 +151,7 @@ Before deploying to production, ensure:
 - [ ] `VERSION` and `VERSION.md` are updated to the target release version.
 - [ ] Database migrations are up to date (`migrations/` directory).
 - [ ] Environment variables for production are configured (see above).
-- [ ] The `borg` documentation submodule is initialized and up to date.
+- [ ] The `tormentnexus` documentation submodule is initialized and up to date.
 - [ ] `GITHUB_WEBHOOK_SECRET` is set for webhook signature verification.
 - [ ] `GITHUB_TOKEN` is configured for CI tracking and AutoDev PR management.
 

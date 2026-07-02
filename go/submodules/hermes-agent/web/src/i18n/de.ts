@@ -487,7 +487,7 @@ export const de: Translations = {
       kicker: "Agentic Gamerscore",
       title: "Hermes Achievements",
       subtitle:
-        "Sammelbare Hermes-Abzeichen, verdient durch echten Sitzungsverlauf. Bekannte, noch nicht abgeschlossene Achievements werden als Entdeckt angezeigt; geheime Achievements bleiben verborgen, bis das erste passende Verhalten auftritt.",
+        "Sammelbare Hermes-Abzeichen, verdient durch echten Sitzungsverlauf. Bekannte, noch nicht abgeschlossene Achievements werden als Entdeckt angezeigt; geheime Achievements bleiben vertormentnexusen, bis das erste passende Verhalten auftritt.",
       scan_subtitle:
         "Hermes-Sitzungsverlauf wird gescannt. Der erste Scan kann bei umfangreichem Verlauf 5–10 Sekunden dauern.",
     },
@@ -500,7 +500,7 @@ export const de: Translations = {
       discovered: "Entdeckt",
       discovered_hint: "bekannt, noch nicht verdient",
       secrets: "Geheimnisse",
-      secrets_hint: "verborgen bis zum ersten Signal",
+      secrets_hint: "vertormentnexusen bis zum ersten Signal",
       highest_tier: "Höchste Stufe",
       highest_tier_hint: "Copper → Silver → Gold → Diamond → Olympian",
       latest: "Neueste",
@@ -514,12 +514,12 @@ export const de: Translations = {
     },
     tier: {
       target: "Ziel {tier}",
-      hidden: "Verborgen",
+      hidden: "Vertormentnexusen",
       complete: "Abgeschlossen",
       objective: "Ziel",
     },
     progress: {
-      hidden: "verborgen",
+      hidden: "vertormentnexusen",
     },
     scan: {
       building_headline: "Achievement-Profil wird erstellt…",
@@ -557,7 +557,7 @@ export const de: Translations = {
       header: "Letzte Freischaltungen",
     },
     empty: {
-      no_secrets_header: "Keine verborgenen Geheimnisse mehr in diesem Scan.",
+      no_secrets_header: "Keine vertormentnexusenen Geheimnisse mehr in diesem Scan.",
       no_secrets_body:
         "Hinweis: Geheimnisse beginnen meist bei ungewöhnlichen Fehlern oder Power-User-Mustern – Port-Konflikten, Berechtigungswänden, fehlenden Umgebungsvariablen, YAML-Fehlern, Docker-Kollisionen, Rollback-/Checkpoint-Nutzung, Cache-Treffern oder kleinen Fixes nach viel rotem Text.",
     },

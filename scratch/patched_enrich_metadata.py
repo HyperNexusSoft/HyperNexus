@@ -10,11 +10,11 @@ Three major tasks:
 
 import sqlite3, uuid, json, re, time, urllib.request, urllib.error, os
 
-BORG_DB_PATH = r"c:\Users\hyper\workspace\borg\tormentnexus.db"
+TORMENTNEXUS_DB_PATH = r"c:\Users\hyper\workspace\tormentnexus\tormentnexus.db"
 
 def http_get(url, timeout=20, accept="application/json"):
     req = urllib.request.Request(url, headers={
-        "User-Agent": "Mozilla/5.0 (compatible; HypercodeBot/1.0)",
+        "User-Agent": "Mozilla/5.0 (compatible; TormentnexusBot/1.0)",
         "Accept": accept,
     })
     try:
@@ -40,7 +40,7 @@ def extract_github(url):
 # ═══════════════════════════════════════════════════════════════════════════
 def scrape_official_registry():
     print("\n[Official MCP Registry] Scraping registry.modelcontextprotocol.io...")
-    conn = sqlite3.connect(BORG_DB_PATH)
+    conn = sqlite3.connect(TORMENTNEXUS_DB_PATH)
     c = conn.cursor()
     
     added = updated = 0
@@ -230,7 +230,7 @@ def enrich_github_metadata():
     """Enrich GitHub-sourced servers with real metadata from GitHub API."""
     print("\n[GitHub Enrichment] Enriching github/* entries with real metadata...")
     
-    conn = sqlite3.connect(BORG_DB_PATH)
+    conn = sqlite3.connect(TORMENTNEXUS_DB_PATH)
     c = conn.cursor()
     
     # Get github/* entries that have no stars yet or poor metadata
@@ -432,7 +432,7 @@ def enrich_smithery():
     """Re-fetch Smithery server details with full config schema."""
     print("\n[Smithery Enrichment] Fetching full config schemas from Smithery...")
     
-    conn = sqlite3.connect(BORG_DB_PATH)
+    conn = sqlite3.connect(TORMENTNEXUS_DB_PATH)
     c = conn.cursor()
     
     # Get smithery-sourced servers
@@ -561,7 +561,7 @@ def scrape_more_directories():
     """Scrape additional MCP directories not yet covered."""
     print("\n[More Directories] Scraping additional MCP directories...")
     
-    conn = sqlite3.connect(BORG_DB_PATH)
+    conn = sqlite3.connect(TORMENTNEXUS_DB_PATH)
     c = conn.cursor()
     added = 0
     gh_pattern = re.compile(r'github\.com/([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+)')
@@ -684,7 +684,7 @@ def scrape_more_directories():
 # ═══════════════════════════════════════════════════════════════════════════
 def ensure_metadata_columns():
     """Add extra metadata columns for testing if not present."""
-    conn = sqlite3.connect(BORG_DB_PATH)
+    conn = sqlite3.connect(TORMENTNEXUS_DB_PATH)
     c = conn.cursor()
     
     # Check and add columns
@@ -722,7 +722,7 @@ if __name__ == "__main__":
     enrich_github_metadata()
     
     # Final stats
-    conn = sqlite3.connect(BORG_DB_PATH)
+    conn = sqlite3.connect(TORMENTNEXUS_DB_PATH)
     c = conn.cursor()
     c.execute("SELECT COUNT(*) FROM published_mcp_servers")
     total = c.fetchone()[0]

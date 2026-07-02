@@ -15,7 +15,7 @@ SCAN_DIRS = [
     WORKSPACE / ".tormentnexus" / "skills",
     HOME / ".tormentnexus" / "skills",
     WORKSPACE / ".agent" / "skills",
-    WORKSPACE / ".borg" / "skills",
+    WORKSPACE / ".tormentnexus" / "skills",
     WORKSPACE / "skill-registry",
     WORKSPACE / "taskplane-tasks",
     WORKSPACE / "hermes-addons",

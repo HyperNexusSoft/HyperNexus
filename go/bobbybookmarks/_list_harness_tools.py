@@ -140,7 +140,7 @@ all_tools.sort(key=lambda x: (x[0], -x[9]))
 # Print report
 print('=' * 80)
 print('  AI CLI/TUI CODING HARNESS TOOLS - COMPREHENSIVE INDEX')
-print('  From the Borg Intelligence Atlas (atlas.db)')
+print('  From the Tormentnexus Intelligence Atlas (atlas.db)')
 print('=' * 80)
 
 tier_names = {1: 'TIER 1 - Major Standalone CLI/TUI AI Coding Tools',

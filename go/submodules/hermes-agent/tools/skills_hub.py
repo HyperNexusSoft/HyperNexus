@@ -1721,7 +1721,7 @@ class SkillsShSource(SkillSource):
 
         # Prefer a single recursive tree lookup before brute-forcing every
         # top-level directory. This avoids large request bursts on categorized
-        # repos like borghei/claude-skills.
+        # repos like tormentnexushei/claude-skills.
         tree_result = self.github._find_skill_in_repo_tree(repo, skill_token)
         if tree_result:
             return tree_result

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Borg Conversation Data Loss — Revised Recovery Execution
+Tormentnexus Conversation Data Loss — Revised Recovery Execution
 Phase 2+: Re-ingest archived session transcripts to restore memories
 """
 

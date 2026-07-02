@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Borg Research Worker v3.0 - Deep Processing Pass
+"""Tormentnexus Research Worker v3.0 - Deep Processing Pass
 
 Focused on:
 1. 787 new URLs from incoming_resources.txt not yet in atlas
@@ -43,7 +43,7 @@ MODELS_QUALITY = [
     ("liquid/lfm2.5-1.2b", 60),
 ]
 
-BORG_TAXONOMY = [
+TORMENTNEXUS_TAXONOMY = [
     "Agent Orchestration & Workflow",
     "Context Engineering & Isolation",
     "Memory & Persistence Architecture",
@@ -278,7 +278,7 @@ def build_prompt(url, fit_text, gh_meta=None, reddit_ctx=None, existing_sd=None)
     
     prompt = f"""Analyze this AI/developer tool or resource. Return a JSON object with these fields:
 
-- CATEGORY: one of [{', '.join(BORG_TAXONOMY)}]
+- CATEGORY: one of [{', '.join(TORMENTNEXUS_TAXONOMY)}]
 - SHORT_DESCRIPTION: 1-sentence description (max 150 chars)
 - LONG_DESCRIPTION: 2-3 sentence detailed description
 - MAIN_FEATURES: comma-separated list of 3-6 key features
@@ -306,7 +306,7 @@ def is_garbage(rdata):
 
 def reclassify_entry(a, eid, mapped):
     """Update layer_membership for an entry"""
-    if mapped and mapped in BORG_TAXONOMY:
+    if mapped and mapped in TORMENTNEXUS_TAXONOMY:
         a.execute("DELETE FROM layer_membership WHERE entry_id=?", (eid,))
         a.execute("INSERT INTO layer_membership (entry_id, layer, is_primary) VALUES (?, ?, 1)", (eid, mapped))
 
@@ -440,7 +440,7 @@ def main():
     a = atl.cursor()
     
     logger.info("=" * 60)
-    logger.info("Borg Research Worker v3.0 - Deep Processing Pass")
+    logger.info("Tormentnexus Research Worker v3.0 - Deep Processing Pass")
     logger.info(f"Phase: {args.phase}, Limit: {args.limit or 'unlimited'}, Dry-run: {args.dry_run}")
     logger.info("=" * 60)
     

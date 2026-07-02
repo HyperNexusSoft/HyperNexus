@@ -1,7 +1,7 @@
 import os
 
-MEMORY_PATH = r"c:\Users\hyper\workspace\borg\MEMORY.md"
-HANDOFF_PATH = r"c:\Users\hyper\workspace\borg\HANDOFF.md"
+MEMORY_PATH = r"c:\Users\hyper\workspace\tormentnexus\MEMORY.md"
+HANDOFF_PATH = r"c:\Users\hyper\workspace\tormentnexus\HANDOFF.md"
 
 def append_memory():
     memory_text = """
@@ -29,7 +29,7 @@ Successfully completed the system-wide skill scraping, deduplication, and databa
 ## Accomplishments
 - **System-Wide Skill Ingestion**:
   - Scraped **17,241 raw skill files/definitions** from the entire developer workspace.
-  - Deduplicated by body hash, outputting **3,863 unique skills** and mapping all duplicates in [catalog_index.json](file:///c:/Users/hyper/workspace/borg/.tormentnexus/skills/catalog_index.json).
+  - Deduplicated by body hash, outputting **3,863 unique skills** and mapping all duplicates in [catalog_index.json](file:///c:/Users/hyper/workspace/tormentnexus/.tormentnexus/skills/catalog_index.json).
   - Extracted **250 unique external registries/repositories** from `bookmarks.db` and `catalog.db`.
 - **Intelligent Validator Upgrade**:
   - Added a `preflightCheck` process runner using Node's `spawn` to capture stdout/stderr from early crash validation attempts.

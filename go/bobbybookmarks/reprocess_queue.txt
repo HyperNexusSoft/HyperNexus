@@ -202,8 +202,8 @@ https://bugzilla.mozilla.org/show_bug.cgi?id=1677497#c0
 https://build.nvidia.com/blueprints
 https://build.nvidia.com/crewai
 https://build.nvidia.com/crewai/code-documentation-for-software-development
-https://build.nvidia.com/cyborg
-https://build.nvidia.com/cyborg/cyborg-enterprise-rag
+https://build.nvidia.com/cytormentnexus
+https://build.nvidia.com/cytormentnexus/cytormentnexus-enterprise-rag
 https://build.nvidia.com/explore/discover
 https://build.nvidia.com/h2o
 https://build.nvidia.com/h2o/flood-intelligence
@@ -1433,7 +1433,7 @@ https://github.com/robertpelloni
 https://github.com/robertpelloni/ArrowVortex
 https://github.com/robertpelloni/Simply-Love-SM5
 https://github.com/robertpelloni/bobcoin/tree/c7d74f00dd51f4b14856187913322facc44738ee
-https://github.com/robertpelloni/borg
+https://github.com/robertpelloni/tormentnexus
 https://github.com/robertpelloni/fwber/blob/main/README.md
 https://github.com/robertpelloni/jules-autopilot
 https://github.com/robertpelloni/workspace/blob/main/.gitmodules

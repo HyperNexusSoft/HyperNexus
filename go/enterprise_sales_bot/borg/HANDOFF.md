@@ -40,7 +40,7 @@ Successfully completed the consolidation of the user-facing dashboard interfaces
 
 ## Summary
 
-Re-executed the full repository synchronization protocol. Fixed version governance (properly bumped to 1.0.0-alpha.159 after previous session's bump was lost in merge conflict resolution). Updated all submodules to latest (enterprise_sales_bot +5 commits, borg to f33149099). Restored CRLF-corrupted tool files. Updated all documentation. Ran both Go and dashboard builds — both clean.
+Re-executed the full repository synchronization protocol. Fixed version governance (properly bumped to 1.0.0-alpha.159 after previous session's bump was lost in merge conflict resolution). Updated all submodules to latest (enterprise_sales_bot +5 commits, tormentnexus to f33149099). Restored CRLF-corrupted tool files. Updated all documentation. Ran both Go and dashboard builds — both clean.
 
 ### What was done
 
@@ -48,7 +48,7 @@ Re-executed the full repository synchronization protocol. Fixed version governan
    - Fetched all remotes/tags. No upstream parent — `MDMAtk/TormentNexus` is root.
    - Updated **bobbybookmarks** to latest `main` (c50f1551).
    - Updated **enterprise_sales_bot** +5 commits (c4c5ab4 → 49f2045 → fdafa92).
-   - Updated nested **borg** to latest (f33149099, tracking TormentNexus main).
+   - Updated nested **tormentnexus** to latest (f33149099, tracking TormentNexus main).
    - Pushed submodule updates to their remotes.
 
 2. **Intelligent Merge Engine (Dual Direction)**:
@@ -80,7 +80,7 @@ Re-executed the full repository synchronization protocol. Fixed version governan
 - **Monorepo Version**: `1.0.0-alpha.159`
 - **Go Build**: ✅ Clean
 - **Dashboard Build**: ✅ Clean
-- **Submodules**: bobbybookmarks (c50f1551), enterprise_sales_bot (fdafa92), borg (f33149099)
+- **Submodules**: bobbybookmarks (c50f1551), enterprise_sales_bot (fdafa92), tormentnexus (f33149099)
 - **Branches**: Only `main` has unique work; 170+ `task/*` are inert
 
 ### Next Agent Instructions
@@ -95,14 +95,14 @@ Re-executed the full repository synchronization protocol. Fixed version governan
 
 ## Summary
 
-Executed comprehensive repository synchronization protocol: fetched all remotes, initialized and updated recursive submodules (bobbybookmarks, enterprise_sales_bot, borg), inspected 170+ feature branches (all zero-commit Brain checkpoints with no unique progress), merged 100+ new Go MCP tool implementations into main, bumped version to 1.0.0-alpha.158, synced all 35 workspace packages, and updated documentation.
+Executed comprehensive repository synchronization protocol: fetched all remotes, initialized and updated recursive submodules (bobbybookmarks, enterprise_sales_bot, tormentnexus), inspected 170+ feature branches (all zero-commit Brain checkpoints with no unique progress), merged 100+ new Go MCP tool implementations into main, bumped version to 1.0.0-alpha.158, synced all 35 workspace packages, and updated documentation.
 
 ### What was done
 
 1. **Upstream Tracking & Submodule Sanitization**:
    - Fetched all remote tags and branches (`git fetch --all --tags --prune`).
-   - Fixed infinite recursive submodule loop in `enterprise_sales_bot/borg/enterprise_sales_bot/borg` — the `.gitmodules` comment confirms legacy submodules removed as redundant.
-   - Initialized all submodules cleanly: `bobbybookmarks` (d9610a21), `enterprise_sales_bot` (c4c5ab48), `enterprise_sales_bot/borg` (e3e3377).
+   - Fixed infinite recursive submodule loop in `enterprise_sales_bot/tormentnexus/enterprise_sales_bot/tormentnexus` — the `.gitmodules` comment confirms legacy submodules removed as redundant.
+   - Initialized all submodules cleanly: `bobbybookmarks` (d9610a21), `enterprise_sales_bot` (c4c5ab48), `enterprise_sales_bot/tormentnexus` (e3e3377).
 
 2. **Intelligent Merge Engine (Dual Direction)**:
    - **Forward Merge**: Bulk-merged 100+ new Go MCP tool implementations from assimilation pipeline (commit f908c6f5b) into `main` with conflict resolution.
@@ -126,7 +126,7 @@ Executed comprehensive repository synchronization protocol: fetched all remotes,
 
 - **Monorepo Version**: `1.0.0-alpha.158`
 - **Branches Inspected**: 170+ `task/*` (all empty), `main` (active)
-- **Submodules Clean**: bobbybookmarks, enterprise_sales_bot, borg all initialized
+- **Submodules Clean**: bobbybookmarks, enterprise_sales_bot, tormentnexus all initialized
 - **Go Sidecar Build**: Pending full compilation check
 - **No Lost Progress**: Confirmed — all feature branches had zero unique commits
 

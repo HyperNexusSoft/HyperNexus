@@ -1,7 +1,7 @@
-# Borg Intelligence Harvester - Vision
+# Tormentnexus Intelligence Harvester - Vision
 
 ## Ultimate Goal
-The overarching goal of the Borg Intelligence Harvester (BobbyBookmarks) is to serve as the foundational "operating system for agent intelligence". It is designed to act not as another agent framework, but as the central connective tissue connecting memory, self-modification, and verification using a knowledge graph backbone. By doing so, it aims to establish an architecture capable of deeply understanding and reasoning about relationships across tools, skills, session history, and extracted facts.
+The overarching goal of the Tormentnexus Intelligence Harvester (BobbyBookmarks) is to serve as the foundational "operating system for agent intelligence". It is designed to act not as another agent framework, but as the central connective tissue connecting memory, self-modification, and verification using a knowledge graph backbone. By doing so, it aims to establish an architecture capable of deeply understanding and reasoning about relationships across tools, skills, session history, and extracted facts.
 
 ## Core Concepts
 1. **Knowledge Graph Backbone**: A uniquely positioned mapping of relationships between tools, skills, memory, and decisions for tasks like blast-radius analysis and semantic failure tracing.
@@ -12,4 +12,4 @@ The overarching goal of the Borg Intelligence Harvester (BobbyBookmarks) is to s
 6. **Cross-Session Persistence**: Allowing agentic execution checkpoints and learned preferences to survive system restarts natively without losing long-term goals.
 
 ## User-Satisfaction Design
-Borg prioritizes autonomous operation, error resilience, and long-term data curation. It operates on the principle of "Don't Stop the Party," ensuring maximum uptime and an uninterrupted intelligence aggregation pipeline that requires minimal human intervention.
+Tormentnexus prioritizes autonomous operation, error resilience, and long-term data curation. It operates on the principle of "Don't Stop the Party," ensuring maximum uptime and an uninterrupted intelligence aggregation pipeline that requires minimal human intervention.

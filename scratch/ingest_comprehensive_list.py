@@ -3,7 +3,7 @@ import re
 import uuid
 import json
 
-DB_PATH = r"c:\Users\hyper\workspace\borg\tormentnexus.db"
+DB_PATH = r"c:\Users\hyper\workspace\tormentnexus\tormentnexus.db"
 MD_PATH = r"c:\Users\hyper\workspace\bobbybookmarks\research\mcp_comprehensive_list.md"
 
 def extract_github_info(url):

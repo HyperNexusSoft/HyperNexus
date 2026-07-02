@@ -1,5 +1,5 @@
 # ⚡ Connectivity / MCP / A2A
-> Borg Intelligence Atlas v8 · 2026-06-17 · 900 tools
+> Tormentnexus Intelligence Atlas v8 · 2026-06-17 · 900 tools
 > MCP infrastructure, A2A, gateways, tool discovery, registries
 
 | Metric | Value |
@@ -319,7 +319,7 @@
 `8.7` ★ ⚡80 Q0.8⭐ ⭐ Excellent
 ↗2 layers
 
-**This project enables developers to connect their chat repls to Wolfram Alpha, leveraging its computational power to enrich code analysis, documentation, and problem-solving capabilities within the Borg ecosystem. It focuses on bridging external AI tools with internal development environments for seamless integration.**
+**This project enables developers to connect their chat repls to Wolfram Alpha, leveraging its computational power to enrich code analysis, documentation, and problem-solving capabilities within the Tormentnexus ecosystem. It focuses on bridging external AI tools with internal development environments for seamless integration.**
 
 **Features:**
 - Connect chat repl to Wolfram Alpha
@@ -508,7 +508,7 @@
 ### 29. [oauth2](https://discord.com/developers/applications/1493728651773087825/oauth2)
 `8.8` ★ ⚡70 Q0.6⭐ ⭐ Excellent
 
-**The resource outlines the technical requirements and considerations for integrating Discord into the Borg intelligence database, focusing on API access, authentication methods, and real-time data synchronization.**
+**The resource outlines the technical requirements and considerations for integrating Discord into the Tormentnexus intelligence database, focusing on API access, authentication methods, and real-time data synchronization.**
 
 **Features:**
 - discord api integration
@@ -2606,7 +2606,7 @@
 ### 38. [sunsetcoder/flightradar24-mcp-server](https://github.com/sunsetcoder/flightradar24-mcp-server)
 `8.8` ★ ⚡88 Q0.9🏆 🏆 World-class
 
-**The Borg Project's flight radar server integrates with Flightradar24 API to provide live flight tracking, arrival/departure times, airport status monitoring, and emergency alerts. It supports seamless connectivity through MCP protocol, enabling automated workflows for aviation enthusiasts, planners, and developers.**
+**The Tormentnexus Project's flight radar server integrates with Flightradar24 API to provide live flight tracking, arrival/departure times, airport status monitoring, and emergency alerts. It supports seamless connectivity through MCP protocol, enabling automated workflows for aviation enthusiasts, planners, and developers.**
 
 **Features:**
 - real-time flight tracking
@@ -4131,7 +4131,7 @@ This tool likely addresses the challenges of managing complex service interactio
 ### 134. [auth.freetaxusa.com](https://auth.freetaxusa.com)
 `7.7` ★ ⚡61 Q0.6✓ ✓ Solid
 
-**This resource highlights a technical requirement for enabling JavaScript in the browser to access certain functionalities, specifically focusing on the interoperability and connectivity aspects within the Borg Project ecosystem.**
+**This resource highlights a technical requirement for enabling JavaScript in the browser to access certain functionalities, specifically focusing on the interoperability and connectivity aspects within the Tormentnexus Project ecosystem.**
 
 **Features:**
 - JavaScript enablement
@@ -4490,7 +4490,7 @@ This tool likely addresses the challenges of managing complex service interactio
 ### 11. [gluneau/hive-mcp-server](https://github.com/gluneau/hive-mcp-server)
 `9.8` ★★ ⚡93 Q0.9🏆 🏆 World-class
 
-**The Borg project provides a robust platform for integrating AI assistants with the Hive blockchain, allowing seamless data exchange, content management, and secure transactions. It supports key functionalities such as account information retrieval, post creation, voting, and encrypted messaging, all while maintaining enterprise-grade security and compliance.**
+**The Tormentnexus project provides a robust platform for integrating AI assistants with the Hive blockchain, allowing seamless data exchange, content management, and secure transactions. It supports key functionalities such as account information retrieval, post creation, voting, and encrypted messaging, all while maintaining enterprise-grade security and compliance.**
 
 **Features:**
 - AI assistant integration with Hive via Model Context Protocol
@@ -4539,7 +4539,7 @@ This tool likely addresses the challenges of managing complex service interactio
 ### 14. [adfin-engineering/mcp-server-adfin](https://github.com/adfin-engineering/mcp-server-adfin)
 `8.8` ★ ⚡91 Q0.9🏆 🏆 World-class
 
-**The project implements a Model Context Protocol Server to facilitate seamless connectivity between the Borg platform and Adfin APIs. This server acts as an intermediary, allowing developers to securely interact with Adfin's services while maintaining robust security protocols. It supports key functionalities such as authentication, data synchronization, and API communication, making it ideal for enterprise environments requiring reliable integration.**
+**The project implements a Model Context Protocol Server to facilitate seamless connectivity between the Tormentnexus platform and Adfin APIs. This server acts as an intermediary, allowing developers to securely interact with Adfin's services while maintaining robust security protocols. It supports key functionalities such as authentication, data synchronization, and API communication, making it ideal for enterprise environments requiring reliable integration.**
 
 **Features:**
 - Model Context Protocol Server
@@ -4789,7 +4789,7 @@ This tool likely addresses the challenges of managing complex service interactio
 ### 28. [sourabh-khot65/typesense-mcp-server](https://github.com/sourabh-khot65/typesense-mcp-server)
 `8.8` ★ ⚡90 Q0.9🏆 🏆 World-class
 
-**The typesense-mcp-server acts as a bridge between Borg and Typesense, allowing seamless retrieval of data from various Typesense collections using popular MCP clients like Claude or Cursor. It supports generic search interfaces, typo tolerance, filtering, pagination, and API integration, making it suitable for enterprise-level applications requiring robust search and data extraction capabilities.**
+**The typesense-mcp-server acts as a bridge between Tormentnexus and Typesense, allowing seamless retrieval of data from various Typesense collections using popular MCP clients like Claude or Cursor. It supports generic search interfaces, typo tolerance, filtering, pagination, and API integration, making it suitable for enterprise-level applications requiring robust search and data extraction capabilities.**
 
 **Features:**
 - Generic search interface
@@ -4856,7 +4856,7 @@ This tool likely addresses the challenges of managing complex service interactio
 `8.8` ★ ⚡90 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg project provides a server-based solution for securely uploading images and videos to Cloudinary via the Model Context Protocol (MCP). It supports integration with Claude Desktop, enabling automated workflows for media management in enterprise environments. Key features include secure authentication using Cloudinary credentials, customizable upload parameters, and seamless deployment within CI/CD pipelines.**
+**The Tormentnexus project provides a server-based solution for securely uploading images and videos to Cloudinary via the Model Context Protocol (MCP). It supports integration with Claude Desktop, enabling automated workflows for media management in enterprise environments. Key features include secure authentication using Cloudinary credentials, customizable upload parameters, and seamless deployment within CI/CD pipelines.**
 
 **Features:**
 - upload images/videos
@@ -5374,7 +5374,7 @@ This tool likely addresses the challenges of managing complex service interactio
 ### 63. [awkoy/notion-mcp-server](https://github.com/awkoy/notion-mcp-server)
 `9.5` ★★ ⚡86 Q0.8🏆 🏆 World-class
 
-**The Borg Intelligence database provides a comprehensive technical guide on integrating with Notion via the Model Context Protocol (MCP), covering setup, data retrieval, content creation, and advanced operations. It emphasizes seamless interaction between AI assistants and Notion's ecosystem, supporting features like database management, block manipulation, and real-time updates.**
+**The Tormentnexus Intelligence database provides a comprehensive technical guide on integrating with Notion via the Model Context Protocol (MCP), covering setup, data retrieval, content creation, and advanced operations. It emphasizes seamless interaction between AI assistants and Notion's ecosystem, supporting features like database management, block manipulation, and real-time updates.**
 
 **Features:**
 - Cursor Integration
@@ -6582,7 +6582,7 @@ Configuration is managed via environment variables, enabling flexible setup for 
 ### 12. [adhikasp/mcp-twikit](https://github.com/adhikasp/mcp-twikit)
 `9.0` ★★ ⚡93 Q0.9🏆 🏆 World-class
 
-**The project introduces a Model Context Protocol (MCP) server designed to facilitate seamless integration between the Borg platform and Twitter. This tool allows automated data extraction, sentiment analysis, and contextual understanding from Twitter feeds, supporting advanced use cases such as customer feedback analysis, brand monitoring, and real-time insights. It leverages MCP's capabilities for secure, protocol-aware communication, ensuring reliable interaction with Twitter's API while mainta...**
+**The project introduces a Model Context Protocol (MCP) server designed to facilitate seamless integration between the Tormentnexus platform and Twitter. This tool allows automated data extraction, sentiment analysis, and contextual understanding from Twitter feeds, supporting advanced use cases such as customer feedback analysis, brand monitoring, and real-time insights. It leverages MCP's capabilities for secure, protocol-aware communication, ensuring reliable interaction with Twitter's API while mainta...**
 
 **Features:**
 - MCP server integration
@@ -7537,7 +7537,7 @@ Configuration is managed via environment variables, enabling flexible setup for 
 ### 69. [hub.docker.com/mcp](https://hub.docker.com/mcp)
 `9.0` ★★ ⚡78 Q0.7⭐ ⭐ Excellent
 
-**The Borg Project's MCP resource provides a centralized catalog of secure, community-built MCP servers, enabling developers to discover, connect, and manage containerized MCP instances efficiently. It supports various use cases such as system exploration, automation, and integration with tools like Stripe, GitHub, and Notion.**
+**The Tormentnexus Project's MCP resource provides a centralized catalog of secure, community-built MCP servers, enabling developers to discover, connect, and manage containerized MCP instances efficiently. It supports various use cases such as system exploration, automation, and integration with tools like Stripe, GitHub, and Notion.**
 
 **Features:**
 - Access to a vast library of Docker-hardened MCP servers
@@ -9268,7 +9268,7 @@ This tool is essential for developers needing to build modern, responsive web ap
 ### 22. [wirdes/db-mcp-tool](https://github.com/wirdes/db-mcp-tool)
 `8.6` ★ ⚡91 Q0.9🏆 🏆 World-class
 
-**This technical resource introduces the Borg Intelligence Database Explorer, a Node.js-based application designed to facilitate interaction with multiple database systems including PostgreSQL, MySQL, and Firestore. It provides a comprehensive interface for executing SQL queries, managing tables, triggers, functions, and exporting schema or data in various formats. The tool emphasizes ease of use through its structured command-line operations and integrates seamlessly with different database backe...**
+**This technical resource introduces the Tormentnexus Intelligence Database Explorer, a Node.js-based application designed to facilitate interaction with multiple database systems including PostgreSQL, MySQL, and Firestore. It provides a comprehensive interface for executing SQL queries, managing tables, triggers, functions, and exporting schema or data in various formats. The tool emphasizes ease of use through its structured command-line operations and integrates seamlessly with different database backe...**
 
 **Features:**
 - Database connection management
@@ -9458,7 +9458,7 @@ This tool is essential for developers needing to build modern, responsive web ap
 `8.6` ★ ⚡88 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Intelligence database outlines a comprehensive NodeMCU MCP server that enables secure, real-time management of IoT devices using the Model Context Protocol. It supports key functionalities such as device registration, status monitoring, configuration updates, and integration with AI assistants like Claude Desktop. The service leverages JWT authentication for security and provides a RESTful API with WebSocket support for live telemetry. Developers can extend its capabilities through cust...**
+**The Tormentnexus Intelligence database outlines a comprehensive NodeMCU MCP server that enables secure, real-time management of IoT devices using the Model Context Protocol. It supports key functionalities such as device registration, status monitoring, configuration updates, and integration with AI assistants like Claude Desktop. The service leverages JWT authentication for security and provides a RESTful API with WebSocket support for live telemetry. Developers can extend its capabilities through cust...**
 
 **Features:**
 - Device management
@@ -9577,7 +9577,7 @@ This tool is essential for developers needing to build modern, responsive web ap
 ### 40. [dmcxblue/claude-c2](https://github.com/dmcxblue/claude-c2)
 `8.8` ★ ⚡85 Q0.9🏆 🏆 World-class
 
-**This project implements a Borg-based system that leverages an MCP (Message Control Protocol) server to facilitate seamless communication between a Python-based client and the C2 (Command and Control) server. The integration allows for efficient task execution, configuration management, and secure interaction within a structured workflow environment.**
+**This project implements a Tormentnexus-based system that leverages an MCP (Message Control Protocol) server to facilitate seamless communication between a Python-based client and the C2 (Command and Control) server. The integration allows for efficient task execution, configuration management, and secure interaction within a structured workflow environment.**
 
 **Features:**
 - MCP Server Integration
@@ -10621,7 +10621,7 @@ This tool is essential for developers needing to build modern, responsive web ap
 `10.0` ★★★ ⚡98 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**Puppeteer provides a standardized interface for automating web browsers, enabling programmatic control over Chrome and Firefox. It facilitates complex web interactions including DOM manipulation, keyboard/mouse event simulation, and request interception. For the 'Borg' project, it represents a foundational connectivity layer that allows AI agents to interact with non-API-based web applications (Agent-to-App) by treating the browser as a managed environment. The project now includes specific supp...**
+**Puppeteer provides a standardized interface for automating web browsers, enabling programmatic control over Chrome and Firefox. It facilitates complex web interactions including DOM manipulation, keyboard/mouse event simulation, and request interception. For the 'Tormentnexus' project, it represents a foundational connectivity layer that allows AI agents to interact with non-API-based web applications (Agent-to-App) by treating the browser as a managed environment. The project now includes specific supp...**
 
 **Features:**
 - Headless browser control
@@ -12412,7 +12412,7 @@ This tool addresses connectivity challenges by ensuring that the agent execution
 ### 14. [fwber.me - Adult Social Network - Free Tokens for AI Avatars & Gold Premium!](https://www.fwber.me/register)
 `7.8` ★ ⚡69 Q0.7✓ ✓ Solid
 
-**The Borg Project intelligence database should prioritize analyzing the technical architecture of fwber.me, particularly its methods for connecting users across platforms and maintaining robust communication flows.**
+**The Tormentnexus Project intelligence database should prioritize analyzing the technical architecture of fwber.me, particularly its methods for connecting users across platforms and maintaining robust communication flows.**
 
 **Features:**
 - social networking
@@ -12890,7 +12890,7 @@ This tool addresses connectivity challenges by ensuring that the agent execution
 `9.0` ★★ ⚡86 Q0.8🏆 🏆 World-class
 ↗2 layers
 
-**The document examines the rapid proliferation of over 17,000 MCP servers across various platforms, highlighting their expanded attack surface. It identifies three critical security threats unique to MCP: tool poisoning, injection risks through malicious tool descriptions, and code execution capabilities embedded in server tools. The analysis emphasizes that traditional CVE-based security measures are insufficient for MCP, as these threats stem from features rather than bugs. Borg should prioriti...**
+**The document examines the rapid proliferation of over 17,000 MCP servers across various platforms, highlighting their expanded attack surface. It identifies three critical security threats unique to MCP: tool poisoning, injection risks through malicious tool descriptions, and code execution capabilities embedded in server tools. The analysis emphasizes that traditional CVE-based security measures are insufficient for MCP, as these threats stem from features rather than bugs. Tormentnexus should prioriti...**
 
 **Features:**
 - Tool poisoning detection
@@ -12989,7 +12989,7 @@ This tool addresses connectivity challenges by ensuring that the agent execution
 `7.5` ★ ⚡64 Q0.6✓ ✓ Solid
 ↗2 layers
 
-**The resource provides a step-by-step overview of how to buy and utilize Monero within the Borg blockchain infrastructure, focusing on technical integration and interoperability protocols.**
+**The resource provides a step-by-step overview of how to buy and utilize Monero within the Tormentnexus blockchain infrastructure, focusing on technical integration and interoperability protocols.**
 
 **Features:**
 - Monero purchase instructions

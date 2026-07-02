@@ -696,7 +696,7 @@
     "serena": {
       "command": "uvx",
       "args": [
-        "--from git+https://github.com/orhypercode/serena",
+        "--from git+https://github.com/ortormentnexus/serena",
         "serena",
         "start-mcp-server",
         "--context",

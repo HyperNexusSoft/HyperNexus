@@ -1,14 +1,14 @@
 """
-BORG FEATURE SPEC — Derived from 13,503 bookmark intelligence reports
+TORMENTNEXUS FEATURE SPEC — Derived from 13,503 bookmark intelligence reports
 The bookmark database is RESEARCH INPUT about the AI engineering ecosystem.
-Borg is a SEPARATE system that should be INFORMED BY those trends.
+Tormentnexus is a SEPARATE system that should be INFORMED BY those trends.
 
 Method: Ecosystem saturation analysis + enrichment ratios + gap detection
 """
 
-BORG_SPEC = """
+TORMENTNEXUS_SPEC = """
 ========================================================================
-  BORG: THE SYSTEM THE DATA SAYS SHOULD EXIST
+  TORMENTNEXUS: THE SYSTEM THE DATA SAYS SHOULD EXIST
 ========================================================================
 
   ECOSYSTEM SATURATION (what's already built):
@@ -29,29 +29,29 @@ BORG_SPEC = """
     UX:           0.99x  OVERBUILT
     Intelligence: 0.69x  adequate
     Context:      0.66x  adequate
-    Tools:        0.48x  UNDERBUILT  <-- BORG OPPORTUNITY
-    Infra:        0.41x  UNDERBUILT  <-- BORG OPPORTUNITY
-    Verification: 0.34x  UNDERBUILT  <-- BORG OPPORTUNITY
-    Self-Mod:     0.30x  UNDERBUILT  <-- BORG OPPORTUNITY
-    Memory:       0.29x  UNDERBUILT  <-- BORG OPPORTUNITY
+    Tools:        0.48x  UNDERBUILT  <-- TORMENTNEXUS OPPORTUNITY
+    Infra:        0.41x  UNDERBUILT  <-- TORMENTNEXUS OPPORTUNITY
+    Verification: 0.34x  UNDERBUILT  <-- TORMENTNEXUS OPPORTUNITY
+    Self-Mod:     0.30x  UNDERBUILT  <-- TORMENTNEXUS OPPORTUNITY
+    Memory:       0.29x  UNDERBUILT  <-- TORMENTNEXUS OPPORTUNITY
 
   MISSING COMBINATIONS (deficit vs expected co-occurrence):
     Self-Mod + Tools:   2.7% deficit  (should be 3.9%, only 1.2%)
     Memory + Tools:     1.7% deficit  (should be 3.7%, only 2.1%)
     Infra + Memory:     1.2% deficit  (should be 3.2%, only 2.0%)
 
-  BORG IS NOT:
+  TORMENTNEXUS IS NOT:
     Another agent framework (52% saturated)
     Another MCP server (66% saturated)
     Another CLI/dashboard (52% saturated)
 
-  BORG IS:
+  TORMENTNEXUS IS:
     A Memory + Self-Modification + Verification system
     that CONNECTS to the saturated layers via Protocol.
     The operating system for agent intelligence.
 
 ========================================================================
-  BORG'S 7 CORE CAPABILITIES (ranked by data evidence)
+  TORMENTNEXUS'S 7 CORE CAPABILITIES (ranked by data evidence)
 ========================================================================
 
   1. KNOWLEDGE GRAPH BACKBONE
@@ -110,7 +110,7 @@ BORG_SPEC = """
   No system in the 13,503-bookmark corpus combines:
     Graph Memory + Verification + Self-Modification
 
-  That's what Borg is. The graph sees relationships, verification
+  That's what Tormentnexus is. The graph sees relationships, verification
   checks decisions, and self-modification improves from outcomes.
 
   The closest existing systems span 3-4 layers but miss the triangle:
@@ -118,7 +118,7 @@ BORG_SPEC = """
     - Mimir: 7 layers but no verification
     - Hindsight: 7 layers but no tools layer
   
-  Borg is the triangle: Memory + Self-Mod + Verify, connected via Protocol.
+  Tormentnexus is the triangle: Memory + Self-Mod + Verify, connected via Protocol.
 
 ========================================================================
   BUILD ORDER

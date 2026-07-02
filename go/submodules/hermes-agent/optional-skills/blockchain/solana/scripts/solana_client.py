@@ -41,7 +41,7 @@ KNOWN_TOKENS: Dict[str, tuple] = {
     "So11111111111111111111111111111111111111112":  ("SOL",   "Solana"),
     "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v": ("USDC",  "USD Coin"),
     "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB":  ("USDT",  "Tether"),
-    "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263": ("BONK",  "Bonk"),
+    "DezXAZ8z7PnrnRJjz3wXTormentnexusixCa6xjnB7YaB1pPB263": ("BONK",  "Bonk"),
     "JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN":  ("JUP",   "Jupiter"),
     "7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs": ("WETH",  "Wrapped Ether"),
     "jtojtomepa8beP8AuQc6eXt5FriJwfFMwQx2v2f9mCL":  ("JTO",   "Jito"),

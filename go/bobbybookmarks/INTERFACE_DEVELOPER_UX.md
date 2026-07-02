@@ -1,5 +1,5 @@
 # 🤳 Interface & Developer UX
-> Borg Intelligence Atlas v8 · 2026-06-17 · 782 tools
+> Tormentnexus Intelligence Atlas v8 · 2026-06-17 · 782 tools
 > Computer-use agents, terminal UIs, IDEs, web dashboards, voice, canvas
 
 | Metric | Value |
@@ -160,7 +160,7 @@
 `8.8` ★ ⚡89 Q0.9🏆 🏆 World-class
 ↗4 layers
 
-**The Borg Project's 'pubmed_mcp' repository offers a robust MCP server that enables users to search, analyze, and retrieve academic medical papers from the PubMed database. It provides advanced features such as topic-based searches, citation generation, publication statistics analysis, and integration with various API tools for seamless development workflows.**
+**The Tormentnexus Project's 'pubmed_mcp' repository offers a robust MCP server that enables users to search, analyze, and retrieve academic medical papers from the PubMed database. It provides advanced features such as topic-based searches, citation generation, publication statistics analysis, and integration with various API tools for seamless development workflows.**
 
 **Features:**
 - search functionality
@@ -437,7 +437,7 @@
 ### 23. [vibefolio.link — Showcase your vibe-coded projects](https://vibefolio.link)
 `8.8` ★ ⚡80 Q0.8⭐ ⭐ Excellent
 
-**The Borg intelligence database should analyze the technical structure of the provided resource, focusing on its user interface design, interactivity, and how it presents project information in a public, shareable format. It evaluates the categorization, navigation, and overall experience for developers and project creators.**
+**The Tormentnexus intelligence database should analyze the technical structure of the provided resource, focusing on its user interface design, interactivity, and how it presents project information in a public, shareable format. It evaluates the categorization, navigation, and overall experience for developers and project creators.**
 
 **Features:**
 - project cards
@@ -637,7 +637,7 @@
 ### 36. [someone_just_built_a_free_video_editing_tool_for](https://www.reddit.com/r/aiecosystem/comments/1ss0nmu/someone_just_built_a_free_video_editing_tool_for)
 `8.8` ★ ⚡71 Q0.6⭐ ⭐ Excellent
 
-**The project introduces a user-friendly video editing interface aimed at enhancing the efficiency and integration of video processing within the Borg ecosystem. It focuses on streamlining workflows, improving developer experience, and ensuring seamless connectivity with other systems.**
+**The project introduces a user-friendly video editing interface aimed at enhancing the efficiency and integration of video processing within the Tormentnexus ecosystem. It focuses on streamlining workflows, improving developer experience, and ensuring seamless connectivity with other systems.**
 
 **Features:**
 - video editing
@@ -645,7 +645,7 @@
 - integration capabilities
 - developer tools
 
-*Tags: video-editing, tool-development, interface-design, developer-experience, borg-project, software-tool, user-interface, workflow-enhancement*
+*Tags: video-editing, tool-development, interface-design, developer-experience, tormentnexus-project, software-tool, user-interface, workflow-enhancement*
 
 ---
 
@@ -685,7 +685,7 @@
 `8.8` ★ ⚡70 Q0.6⭐ ⭐ Excellent
 ↗2 layers
 
-**The Borg should evaluate the technical approach of this app, focusing on its user interface design, interaction flow, and usability features that enhance the user experience when analyzing song keys and BPMs.**
+**The Tormentnexus should evaluate the technical approach of this app, focusing on its user interface design, interaction flow, and usability features that enhance the user experience when analyzing song keys and BPMs.**
 
 **Features:**
 - Key and BPM Finder
@@ -776,7 +776,7 @@
 ### 45. [chatgpt.com](https://chatgpt.com)
 `8.7` ★ ⚡65 Q0.6✓ ✓ Solid
 
-**The Borg Project intelligence database should include this resource to assess its utility in understanding AI-driven chatbot interactions, user engagement patterns, and the technical implementation of conversational agents.**
+**The Tormentnexus Project intelligence database should include this resource to assess its utility in understanding AI-driven chatbot interactions, user engagement patterns, and the technical implementation of conversational agents.**
 
 **Features:**
 - chat interface
@@ -1611,7 +1611,7 @@
 `9.0` ★★ ⚡92 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project's 'couchdb-mcp-server' is a developer-focused platform that provides tools for managing CouchDB databases and documents. It supports AI integration, offering features such as database creation, document manipulation, index management, and querying via Mango and CouchDB 3.x+ syntax. Designed for seamless interaction with CouchDB through a simple interface, it includes robust error handling and debugging tools like the MCP Inspector.**
+**The Tormentnexus Project's 'couchdb-mcp-server' is a developer-focused platform that provides tools for managing CouchDB databases and documents. It supports AI integration, offering features such as database creation, document manipulation, index management, and querying via Mango and CouchDB 3.x+ syntax. Designed for seamless interaction with CouchDB through a simple interface, it includes robust error handling and debugging tools like the MCP Inspector.**
 
 **Features:**
 - Create and manage CouchDB databases
@@ -2347,7 +2347,7 @@ This tool focuses on providing developer tools that enhance the efficiency of bu
 ### 53. [AIVA, the AI Music Generation Assistant](https://www.aiva.ai)
 `9.0` ★★ ⚡78 Q0.7⭐ ⭐ Excellent
 
-**The Borg intelligence database should include a comprehensive overview of AIVA's capabilities, including its AI music generation features, customization tools, licensing models, and technical specifications to support integration into diverse workflows.**
+**The Tormentnexus intelligence database should include a comprehensive overview of AIVA's capabilities, including its AI music generation features, customization tools, licensing models, and technical specifications to support integration into diverse workflows.**
 
 **Features:**
 - AI music generation
@@ -2619,7 +2619,7 @@ This tool focuses on providing developer tools that enhance the efficiency of bu
 `8.8` ★ ⚡70 Q0.6⭐ ⭐ Excellent
 ↗2 layers
 
-**The analysis examines the technical aspects of Qwen AI's codebase, focusing on its architecture, user interface design, and developer experience to assess its suitability for integration into Borg systems.**
+**The analysis examines the technical aspects of Qwen AI's codebase, focusing on its architecture, user interface design, and developer experience to assess its suitability for integration into Tormentnexus systems.**
 
 **Features:**
 - code structure
@@ -3817,7 +3817,7 @@ It serves as a practical demonstration of how a platform handles feature enablem
 `8.8` ★ ⚡85 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The 'Borg' Project's Notion_MCP_Server acts as an API gateway that connects Python-based code editors like Cline with Notion's knowledge base, allowing developers to query and retrieve structured data from Notion directly within their IDE. This integration enhances developer productivity by embedding AI-driven insights and reference links into the coding workflow.**
+**The 'Tormentnexus' Project's Notion_MCP_Server acts as an API gateway that connects Python-based code editors like Cline with Notion's knowledge base, allowing developers to query and retrieve structured data from Notion directly within their IDE. This integration enhances developer productivity by embedding AI-driven insights and reference links into the coding workflow.**
 
 **Features:**
 - Integrate Notion knowledge base via Cline VSCode
@@ -4144,7 +4144,7 @@ It serves as a practical demonstration of how a platform handles feature enablem
 `8.8` ★ ⚡76 Q0.8⭐ ⭐ Excellent
 ↗2 layers
 
-**The Borg intelligence database should include detailed information about the CCS (Community Crowdfunding System) project, including its technical architecture, funding mechanisms, and workflow processes. This entry will outline how proposals are submitted, reviewed, funded, and tracked within the CCS platform.**
+**The Tormentnexus intelligence database should include detailed information about the CCS (Community Crowdfunding System) project, including its technical architecture, funding mechanisms, and workflow processes. This entry will outline how proposals are submitted, reviewed, funded, and tracked within the CCS platform.**
 
 **Features:**
 - proposal submission
@@ -4284,7 +4284,7 @@ It serves as a practical demonstration of how a platform handles feature enablem
 ### 63. [how_arcade_games_changed_your_life](https://www.reddit.com/r/arcade/comments/1szq25m/how_arcade_games_changed_your_life)
 `8.8` ★ ⚡70 Q0.6⭐ ⭐ Excellent
 
-**The article examines the impact of arcade games on contemporary technology, focusing on their role in shaping user interfaces, engagement strategies, and interactive design principles within the Borg intelligence framework.**
+**The article examines the impact of arcade games on contemporary technology, focusing on their role in shaping user interfaces, engagement strategies, and interactive design principles within the Tormentnexus intelligence framework.**
 
 **Features:**
 - user interface design
@@ -5076,7 +5076,7 @@ This platform enables users to design game scenarios by drawing or auto-detectin
 `9.0` ★★ ⚡90 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg project implements an MCP server that allows AI tools like Claude to communicate with the Bunnyshell platform using natural language commands. It provides comprehensive management features including organization, project, environment, component, and variable management, along with secure code handling and integration capabilities.**
+**The Tormentnexus project implements an MCP server that allows AI tools like Claude to communicate with the Bunnyshell platform using natural language commands. It provides comprehensive management features including organization, project, environment, component, and variable management, along with secure code handling and integration capabilities.**
 
 **Features:**
 - Organization Management
@@ -5626,7 +5626,7 @@ This platform enables users to design game scenarios by drawing or auto-detectin
 `8.8` ★ ⚡84 Q0.8⭐ ⭐ Excellent
 ↗4 layers
 
-**The discussion revolves around the integration of MCP (Machine Control Protocol) applications into the Borg intelligence framework, focusing on their ability to extend server capabilities with interactive user interfaces. The conversation highlights the benefits of LLMs generating dynamic UIs and the challenges in achieving seamless integration. It emphasizes the need for custom solutions over generic tools, stressing the importance of flexibility and context-aware design in MCP apps.**
+**The discussion revolves around the integration of MCP (Machine Control Protocol) applications into the Tormentnexus intelligence framework, focusing on their ability to extend server capabilities with interactive user interfaces. The conversation highlights the benefits of LLMs generating dynamic UIs and the challenges in achieving seamless integration. It emphasizes the need for custom solutions over generic tools, stressing the importance of flexibility and context-aware design in MCP apps.**
 
 **Features:**
 - Interactive user interfaces for server management
@@ -5903,7 +5903,7 @@ This platform enables users to design game scenarios by drawing or auto-detectin
 `7.8` ★ ⚡74 Q0.7⭐ ⭐ Excellent
 ↗2 layers
 
-**The Borg Project intelligence database should prioritize this resource due to its focus on the user interface and developer experience of a newly released factory AI command-line interface. The content provides insights into how the tool is structured, its usability, and potential improvements for integration within industrial environments.**
+**The Tormentnexus Project intelligence database should prioritize this resource due to its focus on the user interface and developer experience of a newly released factory AI command-line interface. The content provides insights into how the tool is structured, its usability, and potential improvements for integration within industrial environments.**
 
 **Features:**
 - command line interface
@@ -5953,7 +5953,7 @@ This platform enables users to design game scenarios by drawing or auto-detectin
 `8.5` ★ ⚡72 Q0.6⭐ ⭐ Excellent
 ↗2 layers
 
-**The Borg Project intelligence database should prioritize entries that highlight technical implementations, user interfaces, and developer experiences related to AI-driven factory automation tools.**
+**The Tormentnexus Project intelligence database should prioritize entries that highlight technical implementations, user interfaces, and developer experiences related to AI-driven factory automation tools.**
 
 **Features:**
 - command line interface
@@ -6564,7 +6564,7 @@ This platform enables users to design game scenarios by drawing or auto-detectin
 ### 32. [pavanjava/kafka_mcp_server](https://github.com/pavanjava/kafka_mcp_server)
 `8.8` ★ ⚡86 Q0.8🏆 🏆 World-class
 
-**The pavanjava/kafka_mcp_server project provides a Borg-based MCP (Message Context Protocol) server that integrates seamlessly with Apache Kafka. It allows AI and LLM applications to publish and consume messages across distributed systems, supporting real-time data flow for intelligent applications.**
+**The pavanjava/kafka_mcp_server project provides a Tormentnexus-based MCP (Message Context Protocol) server that integrates seamlessly with Apache Kafka. It allows AI and LLM applications to publish and consume messages across distributed systems, supporting real-time data flow for intelligent applications.**
 
 **Features:**
 - Kafka integration for message publishing and consuming
@@ -6804,7 +6804,7 @@ This platform enables users to design game scenarios by drawing or auto-detectin
 ### 47. [?rdt_cid=5924693557066906820](https://www.mintlify.com/?rdt_cid=5924693557066906820)
 `8.8` ★ ⚡80 Q0.7⭐ ⭐ Excellent
 
-**The Borg Project intelligence database integrates Mintlify's intelligent knowledge platform to streamline documentation creation, maintenance, and AI-assisted updates. It focuses on enabling teams to build, update, and manage documentation efficiently while supporting both human users and AI models like LLMs. Key features include context-aware agents, automated content editing, enterprise scalability, compliance support, and seamless integration with development workflows.**
+**The Tormentnexus Project intelligence database integrates Mintlify's intelligent knowledge platform to streamline documentation creation, maintenance, and AI-assisted updates. It focuses on enabling teams to build, update, and manage documentation efficiently while supporting both human users and AI models like LLMs. Key features include context-aware agents, automated content editing, enterprise scalability, compliance support, and seamless integration with development workflows.**
 
 **Features:**
 - AI-assisted documentation editing
@@ -8160,7 +8160,7 @@ This platform enables users to design game scenarios by drawing or auto-detectin
 `9.1` ★★ ⚡95 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Manifold-MCP-Server acts as a bridge between the Borg platform and Manifold Markets, providing a structured API interface to enable users to create, manage, and interact with prediction markets. It supports core market operations such as market creation, trading, liquidity management, and user interactions like following, reacting, and placing bets. The server leverages TypeScript for type safety, integrates with Manifold's REST endpoints, and includes robust error handling and security meas...**
+**The Manifold-MCP-Server acts as a bridge between the Tormentnexus platform and Manifold Markets, providing a structured API interface to enable users to create, manage, and interact with prediction markets. It supports core market operations such as market creation, trading, liquidity management, and user interactions like following, reacting, and placing bets. The server leverages TypeScript for type safety, integrates with Manifold's REST endpoints, and includes robust error handling and security meas...**
 
 **Features:**
 - Market creation and management
@@ -8302,7 +8302,7 @@ This platform enables users to design game scenarios by drawing or auto-detectin
 `9.0` ★★ ⚡89 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The sworddut/mcp-local-file-reader project provides a Borg-compatible server that allows AI models, such as LLMs, to securely read and process local files. It supports various file types, integrates with AI tools like Windsurf, and emphasizes secure development practices with features like API key management and sandboxed file access.**
+**The sworddut/mcp-local-file-reader project provides a Tormentnexus-compatible server that allows AI models, such as LLMs, to securely read and process local files. It supports various file types, integrates with AI tools like Windsurf, and emphasizes secure development practices with features like API key management and sandboxed file access.**
 
 **Features:**
 - Local file reading via MCP protocol
@@ -9153,7 +9153,7 @@ This platform enables users to design game scenarios by drawing or auto-detectin
 `8.5` ★ ⚡83 Q0.8⭐ ⭐ Excellent
 ↗2 layers
 
-**The Borg Intelligence database provides a robust MCP server that enables users to search, filter, and book flights using the Aviasales Flight Search API. It supports advanced features such as detailed flight information retrieval, multiple transport options, and booking link generation, enhancing user experience through flexible search and seamless integration with external systems.**
+**The Tormentnexus Intelligence database provides a robust MCP server that enables users to search, filter, and book flights using the Aviasales Flight Search API. It supports advanced features such as detailed flight information retrieval, multiple transport options, and booking link generation, enhancing user experience through flexible search and seamless integration with external systems.**
 
 **Features:**
 - flight search
@@ -9452,7 +9452,7 @@ This platform enables users to design game scenarios by drawing or auto-detectin
 ### 37. [character.ai](https://character.ai)
 `8.8` ★ ⚡70 Q0.6⭐ ⭐ Excellent
 
-**The Borg resource focuses on creating an intuitive AI chat interface that dynamically adjusts its responses based on user context, enabling seamless integration across platforms while maintaining a cohesive user experience.**
+**The Tormentnexus resource focuses on creating an intuitive AI chat interface that dynamically adjusts its responses based on user context, enabling seamless integration across platforms while maintaining a cohesive user experience.**
 
 **Features:**
 - natural language understanding
@@ -10480,7 +10480,7 @@ This platform enables users to design game scenarios by drawing or auto-detectin
 ### 22. [the_living_mind_cortexs_ledger_so_far](https://www.reddit.com/r/DesignTecture/comments/1secgbn/the_living_mind_cortexs_ledger_so_far)
 `8.8` ★ ⚡70 Q0.6⭐ ⭐ Excellent
 
-**The resource examines the architecture and technical approach behind a Reddit discussion on designing a living mind ledger, focusing on its implications for interface usability, developer experience, and integration within the Borg ecosystem.**
+**The resource examines the architecture and technical approach behind a Reddit discussion on designing a living mind ledger, focusing on its implications for interface usability, developer experience, and integration within the Tormentnexus ecosystem.**
 
 **Features:**
 - ledger design
@@ -10488,7 +10488,7 @@ This platform enables users to design game scenarios by drawing or auto-detectin
 - design documentation
 - community feedback
 
-*Tags: blockchain, ledger, design, developer, interface, borg, technology, smart-contracts...*
+*Tags: blockchain, ledger, design, developer, interface, tormentnexus, technology, smart-contracts...*
 
 ---
 
@@ -10621,7 +10621,7 @@ This platform enables users to design game scenarios by drawing or auto-detectin
 ### 3. [danielzhao1990/interaction-mcp](https://github.com/danielzhao1990/interaction-mcp)
 `9.0` ★★ ⚡91 Q0.9🏆 🏆 World-class
 
-**The Borg Project's 'Interaction-MCP' is a platform designed to facilitate high-frequency communication between AI models such as Cursor and Windsurf and human users. By integrating with these AI tools, the service reduces wasted API calls, prevents attention fragmentation, enables interactive decision-making, streamlines complex tasks, and supports multiple user interfaces including CLI, web, and PyQt.**
+**The Tormentnexus Project's 'Interaction-MCP' is a platform designed to facilitate high-frequency communication between AI models such as Cursor and Windsurf and human users. By integrating with these AI tools, the service reduces wasted API calls, prevents attention fragmentation, enables interactive decision-making, streamlines complex tasks, and supports multiple user interfaces including CLI, web, and PyQt.**
 
 **Features:**
 - Interactive communication between AI models and users
@@ -11135,7 +11135,7 @@ This platform enables users to design game scenarios by drawing or auto-detectin
 ### 6. [mryanmyn/task-manager-mcp](https://github.com/mryanmyn/task-manager-mcp)
 `9.0` ★★ ⚡91 Q0.9🏆 🏆 World-class
 
-**The Borg Project's 'task-manager-mcp' is a simple, user-friendly interface designed for managing tasks and project plans. It offers a terminal UI with a top-left task list, a top-right task details panel, and a bottom-full-width project plan view. Users can manage tasks, set priorities, track step completions, and export data in JSON format. The application supports command-line operations for automation and integrates with external tools for enhanced functionality.**
+**The Tormentnexus Project's 'task-manager-mcp' is a simple, user-friendly interface designed for managing tasks and project plans. It offers a terminal UI with a top-left task list, a top-right task details panel, and a bottom-full-width project plan view. Users can manage tasks, set priorities, track step completions, and export data in JSON format. The application supports command-line operations for automation and integrates with external tools for enhanced functionality.**
 
 **Features:**
 - Terminal UI with three-pane layout
@@ -11172,7 +11172,7 @@ This platform enables users to design game scenarios by drawing or auto-detectin
 `8.8` ★ ⚡91 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The 'Borg' Project's community server module is designed to deliver macOS-specific system information, including CPU, memory, disk, and network details. It supports seamless integration with development environments, enabling developers to access real-time system metrics directly from their code. This tool enhances productivity by embedding system diagnostics into the development workflow, supporting tasks like debugging, performance monitoring, and resource management.**
+**The 'Tormentnexus' Project's community server module is designed to deliver macOS-specific system information, including CPU, memory, disk, and network details. It supports seamless integration with development environments, enabling developers to access real-time system metrics directly from their code. This tool enhances productivity by embedding system diagnostics into the development workflow, supporting tasks like debugging, performance monitoring, and resource management.**
 
 **Features:**
 - curl-like interface
@@ -11938,7 +11938,7 @@ This tool focuses on providing developer-centric insights into the browser envir
 ### 6. [RivoLink/leaf](https://github.com/RivoLink/leaf)
 `8.3` ★ ⚡82 Q0.8⭐ ⭐ Excellent
 
-**This technical resource describes the Borg Intelligence database's Leaf project, highlighting its terminal markdown previewer, file navigation, editor integration, and rich markdown rendering capabilities. It emphasizes user-friendly features like live preview, fuzzy pickers, and syntax highlighting for code files.**
+**This technical resource describes the Tormentnexus Intelligence database's Leaf project, highlighting its terminal markdown previewer, file navigation, editor integration, and rich markdown rendering capabilities. It emphasizes user-friendly features like live preview, fuzzy pickers, and syntax highlighting for code files.**
 
 **Features:**
 - Live preview with automatic reloads
@@ -11969,7 +11969,7 @@ This tool focuses on providing developer-centric insights into the browser envir
 `8.8` ★ ⚡81 Q0.8⭐ ⭐ Excellent
 ↗4 layers
 
-**The 'Borg' Project's MCP server integrates multiple Claude instances to deliver enhanced responses. It sends the same prompt to two separate AI models and uses a third instance to combine or select the best output, optimizing the final response.**
+**The 'Tormentnexus' Project's MCP server integrates multiple Claude instances to deliver enhanced responses. It sends the same prompt to two separate AI models and uses a third instance to combine or select the best output, optimizing the final response.**
 
 **Features:**
 - multiple claude models

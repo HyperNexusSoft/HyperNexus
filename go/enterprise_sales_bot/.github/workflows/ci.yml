@@ -16,7 +16,7 @@ jobs:
         submodules: false
 
     - name: Initialize TormentNexus Submodule
-      run: git submodule update --init borg
+      run: git submodule update --init tormentnexus
 
     - name: Set up Go
       uses: actions/setup-go@v5

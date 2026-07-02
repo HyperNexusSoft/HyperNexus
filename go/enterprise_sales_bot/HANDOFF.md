@@ -18,11 +18,11 @@
 - CHANGELOG updated with all recent changes
 
 ### Pending / Known Issues
-- `borg` submodule has modified content (not committed — separate repo)
+- `tormentnexus` submodule has modified content (not committed — separate repo)
 - `.memory/branches/main/log.md` has local changes (gitignored for secrets)
 - git `stash` may have an entry from earlier cherry-pick attempts
 
 ### Next Steps for Next Agent
 1. Verify hypernexus.site is fully functional (no blank scroll, gradients animate, video plays)
 2. Verify tormentnexus.site skull animations render correctly
-3. Push remaining submodule updates if borg is ready
+3. Push remaining submodule updates if tormentnexus is ready

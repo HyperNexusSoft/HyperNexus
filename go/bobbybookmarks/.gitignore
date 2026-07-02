@@ -29,8 +29,8 @@ split_db.py
 .pi-lens/
 .tormentnexus-session.json
 .tormentnexus_startup_marker
-.borg-session.json
-.borg_startup_marker
+.tormentnexus-session.json
+.tormentnexus_startup_marker
 .pi/
 logs/
 reddit_hn_urls.txt

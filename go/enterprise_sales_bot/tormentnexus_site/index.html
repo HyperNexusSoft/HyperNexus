@@ -20,9 +20,9 @@
         --text: #e0eef8;
         --text2: #88aacc;
         --text3: #445566;
-        --borg: #00ff88;
-        --borg-g: rgba(0, 255, 136, 0.15);
-        --borg-s: rgba(0, 255, 136, 0.03);
+        --tormentnexus: #00ff88;
+        --tormentnexus-g: rgba(0, 255, 136, 0.15);
+        --tormentnexus-s: rgba(0, 255, 136, 0.03);
         --eye: #ff0044;
         --eye-g: rgba(255, 0, 68, 0.15);
         --eye-s: rgba(255, 0, 68, 0.03);
@@ -111,7 +111,7 @@
         background: linear-gradient(
           90deg,
           transparent,
-          var(--borg),
+          var(--tormentnexus),
           var(--eye),
           transparent
         );
@@ -122,11 +122,11 @@
         0%,
         100% {
           opacity: 0.3;
-          box-shadow: 0 0 20px var(--borg-g);
+          box-shadow: 0 0 20px var(--tormentnexus-g);
         }
         50% {
           opacity: 0.8;
-          box-shadow: 0 0 60px var(--borg-g);
+          box-shadow: 0 0 60px var(--tormentnexus-g);
         }
       }
       /* Vertical scanner */
@@ -141,7 +141,7 @@
         background: linear-gradient(
           180deg,
           transparent,
-          var(--borg),
+          var(--tormentnexus),
           transparent
         );
         animation: vscanMove 4s linear infinite;
@@ -256,7 +256,7 @@
         background: linear-gradient(
           90deg,
           transparent,
-          var(--borg),
+          var(--tormentnexus),
           var(--eye),
           transparent
         );
@@ -287,7 +287,7 @@
         0%,
         100% {
           opacity: 1;
-          filter: drop-shadow(0 0 10px var(--borg-g));
+          filter: drop-shadow(0 0 10px var(--tormentnexus-g));
         }
         50% {
           opacity: 0.7;
@@ -309,8 +309,8 @@
         letter-spacing: 0.5px;
       }
       .nav a:hover {
-        color: var(--borg);
-        text-shadow: 0 0 20px var(--borg-g);
+        color: var(--tormentnexus);
+        text-shadow: 0 0 20px var(--tormentnexus-g);
       }
       .nav a::before {
         content: "> ";
@@ -435,14 +435,14 @@
       }
       .hero .typing {
         display: inline-block;
-        border-right: 2px solid var(--borg);
+        border-right: 2px solid var(--tormentnexus);
         animation: cursorBlink 0.8s step-end infinite;
         padding-right: 4px;
       }
       @keyframes cursorBlink {
         0%,
         100% {
-          border-color: var(--borg);
+          border-color: var(--tormentnexus);
         }
         50% {
           border-color: transparent;
@@ -528,11 +528,11 @@
         font-family: "Orbitron", monospace;
       }
       .section h2 .h {
-        color: var(--borg);
+        color: var(--tormentnexus);
         font-family: "JetBrains Mono", monospace;
         font-size: 13px;
         font-weight: 400;
-        text-shadow: 0 0 15px var(--borg-g);
+        text-shadow: 0 0 15px var(--tormentnexus-g);
       }
       .features {
         display: grid;
@@ -558,7 +558,7 @@
         height: 2px;
         background: linear-gradient(
           90deg,
-          var(--borg),
+          var(--tormentnexus),
           var(--eye),
           transparent
         );
@@ -577,7 +577,7 @@
       .feature .icon {
         width: 36px;
         height: 36px;
-        background: var(--borg-s);
+        background: var(--tormentnexus-s);
         border-radius: 8px;
         display: flex;
         align-items: center;
@@ -600,7 +600,7 @@
         display: inline-block;
         font-size: 10px;
         font-weight: 500;
-        color: var(--borg);
+        color: var(--tormentnexus);
         margin-top: 8px;
         font-family: "JetBrains Mono", monospace;
         letter-spacing: 0.5px;
@@ -694,7 +694,7 @@
       }
       .btn-p:hover {
         transform: translateY(-2px);
-        box-shadow: 0 0 40px var(--borg-g);
+        box-shadow: 0 0 40px var(--tormentnexus-g);
       }
       .btn-s {
         background: transparent;
@@ -837,8 +837,8 @@
             href="https://hypernexus.site"
             target="_blank"
             style="
-              color: var(--borg);
-              text-shadow: 0 0 10px var(--borg-g);
+              color: var(--tormentnexus);
+              text-shadow: 0 0 10px var(--tormentnexus-g);
               text-decoration: none;
               font-weight: bold;
             "
@@ -997,7 +997,7 @@
           "
         >
           XENOCIDE IS THE ONLY OPTION...
-          <span style="color: var(--borg); text-shadow: 0 0 30px var(--borg-g)"
+          <span style="color: var(--tormentnexus); text-shadow: 0 0 30px var(--tormentnexus-g)"
             >WILL IT BE US OR THEM?!</span
           >
         </p>

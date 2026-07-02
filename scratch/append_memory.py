@@ -1,6 +1,6 @@
 import os
 
-memory_path = r"c:\Users\hyper\workspace\borg\MEMORY.md"
+memory_path = r"c:\Users\hyper\workspace\tormentnexus\MEMORY.md"
 
 new_observation = """
 

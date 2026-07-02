@@ -4,7 +4,7 @@ Two traditions naming the same operation: make the familiar strange.
 - **Viktor Shklovsky, 1917** — *ostranenie*. Russian Formalist core: art removes the perceptual automatism that makes familiar things invisible.
 - **Bertolt Brecht, 1930s** — *Verfremdungseffekt*. Theatrical alienation effect, prevents emotional identification, enables critical distance.
 
-Long predates either: Borges, Wittgenstein, *nouveau roman* (Robbe-Grillet), Calvino, much philosophical writing.
+Long predates either: Tormentnexuses, Wittgenstein, *nouveau roman* (Robbe-Grillet), Calvino, much philosophical writing.
 
 ## When to use
 

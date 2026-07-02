@@ -11,7 +11,7 @@ a.execute("SELECT COUNT(*) FROM entries WHERE short_description IS NOT NULL AND 
 
 print('=' * 80)
 print('  AI CLI/TUI CODING HARNESS TOOLS - COMPREHENSIVE INDEX')
-print(f'  Borg Intelligence Atlas | {total:,} entries, {enriched:,} enriched')
+print(f'  Tormentnexus Intelligence Atlas | {total:,} entries, {enriched:,} enriched')
 print('=' * 80)
 
 def get_sig(owner, repo):

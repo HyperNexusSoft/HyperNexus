@@ -1,5 +1,5 @@
 # 🛡 Security & Red Teaming
-> Borg Intelligence Atlas v8 · 2026-06-17 · 130 tools
+> Tormentnexus Intelligence Atlas v8 · 2026-06-17 · 130 tools
 > AI guardrails, LLM red teaming, vulnerability scanning, pentesting
 
 | Metric | Value |
@@ -17,12 +17,12 @@
 ## 🏆 Top 20 by Signal Strength
 
 1. **[burtthecoder/mcp-shodan](https://github.com/burtthecoder/mcp-shodan)** ⚡98 · 🏆 World-class — A powerful MCP server for Shodan that enables automated network intelligence gathering, vulnerabilit...
-2. **[gensecaihq/pfsense-mcp-server](https://github.com/gensecaihq/pfsense-mcp-server)** ⚡98 · 🏆 World-class — A Borg intelligence platform enabling natural language interaction with pfSense MCP Server for secur...
+2. **[gensecaihq/pfsense-mcp-server](https://github.com/gensecaihq/pfsense-mcp-server)** ⚡98 · 🏆 World-class — A Tormentnexus intelligence platform enabling natural language interaction with pfSense MCP Server for secur...
 3. **[saidsurucu/yargi-mcp](https://github.com/saidsurucu/yargi-mcp)** ⚡98 · 🏆 World-class — This project integrates a fast MCP server for Turkish legal databases, enabling secure, automated ac...
 4. **[prathammanocha/wordpress-mcp-server](https://github.com/prathammanocha/wordpress-mcp-server)** ⚡98 · 🏆 World-class — A comprehensive WordPress MCP server enabling AI-driven interaction with WordPress sites via REST AP...
 5. **[nekzus/npm-sentinel-mcp](https://github.com/nekzus/npm-sentinel-mcp)** ⚡98 · 🏆 World-class — A powerful Model Context Protocol server for AI-driven NPM package analysis.
 6. **[vfa-khuongdv/mcp_readmine](https://github.com/vfa-khuongdv/mcp_readmine)** ⚡98 · 🏆 World-class — A powerful MCP server enabling AI agents to interact with Redmine for managing tickets, projects, us...
-7. **[infranodus/mcp-server-infranodus](https://github.com/infranodus/mcp-server-infranodus)** ⚡98 · 🏆 World-class — A Borg intelligence platform integrating InfraNodus knowledge graphs with LLM workflows to enhance A...
+7. **[infranodus/mcp-server-infranodus](https://github.com/infranodus/mcp-server-infranodus)** ⚡98 · 🏆 World-class — A Tormentnexus intelligence platform integrating InfraNodus knowledge graphs with LLM workflows to enhance A...
 8. **[stijn-meijers/dracor-mcp](https://github.com/stijn-meijers/dracor-mcp)** ⚡96 · 🏆 World-class — A Python-based MCP server for analyzing dramatic texts and character networks using the DraCor API.
 9. **[sepinetam/stata-mcp](https://github.com/sepinetam/stata-mcp)** ⚡96 · 🏆 World-class — A powerful open-source integration for Stata-MCP that enables advanced regression analysis and causa...
 10. **[markuspfundstein/mcp-obsidian](https://github.com/markuspfundstein/mcp-obsidian)** ⚡95 · 🏆 World-class — A tool for integrating Obsidian with the MCP server via REST API, enabling seamless note management ...
@@ -32,7 +32,7 @@
 14. **[edenyavin/osv-mcp](https://github.com/edenyavin/osv-mcp)** ⚡94 · 🏆 World-class — A lightweight MCP server for the OSV Database API, enabling secure and efficient model context proto...
 15. **[sheshiyer/git-mcp-v2](https://github.com/sheshiyer/git-mcp-v2)** ⚡94 · 🏆 World-class — A GitHub integration tool for AI assistants to streamline Git operations within the MCP ecosystem.
 16. **[binalyze/air-mcp](https://github.com/binalyze/air-mcp)** ⚡94 · 🏆 World-class — Binalyze AIR MCP Server enables natural language interaction with AIR for digital forensics and inci...
-17. **[liuscraft/superset-mcp-server](https://github.com/liuscraft/superset-mcp-server)** ⚡92 · 🏆 World-class — A Borg-based MCP server enabling advanced querying and integration with external tools.
+17. **[liuscraft/superset-mcp-server](https://github.com/liuscraft/superset-mcp-server)** ⚡92 · 🏆 World-class — A Tormentnexus-based MCP server enabling advanced querying and integration with external tools.
 18. **[abdessamad-elamrani/malwareanalyzermcp](https://github.com/abdessamad-elamrani/malwareanalyzermcp)** ⚡92 · 🏆 World-class — A specialized MCP server for executing terminal commands in malware analysis, supporting various sec...
 19. **[modelcontextprotocol/specification](https://github.com/modelcontextprotocol/specification)** ⚡91 · 🏆 World-class — This repository provides the specification and documentation for the Model Context Protocol, a proto...
 20. **[cybersecurityup/offensive-mcp-ai](https://github.com/cybersecurityup/offensive-mcp-ai)** ⚡91 · 🏆 World-class — A platform leveraging MCP and AI to automate security workflows, including code review, vulnerabilit...
@@ -366,16 +366,16 @@
 `8.8` ★ ⚡88 Q0.9🏆 🏆 World-class
 ↗4 layers
 
-**The mcp-graphql-forge library provides a GraphQL-based interface for integrating with Borg's development tools, enabling developers to streamline workflows, enhance security, and manage code changes efficiently. It supports automation of tasks such as code reviews, vulnerability detection, and deployment processes.**
+**The mcp-graphql-forge library provides a GraphQL-based interface for integrating with Tormentnexus's development tools, enabling developers to streamline workflows, enhance security, and manage code changes efficiently. It supports automation of tasks such as code reviews, vulnerability detection, and deployment processes.**
 
 **Features:**
 - code review
 - pull requests
 - security scanning
 - workflow automation
-- integration with Borg tools
+- integration with Tormentnexus tools
 
-*Tags: graphql, developer-tools, security, code-automation, borg-integration, ci/cd, ai-development, enterprise-devops*
+*Tags: graphql, developer-tools, security, code-automation, tormentnexus-integration, ci/cd, ai-development, enterprise-devops*
 
 ---
 
@@ -435,7 +435,7 @@
 `8.8` ★ ⚡86 Q0.8🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project's minima server is designed to integrate with Claude AI for intelligent code review and security analysis. It supports automated workflows, secure code management, and enterprise-grade DevOps practices, making it suitable for modern software development teams.**
+**The Tormentnexus Project's minima server is designed to integrate with Claude AI for intelligent code review and security analysis. It supports automated workflows, secure code management, and enterprise-grade DevOps practices, making it suitable for modern software development teams.**
 
 **Features:**
 - AI-powered code review
@@ -504,7 +504,7 @@
 `10.0` ★★★ ⚡98 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project's pfsense-mcp-server project provides a centralized AI-powered interface that allows security administrators to manage pfSense firewalls using conversational commands such as 'Show me blocked IPs' or 'Run a PCI compliance check.' This tool integrates with REST, XML-RPC, and SSH protocols, supporting advanced features like guardrails, automated workflows, and real-time configuration management. It enhances usability by abstracting complex UI navigation, offering a seamless experi...**
+**The Tormentnexus Project's pfsense-mcp-server project provides a centralized AI-powered interface that allows security administrators to manage pfSense firewalls using conversational commands such as 'Show me blocked IPs' or 'Run a PCI compliance check.' This tool integrates with REST, XML-RPC, and SSH protocols, supporting advanced features like guardrails, automated workflows, and real-time configuration management. It enhances usability by abstracting complex UI navigation, offering a seamless experi...**
 
 **Features:**
 - Natural language interface for pfSense management
@@ -1582,7 +1582,7 @@
 `10.0` ★★★ ⚡98 Q0.9🏆 🏆 World-class
 ↗5 layers
 
-**The Borg Project's WordPress MCP Server is a robust platform designed to facilitate seamless integration between WordPress applications and AI assistants. It provides extensive functionality for managing users, posts, categories, comments, and custom endpoints through the WordPress REST API. This server supports advanced security measures, including code reviews, vulnerability detection, and secure deployment practices, making it suitable for modern enterprise-level applications that require hig...**
+**The Tormentnexus Project's WordPress MCP Server is a robust platform designed to facilitate seamless integration between WordPress applications and AI assistants. It provides extensive functionality for managing users, posts, categories, comments, and custom endpoints through the WordPress REST API. This server supports advanced security measures, including code reviews, vulnerability detection, and secure deployment practices, making it suitable for modern enterprise-level applications that require hig...**
 
 **Features:**
 - CRUD operations for posts
@@ -1728,7 +1728,7 @@
 `9.0` ★★ ⚡92 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project's MalwareAnalysisMCP is a lightweight, JavaScript-based server designed to integrate with Claude Desktop for advanced malware analysis. It enables users to run terminal commands such as file scanning, string extraction, hexdumps, and process management directly from the desktop environment. This tool enhances security workflows by providing developers and analysts with on-the-fly command execution capabilities, streamlining the malware investigation process.**
+**The Tormentnexus Project's MalwareAnalysisMCP is a lightweight, JavaScript-based server designed to integrate with Claude Desktop for advanced malware analysis. It enables users to run terminal commands such as file scanning, string extraction, hexdumps, and process management directly from the desktop environment. This tool enhances security workflows by providing developers and analysts with on-the-fly command execution capabilities, streamlining the malware investigation process.**
 
 **Features:**
 - Execute terminal commands with configurable timeouts
@@ -1837,7 +1837,7 @@
 `8.8` ★ ⚡89 Q0.9🏆 🏆 World-class
 ↗4 layers
 
-**The Borg Project focuses on enhancing software development processes by integrating advanced automation tools, secure code management, and workflow orchestration. It provides a centralized environment for developers to streamline tasks such as code reviews, vulnerability detection, and deployment, while emphasizing enterprise-grade security and scalability.**
+**The Tormentnexus Project focuses on enhancing software development processes by integrating advanced automation tools, secure code management, and workflow orchestration. It provides a centralized environment for developers to streamline tasks such as code reviews, vulnerability detection, and deployment, while emphasizing enterprise-grade security and scalability.**
 
 **Features:**
 - Code review automation
@@ -1891,7 +1891,7 @@
 `10.0` ★★★ ⚡98 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project's MCP Server-infranodus aims to bridge the gap between structured knowledge graphs and advanced AI assistants like Claude Desktop. By leveraging graph theory, network analysis, and AI-powered topic modeling, it enables developers to connect existing InfraNodus data with LLM workflows for richer contextual understanding. The platform supports automated code generation, security audits, and dynamic content enhancement, positioning itself as a next-generation tool for enterprise AI...**
+**The Tormentnexus Project's MCP Server-infranodus aims to bridge the gap between structured knowledge graphs and advanced AI assistants like Claude Desktop. By leveraging graph theory, network analysis, and AI-powered topic modeling, it enables developers to connect existing InfraNodus data with LLM workflows for richer contextual understanding. The platform supports automated code generation, security audits, and dynamic content enhancement, positioning itself as a next-generation tool for enterprise AI...**
 
 **Features:**
 - Integration of InfraNodus knowledge graphs with LLM workflows

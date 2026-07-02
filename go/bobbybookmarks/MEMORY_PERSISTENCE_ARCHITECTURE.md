@@ -1,5 +1,5 @@
 # 🧬 Memory & Persistence Architecture
-> Borg Intelligence Atlas v8 · 2026-06-17 · 226 tools
+> Tormentnexus Intelligence Atlas v8 · 2026-06-17 · 226 tools
 > Graph memory, episodic, semantic, MCP memory, second brain, memory OS
 
 | Metric | Value |
@@ -1561,7 +1561,7 @@
 `10.0` ★★★ ⚡87 Q0.7🏆 🏆 World-class
 ↗4 layers
 
-**The Hermes Agent Self-Evolution System, detailed in the EvoMap blog post, leverages Evolver's Genome Evolution Protocol (GEP) to enable continuous AI skill optimization. The system features a three-tier memory architecture (memory graph, persistent facts, and user markdown), a robust skill distillation and publishing mechanism, and an automated reflection loop for self-improvement. This approach mirrors Borg's emphasis on modular, reusable, and adaptive intelligence components, with a focus on i...**
+**The Hermes Agent Self-Evolution System, detailed in the EvoMap blog post, leverages Evolver's Genome Evolution Protocol (GEP) to enable continuous AI skill optimization. The system features a three-tier memory architecture (memory graph, persistent facts, and user markdown), a robust skill distillation and publishing mechanism, and an automated reflection loop for self-improvement. This approach mirrors Tormentnexus's emphasis on modular, reusable, and adaptive intelligence components, with a focus on i...**
 
 **Features:**
 - Three-tier memory system (causal
@@ -1939,7 +1939,7 @@ It is built specifically for the Model Context Protocol (MCP) framework, offerin
 - Bit manipulation for vertex coordinate retrieval
 - Ray-AABB intersection algorithm
 
-*Tags: 3d-programming, aabb-representation, borg-intelligence, ray-tracing, code-optimization, memory-management, vertex-processing, collision-detection...*
+*Tags: 3d-programming, aabb-representation, tormentnexus-intelligence, ray-tracing, code-optimization, memory-management, vertex-processing, collision-detection...*
 
 ---
 
@@ -2556,7 +2556,7 @@ It is built specifically for the Model Context Protocol (MCP) framework, offerin
 ### 143. [VEKTOR Docs — Vektor Slipstream](https://vektormemory.com/docs)
 `8.8` ★ ⚡78 Q0.7⭐ ⭐ Excellent
 
-**The Borg Project incorporates a next-generation persistent memory solution leveraging Vektor Slipstream to securely store, manage, and retrieve AI models and datasets. This integration focuses on seamless API references, integration guides, and troubleshooting for developers and researchers.**
+**The Tormentnexus Project incorporates a next-generation persistent memory solution leveraging Vektor Slipstream to securely store, manage, and retrieve AI models and datasets. This integration focuses on seamless API references, integration guides, and troubleshooting for developers and researchers.**
 
 **Features:**
 - Persistent memory storage
@@ -2602,7 +2602,7 @@ It is built specifically for the Model Context Protocol (MCP) framework, offerin
 ### 146. [[]memo](https://danieltemkin.com/Esolangs/Memo)
 `8.8` ★ ⚡77 Q0.8⭐ ⭐ Excellent
 
-**The resource presents a unique interactive coding space that blends natural language syntax with functional programming constructs, enabling users to experiment with unconventional logic structures. It emphasizes memory management through abstract data structures and showcases the Borg's ability to adapt to evolving technical paradigms.**
+**The resource presents a unique interactive coding space that blends natural language syntax with functional programming constructs, enabling users to experiment with unconventional logic structures. It emphasizes memory management through abstract data structures and showcases the Tormentnexus's ability to adapt to evolving technical paradigms.**
 
 **Features:**
 - stream-of-consciousness coding environment
@@ -2649,7 +2649,7 @@ It is built specifically for the Model Context Protocol (MCP) framework, offerin
 `8.8` ★ ⚡75 Q0.6⭐ ⭐ Excellent
 ↗2 layers
 
-**The resource discusses the process of importing chatgpt history into an OpenClaw instance, focusing on memory management and persistence architecture. It covers technical aspects such as data serialization, file handling, and integration with the Borg framework for efficient data flow.**
+**The resource discusses the process of importing chatgpt history into an OpenClaw instance, focusing on memory management and persistence architecture. It covers technical aspects such as data serialization, file handling, and integration with the Tormentnexus framework for efficient data flow.**
 
 **Features:**
 - memory importing
@@ -2658,7 +2658,7 @@ It is built specifically for the Model Context Protocol (MCP) framework, offerin
 - integration with OpenClaw
 - workflow optimization
 
-*Tags: openclaw, chatgpt, memory-import, persistence, data-serialization, borg, ai-architecture, workflow...*
+*Tags: openclaw, chatgpt, memory-import, persistence, data-serialization, tormentnexus, ai-architecture, workflow...*
 
 ---
 
@@ -3515,7 +3515,7 @@ It is built specifically for the Model Context Protocol (MCP) framework, offerin
 `10.0` ★★★ ⚡90 Q0.8🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project's @platformatic/vfs project introduces a userland Virtual File System (VFS) for Node.js, designed to address the limitations of virtualizing the filesystem in Node.js. By integrating directly into the core Node.js runtime, it enables bundling applications into single executables without bloating with unnecessary boilerplate or requiring manual fixes for asset access. The solution leverages a provider-based architecture, allowing seamless integration with module resolution and fi...**
+**The Tormentnexus Project's @platformatic/vfs project introduces a userland Virtual File System (VFS) for Node.js, designed to address the limitations of virtualizing the filesystem in Node.js. By integrating directly into the core Node.js runtime, it enables bundling applications into single executables without bloating with unnecessary boilerplate or requiring manual fixes for asset access. The solution leverages a provider-based architecture, allowing seamless integration with module resolution and fi...**
 
 **Features:**
 - Single Executable applications

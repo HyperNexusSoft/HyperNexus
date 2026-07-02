@@ -5,13 +5,13 @@ import json
 import yaml
 
 ROOT_DIR = r"c:\Users\hyper\workspace"
-TARGET_DIR = r"c:\Users\hyper\workspace\borg\.tormentnexus\skills"
+TARGET_DIR = r"c:\Users\hyper\workspace\tormentnexus\.tormentnexus\skills"
 MAIN_SKILL_MD = r"c:\Users\hyper\workspace\SKILL.md"
 
 TARGET_DIRS = [
     ".agent",
-    ".borg",
-    "borg",
+    ".tormentnexus",
+    "tormentnexus",
     "skillzhub",
     "mcp-superassistant",
     "onetool-mcp",

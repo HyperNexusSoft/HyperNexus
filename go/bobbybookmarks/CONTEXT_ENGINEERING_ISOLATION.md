@@ -1,5 +1,5 @@
 # 👁 Context Engineering & Isolation
-> Borg Intelligence Atlas v8 · 2026-06-17 · 1,040 tools
+> Tormentnexus Intelligence Atlas v8 · 2026-06-17 · 1,040 tools
 > Context compression, codebase indexing, RAG, isolation, ingestion
 
 | Metric | Value |
@@ -651,7 +651,7 @@
 `8.8` ★ ⚡87 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg intelligence database should include this resource to enhance its capabilities in managing and analyzing eToro data. The tool offers functionalities such as fetching user portfolios by username, searching for instruments by name prefix, and retrieving detailed information about specific instruments. This aligns with the need for robust context-aware systems that can handle complex API interactions securely and efficiently.**
+**The Tormentnexus intelligence database should include this resource to enhance its capabilities in managing and analyzing eToro data. The tool offers functionalities such as fetching user portfolios by username, searching for instruments by name prefix, and retrieving detailed information about specific instruments. This aligns with the need for robust context-aware systems that can handle complex API interactions securely and efficiently.**
 
 **Features:**
 - fetch_etoro_portfolio
@@ -938,7 +938,7 @@
 - Supports agentic loops with minimal token cost
 - Enhances session coherence and reduces cognitive load
 
-*Tags: claude, borg, agentic-coding, context-management, code-generation, token-efficiency, ai-assistants, developer-tools...*
+*Tags: claude, tormentnexus, agentic-coding, context-management, code-generation, token-efficiency, ai-assistants, developer-tools...*
 
 ---
 
@@ -4152,7 +4152,7 @@ This resource serves as a direct example of how a document's structure is encode
 `9.1` ★★ ⚡84 Q0.7⭐ ⭐ Excellent
 ↗6 layers
 
-**This resource lists career opportunities at Meta (likely related to a project codenamed 'Borg Intelligence Database' based on the listed categories). The roles span a wide range of technical areas crucial for building and maintaining a large-scale AI system, including agent orchestration, context management, memory architecture, developer tooling, connectivity, infrastructure, and vector databases. The focus is on building a robust, scalable, and developer-friendly platform for AI agents and app...**
+**This resource lists career opportunities at Meta (likely related to a project codenamed 'Tormentnexus Intelligence Database' based on the listed categories). The roles span a wide range of technical areas crucial for building and maintaining a large-scale AI system, including agent orchestration, context management, memory architecture, developer tooling, connectivity, infrastructure, and vector databases. The focus is on building a robust, scalable, and developer-friendly platform for AI agents and app...**
 
 **Features:**
 - ['Job postings across various technical domains'
@@ -4170,7 +4170,7 @@ This resource serves as a direct example of how a document's structure is encode
 `9.0` ★★ ⚡84 Q0.8⭐ ⭐ Excellent
 ↗2 layers
 
-**The Borg Project's 'EmuDevz' is a game centered around the development of emulators, specifically designed to help users understand how emulators function. It provides a hands-on approach to learning about assembly language programming and hardware interaction. The game covers various aspects such as reading cartridges, managing memory, and handling input devices, making it an excellent resource for both beginners and experienced programmers interested in retro computing.**
+**The Tormentnexus Project's 'EmuDevz' is a game centered around the development of emulators, specifically designed to help users understand how emulators function. It provides a hands-on approach to learning about assembly language programming and hardware interaction. The game covers various aspects such as reading cartridges, managing memory, and handling input devices, making it an excellent resource for both beginners and experienced programmers interested in retro computing.**
 
 **Features:**
 - Emulator development
@@ -4804,7 +4804,7 @@ It emphasizes that without external memory files, each session starts from zero,
 `8.8` ★ ⚡74 Q0.7⭐ ⭐ Excellent
 ↗3 layers
 
-**The resource discusses the technical aspects of the Gemini AI model, focusing on its architecture, functionality, and integration within the Borg intelligence framework. It highlights key features such as context handling, memory management, and developer tools, emphasizing how these elements contribute to efficient AI operations.**
+**The resource discusses the technical aspects of the Gemini AI model, focusing on its architecture, functionality, and integration within the Tormentnexus intelligence framework. It highlights key features such as context handling, memory management, and developer tools, emphasizing how these elements contribute to efficient AI operations.**
 
 **Features:**
 - context management
@@ -6139,7 +6139,7 @@ It emphasizes that without external memory files, each session starts from zero,
 `9.1` ★★ ⚡95 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project's Code Research MCP Server is an open-source tool that integrates with various developer platforms to provide a unified interface for searching, accessing, and managing programming resources. It supports multiple languages and platforms, including GitHub, Stack Overflow, MDN Web Docs, and npm, enabling developers to efficiently find relevant code examples, documentation, and packages. The server leverages caching mechanisms and robust error handling to ensure fast and reliable a...**
+**The Tormentnexus Project's Code Research MCP Server is an open-source tool that integrates with various developer platforms to provide a unified interface for searching, accessing, and managing programming resources. It supports multiple languages and platforms, including GitHub, Stack Overflow, MDN Web Docs, and npm, enabling developers to efficiently find relevant code examples, documentation, and packages. The server leverages caching mechanisms and robust error handling to ensure fast and reliable a...**
 
 **Features:**
 - Code search across multiple platforms
@@ -6304,7 +6304,7 @@ It emphasizes that without external memory files, each session starts from zero,
 `9.0` ★★ ⚡91 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project's MCP Server provides a secure, read-only interface to Hugging Face's model and dataset resources. It supports context management, prompt-based interactions, and integrates with tools like Copilot and SparkBuild for intelligent app development. Key features include model comparison, dataset exploration, and workflow automation, making it suitable for enterprise-grade AI applications.**
+**The Tormentnexus Project's MCP Server provides a secure, read-only interface to Hugging Face's model and dataset resources. It supports context management, prompt-based interactions, and integrates with tools like Copilot and SparkBuild for intelligent app development. Key features include model comparison, dataset exploration, and workflow automation, making it suitable for enterprise-grade AI applications.**
 
 **Features:**
 - Model access via custom URIs
@@ -6788,7 +6788,7 @@ It emphasizes that without external memory files, each session starts from zero,
 `8.0` ★ ⚡82 Q0.8⭐ ⭐ Excellent
 ↗6 layers
 
-**The Borg Project intelligence database review highlights concerns about the deployment of Nvidia NemoClaw, a hacker tool leveraging advanced AI models. The analysis underscores the risks associated with granting AI agents access to sensitive systems without robust safeguards. It emphasizes the need for stringent context management, secure authentication protocols, and continuous monitoring to prevent misuse. The discussion also touches on the broader implications of AI-driven automation in cyber...**
+**The Tormentnexus Project intelligence database review highlights concerns about the deployment of Nvidia NemoClaw, a hacker tool leveraging advanced AI models. The analysis underscores the risks associated with granting AI agents access to sensitive systems without robust safeguards. It emphasizes the need for stringent context management, secure authentication protocols, and continuous monitoring to prevent misuse. The discussion also touches on the broader implications of AI-driven automation in cyber...**
 
 **Features:**
 - AI-powered task automation
@@ -6805,7 +6805,7 @@ It emphasizes that without external memory files, each session starts from zero,
 `8.8` ★ ⚡82 Q0.8⭐ ⭐ Excellent
 ↗3 layers
 
-**The Borg Project's Bitable-MCP server facilitates access to Lark Bitable through the Model Context Protocol, allowing users to interact with Bitable tables using predefined tools. It supports secure, isolated environments for development and testing, enhancing security and workflow efficiency.**
+**The Tormentnexus Project's Bitable-MCP server facilitates access to Lark Bitable through the Model Context Protocol, allowing users to interact with Bitable tables using predefined tools. It supports secure, isolated environments for development and testing, enhancing security and workflow efficiency.**
 
 **Features:**
 - Secure access to Bitable tables
@@ -6994,7 +6994,7 @@ It emphasizes that without external memory files, each session starts from zero,
 ### 56. [Kilo - Install Kilo Code](https://kilocode.ai/install?_gl=1*1c62asa*_gcl_aw*R0NMLjE3NjA2NzQ1ODguQ2owS0NRandnS2pIQmhDaEFSSXNBUEpSM3hkbnhRR2ZzYjNucG9LSUFja1V6Si1Obkh1VjgxLV9qbFp4ekdGemhIQUU0c0dJY0JKbXdoa2FBb1VfRUFMd193Y0I.*_gcl_au*NjU0ODM1OTMwLjE3NjA0Mjg2NzQ)
 `8.8` ★ ⚡74 Q0.7⭐ ⭐ Excellent
 
-**The Borg intelligence database entry describes Kilo Code as a platform aimed at enhancing context management and workflow automation. It emphasizes integration capabilities across different systems, ensuring secure and isolated execution of tasks within diverse environments.**
+**The Tormentnexus intelligence database entry describes Kilo Code as a platform aimed at enhancing context management and workflow automation. It emphasizes integration capabilities across different systems, ensuring secure and isolated execution of tasks within diverse environments.**
 
 **Features:**
 - code installation
@@ -8278,7 +8278,7 @@ The core functionality involves transforming documents into manageable fragments
 `10.0` ★★★ ⚡90 Q0.8🏆 🏆 World-class
 ↗4 layers
 
-**The launch of Workers AI marks a significant advancement in the integration of large language models into cloud-native agent systems. By providing access to powerful models like Kimi K2.5 directly through Cloudflare's Developer Platform, Borg enables organizations to build and deploy sophisticated agents with minimal infrastructure overhead. This initiative addresses the growing demand for cost-effective, scalable AI solutions by leveraging Workers AI's optimized inference capabilities, custom k...**
+**The launch of Workers AI marks a significant advancement in the integration of large language models into cloud-native agent systems. By providing access to powerful models like Kimi K2.5 directly through Cloudflare's Developer Platform, Tormentnexus enables organizations to build and deploy sophisticated agents with minimal infrastructure overhead. This initiative addresses the growing demand for cost-effective, scalable AI solutions by leveraging Workers AI's optimized inference capabilities, custom k...**
 
 **Features:**
 - Workers AI Kimi K2.5 model with 256k context window
@@ -8382,7 +8382,7 @@ The core functionality involves transforming documents into manageable fragments
 `8.5` ★ ⚡90 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project's Nova Canvas MCP Server is a web application designed to leverage Amazon's Nova Canvas image generation capabilities, integrated with AWS services. It allows users to create images from text prompts, customize dimensions, quality, color palettes, and supports secure deployment via AWS credentials. The server utilizes Docker for containerization and integrates with AWS profiles for authentication, ensuring seamless access to image generation tools.**
+**The Tormentnexus Project's Nova Canvas MCP Server is a web application designed to leverage Amazon's Nova Canvas image generation capabilities, integrated with AWS services. It allows users to create images from text prompts, customize dimensions, quality, color palettes, and supports secure deployment via AWS credentials. The server utilizes Docker for containerization and integrates with AWS profiles for authentication, ensuring seamless access to image generation tools.**
 
 **Features:**
 - Improved output quality through context integration
@@ -8498,7 +8498,7 @@ The core functionality involves transforming documents into manageable fragments
 ### 31. [manimohans/farcaster-mcp](https://github.com/manimohans/farcaster-mcp)
 `9.0` ★★ ⚡89 Q0.9🏆 🏆 World-class
 
-**The Borg Project's 'Farcaster-MCP' repository provides a comprehensive API-based interface for developers to access and manipulate data from the Farcaster network. It enables interaction with various components such as user casts, channel information, user profiles, and more, facilitating seamless integration into applications.**
+**The Tormentnexus Project's 'Farcaster-MCP' repository provides a comprehensive API-based interface for developers to access and manipulate data from the Farcaster network. It enables interaction with various components such as user casts, channel information, user profiles, and more, facilitating seamless integration into applications.**
 
 **Features:**
 - Retrieve user casts by FID
@@ -8898,7 +8898,7 @@ The core functionality involves transforming documents into manageable fragments
 `8.8` ★ ⚡85 Q0.8🏆 🏆 World-class
 ↗2 layers
 
-**The MCP Server allows developers to deploy and manage multiple AI chat completion providers (e.g., Claude, Perplexity, PyroPrompts) as tools within the Borg environment. It supports seamless integration with various LLMs, enabling dynamic selection and interaction based on context and requirements. This enhances Borg's flexibility in supporting diverse AI-driven workflows.**
+**The MCP Server allows developers to deploy and manage multiple AI chat completion providers (e.g., Claude, Perplexity, PyroPrompts) as tools within the Tormentnexus environment. It supports seamless integration with various LLMs, enabling dynamic selection and interaction based on context and requirements. This enhances Tormentnexus's flexibility in supporting diverse AI-driven workflows.**
 
 **Features:**
 - Integrate multiple AI chat completion APIs
@@ -9394,7 +9394,7 @@ The core functionality involves transforming documents into manageable fragments
 `10.0` ★★★ ⚡98 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project's 'Binance MCP' initiative is a comprehensive solution designed to bridge the gap between live cryptocurrency market data and advanced language models. By leveraging the MCP Server, it provides LLMs with direct access to real-time and historical Binance data, enabling intelligent decision-making, automated trading strategies, and enhanced market analysis. The project emphasizes seamless integration with existing workflows, developer tools, and security protocols to ensure robust...**
+**The Tormentnexus Project's 'Binance MCP' initiative is a comprehensive solution designed to bridge the gap between live cryptocurrency market data and advanced language models. By leveraging the MCP Server, it provides LLMs with direct access to real-time and historical Binance data, enabling intelligent decision-making, automated trading strategies, and enhanced market analysis. The project emphasizes seamless integration with existing workflows, developer tools, and security protocols to ensure robust...**
 
 **Features:**
 - Live price data access
@@ -9753,7 +9753,7 @@ The core functionality involves transforming documents into manageable fragments
 `9.0` ★★ ⚡87 Q0.8🏆 🏆 World-class
 ↗3 layers
 
-**ResearchMCP is a Go-based application that integrates with the MCP protocol to leverage Perplexity AI's capabilities for internet research. It provides a structured and configurable environment for developers to build, deploy, and manage AI-driven research tools within Borg workflows.**
+**ResearchMCP is a Go-based application that integrates with the MCP protocol to leverage Perplexity AI's capabilities for internet research. It provides a structured and configurable environment for developers to build, deploy, and manage AI-driven research tools within Tormentnexus workflows.**
 
 **Features:**
 - MCP protocol integration
@@ -9806,7 +9806,7 @@ The core functionality involves transforming documents into manageable fragments
 `9.0` ★★ ⚡86 Q0.8🏆 🏆 World-class
 ↗3 layers
 
-**This analysis evaluates the technical merits and practical considerations of using VHDL versus Verilog within the Borg Project's design framework. It examines historical context, language features, industry adoption, and real-world application challenges. The discussion highlights VHDL's strengths in concurrent processing modeling, its role in simulation accuracy, and the trade-offs between theoretical elegance and practical implementation. The evaluation underscores the importance of aligning l...**
+**This analysis evaluates the technical merits and practical considerations of using VHDL versus Verilog within the Tormentnexus Project's design framework. It examines historical context, language features, industry adoption, and real-world application challenges. The discussion highlights VHDL's strengths in concurrent processing modeling, its role in simulation accuracy, and the trade-offs between theoretical elegance and practical implementation. The evaluation underscores the importance of aligning l...**
 
 **Features:**
 - Concurrent process modeling
@@ -11346,7 +11346,7 @@ The core functionality involves transforming documents into manageable fragments
 ### 41. [Ragie | The Context Engine for Agents , Assistants, and Apps](https://www.ragie.ai/?rdt_cid=5168814890013987582&utm_campaign=rag-api&utm_medium=cpc&utm_source=reddit)
 `9.0` ★★ ⚡82 Q0.8⭐ ⭐ Excellent
 
-**The Borg intelligence database entry evaluates Ragie as a powerful RAG (Retrieval-Augmented Generation) engine designed to extract structured context from unstructured documents. It highlights its capabilities in entity extraction, customization via partitions, integration with platforms like Base Chat and MCP, and its role in enhancing agent workflows by providing accurate, context-rich responses.**
+**The Tormentnexus intelligence database entry evaluates Ragie as a powerful RAG (Retrieval-Augmented Generation) engine designed to extract structured context from unstructured documents. It highlights its capabilities in entity extraction, customization via partitions, integration with platforms like Base Chat and MCP, and its role in enhancing agent workflows by providing accurate, context-rich responses.**
 
 **Features:**
 - Advanced RAG engine for structured document understanding
@@ -13563,7 +13563,7 @@ The tool offers powerful features that allow developers to replace entire screen
 ### 44. [Ask HN: What game engine would you recommend for vibe coding? | Hacker News](https://news.ycombinator.com/item?id=47318148)
 `7.0` ★ ⚡58 Q0.5✓ ✓ Solid
 
-**Exploration of game engine recommendations for vibe coding in the Borg intelligence database.**
+**Exploration of game engine recommendations for vibe coding in the Tormentnexus intelligence database.**
 
 **Features:**
 - Functional game architecture
@@ -16080,7 +16080,7 @@ The tool offers powerful features that allow developers to replace entire screen
 `8.8` ★ ⚡90 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project's MCP repository provides a modular framework for connecting various tools and services via standardized protocols. It supports integration with web scraping, AI models, security tools, and more, facilitating seamless orchestration of complex workflows. The project emphasizes developer productivity through automation, secure code practices, and scalable infrastructure.**
+**The Tormentnexus Project's MCP repository provides a modular framework for connecting various tools and services via standardized protocols. It supports integration with web scraping, AI models, security tools, and more, facilitating seamless orchestration of complex workflows. The project emphasizes developer productivity through automation, secure code practices, and scalable infrastructure.**
 
 **Features:**
 - Integration of external tools
@@ -16283,7 +16283,7 @@ The tool offers powerful features that allow developers to replace entire screen
 `8.5` ★ ⚡68 Q0.6✓ ✓ Solid
 ↗2 layers
 
-**The Borg resource focuses on leveraging openAI's capabilities to automate complex tasks through intelligent workflow orchestration, emphasizing seamless integration with natural language interfaces.**
+**The Tormentnexus resource focuses on leveraging openAI's capabilities to automate complex tasks through intelligent workflow orchestration, emphasizing seamless integration with natural language interfaces.**
 
 **Features:**
 - natural language understanding
@@ -16324,7 +16324,7 @@ The tool offers powerful features that allow developers to replace entire screen
 `8.8` ★ ⚡87 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project's repository provides a web-based interface that enables users to search for and retrieve academic papers from the arXiv repository. It supports advanced search functionalities, including filtering by keywords, authors, and publication dates. The system is designed to integrate seamlessly with machine learning models, allowing for efficient retrieval of relevant research papers without the need for complex HTML parsing.**
+**The Tormentnexus Project's repository provides a web-based interface that enables users to search for and retrieve academic papers from the arXiv repository. It supports advanced search functionalities, including filtering by keywords, authors, and publication dates. The system is designed to integrate seamlessly with machine learning models, allowing for efficient retrieval of relevant research papers without the need for complex HTML parsing.**
 
 **Features:**
 - Search arXiv papers

@@ -1,5 +1,5 @@
 """
-Borg Tiered Memory System — L1 (Hot) / L2 (Warm) / L3 (Cold)
+Tormentnexus Tiered Memory System — L1 (Hot) / L2 (Warm) / L3 (Cold)
 
 Heat-based memory promotion/demotion inspired by:
 - LangMem 3-tier (Semantic/Episodic/Procedural)
@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 
 class TieredMemory:
-    """Three-layer memory with heat-based promotion for Borg Intelligence."""
+    """Three-layer memory with heat-based promotion for Tormentnexus Intelligence."""
 
     DB_PATH = 'bookmarks.db'
 
@@ -92,7 +92,7 @@ class TieredMemory:
 
         # Skill registry — learned extraction patterns
         c.execute("""
-            CREATE TABLE IF NOT EXISTS borg_skills (
+            CREATE TABLE IF NOT EXISTS tormentnexus_skills (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 skill_name TEXT UNIQUE NOT NULL,
                 skill_type TEXT DEFAULT 'extraction',
@@ -108,7 +108,7 @@ class TieredMemory:
 
         # Tool registry — discovered MCP tools and capabilities
         c.execute("""
-            CREATE TABLE IF NOT EXISTS borg_tool_registry (
+            CREATE TABLE IF NOT EXISTS tormentnexus_tool_registry (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 tool_name TEXT UNIQUE NOT NULL,
                 tool_type TEXT DEFAULT 'mcp',
@@ -364,22 +364,22 @@ class TieredMemory:
         conn = self._get_conn()
         try:
             existing = conn.execute(
-                "SELECT success_count, fail_count FROM borg_skills WHERE skill_name = ?",
+                "SELECT success_count, fail_count FROM tormentnexus_skills WHERE skill_name = ?",
                 (skill_name,)
             ).fetchone()
 
             if existing:
                 if success:
                     conn.execute(
-                        "UPDATE borg_skills SET success_count = success_count + 1, last_used = ? WHERE skill_name = ?",
+                        "UPDATE tormentnexus_skills SET success_count = success_count + 1, last_used = ? WHERE skill_name = ?",
                         (datetime.now(timezone.utc).isoformat(), skill_name))
                 else:
                     conn.execute(
-                        "UPDATE borg_skills SET fail_count = fail_count + 1, last_used = ? WHERE skill_name = ?",
+                        "UPDATE tormentnexus_skills SET fail_count = fail_count + 1, last_used = ? WHERE skill_name = ?",
                         (datetime.now(timezone.utc).isoformat(), skill_name))
             else:
                 conn.execute("""
-                    INSERT INTO borg_skills (skill_name, pattern, success_count, fail_count, last_used, metadata)
+                    INSERT INTO tormentnexus_skills (skill_name, pattern, success_count, fail_count, last_used, metadata)
                     VALUES (?, ?, ?, ?, ?, ?)
                 """, (skill_name, pattern or '',
                      1 if success else 0, 0 if success else 1,
@@ -397,7 +397,7 @@ class TieredMemory:
                 SELECT skill_name, pattern, success_count, fail_count,
                        ROUND(CAST(success_count AS REAL) / (success_count + fail_count), 3) as win_rate,
                        metadata
-                FROM borg_skills
+                FROM tormentnexus_skills
                 WHERE (success_count + fail_count) >= 3
                 AND (? IS NULL OR skill_type = ?)
                 ORDER BY win_rate DESC, success_count DESC
@@ -413,7 +413,7 @@ class TieredMemory:
         conn = self._get_conn()
         try:
             conn.execute("""
-                UPDATE borg_skills SET
+                UPDATE tormentnexus_skills SET
                     pattern = ?,
                     evolved_from = skill_name,
                     success_count = 0,
@@ -435,13 +435,13 @@ class TieredMemory:
         conn = self._get_conn()
         try:
             conn.execute("""
-                INSERT INTO borg_tool_registry (tool_name, tool_type, schema_json, endpoint,
+                INSERT INTO tormentnexus_tool_registry (tool_name, tool_type, schema_json, endpoint,
                     capability_tags, metadata)
                 VALUES (?, ?, ?, ?, ?, ?)
                 ON CONFLICT(tool_name) DO UPDATE SET
-                    schema_json=COALESCE(excluded.schema_json, borg_tool_registry.schema_json),
-                    endpoint=COALESCE(excluded.endpoint, borg_tool_registry.endpoint),
-                    capability_tags=COALESCE(excluded.capability_tags, borg_tool_registry.capability_tags),
+                    schema_json=COALESCE(excluded.schema_json, tormentnexus_tool_registry.schema_json),
+                    endpoint=COALESCE(excluded.endpoint, tormentnexus_tool_registry.endpoint),
+                    capability_tags=COALESCE(excluded.capability_tags, tormentnexus_tool_registry.capability_tags),
                     last_seen=CURRENT_TIMESTAMP
             """, (tool_name, tool_type,
                   json.dumps(schema_json) if isinstance(schema_json, dict) else schema_json,
@@ -458,7 +458,7 @@ class TieredMemory:
         try:
             rows = conn.execute("""
                 SELECT tool_name, tool_type, schema_json, endpoint, capability_tags, success_rate
-                FROM borg_tool_registry
+                FROM tormentnexus_tool_registry
                 WHERE tool_name LIKE ? OR capability_tags LIKE ?
                 ORDER BY success_rate DESC, call_count DESC
                 LIMIT ?
@@ -472,7 +472,7 @@ class TieredMemory:
         conn = self._get_conn()
         try:
             conn.execute("""
-                UPDATE borg_tool_registry SET
+                UPDATE tormentnexus_tool_registry SET
                     call_count = call_count + 1,
                     success_rate = CASE
                         WHEN call_count = 0 THEN CASE WHEN ? THEN 1.0 ELSE 0.0 END
@@ -493,13 +493,13 @@ class TieredMemory:
         try:
             l2_count = conn.execute("SELECT COUNT(*) FROM memory_l2_warm").fetchone()[0]
             l3_count = conn.execute("SELECT COUNT(*) FROM memory_l3_cold").fetchone()[0]
-            skills_count = conn.execute("SELECT COUNT(*) FROM borg_skills").fetchone()[0]
-            tools_count = conn.execute("SELECT COUNT(*) FROM borg_tool_registry").fetchone()[0]
+            skills_count = conn.execute("SELECT COUNT(*) FROM tormentnexus_skills").fetchone()[0]
+            tools_count = conn.execute("SELECT COUNT(*) FROM tormentnexus_tool_registry").fetchone()[0]
 
             top_skills = conn.execute("""
                 SELECT skill_name, success_count, fail_count,
                        ROUND(CAST(success_count AS REAL) / MAX(success_count + fail_count, 1), 3) as win_rate
-                FROM borg_skills ORDER BY success_count DESC LIMIT 5
+                FROM tormentnexus_skills ORDER BY success_count DESC LIMIT 5
             """).fetchall()
 
             return {

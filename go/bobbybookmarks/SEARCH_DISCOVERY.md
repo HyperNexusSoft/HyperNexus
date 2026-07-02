@@ -1,5 +1,5 @@
 # 🔍 Search & Discovery
-> Borg Intelligence Atlas v8 · 2026-06-17 · 179 tools
+> Tormentnexus Intelligence Atlas v8 · 2026-06-17 · 179 tools
 > Semantic search, web APIs, code search, MCP registries
 
 | Metric | Value |
@@ -31,7 +31,7 @@
 10. **[haran2001/mcp-search-server](https://github.com/haran2001/mcp-search-server)** ⚡93 · 🏆 World-class — A powerful MCP intelligence server for discovering and analyzing Model Context Protocol servers.
 11. **[misanthropic-ai/ddg-mcp](https://github.com/misanthropic-ai/ddg-mcp)** ⚡93 · 🏆 World-class — A DuckDuckGo search API server enabling advanced web search capabilities via the Model Context Proto...
 12. **[zongmin-yu/semantic-scholar-fastmcp-mcp-server](https://github.com/zongmin-yu/semantic-scholar-fastmcp-mcp-server)** ⚡93 · 🏆 World-class — This resource is a Python project that implements a FastMCP server to provide comprehensive access t...
-13. **[randomm/files-db-mcp](https://github.com/randomm/files-db-mcp)** ⚡92 · 🏆 World-class — A Borg-style local vector database for LLM code search with real-time monitoring and integration wit...
+13. **[randomm/files-db-mcp](https://github.com/randomm/files-db-mcp)** ⚡92 · 🏆 World-class — A Tormentnexus-style local vector database for LLM code search with real-time monitoring and integration wit...
 14. **[garylab/serper-mcp-server](https://github.com/garylab/serper-mcp-server)** ⚡92 · 🏆 World-class — A server that integrates Google Search via Serper to provide LLMs with search result information.
 15. **[r-huijts/opentk-mcp](https://github.com/r-huijts/opentk-mcp)** ⚡92 · 🏆 World-class — The OpenTK project enables AI assistants to efficiently search and analyze Dutch parliamentary docum...
 16. **[LinkupPlatform/linkup-mcp-server](https://github.com/LinkupPlatform/linkup-mcp-server)** ⚡92 · 🏆 World-class — A MCP server enabling AI-powered web search and content retrieval.
@@ -1470,7 +1470,7 @@
 `9.1` ★★ ⚡95 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project's Researcher-MCP repository offers a comprehensive suite of tools designed to enhance software development workflows. It leverages Perplexity AI for intelligent search, documentation retrieval, API integration, and code modernization assistance. The platform supports seamless context tracking, advanced query processing, adaptive rate management, and robust performance optimization. Key features include intelligent rate limiting, connection pooling, and detailed insights into cod...**
+**The Tormentnexus Project's Researcher-MCP repository offers a comprehensive suite of tools designed to enhance software development workflows. It leverages Perplexity AI for intelligent search, documentation retrieval, API integration, and code modernization assistance. The platform supports seamless context tracking, advanced query processing, adaptive rate management, and robust performance optimization. Key features include intelligent rate limiting, connection pooling, and detailed insights into cod...**
 
 **Features:**
 - search
@@ -1590,7 +1590,7 @@
 `8.8` ★ ⚡88 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project's 'mcp-rememberizer-vectordb' is a GitHub-hosted AI-powered vector store designed to enhance LLM interactions by providing semantic search and retrieval capabilities. It integrates with MCP servers, enabling developers to manage documents, perform agentic searches, and automate workflows efficiently.**
+**The Tormentnexus Project's 'mcp-rememberizer-vectordb' is a GitHub-hosted AI-powered vector store designed to enhance LLM interactions by providing semantic search and retrieval capabilities. It integrates with MCP servers, enabling developers to manage documents, perform agentic searches, and automate workflows efficiently.**
 
 **Features:**
 - AI-powered search
@@ -2625,7 +2625,7 @@
 ### 4. [flow-product/doubao-search-mcp](https://github.com/flow-product/doubao-search-mcp)
 `8.5` ★ ⚡83 Q0.8⭐ ⭐ Excellent
 
-**This project focuses on enhancing search capabilities within the Borg Intelligence database by implementing advanced indexing, filtering, and query optimization techniques. It integrates custom metadata management and leverages Git-based version control to track changes over time. The codebase emphasizes modular architecture for scalability, ensuring efficient data retrieval and real-time updates.**
+**This project focuses on enhancing search capabilities within the Tormentnexus Intelligence database by implementing advanced indexing, filtering, and query optimization techniques. It integrates custom metadata management and leverages Git-based version control to track changes over time. The codebase emphasizes modular architecture for scalability, ensuring efficient data retrieval and real-time updates.**
 
 **Features:**
 - custom search filters

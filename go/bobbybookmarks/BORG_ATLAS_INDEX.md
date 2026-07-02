@@ -1,7 +1,7 @@
-# Borg Intelligence Atlas v8 — Master Index
+# Tormentnexus Intelligence Atlas v8 — Master Index
 > **17,546** tools · **2,027** standout 🏆⭐ · Domain-classified · Signal-scored · 2026-06-17
 
-## The 7 Borg Categories
+## The 7 Tormentnexus Categories
 
 | # | Layer | Tools | Standout | ⚡ | Description |
 |---|-------|-------|----------|-----|-------------|

@@ -9,4 +9,4 @@
 ## Codebase Maintenance
 - [ ] Thoroughly explore `backend/internal/api` to verify any missing endpoints from prior phases.
 - [ ] Connect the frontend UI logic to any new endpoints that get deployed.
-- [ ] Continue generating and logging error cases inside `borg.db`.
+- [ ] Continue generating and logging error cases inside `tormentnexus.db`.

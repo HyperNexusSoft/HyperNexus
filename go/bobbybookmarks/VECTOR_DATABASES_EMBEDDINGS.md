@@ -1,5 +1,5 @@
 # 📐 Vector Databases & Embeddings
-> Borg Intelligence Atlas v8 · 2026-06-17 · 59 tools
+> Tormentnexus Intelligence Atlas v8 · 2026-06-17 · 59 tools
 > Vector DBs, embedding models, ANN indexes, RAG frameworks
 
 | Metric | Value |
@@ -966,7 +966,7 @@
 `9.0` ★★ ⚡84 Q0.8⭐ ⭐ Excellent
 ↗3 layers
 
-**This resource provides an interactive font generator that allows users to preview, style, and generate a wide variety of cool, fancy, vintage script, bold, cursive, and typewriter-style fonts. It offers options for different styles like Double-Struck/Outlined, Fraktur, Old English Bold, Sans Serif, and more. The tool includes various text effects such as Bubble Text, Square Text, Monospace/Typewriter, and even 'Borg' inspired stylistic elements.**
+**This resource provides an interactive font generator that allows users to preview, style, and generate a wide variety of cool, fancy, vintage script, bold, cursive, and typewriter-style fonts. It offers options for different styles like Double-Struck/Outlined, Fraktur, Old English Bold, Sans Serif, and more. The tool includes various text effects such as Bubble Text, Square Text, Monospace/Typewriter, and even 'Tormentnexus' inspired stylistic elements.**
 
 **Features:**
 - Font Generation & Styling Preview

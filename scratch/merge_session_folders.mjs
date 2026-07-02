@@ -160,9 +160,9 @@ async function run() {
         const tormentnexusPath = path.join(projectPath, '.tormentnexus');
         
         const hasTormentNexus = fs.existsSync(tormentnexusPath);
-        const hasHypercode = fs.existsSync(TormentNexusPath);
+        const hasTormentnexus = fs.existsSync(TormentNexusPath);
         
-        if (hasTormentNexus || hasHypercode) {
+        if (hasTormentNexus || hasTormentnexus) {
             console.log(`📁 Processing project: ${entry.name}`);
             ensureDir(tormentnexusPath);
             
@@ -181,7 +181,7 @@ async function run() {
                 }
             }
             
-            if (hasHypercode) {
+            if (hasTormentnexus) {
                 console.log(`  - Deep Merging .TormentNexus -> .tormentnexus`);
                 try {
                     copyRecursiveMergeSync(TormentNexusPath, tormentnexusPath);

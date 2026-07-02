@@ -1,4 +1,4 @@
-# Borg Intelligence Atlas
+# Tormentnexus Intelligence Atlas
 
 AI/developer tools and resources database with automated ingestion, LLM-powered enrichment, and data hygiene.
 
@@ -30,7 +30,7 @@ AI/developer tools and resources database with automated ingestion, LLM-powered 
 | 13 | Vector Databases & Embeddings | 42 | 12 | 85 | [VECTOR_DATABASES_EMBEDDINGS.md](VECTOR_DATABASES_EMBEDDINGS.md) |
 | 14 | Security & Red Teaming | 125 | 40 | 85 | [SECURITY_RED_TEAMING.md](SECURITY_RED_TEAMING.md) |
 
-Full index: [BORG_ATLAS_INDEX.md](BORG_ATLAS_INDEX.md)
+Full index: [TORMENTNEXUS_ATLAS_INDEX.md](TORMENTNEXUS_ATLAS_INDEX.md)
 
 ## Pipeline
 

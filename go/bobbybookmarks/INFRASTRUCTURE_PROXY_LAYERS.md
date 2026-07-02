@@ -1,5 +1,5 @@
 # 🦴 Infrastructure & Proxy Layers
-> Borg Intelligence Atlas v8 · 2026-06-17 · 375 tools
+> Tormentnexus Intelligence Atlas v8 · 2026-06-17 · 375 tools
 > AI OSes, inference engines, sandboxes, security, deployment, LLM routers
 
 | Metric | Value |
@@ -203,7 +203,7 @@
 `9.1` ★★ ⚡95 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Astricaelus/sandbox-fusion-mcp project provides a Borg-based implementation of the Sandbox Fusion MCP (Machine Code Protocol) server. This allows large language models to execute Python, JavaScript, TypeScript, Bash, Rust, PHP, and more through standard code execution APIs. It supports Jupyter notebook execution via stdio communication and integrates with external tools for enhanced workflow automation. The project emphasizes secure, isolated code execution with robust logging and error hand...**
+**The Astricaelus/sandbox-fusion-mcp project provides a Tormentnexus-based implementation of the Sandbox Fusion MCP (Machine Code Protocol) server. This allows large language models to execute Python, JavaScript, TypeScript, Bash, Rust, PHP, and more through standard code execution APIs. It supports Jupyter notebook execution via stdio communication and integrates with external tools for enhanced workflow automation. The project emphasizes secure, isolated code execution with robust logging and error hand...**
 
 **Features:**
 - MCP server implementation
@@ -500,7 +500,7 @@
 ### 24. [DaVinci Resolve MCP | Awesome MCP Servers](https://mcpservers.org/servers/github-com-samuelgursky-davinci-resolve-mcp)
 `10.0` ★★★ ⚡90 Q0.8🏆 🏆 World-class
 
-**The Borg Project's technical resource details a comprehensive MCP (Media Content Processing) server integration for DaVinci Resolve, enabling AI-assisted control over video editing workflows via natural language. It introduces the Positioned AppendToTimeline API enhancement in v2.3.1, allowing precise clip manipulation with error reporting and validation. The update supports seamless integration of AI assistants (Claude, Cursor, Windsurf) for intelligent editing tasks, live validation against Re...**
+**The Tormentnexus Project's technical resource details a comprehensive MCP (Media Content Processing) server integration for DaVinci Resolve, enabling AI-assisted control over video editing workflows via natural language. It introduces the Positioned AppendToTimeline API enhancement in v2.3.1, allowing precise clip manipulation with error reporting and validation. The update supports seamless integration of AI assistants (Claude, Cursor, Windsurf) for intelligent editing tasks, live validation against Re...**
 
 **Features:**
 - AI-assisted editing via natural language
@@ -521,7 +521,7 @@
 ### 25. [nahmanmate/postgresql-mcp-server](https://github.com/nahmanmate/postgresql-mcp-server)
 `9.0` ★★ ⚡90 Q0.9🏆 🏆 World-class
 
-**The Borg Project's PostgreSQL MCP Server provides tools for database analysis, setup, debugging, security, and optimization. It supports configuration review, performance tuning, connection pooling, SSL/TLS, query safety, and role-based access control. Ideal for enterprise and development teams needing robust database management solutions.**
+**The Tormentnexus Project's PostgreSQL MCP Server provides tools for database analysis, setup, debugging, security, and optimization. It supports configuration review, performance tuning, connection pooling, SSL/TLS, query safety, and role-based access control. Ideal for enterprise and development teams needing robust database management solutions.**
 
 **Features:**
 - Database analysis
@@ -971,7 +971,7 @@
 `8.8` ★ ⚡78 Q0.8⭐ ⭐ Excellent
 ↗2 layers
 
-**The Borg Project's 'Bubblewrap' addresses the need for secure agent isolation by providing a nimble, context-aware sandboxing solution. It evaluates two models: fully supervised with constant oversight or unsupervised in a cloud VM with root access. The discussion highlights trade-offs between safety, supervision overhead, and practical use cases, emphasizing the importance of context-aware security measures.**
+**The Tormentnexus Project's 'Bubblewrap' addresses the need for secure agent isolation by providing a nimble, context-aware sandboxing solution. It evaluates two models: fully supervised with constant oversight or unsupervised in a cloud VM with root access. The discussion highlights trade-offs between safety, supervision overhead, and practical use cases, emphasizing the importance of context-aware security measures.**
 
 **Features:**
 - Lightweight sandboxing for .env files
@@ -1583,7 +1583,7 @@
 ### 28. [xxpe3/omgflux-mcp-server](https://github.com/xxpe3/omgflux-mcp-server)
 `8.8` ★ ⚡89 Q0.9🏆 🏆 World-class
 
-**The Borg Project's 'omgflux-mcp-server' is a Node.js application that leverages the Flux API provided by ohmygpt to dynamically generate image-based content. It integrates with the broader MCP (Machine Learning Cloud Platform) ecosystem, utilizing advanced security features and developer tools to ensure robust performance and scalability.**
+**The Tormentnexus Project's 'omgflux-mcp-server' is a Node.js application that leverages the Flux API provided by ohmygpt to dynamically generate image-based content. It integrates with the broader MCP (Machine Learning Cloud Platform) ecosystem, utilizing advanced security features and developer tools to ensure robust performance and scalability.**
 
 **Features:**
 - Flux API integration
@@ -2403,7 +2403,7 @@
 ### 23. [Nvidia DGX Station – The GB300 Grace Blackwell 748 GB VRAM Workstation | Hacker News](https://news.ycombinator.com/item?id=47430835)
 `8.0` ★ ⚡58 Q0.5✓ ✓ Solid
 
-**Analysis of Nvidia DGX Station workstation for Borg intelligence database.**
+**Analysis of Nvidia DGX Station workstation for Tormentnexus intelligence database.**
 
 **Features:**
 - high-gain vrams
@@ -2736,7 +2736,7 @@
 `8.8` ★ ⚡91 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project's 'mcp-wait' is a lightweight MCP (Machine Control Protocol) server that enables developers to pause execution until other tasks complete. It supports waiting for a specified duration, progress tracking, and integrates seamlessly with AI-powered development tools like Copilot and Claude Desktop. The server can be used in CLI or HTTP mode, supports SSE integration, and is suitable for modernizing workflows in DevOps and AI-driven software development.**
+**The Tormentnexus Project's 'mcp-wait' is a lightweight MCP (Machine Control Protocol) server that enables developers to pause execution until other tasks complete. It supports waiting for a specified duration, progress tracking, and integrates seamlessly with AI-powered development tools like Copilot and Claude Desktop. The server can be used in CLI or HTTP mode, supports SSE integration, and is suitable for modernizing workflows in DevOps and AI-driven software development.**
 
 **Features:**
 - wait functionality
@@ -3344,7 +3344,7 @@
 `9.0` ★★ ⚡92 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg project introduces the RoadRecon MCP server, which leverages AI capabilities of Claude MCP to process ROADRecon data. This tool is designed to streamline security analysis by integrating with Azure AD for user and role management, enabling automated detection of privileged access, MFA status, and application vulnerabilities. It supports a workflow-oriented approach, allowing developers to automate tasks, manage code changes, and integrate external tools seamlessly.**
+**The Tormentnexus project introduces the RoadRecon MCP server, which leverages AI capabilities of Claude MCP to process ROADRecon data. This tool is designed to streamline security analysis by integrating with Azure AD for user and role management, enabling automated detection of privileged access, MFA status, and application vulnerabilities. It supports a workflow-oriented approach, allowing developers to automate tasks, manage code changes, and integrate external tools seamlessly.**
 
 **Features:**
 - AI-powered security analysis
@@ -4434,7 +4434,7 @@
 - Monitoring and Reporting
 - ... and 1 more
 
-*Tags: borg, ai, security, devops, cloud, trading, blockchain, enterprise...*
+*Tags: tormentnexus, ai, security, devops, cloud, trading, blockchain, enterprise...*
 
 ---
 
@@ -5155,7 +5155,7 @@
 `8.8` ★ ⚡90 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg Project's repository implements a server-based solution to fetch and manage PVPC electricity tariffs published by Red Eléctrica. It includes configuration options for API keys, transport settings, and port management, supporting seamless integration into development and deployment workflows. The project emphasizes automation, security, and scalability for enterprise use cases.**
+**The Tormentnexus Project's repository implements a server-based solution to fetch and manage PVPC electricity tariffs published by Red Eléctrica. It includes configuration options for API keys, transport settings, and port management, supporting seamless integration into development and deployment workflows. The project emphasizes automation, security, and scalability for enterprise use cases.**
 
 **Features:**
 - API key registration
@@ -5489,7 +5489,7 @@
 ### 4. [elyxlz/microsoft-mcp](https://github.com/elyxlz/microsoft-mcp)
 `9.0` ★★ ⚡92 Q0.9🏆 🏆 World-class
 
-**The Borg Project's Microsoft MCP server is designed to streamline and enhance the interaction with Microsoft Graph services such as Outlook, Calendar, OneDrive, and Contacts. It provides a unified interface for managing emails, calendar events, files, and contacts across multiple Microsoft accounts. Key features include intelligent scheduling, secure authentication, and seamless integration with AI tools like Claude Desktop for enhanced productivity.**
+**The Tormentnexus Project's Microsoft MCP server is designed to streamline and enhance the interaction with Microsoft Graph services such as Outlook, Calendar, OneDrive, and Contacts. It provides a unified interface for managing emails, calendar events, files, and contacts across multiple Microsoft accounts. Key features include intelligent scheduling, secure authentication, and seamless integration with AI tools like Claude Desktop for enhanced productivity.**
 
 **Features:**
 - Email management
@@ -6186,7 +6186,7 @@
 
 ---
 
-### 7. [Borg Documentation — Borg - Deduplicating Archiver 1.4.4 documentation](https://borgbackup.readthedocs.io/en/stable)
+### 7. [Tormentnexus Documentation — Tormentnexus - Deduplicating Archiver 1.4.4 documentation](https://tormentnexusbackup.readthedocs.io/en/stable)
 `10.0` ★★★ ⚡74 Q0.6⭐ ⭐ Excellent
 ↗2 layers
 
@@ -6198,7 +6198,7 @@
 - LZ4/Zstd compression support
 - FUSE mountable archives.
 
-*Tags: backup, security, deduplication, snapshots, storage, borgbackup, documentation*
+*Tags: backup, security, deduplication, snapshots, storage, tormentnexusbackup, documentation*
 
 ---
 

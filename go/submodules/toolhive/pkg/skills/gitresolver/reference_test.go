@@ -89,9 +89,9 @@ func TestParseGitReference(t *testing.T) {
 		},
 		{
 			name:  "deep repo path",
-			input: "git://github.com/org/suborg/repo",
+			input: "git://github.com/org/sutormentnexus/repo",
 			expected: &GitReference{
-				URL: "https://github.com/org/suborg/repo",
+				URL: "https://github.com/org/sutormentnexus/repo",
 			},
 		},
 		{

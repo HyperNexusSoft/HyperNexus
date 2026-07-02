@@ -327,12 +327,12 @@
       "elapsed": 95.9334876537323
     },
     {
-      "id": "mcp-hypercode-supervisor",
+      "id": "mcp-tormentnexus-supervisor",
       "status": "completed",
-      "summary": "Successfully implemented the hypercode-supervisor MCP server as a native Go tool. Created:\n1. C:/Users/hyper/workspace/tormentnexus/go/internal/tools/hypercode_supervisor.go - Contains HandleHypercodeSupervisor function that handles actions: status, start, stop, restart\n2. C:/Users/hyper/workspace/tormentnexus/go/internal/tools/hypercode_supervisor.go.json - Manifest file\n\nThe build fails due to pre-existing errors in other tool files (pubmed_mcp_server.go, himalayas_remote_jobs.go, siilostomystore.go, odoo_mcp_server.go, bjj_belt_progress.go, compress_new.go, foul_domain.go), not related to this implementation. My code follows the correct template pattern using getString, ok, and err helpers.",
+      "summary": "Successfully implemented the tormentnexus-supervisor MCP server as a native Go tool. Created:\n1. C:/Users/hyper/workspace/tormentnexus/go/internal/tools/tormentnexus_supervisor.go - Contains HandleTormentnexusSupervisor function that handles actions: status, start, stop, restart\n2. C:/Users/hyper/workspace/tormentnexus/go/internal/tools/tormentnexus_supervisor.go.json - Manifest file\n\nThe build fails due to pre-existing errors in other tool files (pubmed_mcp_server.go, himalayas_remote_jobs.go, siilostomystore.go, odoo_mcp_server.go, bjj_belt_progress.go, compress_new.go, foul_domain.go), not related to this implementation. My code follows the correct template pattern using getString, ok, and err helpers.",
       "files": [
-        "C:/Users/hyper/workspace/tormentnexus/go/internal/tools/hypercode_supervisor.go",
-        "C:/Users/hyper/workspace/tormentnexus/go/internal/tools/hypercode_supervisor.go.json"
+        "C:/Users/hyper/workspace/tormentnexus/go/internal/tools/tormentnexus_supervisor.go",
+        "C:/Users/hyper/workspace/tormentnexus/go/internal/tools/tormentnexus_supervisor.go.json"
       ],
       "api_calls": 5,
       "turns": 5,

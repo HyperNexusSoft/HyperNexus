@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Borg Deep Processor v4 - Crawl + Ingest + Enrich"""
+"""Tormentnexus Deep Processor v4 - Crawl + Ingest + Enrich"""
 
 import os
 import re
@@ -33,7 +33,7 @@ MODELS = [
     ("qwen3.6-27b-uncensored-hauhaucs-aggressive", 150),
     ("gemma-4-26b-a4b-it-heretic-ara", 180),
 ]
-BORG_TAXONOMY = [
+TORMENTNEXUS_TAXONOMY = [
     "Agent Orchestration & Workflow",
     "Context Engineering & Isolation",
     "Memory & Persistence Architecture",
@@ -182,7 +182,7 @@ def fetch_page(url, timeout=18):
     try:
         resp = requests.get(
             fetch_url,
-            headers={"User-Agent": "Mozilla/5.0 (compatible; BorgIntel/4.0)"},
+            headers={"User-Agent": "Mozilla/5.0 (compatible; TormentnexusIntel/4.0)"},
             timeout=timeout,
             allow_redirects=True,
         )
@@ -306,7 +306,7 @@ def build_prompt(url, fit_text, gh_meta=None, existing_sd=None):
     if fit_text and len(fit_text) > 50:
         ctx.append("Page content:\n" + fit_text[:1800])
     ctx_str = "\n".join(ctx)
-    tax = ", ".join(BORG_TAXONOMY)
+    tax = ", ".join(TORMENTNEXUS_TAXONOMY)
     parts = [
         "Analyze this AI/developer tool or resource. Return a JSON object with these fields:",
         "- CATEGORY: one of [" + tax + "]",
@@ -775,7 +775,7 @@ def phase_ingest(limit=0):
                     "Return JSON for this URL: " + url + nl
                     + "Fields: CATEGORY, SHORT_DESCRIPTION, LONG_DESCRIPTION, "
                     + "MAIN_FEATURES, INNOVATION_SCORE(1-10), TAGS" + nl
-                    + "Categories: " + ", ".join(BORG_TAXONOMY) + nl
+                    + "Categories: " + ", ".join(TORMENTNEXUS_TAXONOMY) + nl
                     + "Return ONLY valid JSON."
                 )
                 raw2, model2 = call_llm(simple_prompt)
@@ -825,7 +825,7 @@ def phase_ingest(limit=0):
 
             category = stringify(rdata.get("CATEGORY", ""))
             mapped = CAT_MAP.get(category, category)
-            if mapped and mapped in BORG_TAXONOMY:
+            if mapped and mapped in TORMENTNEXUS_TAXONOMY:
                 c.execute("DELETE FROM layer_membership WHERE entry_id=?", (eid,))
                 c.execute(
                     "INSERT OR REPLACE INTO layer_membership (entry_id, layer, is_primary) VALUES (?, ?, 1)",
@@ -938,7 +938,7 @@ def phase_enrich(limit=0):
 
         category = stringify(rdata.get("CATEGORY", ""))
         mapped = CAT_MAP.get(category, category)
-        if mapped and mapped in BORG_TAXONOMY:
+        if mapped and mapped in TORMENTNEXUS_TAXONOMY:
             c.execute("DELETE FROM layer_membership WHERE entry_id=?", (eid,))
             c.execute(
                 "INSERT OR REPLACE INTO layer_membership (entry_id, layer, is_primary) VALUES (?, ?, 1)",
@@ -954,7 +954,7 @@ def phase_enrich(limit=0):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Borg Deep Processor v4")
+    parser = argparse.ArgumentParser(description="Tormentnexus Deep Processor v4")
     parser.add_argument(
         "--phase",
         choices=["crawl", "ingest", "enrich", "all"],
@@ -963,7 +963,7 @@ def main():
     parser.add_argument("--limit", type=int, default=0)
     args = parser.parse_args()
 
-    log.info("Borg Deep Processor v4 - Starting")
+    log.info("Tormentnexus Deep Processor v4 - Starting")
     log.info("Phase: %s, Limit: %s", args.phase, args.limit or "unlimited")
 
     if args.phase in ("crawl", "all"):

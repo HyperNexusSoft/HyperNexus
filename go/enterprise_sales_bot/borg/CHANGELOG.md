@@ -49,7 +49,7 @@
 
 ### Changed
 - **Workspace Simplification**: Created `archive_cleaner.py` and consolidated obsolete, temporary, and old version files from the root workspace into structured, git-ignored subdirectories within `/archive/`.
-- **LM Studio Integration**: Updated `~/.lmstudio/mcp.json` configuration to default to `tormentnexus` supervisor instead of `hypercode` as its MCP server.
+- **LM Studio Integration**: Updated `~/.lmstudio/mcp.json` configuration to default to `tormentnexus` supervisor instead of `tormentnexus` as its MCP server.
 - **Version bump**: Synchronized all monorepo dependencies and workspaces to version `1.0.0-alpha.149`.
 
 ## [1.0.0-alpha.136] - 2026-06-23
@@ -257,7 +257,7 @@
   - Added unit test validation checking version increments and near-duplicate linkages.
 - **Fixed test suite issues**:
   - Fixed variable redeclaration error in `cmd/foundation_http_test.go`.
-  - Resolved `htormentnelloxus` test snapshot difference due to case-insensitive hypercode replacements in `foundation/pi/tool_snapshot_test.go`.
+  - Resolved `htormentnelloxus` test snapshot difference due to case-insensitive tormentnexus replacements in `foundation/pi/tool_snapshot_test.go`.
 
 ## [1.0.0-alpha.120] - 2026-06-05
 
@@ -613,7 +613,7 @@
 
 ### Changed
 
-- Standardized documentation identity to Hypercode Kernel & TormentNexus.
+- Standardized documentation identity to Tormentnexus Kernel & TormentNexus.
 - Replaced git merge conflict markers across multiple internal Kotlin and Markdown files with unified content logic.
 
 ## [1.0.0-alpha.61] - 2026-05-17

@@ -2,7 +2,7 @@
 
 ## Ultimate Goal
 
-The ultimate goal of this project is to create a fully autonomous, end-to-end B2B sales and lead generation pipeline for the [TormentNexus AI Hypervisor](https://github.com/robertpelloni/borg). The system is designed to identify, research, contact, persuade, and close deals with enterprise engineering departments without human intervention.
+The ultimate goal of this project is to create a fully autonomous, end-to-end B2B sales and lead generation pipeline for the [TormentNexus AI Hypervisor](https://github.com/robertpelloni/tormentnexus). The system is designed to identify, research, contact, persuade, and close deals with enterprise engineering departments without human intervention.
 
 ## Current State (v0.4.1)
 

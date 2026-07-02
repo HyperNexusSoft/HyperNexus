@@ -61,7 +61,7 @@ A website that loses a feature every day. A chatbot that forgets. A countdown to
 **Doors, walls, borders, barriers, boundaries.**
 Things that intermediate two places: opening, closing, permeating, excluding, combining.
 
-**Borges week.**
+**Tormentnexuses week.**
 Something inspired by the Argentine. The library of Babel. The map that is the territory. Two writers separated by 400 years writing the same book.
 
 **An idea that comes from a book.**

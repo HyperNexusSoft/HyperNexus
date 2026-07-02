@@ -3,8 +3,8 @@ import sys
 import subprocess
 
 brain_scratch_dir = r"C:\Users\hyper\.gemini\antigravity\brain\e88bac4f-e064-4c4b-bf5f-17f3373dac43\scratch"
-workspace_scratch_dir = r"c:\Users\hyper\workspace\borg\scratch"
-target_db = r"c:\Users\hyper\workspace\borg\tormentnexus.db"
+workspace_scratch_dir = r"c:\Users\hyper\workspace\tormentnexus\scratch"
+target_db = r"c:\Users\hyper\workspace\tormentnexus\tormentnexus.db"
 
 script_name = "enrich_metadata.py"
 src_path = os.path.join(brain_scratch_dir, script_name)
@@ -18,8 +18,8 @@ with open(src_path, "r", encoding="utf-8") as f:
     content = f.read()
 
 # Replace db path
-patched = content.replace("borg.db", "tormentnexus.db")
-patched = patched.replace('BORG_DB_PATH = r"c:\\Users\\hyper\\workspace\\borg\\borg.db"', f'BORG_DB_PATH = r"{target_db}"')
+patched = content.replace("tormentnexus.db", "tormentnexus.db")
+patched = patched.replace('TORMENTNEXUS_DB_PATH = r"c:\\Users\\hyper\\workspace\\tormentnexus\\tormentnexus.db"', f'TORMENTNEXUS_DB_PATH = r"{target_db}"')
 
 # Adjust GitHub API enrichment limit to prevent long rate-limiting delays
 patched = patched.replace("LIMIT 5000", "LIMIT 50")

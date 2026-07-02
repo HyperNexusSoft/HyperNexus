@@ -9,8 +9,8 @@ _Last updated: 2026-06-25, version 1.0.0-alpha.159_
 | Submodule | Location | Upstream | Commit | Purpose |
 |-----------|----------|----------|--------|---------|
 | **bobbybookmarks** | `bobbybookmarks/` | `robertpelloni/bobbybookmarks` | `c50f155` (main) | Bookmark sync and scraped data ingestion |
-| **enterprise_sales_bot** | `enterprise_sales_bot/` | `robertpelloni/enterprise_sales_bot` | `fdafa92` (main) | Enterprise sales bot with nested borg submodule |
-| **borg** (nested) | `enterprise_sales_bot/borg/` | `robertpelloni/borg` | `f3314909` (main) | Core OS module, tracks TormentNexus main |
+| **enterprise_sales_bot** | `enterprise_sales_bot/` | `robertpelloni/enterprise_sales_bot` | `fdafa92` (main) | Enterprise sales bot with nested tormentnexus submodule |
+| **tormentnexus** (nested) | `enterprise_sales_bot/tormentnexus/` | `robertpelloni/tormentnexus` | `f3314909` (main) | Core OS module, tracks TormentNexus main |
 
 ## Legacy Submodules (Removed)
 
@@ -42,7 +42,7 @@ tormentnexus/
 ├── apps/
 │   └── web/                 # Next.js dashboard (port 7779)
 ├── bobbybookmarks/          # Submodule: bookmark sync
-├── enterprise_sales_bot/    # Submodule: sales bot + nested borg
+├── enterprise_sales_bot/    # Submodule: sales bot + nested tormentnexus
 ├── data/                    # Database files (.db, assimilated states)
 ├── scripts/                 # Build and sync utilities
 ├── .memory/                 # Brain agent memory (roadmap, logs, branches)

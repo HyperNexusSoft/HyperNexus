@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Borg Intelligence Atlas v8.0 — Markdown Layer Exporter
+Tormentnexus Intelligence Atlas v8.0 — Markdown Layer Exporter
 Regenerates all layer markdown files from atlas.db
 """
 import sqlite3, sys, os, time
@@ -166,7 +166,7 @@ def gen_layer_md(atl, layer_name):
     # Build markdown
     lines = []
     lines.append(f'# {icon} {layer_name}')
-    lines.append(f'> Borg Intelligence Atlas v8 · {DATE} · {total:,} tools')
+    lines.append(f'> Tormentnexus Intelligence Atlas v8 · {DATE} · {total:,} tools')
     lines.append(f'> {desc}')
     lines.append('')
     
@@ -275,10 +275,10 @@ def gen_index_md(layer_stats):
     total_all = sum(s[1] for s in layer_stats)
     standout_all = sum(s[2] for s in layer_stats)
     
-    lines.append(f'# Borg Intelligence Atlas v8 — Master Index')
+    lines.append(f'# Tormentnexus Intelligence Atlas v8 — Master Index')
     lines.append(f'> **{total_all:,}** tools · **{standout_all:,}** standout 🏆⭐ · Domain-classified · Signal-scored · {DATE}')
     lines.append('')
-    lines.append('## The 7 Borg Categories')
+    lines.append('## The 7 Tormentnexus Categories')
     lines.append('')
     lines.append('| # | Layer | Tools | Standout | ⚡ | Description |')
     lines.append('|---|-------|-------|----------|-----|-------------|')
@@ -387,10 +387,10 @@ def main():
     
     # Generate master index
     index_md = gen_index_md(layer_stats)
-    index_path = os.path.join(OUTDIR, 'BORG_ATLAS_INDEX.md')
+    index_path = os.path.join(OUTDIR, 'TORMENTNEXUS_ATLAS_INDEX.md')
     with open(index_path, 'w', encoding='utf-8') as f:
         f.write(index_md)
-    print(f'\n  BORG_ATLAS_INDEX.md: {sum(s[1] for s in layer_stats):,} total tools across {len(layer_stats)} layers')
+    print(f'\n  TORMENTNEXUS_ATLAS_INDEX.md: {sum(s[1] for s in layer_stats):,} total tools across {len(layer_stats)} layers')
     
     atl.close()
     print('\nDone!')

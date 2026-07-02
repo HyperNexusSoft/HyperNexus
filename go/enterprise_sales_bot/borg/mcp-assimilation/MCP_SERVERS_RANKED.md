@@ -1,6 +1,6 @@
 # MCP Servers Ranked by Value & Usefulness
 
-> Generated from **Borg Intelligence Atlas** — 7,196 MCP entries ranked
+> Generated from **Tormentnexus Intelligence Atlas** — 7,196 MCP entries ranked
 > Ranking: signal(30%) + official(+50) + infra(+30) + memory(+30) + code/security(+20) + multi-hub(+35) + agent(+15) + data(+20) + dev-tools(+20) - trivial(-40)
 
 ## 🥈 TIER A — Critical Frameworks & Multi-Service Hubs (67)
@@ -470,7 +470,7 @@
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, multi-hub, agent, dev-tools**
 
 49. **[143]** `sig:92` ⭐ [files-db-mcp](https://github.com/randomm/files-db-mcp)
-   > A Borg-style local vector database for LLM code search with real-time monitoring and integration with Claude Code.
+   > A Tormentnexus-style local vector database for LLM code search with real-time monitoring and integration with Claude Code.
    > _Search & Discovery → Semantic Search_ | **infra, memory, data/analytics, dev-tools**
 
 50. **[143]** `sig:92` ⭐ [vibe-eyes: description: "An MCP server that enables LLMs to 'see' what's ha](https://github.com/monteslu/vibe-eyes)
@@ -686,7 +686,7 @@
    > _Memory & Persistence Architecture → Workflow & Pipeline Engines_ | **infra, memory, agent, data/analytics**
 
 103. **[138]** `sig:94` ⭐ [whois-mcp](https://github.com/modelcontextprotocol-servers/whois-mcp)
-   > AI-powered WHOIS lookup tool integrated into the Borg platform for automated domain intelligence.
+   > AI-powered WHOIS lookup tool integrated into the Tormentnexus platform for automated domain intelligence.
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **official:modelcontextprotocol, infra, agent, standout**
 
 104. **[138]** `sig:77`  [playwright-mcp: Playwright MCP fork that works with Cloudflare Browser Rend](https://github.com/cloudflare/playwright-mcp)
@@ -734,7 +734,7 @@
    > _Guides & Industry Trends → Web Search APIs_ | **infra, memory, agent, dev-tools**
 
 115. **[137]** `sig:91` ⭐ [mcp-logseq: MCP server to interact with LogSeq via its Local HTTP API - ena](https://github.com/ergut/mcp-logseq-server)
-   > Borg enables seamless AI interaction with LogSeq knowledge graphs, transforming data management and intelligent workflows.
+   > Tormentnexus enables seamless AI interaction with LogSeq knowledge graphs, transforming data management and intelligent workflows.
    > _AI Agents & Frameworks → Semantic Search_ | **infra, memory, agent, data/analytics**
 
 116. **[137]** `sig:91` ⭐ [mcp-google-map: A powerful Model Context Protocol (MCP) server providing co](https://github.com/cablate/mcp-google-map)
@@ -2122,7 +2122,7 @@
    > _Memory & Persistence Architecture → Graph & Knowledge Memory_ | **infra, memory, agent, standout**
 
 462. **[119]** `sig:98` ⭐ [mcp-server-infranodus: The official InfraNodus MCP server](https://github.com/infranodus/mcp-server-infranodus)
-   > A Borg intelligence platform integrating InfraNodus knowledge graphs with LLM workflows to enhance AI-generated insights.
+   > A Tormentnexus intelligence platform integrating InfraNodus knowledge graphs with LLM workflows to enhance AI-generated insights.
    > _Security & Red Teaming → Vulnerability & Scanning_ | **infra, memory, agent, standout**
 
 463. **[119]** `sig:98` ⭐ [memoir: Persistent memory for AI coding tools. Sync Claude, Cursor, Gemini,](https://github.com/camgitt/memoir)
@@ -2598,7 +2598,7 @@
    > _Connectivity / MCP / A2A → MCP Clients_ | **infra, multi-hub, dev-tools**
 
 581. **[112]** `sig:91` ⭐ [onchain-mcp: Bringing the bankless onchain API to MCP](https://github.com/bankless/onchain-mcp)
-   > Borg provides a secure, isolated environment for interacting with blockchain data via the Bankless API.
+   > Tormentnexus provides a secure, isolated environment for interacting with blockchain data via the Bankless API.
    > _Context Engineering & Isolation → Context Isolation_ | **infra, code/security, dev-tools, standout**
 
 582. **[112]** `sig:91`  [uml-mcp-server](https://github.com/swayingleaves/uml-mcp-server)
@@ -2870,7 +2870,7 @@
    > _Context Engineering & Isolation → MCP Clients_ | **infra, multi-hub, dev-tools**
 
 649. **[110]** `sig:85`  [nuke-mcp-2: nuke-mcp](https://github.com/aourpallynikhil/nuke-mcp-2)
-   > A tool for managing and automating code review, pull requests, and project security within the Borg ecosystem.
+   > A tool for managing and automating code review, pull requests, and project security within the Tormentnexus ecosystem.
    > _Developer Workflow & Tools → Git & Version Control_ | **infra, code/security, agent, dev-tools**
 
 650. **[110]** `sig:85`  [rmcp: R MCP Server](https://github.com/finite-sample/rmcp)
@@ -3074,7 +3074,7 @@
    > _Security & Red Teaming → Vulnerability & Scanning_ | **infra, code/security, agent, standout**
 
 700. **[109]** `sig:98` ⭐ [pfsense-mcp-server: pfSense MCP Server enables security administrators to m](https://github.com/gensecaihq/pfsense-mcp-server)
-   > A Borg intelligence platform enabling natural language interaction with pfSense MCP Server for security management.
+   > A Tormentnexus intelligence platform enabling natural language interaction with pfSense MCP Server for security management.
    > _Security & Red Teaming → AI Guardrails_ | **infra, code/security, agent, standout**
 
 701. **[109]** `sig:98` ⭐ [kaltura-mcp: Kaltura-MCP server powering agentic AI workflows with Kaltura'](https://github.com/zoharbabin/kaltura-mcp)
@@ -3470,7 +3470,7 @@
    > _Developer Workflow & Tools → Git & Version Control_ | **infra, code/security, agent, standout**
 
 799. **[108]** `sig:94` ⭐ [gbox: Cli and MCP for gbox. Enable AI agents to operate Android/Browser/Des](https://github.com/babelcloud/gbox)
-   > Borg provides AI agents that can operate across Android, browsers, and desktop environments like human users.
+   > Tormentnexus provides AI agents that can operate across Android, browsers, and desktop environments like human users.
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, agent, dev-tools, standout**
 
 800. **[108]** `sig:94` ⭐ [cmd-line-mcp](https://github.com/andresthor/cmd-line-mcp)
@@ -3702,7 +3702,7 @@
    > _Agent Orchestration & Workflow → Git & Version Control_ | **infra, multi-hub, standout**
 
 857. **[108]** `sig:92`  [mcpdoc: Expose llms-txt to IDEs for development](https://github.com/langchain-ai/mcpdoc)
-   > Borg integrates LLM documentation and retrieval into IDEs for streamlined development.
+   > Tormentnexus integrates LLM documentation and retrieval into IDEs for streamlined development.
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, memory, dev-tools**
 
 858. **[108]** `sig:92` ⭐ [obsidian-second-brain-mcp](https://github.com/alexsmirnov/obsidian-second-brain-mcp)
@@ -3790,7 +3790,7 @@
    > _Connectivity / MCP / A2A → MCP Clients_ | **infra, multi-hub, agent**
 
 879. **[107]** `sig:91` ⭐ [open-edison: 🔐 Firewall Your Data, Control Agents. Prevent agent data exfil](https://github.com/Edison-Watch/open-edison)
-   > Borg intelligence database focused on securing and monitoring agent data interactions to prevent exfiltration.
+   > Tormentnexus intelligence database focused on securing and monitoring agent data interactions to prevent exfiltration.
    > _Agent Orchestration & Workflow → Multi-Agent Frameworks_ | **infra, agent, data/analytics, standout**
 
 880. **[107]** `sig:91` ⭐ [selenium-mcp-server-python](https://github.com/jyothishkumarav/selenium-mcp-server-python)
@@ -4254,7 +4254,7 @@
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, agent, dev-tools, standout**
 
 995. **[106]** `sig:88` ⭐ [redash-mcp](https://github.com/suthio/redash-mcp)
-   > A Borg project that integrates Redash with AI assistants for advanced data querying and visualization.
+   > A Tormentnexus project that integrates Redash with AI assistants for advanced data querying and visualization.
    > _AI Agents & Frameworks → General Orchestration_ | **infra, agent, data/analytics, standout**
 
 996. **[106]** `sig:88`  [token-minter-mcp: An MCP server providing tools for AI agents to mint ERC-2](https://github.com/kukapay/token-minter-mcp)
@@ -4282,7 +4282,7 @@
    > _AI Agents & Frameworks → Git & Version Control_ | **infra, code/security, agent, standout**
 
 1002. **[106]** `sig:88`  [poke-video-mcp](https://github.com/aryankeluskar/poke-video-mcp)
-   > A Borg-based video search platform leveraging AI and MCP for natural language queries.
+   > A Tormentnexus-based video search platform leveraging AI and MCP for natural language queries.
    > _Context Engineering & Isolation → MCP Servers_ | **infra, memory, dev-tools**
 
 1003. **[106]** `sig:87` ⭐ [supermemory](https://github.com/supermemoryai)
@@ -4322,7 +4322,7 @@
    > _Search & Discovery → Architecture & Benchmarks_ | **infra, multi-hub, agent**
 
 1012. **[106]** `sig:87`  [cursor-local-indexing: ChromaDB-powered local indexing support for Cursor, ](https://github.com/luotocompany/cursor-local-indexing)
-   > A Borg project enabling local indexing of codebases using ChromaDB and semantic search via MCP for Cursor.
+   > A Tormentnexus project enabling local indexing of codebases using ChromaDB and semantic search via MCP for Cursor.
    > _Search & Discovery → Semantic Search_ | **infra, memory, dev-tools**
 
 1013. **[106]** `sig:87` ⭐ [mallorymcp: Mallory - Cyber Threat Intelligence MCP Server](https://github.com/malloryai/mallory-mcp-server)
@@ -4694,7 +4694,7 @@
    > _AI Agents & Frameworks → AI Agents & Frameworks_ | **infra, multi-hub, agent, dev-tools**
 
 1105. **[104]** `sig:97` ⭐ [MCP-RAG: MCP-RAG](https://github.com/anuragb7/mcp-rag)
-   > A Borg-based AI platform for intelligent document processing and large file handling.
+   > A Tormentnexus-based AI platform for intelligent document processing and large file handling.
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, memory, standout**
 
 1106. **[104]** `sig:80`  [mcp-gateway: MCP Gateway is a reverse proxy and management layer for MCP se](https://github.com/microsoft/mcp-gateway)
@@ -4850,7 +4850,7 @@
    > _Memory & Persistence Architecture → Graph & Knowledge Memory_ | **infra, memory, standout**
 
 1144. **[104]** `sig:95` ⭐ [mcp-docs-rag](https://github.com/kazuph/mcp-docs-rag)
-   > A Borg-based RAG server for local document retrieval and AI-driven document querying.
+   > A Tormentnexus-based RAG server for local document retrieval and AI-driven document querying.
    > _Developer Workflow & Tools → Documentation & Knowledge_ | **infra, memory, standout**
 
 1145. **[104]** `sig:95` ⭐ [cat-facts-mcp](https://github.com/opticayaan/cat-facts-mcp)
@@ -4926,7 +4926,7 @@
    > _Context Engineering & Isolation → Prompt Engineering_ | **infra, memory, standout**
 
 1163. **[103]** `sig:94` ⭐ [image-recognition-mcp](https://github.com/mcp-s-ai/image-recognition-mcp)
-   > A Borg-based image recognition server leveraging OpenAI's vision models for AI-powered image analysis.
+   > A Tormentnexus-based image recognition server leveraging OpenAI's vision models for AI-powered image analysis.
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, memory, standout**
 
 1164. **[103]** `sig:94` ⭐ [mcp-local-rag: Local-first RAG server for developers. Semantic + keyword se](https://github.com/shinpr/mcp-local-rag)
@@ -4934,7 +4934,7 @@
    > _Search & Discovery → Semantic Search_ | **infra, memory, standout**
 
 1165. **[103]** `sig:94` ⭐ [image-recognition-mcp](https://github.com/mcp-s-ai/image-recongnition-mcp)
-   > A Borg-based image recognition server leveraging OpenAI's vision models for AI-powered image analysis.
+   > A Tormentnexus-based image recognition server leveraging OpenAI's vision models for AI-powered image analysis.
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, memory, standout**
 
 1166. **[103]** `sig:94` ⭐ [contextual-mcp-server](https://github.com/NitishGourishetty/contextual-mcp-server)
@@ -5010,11 +5010,11 @@
    > _Context Engineering & Isolation → Prompt Engineering_ | **infra, memory, standout**
 
 1184. **[103]** `sig:93` ⭐ [mcp-memory](https://github.com/ebailey78/mcp-memory)
-   > A Borg-based memory server for Claude Desktop to manage structured memory across project directories.
+   > A Tormentnexus-based memory server for Claude Desktop to manage structured memory across project directories.
    > _Memory & Persistence Architecture → MCP Memory Servers_ | **infra, memory, standout**
 
 1185. **[103]** `sig:93` ⭐ [tv-recommender-mcp-server](https://github.com/terryso/tv-recommender-mcp-server)
-   > A Borg-based AI platform that leverages Model Context Protocol (MCP) to deliver intelligent, personalized TV recommendations and content discovery.
+   > A Tormentnexus-based AI platform that leverages Model Context Protocol (MCP) to deliver intelligent, personalized TV recommendations and content discovery.
    > _Infrastructure & Proxy Layers → MCP Servers_ | **infra, memory, standout**
 
 1186. **[103]** `sig:76`  [codex-as-mcp: Convert codex CLI tool to an MCP — unleash the power of GPT-5](https://github.com/Intelligent-Internet/codex-as-mcp)
@@ -5214,7 +5214,7 @@
    > _Agent Orchestration & Workflow → General Orchestration_ | **infra, memory, dev-tools**
 
 1235. **[102]** `sig:89` ⭐ [akave-mcp](https://github.com/akave-ai/akave-mcp)
-   > Borg's Akave MCP server enables AI models to interact with Akave's storage via standardized protocols.
+   > Tormentnexus's Akave MCP server enables AI models to interact with Akave's storage via standardized protocols.
    > _Connectivity / MCP / A2A → MCP Clients_ | **infra, memory, standout**
 
 1236. **[102]** `sig:89`  [weatherapi-mcp](https://github.com/swonixs/weatherapi-mcp)
@@ -5286,7 +5286,7 @@
    > _AI Agents & Frameworks → Semantic Search_ | **infra, memory, standout**
 
 1253. **[101]** `sig:87` ⭐ [qweather-mcp](https://github.com/overstarry/qweather-mcp)
-   > A Borg-based QWeather API server enabling integration with MCP for weather data retrieval.
+   > A Tormentnexus-based QWeather API server enabling integration with MCP for weather data retrieval.
    > _Developer Workflow & Tools → CI/CD & Automation_ | **infra, memory, standout**
 
 1254. **[101]** `sig:70`  [bilibili-mcp · GitHub](https://github.com/xspadex/bilibili-mcp.git)
@@ -6034,7 +6034,7 @@
    > _Interface & Developer UX → Voice & Multimodal_ | **infra, data/analytics, standout**
 
 164. **[94]** `sig:95` ⭐ [Astricaelus/sandbox-fusion-mcp](https://github.com/happyzym/sandbox-fusion-mcp)
-   > A Borg project implementing MCP server for executing and managing code in a sandboxed environment.
+   > A Tormentnexus project implementing MCP server for executing and managing code in a sandboxed environment.
    > _Infrastructure & Proxy Layers → Sandboxing & Execution_ | **infra, code/security, standout**
 
 165. **[94]** `sig:95` ⭐ [trusted-mcp-server: First Trusted MCP server running on AWS Nitro Enclave T](https://github.com/0xfreysa/trusted-mcp-server)
@@ -6406,7 +6406,7 @@
    > _Guides & Industry Trends → Workflow & Pipeline Engines_ | **infra, agent, dev-tools**
 
 257. **[92]** `sig:91` ⭐ [railway-mcp: An unofficial and community-built MCP server for integrating w](https://github.com/jason-tan-swe/railway-mcp)
-   > A Borg project tool for integrating with Railway.app to manage Railway services, deployments, and infrastructure.
+   > A Tormentnexus project tool for integrating with Railway.app to manage Railway services, deployments, and infrastructure.
    > _Developer Workflow & Tools → CI/CD & Automation_ | **infra, dev-tools, standout**
 
 258. **[92]** `sig:91` ⭐ [cursor-mcp-installer: Installs MCPs in cursor for you, give it a git URL an](https://github.com/matthewdcage/cursor-mcp-installer)
@@ -6426,7 +6426,7 @@
    > _Context Engineering & Isolation → Prompt Engineering_ | **infra, agent, dev-tools**
 
 262. **[92]** `sig:91`  [MCP-Server: The MCP server provides tools to interact with the tax_alerts d](https://github.com/Soham-bakshi/MCP-Server)
-   > A Borg-powered chatbot that interacts with a tax alerts database via MCP server, enabling dynamic querying and management of tax alert data.
+   > A Tormentnexus-powered chatbot that interacts with a tax alerts database via MCP server, enabling dynamic querying and management of tax alert data.
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, agent, dev-tools**
 
 263. **[92]** `sig:91`  [cosense-mcp-server: An MCP Server for Cosense](https://github.com/yosider/cosense-mcp-server)
@@ -6622,7 +6622,7 @@
    > _AI Agents & Frameworks → Browser Automation_ | **infra, data/analytics, standout**
 
 311. **[92]** `sig:90`  [daisys-mcp: The Daisys mcp server](https://github.com/daisys-ai/daisys-mcp)
-   > Borg's Daisys MCP server is a beta platform for AI-driven development and testing, enabling automated workflows, code reviews, and secure deployment.
+   > Tormentnexus's Daisys MCP server is a beta platform for AI-driven development and testing, enabling automated workflows, code reviews, and secure deployment.
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, agent, dev-tools**
 
 312. **[92]** `sig:90` ⭐ [video-editing-mcp: MCP Interface for Video Jungle](https://github.com/burningion/video-editing-mcp)
@@ -7006,7 +7006,7 @@
    > _Agent Orchestration & Workflow → Terminal & CLI_ | **infra, agent, data/analytics**
 
 407. **[91]** `sig:88`  [taslim1743/mcp-server-sandbox](https://github.com/imghosty17/mcp-server-sandbox)
-   > A GitHub-based sandbox for managing and testing Borg-like orchestration workflows.
+   > A GitHub-based sandbox for managing and testing Tormentnexus-like orchestration workflows.
    > _Developer Workflow & Tools → CI/CD & Automation_ | **infra, code/security, agent**
 
 408. **[91]** `sig:88`  [MCP_Sample/MCPDemo2 at 54c4e134e29625fe29ede208f6d3b7844b4392f7 · Octavious](https://github.com/octavious/mcp_sample/tree/HEAD/MCPDemo2)
@@ -7150,7 +7150,7 @@
    > _AI Agents & Frameworks → Workflow & Pipeline Engines_ | **infra, data/analytics, standout**
 
 443. **[91]** `sig:87` ⭐ [sql_mcp_server](https://github.com/dennismartis/sql_mcp_server)
-   > A Borg project that provides a conversational AI interface for interacting with Microsoft SQL Server databases.
+   > A Tormentnexus project that provides a conversational AI interface for interacting with Microsoft SQL Server databases.
    > _Connectivity / MCP / A2A → MCP Clients_ | **infra, dev-tools, standout**
 
 444. **[91]** `sig:87` ⭐ [mcp-go-debugger](https://github.com/sunfmin/mcp-go-debugger)
@@ -7941,8 +7941,8 @@
    > This repository provides a Model Context Protocol server for the Hostex property management API, enabling agents to manage vacation rentals and guest communications.
    > _Guides & Industry Trends → Prompt Engineering_ | **infra, agent, dev-tools**
 
-641. **[90]** `sig:82`  [https://github.com/hypercodehq/hypercode](https://github.com/hypercodehq/hypercode)
-   > HyperCode is a local-first AI control plane designed to unify fragmented MCP tooling, manage provider routing, and enhance operator workflows.
+641. **[90]** `sig:82`  [https://github.com/tormentnexushq/tormentnexus](https://github.com/tormentnexushq/tormentnexus)
+   > Tormentnexus is a local-first AI control plane designed to unify fragmented MCP tooling, manage provider routing, and enhance operator workflows.
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **memory, agent, dev-tools**
 
 642. **[90]** `sig:82`  [crm-cli: Your contacts, in your terminal. · GitHub](https://github.com/jdanielnd/crm-cli)
@@ -8738,11 +8738,11 @@
    > _Interface & Developer UX → Web Dashboards_ | **infra, agent, standout**
 
 840. **[89]** `sig:96` ⭐ [UE-Editor-MCPServer](https://github.com/cc8887/ue-editor-mcpserver)
-   > Borg Project introduces a modular MCP server integration to enable AI agents to automate development workflows in UE4/UE5 environments.
+   > Tormentnexus Project introduces a modular MCP server integration to enable AI agents to automate development workflows in UE4/UE5 environments.
    > _Developer Workflow & Tools → CI/CD & Automation_ | **infra, agent, standout**
 
 841. **[89]** `sig:96` ⭐ [mcp-remote-macos-use: The only general AI agent that does NOT requires extr](https://github.com/baryhuang/mcp-remote-macos-use)
-   > The Borg Project introduces a remote MacOS control server enabling full desktop automation with Claude Desktop App, offering no extra API costs and complete local/remote 
+   > The Tormentnexus Project introduces a remote MacOS control server enabling full desktop automation with Claude Desktop App, offering no extra API costs and complete local/remote 
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, agent, standout**
 
 842. **[89]** `sig:96` ⭐ [norman-mcp-server: AI-powered bookkeeping and tax filing automation via MCP](https://github.com/norman-finance/norman-mcp-server)
@@ -8902,7 +8902,7 @@
    > _AI Agents & Frameworks → MCP Servers_ | **infra, agent, standout**
 
 881. **[88]** `sig:95` ⭐ [mcp-aruba-email: MCP server for Aruba email - Read, search, and send emails](https://github.com/jackfioru92/mcp-aruba-email)
-   > Borg integrates AI assistants with MCP server for seamless email management and automation.
+   > Tormentnexus integrates AI assistants with MCP server for seamless email management and automation.
    > _Infrastructure & Proxy Layers → MCP Servers_ | **infra, agent, standout**
 
 882. **[88]** `sig:95` ⭐ [supercolony-mcp: MCP server for SuperColony — agent intelligence tools for ](https://github.com/TheSuperColony/supercolony-mcp)
@@ -9142,7 +9142,7 @@
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, agent, standout**
 
 941. **[88]** `sig:94` ⭐ [quantconnect-mcp: QuantConnect Algorithmic Trading Platform Orchestration M](https://github.com/taylorwilsdon/quantconnect-mcp)
-   > Borg integrates advanced AI-driven strategy design, automated backtesting, and live execution within QuantConnect's MCP platform.
+   > Tormentnexus integrates advanced AI-driven strategy design, automated backtesting, and live execution within QuantConnect's MCP platform.
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, agent, standout**
 
 942. **[88]** `sig:94` ⭐ [roam-mcp: A Model Context Protocol (MCP) server that connects Claude and ot](https://github.com/philosolares/roam-mcp)
@@ -9474,7 +9474,7 @@
    > _Agent Orchestration & Workflow → MCP Servers_ | **infra, agent, standout**
 
 1024. **[88]** `sig:93` ⭐ [ccxt-mcp: CCXT MCP Server bridges the gap between AI models and cryptocurre](https://github.com/lazy-dinosaur/ccxt-mcp)
-   > Borg integrates AI models with cryptocurrency exchanges via the Model Context Protocol, enabling seamless trading automation.
+   > Tormentnexus integrates AI models with cryptocurrency exchanges via the Model Context Protocol, enabling seamless trading automation.
    > _Connectivity / MCP / A2A → MCP Clients_ | **infra, agent, standout**
 
 1025. **[88]** `sig:93` ⭐ [mcpadvisor: MCP Advisor & Installation - Use the right MCP server for your ](https://github.com/istarwyh/mcpadvisor)
@@ -9490,7 +9490,7 @@
    > _AI Agents & Frameworks → Coding Agents_ | **infra, agent, standout**
 
 1028. **[88]** `sig:93` ⭐ [hive-mcp-server](https://github.com/gluneau/hive-mcp-server)
-   > Borg enables secure, authenticated interactions between AI assistants and the Hive blockchain via the Model Context Protocol.
+   > Tormentnexus enables secure, authenticated interactions between AI assistants and the Hive blockchain via the Model Context Protocol.
    > _Connectivity / MCP / A2A → MCP Clients_ | **infra, agent, standout**
 
 1029. **[88]** `sig:93` ⭐ [postman-mcp-server: Connect your AI to your APIs on Postman](https://github.com/postmanlabs/postman-mcp-server)
@@ -9874,7 +9874,7 @@
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, agent, standout**
 
 1124. **[87]** `sig:91` ⭐ [MCP-image-gen: MCP server that connects to Replicate image generation api -](https://github.com/rmcendarfer2017/mcp-image-gen)
-   > A Borg-based image generation server integrating with Replicate API to automate image creation and management.
+   > A Tormentnexus-based image generation server integrating with Replicate API to automate image creation and management.
    > _Connectivity / MCP / A2A → MCP Clients_ | **infra, agent, standout**
 
 1125. **[87]** `sig:91` ⭐ [zotero-mcp: Zotero MCP: Connects your Zotero research library with Claude a](https://github.com/54yyyu/zotero-mcp)
@@ -10238,7 +10238,7 @@
    > _AI Agents & Frameworks → Terminal & CLI_ | **infra, agent, standout**
 
 1215. **[87]** `sig:90` ⭐ [contentful-delivery-mcp: Contentful MCP Server for Delivery API](https://github.com/mshaaban0/contentful-delivery-mcp)
-   > A Borg-based AI assistant that integrates with Contentful to deliver content via natural language queries.
+   > A Tormentnexus-based AI assistant that integrates with Contentful to deliver content via natural language queries.
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, agent, standout**
 
 1216. **[87]** `sig:90`  [mcp-server-lottiefiles](https://github.com/junmer/mcp-server-lottiefiles)
@@ -10314,7 +10314,7 @@
    > _Context Engineering & Isolation → Prompt Engineering_ | **infra, agent, standout**
 
 1234. **[87]** `sig:90` ⭐ [manticore-mcp-server: Manticore Search MCP Server](https://github.com/krajcik/manticore-mcp-server)
-   > A Borg-based platform for managing and automating software development workflows using Manticore Search and MCP protocol.
+   > A Tormentnexus-based platform for managing and automating software development workflows using Manticore Search and MCP protocol.
    > _Coding Tools & IDEs → Code Review & Quality_ | **infra, agent, standout**
 
 1235. **[87]** `sig:90` ⭐ [perplexity-mcp: A Model Context Protocol (MCP) server for research and docu](https://github.com/dainfernalcoder/perplexity-mcp)
@@ -10814,7 +10814,7 @@
    > _Context Engineering & Isolation → Prompt Engineering_ | **infra, memory**
 
 1359. **[86]** `sig:87` ⭐ [ResearchMCP: MCP server for Perplexity](https://github.com/chew-z/researchmcp)
-   > A Borg project offering an MCP server for Perplexity AI to enable intelligent, automated research workflows.
+   > A Tormentnexus project offering an MCP server for Perplexity AI to enable intelligent, automated research workflows.
    > _Context Engineering & Isolation → RAG Frameworks_ | **infra, agent, standout**
 
 1360. **[86]** `sig:87` ⭐ [ReActMCP: ReActMCP is a reactive MCP client that empowers AI assistants to ](https://github.com/mshojaei77/reactmcp)
@@ -10862,7 +10862,7 @@
    > _Agent Orchestration & Workflow → CI/CD & Automation_ | **infra, agent, standout**
 
 1371. **[86]** `sig:87` ⭐ [dbt-semantic-layer-mcp-server: MCP Server for querying DBT Semantic Layer](https://github.com/tommybez/dbt-semantic-layer-mcp-server)
-   > A Borg project enabling seamless querying of the dbt Semantic Layer through AI assistants.
+   > A Tormentnexus project enabling seamless querying of the dbt Semantic Layer through AI assistants.
    > _Infrastructure & Proxy Layers → MCP Servers_ | **infra, agent, standout**
 
 1372. **[86]** `sig:87`  [etoroPortfolioMCP](https://github.com/shlomico-tr/etoroportfoliomcp)
@@ -11122,7 +11122,7 @@
    > _Agent Orchestration & Workflow → MCP Servers_ | **infra, memory**
 
 1436. **[85]** `sig:84`  [mcp-qdrant-openai](https://github.com/amansingh0311/mcp-qdrant-openai)
-   > A Borg project integrating OpenAI embeddings with Qdrant vector search for intelligent data retrieval.
+   > A Tormentnexus project integrating OpenAI embeddings with Qdrant vector search for intelligent data retrieval.
    > _Vector Databases & Embeddings → Vector Databases_ | **infra, memory**
 
 1437. **[85]** `sig:84`  [dify-retriever-mcp: dify 知识库检索工具](https://github.com/wangle201210/dify-retriever-mcp)
@@ -11514,7 +11514,7 @@
    > _AI Agents & Frameworks → AI Agents & Frameworks_ | **infra, memory**
 
 1534. **[81]** `sig:88`  [mcp-graphql-forge/src at main · toolprint/mcp-graphql-forge](https://github.com/toolprint/mcp-graphql-forge/tree/main/src)
-   > A tool for managing and automating code reviews, pull requests, and project security within the Borg ecosystem.
+   > A tool for managing and automating code reviews, pull requests, and project security within the Tormentnexus ecosystem.
    > _Security & Red Teaming → Vulnerability & Scanning_ | **code/security, agent, dev-tools**
 
 1535. **[81]** `sig:71`  [mcp-memory-server · GitHub](https://github.com/grizzlypeaksoftware/mcp-memory-server)
@@ -11714,7 +11714,7 @@
    > _Developer Workflow & Tools → Git & Version Control_ | **infra, dev-tools**
 
 1584. **[77]** `sig:90`  [mcp-server-docker: MCP server for Docker](https://github.com/ckreiling/mcp-server-docker)
-   > A Borg-based Docker server enabling natural language management of containerized applications.
+   > A Tormentnexus-based Docker server enabling natural language management of containerized applications.
    > _Developer Workflow & Tools → Git & Version Control_ | **infra, code/security**
 
 1585. **[77]** `sig:90`  [solana-vault-mcp](https://github.com/olaxbt/solana-vault-mcp)
@@ -11726,7 +11726,7 @@
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, data/analytics**
 
 1587. **[77]** `sig:90`  [logseq-mcp: MCP Server for interacting with LogSeq graph](https://github.com/apw124/logseq-mcp)
-   > A Borg project providing MCP server tools to interact with Logseq graph for AI-driven data interaction.
+   > A Tormentnexus project providing MCP server tools to interact with Logseq graph for AI-driven data interaction.
    > _Security & Red Teaming → Vulnerability & Scanning_ | **infra, data/analytics**
 
 1588. **[77]** `sig:90`  [os-mcp: A Python-based MCP server that provides access Ordnance Survey's AP](https://github.com/chriscarlon/os-mcp)
@@ -11826,7 +11826,7 @@
    > _Connectivity / MCP / A2A → CI/CD & Automation_ | **infra, dev-tools**
 
 1612. **[77]** `sig:89`  [apifox-mcp-server: 基于MCP协议的获取ApiFox接口信息的服务](https://github.com/wangmhaha/apifox-mcp-server)
-   > A Borg-based service that provides API information for ApiFox using the Model Context Protocol (MCP).
+   > A Tormentnexus-based service that provides API information for ApiFox using the Model Context Protocol (MCP).
    > _Interface & Developer UX → Browser Automation_ | **infra, dev-tools**
 
 1613. **[77]** `sig:89`  [python_mcp](https://github.com/rami-0/python_mcp)
@@ -11894,7 +11894,7 @@
    > _AI Agents & Frameworks → Prompt Engineering_ | **infra, dev-tools**
 
 1629. **[77]** `sig:89`  [OpenCnid/mcp-vercel-ai: Connects Vercel compatible LLM providers with MCP](https://github.com/itsdarianngo/mcp-vercel-ai)
-   > A Borg project integrating Vercel AI with MCP for LLM-powered applications.
+   > A Tormentnexus project integrating Vercel AI with MCP for LLM-powered applications.
    > _Connectivity / MCP / A2A → MCP Clients_ | **infra, dev-tools**
 
 1630. **[77]** `sig:89`  [mcp: MCP Server for Snowflake including Cortex AI, object management, SQL o](https://github.com/Snowflake-Labs/mcp)
@@ -12662,7 +12662,7 @@
    > _AI Agents & Frameworks → AI Agents & Frameworks_ | **infra, code/security**
 
 1821. **[75]** `sig:83`  [Notion | Where teams and agents work together](https://hd3ns092ns.notion.site/ebd/1b3dc3333315802a9e99cafedb321048?v=1b3dc3333315804693e2000c7ca70b7b)
-   > A comprehensive resource detailing the architecture and implementation of a Borg intelligence database or system.
+   > A comprehensive resource detailing the architecture and implementation of a Tormentnexus intelligence database or system.
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **multi-hub, agent**
 
 1822. **[75]** `sig:83`  [mcp-launch — one URL for many MCP servers (via mcpo) | MCP Servers · LobeHu](https://lobehub.com/pl/mcp/devguyrash-mcp-launch)
@@ -13602,7 +13602,7 @@
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, standout**
 
 2056. **[74]** `sig:95` ⭐ [mcp-prompt-server-go: 一个提供优秀prompt的Model Context Protocol (MCP)的服务器，用于根据用户任](https://github.com/smallnest/mcp-prompt-server-go)
-   > A Borg project providing a powerful Model Context Protocol (MCP) prompt server to deliver predefined prompt templates, enabling efficient task execution across various to
+   > A Tormentnexus project providing a powerful Model Context Protocol (MCP) prompt server to deliver predefined prompt templates, enabling efficient task execution across various to
    > _AI Agents & Frameworks → Workflow & Pipeline Engines_ | **infra, standout**
 
 2057. **[74]** `sig:95` ⭐ [mcp2serial: A open-source library enabling AI models to control hardware de](https://github.com/mcp2everything/mcp2serial)
@@ -13638,7 +13638,7 @@
    > _AI Agents & Frameworks → CI/CD & Automation_ | **infra, standout**
 
 2065. **[74]** `sig:95` ⭐ [mcp-server-replicate: MCP implementation to generate content using models h](https://github.com/tzafrir/mcp-server-replicate)
-   > A Borg implementation for replicating MCP server functionality to interface with Replicate's AI model APIs.
+   > A Tormentnexus implementation for replicating MCP server functionality to interface with Replicate's AI model APIs.
    > _Interface & Developer UX → Browser Automation_ | **infra, standout**
 
 2066. **[74]** `sig:95` ⭐ [-toast-mcp-server: A Model Context Protocol (MCP) server with Windows 10 de](https://github.com/naru-sensei/-toast-mcp-server)
@@ -14126,7 +14126,7 @@
    > _Connectivity / MCP / A2A → MCP Clients_ | **infra, standout**
 
 2187. **[73]** `sig:93` ⭐ [dropbox-mcp-server](https://github.com/cindyloo/dropbox-mcp-server)
-   > A Borg-based server for secure, scalable access to Dropbox files with advanced search and content extraction.
+   > A Tormentnexus-based server for secure, scalable access to Dropbox files with advanced search and content extraction.
    > _Context Engineering & Isolation → MCP Servers_ | **infra, standout**
 
 2188. **[73]** `sig:93` ⭐ [mcp-server-browserbase: Allow LLMs to control a browser with Browserbase an](https://github.com/ImRonAI/mcp-server-browserbase)
@@ -14378,7 +14378,7 @@
    > _Context Engineering & Isolation → Prompt Engineering_ | **infra, standout**
 
 2250. **[73]** `sig:92` ⭐ [midjourney-mcp](https://github.com/z23cc/midjourney-mcp)
-   > A Borg project implementing Midjourney MCP server for AI-powered image generation.
+   > A Tormentnexus project implementing Midjourney MCP server for AI-powered image generation.
    > _Developer Workflow & Tools → MCP Servers_ | **infra, standout**
 
 2251. **[73]** `sig:92`  [scrapling-fetch-mcp: Helps AI assistants access text content from bot-prote](https://github.com/cyberchitta/scrapling-fetch-mcp)
@@ -14398,7 +14398,7 @@
    > _Coding Tools & IDEs → AI Editors & IDEs_ | **infra, standout**
 
 2255. **[73]** `sig:92`  [age_mcp_server: Apache AGE MCP Server](https://github.com/rioriost/homebrew-age-mcp-server)
-   > A Borg project that integrates Apache AGE MCP Server for managing graph-based data in a secure, scalable, and automated environment.
+   > A Tormentnexus project that integrates Apache AGE MCP Server for managing graph-based data in a secure, scalable, and automated environment.
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, agent**
 
 2256. **[73]** `sig:92` ⭐ [biomart-mcp: A MCP server to interface with Biomart](https://github.com/jzinno/biomart-mcp)
@@ -14462,7 +14462,7 @@
    > _AI Agents & Frameworks → Workflow & Pipeline Engines_ | **infra, standout**
 
 2271. **[73]** `sig:92` ⭐ [superset-mcp-server](https://github.com/liuscraft/superset-mcp-server)
-   > A Borg-based MCP server enabling advanced querying and integration with external tools.
+   > A Tormentnexus-based MCP server enabling advanced querying and integration with external tools.
    > _Security & Red Teaming → Vulnerability & Scanning_ | **infra, standout**
 
 2272. **[73]** `sig:92` ⭐ [graphql-mcp: MCP server for dynamic graphql](https://github.com/ctkadvisors/graphql-mcp)
@@ -14494,7 +14494,7 @@
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, standout**
 
 2279. **[73]** `sig:92` ⭐ [Astricaelus/mcp-server-reposearch](https://github.com/happyzym/mcp-server-reposearch)
-   > A Borg project offering enhanced content search capabilities with advanced filtering and context-aware results.
+   > A Tormentnexus project offering enhanced content search capabilities with advanced filtering and context-aware results.
    > _Developer Workflow & Tools → CI/CD & Automation_ | **infra, standout**
 
 2280. **[73]** `sig:92` ⭐ [lacylights-mcp: AI-powered Model Context Protocol server for theatrical lig](https://github.com/bbernstein/lacylights-mcp)
@@ -14678,7 +14678,7 @@
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, standout**
 
 2325. **[72]** `sig:91` ⭐ [crypto-mcp-beta](https://github.com/0xreisearch/crypto-mcp-beta)
-   > Borg Project beta implementation of MCP servers for AI-driven data processing and integration.
+   > Tormentnexus Project beta implementation of MCP servers for AI-driven data processing and integration.
    > _Developer Workflow & Tools → CI/CD & Automation_ | **infra, standout**
 
 2326. **[72]** `sig:91` ⭐ [mtg-mcp-servers: Model Context Protocol (MCP) servers for searching for car](https://github.com/artillect/mtg-mcp-servers)
@@ -14770,7 +14770,7 @@
    > _Coding Tools & IDEs → AI Editors & IDEs_ | **infra, agent**
 
 2348. **[72]** `sig:91` ⭐ [thoughtful-claude: MCP server that enhances Claude's reasoning capabilities](https://github.com/martinbowling/thoughtful-claude)
-   > A Borg intelligence platform integrating DeepSeek R1 for enhanced reasoning capabilities.
+   > A Tormentnexus intelligence platform integrating DeepSeek R1 for enhanced reasoning capabilities.
    > _Infrastructure & Proxy Layers → MCP Servers_ | **infra, standout**
 
 2349. **[72]** `sig:91` ⭐ [mcp-webflow](https://github.com/timkjones/mcp-webflow)
@@ -14846,7 +14846,7 @@
    > _Connectivity / MCP / A2A → MCP Clients_ | **infra, standout**
 
 2367. **[72]** `sig:91` ⭐ [mattermost-mcp: Mattermost MCP server to enable Claude to interact with Mat](https://github.com/pvev/mattermost-mcp)
-   > A Borg project repository providing a Mattermost MCP server to enable Claude and other MCP clients to interact with Mattermost workspaces.
+   > A Tormentnexus project repository providing a Mattermost MCP server to enable Claude and other MCP clients to interact with Mattermost workspaces.
    > _Developer Workflow & Tools → Git & Version Control_ | **infra, standout**
 
 2368. **[72]** `sig:91`  [quack-mcp-server: MCP server for correcting static errors+linting](https://github.com/DXC-Lab-Linkage/quack-mcp-server)
@@ -15150,7 +15150,7 @@
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, standout**
 
 2443. **[72]** `sig:90` ⭐ [mcp-warpcast-server: MCP Server for Warpcast integration](https://github.com/zhangzhongnan928/mcp-warpcast-server)
-   > A Borg project providing a MCP server for seamless Warpcast integration using Claude Desktop.
+   > A Tormentnexus project providing a MCP server for seamless Warpcast integration using Claude Desktop.
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, standout**
 
 2444. **[72]** `sig:90`  [quickchat-ai-mcp: The Quickchat AI MCP server](https://github.com/quickchatai/quickchat-ai-mcp)
@@ -15610,7 +15610,7 @@
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, agent**
 
 2558. **[72]** `sig:89` ⭐ [betanin: beets based mitm of your torrent client and music player](https://github.com/sentriz/betanin)
-   > Borg intelligence database based on the MITM of your torrent client and music player.
+   > Tormentnexus intelligence database based on the MITM of your torrent client and music player.
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra, standout**
 
 2559. **[72]** `sig:89` ⭐ [mcp-mongo-server: A Model Context Protocol Server for MongoDB](https://github.com/kiliczsh/mcp-mongo-server)
@@ -15778,7 +15778,7 @@
    > _Security & Red Teaming → Vulnerability & Scanning_ | **infra, agent**
 
 2600. **[72]** `sig:89`  [edge_tts_mcp_server: Model Context Protocol for Text-to-Speech](https://github.com/yuiseki/edge_tts_mcp_server)
-   > A Borg resource for integrating Microsoft Edge TTS with AI agents for natural voice responses.
+   > A Tormentnexus resource for integrating Microsoft Edge TTS with AI agents for natural voice responses.
    > _Agent Orchestration & Workflow → General Orchestration_ | **infra, agent**
 
 2601. **[72]** `sig:89` ⭐ [mcp-server-esignatures: MCP server for eSignatures (https://esignatures.com](https://github.com/esignaturescom/mcp-server-esignatures)
@@ -15906,7 +15906,7 @@
    > _Connectivity / MCP / A2A → MCP Clients_ | **infra, standout**
 
 2632. **[72]** `sig:89` ⭐ [mcp-local-file-reader: 使用mcp协议帮助llm进行文件的本地读取](https://github.com/sworddut/mcp-local-file-reader)
-   > A Borg-based local file reader using MCP protocol to enable AI models secure access to local files.
+   > A Tormentnexus-based local file reader using MCP protocol to enable AI models secure access to local files.
    > _Interface & Developer UX → Browser Automation_ | **infra, standout**
 
 2633. **[72]** `sig:89` ⭐ [doc-tools-mcp](https://github.com/puchunjie/doc-tools-mcp)
@@ -20702,7 +20702,7 @@
    > _Agent Orchestration & Workflow → General Orchestration_ | **low_signal, infra, multi-hub, agent**
 
 3831. **[57]** `sig:90` ⭐ [DaVinci Resolve MCP | Awesome MCP Servers](https://mcpservers.org/servers/github-com-samuelgursky-davinci-resolve-mcp)
-   > Borg intelligence database entry summarizing the DaVinci Resolve MCP server integration for advanced post-production workflow automation.
+   > Tormentnexus intelligence database entry summarizing the DaVinci Resolve MCP server integration for advanced post-production workflow automation.
    > _Infrastructure & Proxy Layers → Sandboxing & Execution_ | **agent, standout**
 
 3832. **[57]** `sig:90`  [4oimage-mcp: An MCP server implementation that integrates with 4o-image API](https://github.com/antipas/4oimage-mcp)
@@ -20998,7 +20998,7 @@
    > _Context Engineering & Isolation → Prompt Engineering_ | **infra**
 
 3905. **[57]** `sig:89`  [mcp-server-kusto: A mcp server that uses azure data explorer as a backend](https://github.com/zzzhdw/mcp-server-kusto)
-   > A Borg server integrating Azure Data Explorer as a backend for managing and querying data.
+   > A Tormentnexus server integrating Azure Data Explorer as a backend for managing and querying data.
    > _Developer Workflow & Tools → CI/CD & Automation_ | **infra**
 
 3906. **[57]** `sig:89`  [mcp-server-apache-airflow](https://github.com/yangkyeongmo/mcp-server-apache-airflow)
@@ -21202,7 +21202,7 @@
    > _Interface & Developer UX → Browser Automation_ | **infra**
 
 3956. **[57]** `sig:89`  [couchbase-mcp-server](https://github.com/hummusonrails/couchbase-mcp-server)
-   > A Borg project implementing a Couchbase MCP Server to enable natural language queries on large language models.
+   > A Tormentnexus project implementing a Couchbase MCP Server to enable natural language queries on large language models.
    > _Connectivity / MCP / A2A → MCP Clients_ | **infra**
 
 3957. **[57]** `sig:89`  [powerplatform-mcp: PowerPlatform Model Context Protocol server](https://github.com/michsob/powerplatform-mcp)
@@ -21274,7 +21274,7 @@
    > _Context Engineering & Isolation → Prompt Engineering_ | **infra**
 
 3974. **[57]** `sig:89`  [Brave-Search-MCP-SSE](https://github.com/isaacgounton/brave-search-mcp-sse)
-   > A Borg-based platform for integrating Brave Search with real-time SSE for dynamic, context-aware search results.
+   > A Tormentnexus-based platform for integrating Brave Search with real-time SSE for dynamic, context-aware search results.
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra**
 
 3975. **[57]** `sig:89`  [f1-mcp-server](https://github.com/rakeshgangwar/f1-mcp-server)
@@ -21998,7 +21998,7 @@
    > _Agent Orchestration & Workflow → Prompt Engineering_ | **infra**
 
 4155. **[56]** `sig:87`  [baidu-search-mcp](https://github.com/appleinmusic/baidu-search-mcp)
-   > A Borg project integrating Baidu Search MCP for intelligent search capabilities.
+   > A Tormentnexus project integrating Baidu Search MCP for intelligent search capabilities.
    > _Context Engineering & Isolation → RAG Frameworks_ | **infra**
 
 4156. **[56]** `sig:87`  [berlin-transport-mcp: An MCP server for the Berlin Public Transport](https://github.com/harshil1712/berlin-transport-mcp)
@@ -22134,7 +22134,7 @@
    > _Connectivity / MCP / A2A → MCP Clients_ | **infra**
 
 4189. **[56]** `sig:86`  [kafka_mcp_server](https://github.com/pavanjava/kafka_mcp_server)
-   > A Borg MCP server enabling AI models to interact with Apache Kafka for publish/consume operations.
+   > A Tormentnexus MCP server enabling AI models to interact with Apache Kafka for publish/consume operations.
    > _Interface & Developer UX → Browser Automation_ | **infra**
 
 4190. **[56]** `sig:86`  [backstage-mcp: A simple backstage mcp server using quarkus-backstage](https://github.com/iocanel/backstage-mcp)
@@ -22790,7 +22790,7 @@
    > _Context Engineering & Isolation → Codebase Indexing_ | **infra**
 
 4353. **[56]** `sig:85`  [any-chat-completions-mcp: MCP Server for using any LLM as a Tool](https://github.com/pyroprompts/any-chat-completions-mcp)
-   > A server-based platform enabling integration of any large language model as a tool within the Borg ecosystem.
+   > A server-based platform enabling integration of any large language model as a tool within the Tormentnexus ecosystem.
    > _Context Engineering & Isolation → Prompt Engineering_ | **infra**
 
 4354. **[56]** `sig:85`  [mcp-substack: 🤖 MCP Server for Substack integration with Claude AI Desktop.](https://github.com/michalnaka/mcp-substack)
@@ -23282,7 +23282,7 @@
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra**
 
 4476. **[55]** `sig:83`  [doubao-search-mcp](https://github.com/flow-product/doubao-search-mcp)
-   > A repository showcasing search and discovery functionalities for the Borg Intelligence database.
+   > A repository showcasing search and discovery functionalities for the Tormentnexus Intelligence database.
    > _Search & Discovery → Code Search_ | **infra**
 
 4477. **[55]** `sig:83`  [mcp-rss-md](https://github.com/taweili/mcp-rss-md)
@@ -23474,7 +23474,7 @@
    > _Interface & Developer UX → Browser Automation_ | **infra**
 
 4524. **[55]** `sig:82`  [file-finder-mcp](https://github.com/stepancooleague/file-finder-mcp)
-   > A Borg-based file search tool for efficiently locating files within a filesystem using MCP servers.
+   > A Tormentnexus-based file search tool for efficiently locating files within a filesystem using MCP servers.
    > _Search & Discovery → MCP Discovery_ | **infra**
 
 4525. **[55]** `sig:82`  [mcp-trader: A Model Context Protocol (MCP) server for stock traders](https://github.com/wshobson/mcp-trader)
@@ -23530,7 +23530,7 @@
    > _AI Agents & Frameworks → AI Editors & IDEs_ | **infra**
 
 4538. **[55]** `sig:82`  [mcp-replicate-flux](https://github.com/ozgrozer/mcp-replicate-flux)
-   > This resource details the setup and configuration of a Borg Intelligence database using Flux for data processing.
+   > This resource details the setup and configuration of a Tormentnexus Intelligence database using Flux for data processing.
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **infra**
 
 4539. **[55]** `sig:82`  [azure-mcp: A Model Context Protocol (MCP) implementation that enables Claud](https://github.com/kalivaraprasad-gonapa/azure-mcp)
@@ -25130,7 +25130,7 @@
    > _Agent Orchestration & Workflow → General Orchestration_ | **infra**
 
 4938. **[52]** `sig:75`  [stock_info_mcp: 获取股票各类信息](https://github.com/tddt/stock_info_mcp)
-   > A Borg-based stock intelligence platform providing historical data, fundamental info, news, and risk alerts.
+   > A Tormentnexus-based stock intelligence platform providing historical data, fundamental info, news, and risk alerts.
    > _Agent Orchestration & Workflow → Prompt Engineering_ | **infra**
 
 4939. **[52]** `sig:75`  [pdf-generator-mcp-server: A MCP server for generating PDFs using PDFKit and](https://github.com/ivarvd-hldng/pdf-generator-mcp-server)
@@ -27470,7 +27470,7 @@
    > _Agent Orchestration & Workflow → Workflow & Pipeline Engines_ | **dev-tools**
 
 362. **[24]** `sig:64`  [https://monero.forex/how-to-buy-monero](https://monero.forex/how-to-buy-monero)
-   > A guide on purchasing Monero for use in the Borg network.
+   > A guide on purchasing Monero for use in the Tormentnexus network.
    > _Connectivity / MCP / A2A → MCP Clients_ | **dev-tools**
 
 363. **[24]** `sig:64`  [Hacker News](https://news.ycombinator.com/item?id=47419709)
@@ -27954,7 +27954,7 @@
    > _Infrastructure & Proxy Layers → Deployment & Scaling_ | ****
 
 483. **[21]** `sig:70`  [https://discord.com/developers/applications/1493728651773087825/oauth2](https://discord.com/developers/applications/1493728651773087825/oauth2)
-   > Discord integration for Borg project development.
+   > Discord integration for Tormentnexus project development.
    > _Connectivity / MCP / A2A → MCP Clients_ | ****
 
 484. **[21]** `sig:70`  [https://github.com/dvejsada/mcp_media_generator](https://github.com/dvejsada/mcp_media_generator)

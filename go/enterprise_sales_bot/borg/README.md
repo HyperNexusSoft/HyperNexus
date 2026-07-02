@@ -206,7 +206,7 @@ tormentnexus/
 │  ├─ vscode/                     # VS Code extension
 │  ├─ tormentnexus-extension/      # Browser extension
 │  ├─ cloud-orchestrator/          # Nested cloud stack (mini-monorepo)
-│  └─ borg-extension/              # Borg extension
+│  └─ tormentnexus-extension/              # Tormentnexus extension
 │
 ├─ packages/                       # Shared libraries & TypeScript control plane
 │  ├─ core/                        # Main TS control plane, tRPC routers, orchestration

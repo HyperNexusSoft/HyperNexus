@@ -488,7 +488,7 @@ export const af: Translations = {
       kicker: "Agentic Gamerscore",
       title: "Hermes Achievements",
       subtitle:
-        "Versamelbare Hermes-kentekens wat verdien word uit werklike sessiegeskiedenis. Bekende, onvoltooide prestasies word as Ontdek vertoon; Geheime prestasies bly verborge totdat die eerste ooreenstemmende gedrag verskyn.",
+        "Versamelbare Hermes-kentekens wat verdien word uit werklike sessiegeskiedenis. Bekende, onvoltooide prestasies word as Ontdek vertoon; Geheime prestasies bly vertormentnexuse totdat die eerste ooreenstemmende gedrag verskyn.",
       scan_subtitle:
         "Hermes-sessiegeskiedenis word geskandeer. Die eerste skandering kan 5–10 sekondes neem op groot geskiedenisse.",
     },
@@ -501,7 +501,7 @@ export const af: Translations = {
       discovered: "Ontdek",
       discovered_hint: "bekend, nog nie verdien nie",
       secrets: "Geheime",
-      secrets_hint: "verborge tot eerste sein",
+      secrets_hint: "vertormentnexuse tot eerste sein",
       highest_tier: "Hoogste vlak",
       highest_tier_hint: "Copper → Silver → Gold → Diamond → Olympian",
       latest: "Jongste",
@@ -515,12 +515,12 @@ export const af: Translations = {
     },
     tier: {
       target: "Teiken {tier}",
-      hidden: "Verborge",
+      hidden: "Vertormentnexuse",
       complete: "Voltooi",
       objective: "Doelwit",
     },
     progress: {
-      hidden: "verborge",
+      hidden: "vertormentnexuse",
     },
     scan: {
       building_headline: "Prestasieprofiel word gebou…",
@@ -536,7 +536,7 @@ export const af: Translations = {
       tiers_header: "Vlakke",
       secret_header: "Geheime prestasies",
       secret_body:
-        "Geheime hou hul presiese sneller verborge. Sodra Hermes 'n verwante sein sien, word die kaart Ontdek en wys sy vereiste.",
+        "Geheime hou hul presiese sneller vertormentnexuse. Sodra Hermes 'n verwante sein sien, word die kaart Ontdek en wys sy vereiste.",
       scan_status_header: "Skanderingstatus",
       scan_status_body:
         "Hermes skandeer plaaslike geskiedenis een keer, daarna verskyn kaarte outomaties. Niks is vasgevang as dit 'n paar sekondes neem nie.",
@@ -558,7 +558,7 @@ export const af: Translations = {
       header: "Onlangse ontsluitings",
     },
     empty: {
-      no_secrets_header: "Geen verborge geheime in hierdie skandering oor nie.",
+      no_secrets_header: "Geen vertormentnexuse geheime in hierdie skandering oor nie.",
       no_secrets_body:
         "Wenk: geheime begin gewoonlik by ongewone mislukkings of magsgebruikerspatrone — poortbotsings, toestemmingsmure, ontbrekende env-veranderlikes, YAML-foute, Docker-botsings, terugrol/kontrolepunt-gebruik, kasterugslae of klein regstellings na baie rooi teks.",
     },

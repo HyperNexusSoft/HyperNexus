@@ -117,7 +117,7 @@ mint/freeze authorities, and top 5 holders.
 
 ```bash
 python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py \
-  token DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263
+  token DezXAZ8z7PnrnRJjz3wXTormentnexusixCa6xjnB7YaB1pPB263
 ```
 
 Output: name, symbol, decimals, supply, price, market cap, top 5
@@ -171,7 +171,7 @@ Quick price check for any token by mint address or known symbol.
 python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py price BONK
 python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py price JUP
 python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py price SOL
-python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py price DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263
+python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py price DezXAZ8z7PnrnRJjz3wXTormentnexusixCa6xjnB7YaB1pPB263
 ```
 
 Known symbols: SOL, USDC, USDT, BONK, JUP, WETH, JTO, mSOL, stSOL,

@@ -1,5 +1,5 @@
 """
-Borg Self-Healing Verification Engine
+Tormentnexus Self-Healing Verification Engine
 
 Planner-Checker-Revise cycle inspired by:
 - Verdent AI: 3-model cross-validation
@@ -182,7 +182,7 @@ class ExtractionValidator:
         if not self.llm_pool:
             return True, rdata, 0.5  # No pool = auto-accept
 
-        from deep_research import extract_fit_markdown, classify_url_complexity, build_tiered_prompt, BORG_TAXONOMY
+        from deep_research import extract_fit_markdown, classify_url_complexity, build_tiered_prompt, TORMENTNEXUS_TAXONOMY
 
         # Build a verification prompt
         fit_text = extract_fit_markdown(html_content, url) if html_content else "N/A"

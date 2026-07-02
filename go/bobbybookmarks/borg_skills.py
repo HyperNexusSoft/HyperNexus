@@ -1,5 +1,5 @@
 """
-Borg Skill Evolution Engine
+Tormentnexus Skill Evolution Engine
 
 Learns from extraction patterns and auto-promotes successful strategies.
 Inspired by:

@@ -13,14 +13,14 @@ from urllib.parse import urlparse, urlunparse
 from llm_pool import LLMPool, stringify_field
 from deduplicator import normalize_url
 
-from borg_memory import TieredMemory
-from borg_selfhealing import SelfHealingEngine, ExtractionValidator
-from borg_skills import SkillEvolutionEngine
+from tormentnexus_memory import TieredMemory
+from tormentnexus_selfhealing import SelfHealingEngine, ExtractionValidator
+from tormentnexus_skills import SkillEvolutionEngine
 logging.basicConfig(
     level=logging.INFO, 
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(os.path.join('logs', 'borg_research.log'), mode='a'),
+        logging.FileHandler(os.path.join('logs', 'tormentnexus_research.log'), mode='a'),
         logging.StreamHandler()
     ]
 )
@@ -39,7 +39,7 @@ LLM_MODELS = [f"{b}/{m}" for b, m in llm_pool.all_backends]
 # Phase 2 systems initialized inside main() — see below
 
 
-BORG_TAXONOMY = [
+TORMENTNEXUS_TAXONOMY = [
     "Agent Orchestration & Workflow",
     "Context Engineering & Isolation",
     "Memory & Persistence Architecture",
@@ -237,7 +237,7 @@ def classify_url_complexity(url):
 
 def build_tiered_prompt(url, fit_text, complexity, github_metadata=None):
     """Build an extraction prompt appropriate to the URL complexity."""
-    prompt = "Analyze this technical resource for the Borg Intelligence database.\n\n"
+    prompt = "Analyze this technical resource for the Tormentnexus Intelligence database.\n\n"
     prompt += "URL: " + url + "\n"
     if github_metadata:
         if 'repo_description' in github_metadata:
@@ -247,7 +247,7 @@ def build_tiered_prompt(url, fit_text, complexity, github_metadata=None):
         if 'primary_language' in github_metadata:
             prompt += "Language: " + github_metadata['primary_language'] + "\n"
     prompt += "\nContent: " + fit_text + "\n\n"
-    prompt += "Categorize into EXACTLY ONE: " + ", ".join(BORG_TAXONOMY) + "\n\n"
+    prompt += "Categorize into EXACTLY ONE: " + ", ".join(TORMENTNEXUS_TAXONOMY) + "\n\n"
     prompt += "Return strict JSON:\n"
     prompt += "- CATEGORY: one of the above categories\n"
     prompt += "- SHORT_DESCRIPTION: 1 specific sentence about what this DOES\n"
@@ -338,7 +338,7 @@ def write_feed(message, type="info"):
             json.dump(entries[-100:], f, indent=2)
     except Exception: pass
 
-def borg_research_url(url, content, status):
+def tormentnexus_research_url(url, content, status):
     """Upgraded v2.0: Fit Markdown + GitHub metadata + Tiered prompt + Garbage filter."""
     fit_text = extract_fit_markdown(content, url)
     github_metadata = None
@@ -346,7 +346,7 @@ def borg_research_url(url, content, status):
         github_metadata = extract_github_metadata(url, content)
     complexity = classify_url_complexity(url)
     # Phase 2: Skill-enhanced extraction
-    skill_engine = getattr(borg_research_url, '_skill_engine', None)
+    skill_engine = getattr(tormentnexus_research_url, '_skill_engine', None)
     if skill_engine:
         skill_name, skill_config = skill_engine.match_skill(url, content)
         prompt = skill_engine.build_skill_prompt(url, skill_name, fit_text, skill_config)
@@ -392,7 +392,7 @@ def borg_research_url(url, content, status):
             rdata = json.loads(res_text)
 
             # Phase 2: Self-healing validation
-            healing_engine = getattr(borg_research_url, "_healing_engine", None)
+            healing_engine = getattr(tormentnexus_research_url, "_healing_engine", None)
             if healing_engine:
                 final_rdata, quality, decision_path = healing_engine.process_extraction(
                     url, rdata, content, raw_response)
@@ -440,25 +440,25 @@ def borg_research_url(url, content, status):
 
 def main():
     logger.info("=" * 60)
-    logger.info("Borg Intelligence Deep Research Worker v2.0")
+    logger.info("Tormentnexus Intelligence Deep Research Worker v2.0")
     logger.info("Upgrades: Garbage Filter | Fit Markdown | Flight Recorder | Tiered Routing | Self-Healing | Skills")
     logger.info("=" * 60)
     logger.info("Using LLM backends: %s", ', '.join(LLM_MODELS))
 
     # Phase 2: Initialize intelligence systems
-    borg_memory = TieredMemory()
-    borg_healing = SelfHealingEngine(llm_pool=llm_pool, memory=borg_memory)
-    borg_skills_engine = SkillEvolutionEngine(memory=borg_memory)
-    borg_research_url._healing_engine = borg_healing
-    borg_research_url._skill_engine = borg_skills_engine
-    borg_research_url._memory = borg_memory
+    tormentnexus_memory = TieredMemory()
+    tormentnexus_healing = SelfHealingEngine(llm_pool=llm_pool, memory=tormentnexus_memory)
+    tormentnexus_skills_engine = SkillEvolutionEngine(memory=tormentnexus_memory)
+    tormentnexus_research_url._healing_engine = tormentnexus_healing
+    tormentnexus_research_url._skill_engine = tormentnexus_skills_engine
+    tormentnexus_research_url._memory = tormentnexus_memory
     logger.info("Phase 2 systems: Memory | Self-Healing | Skills initialized")
     conn = init_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT url FROM bookmarks WHERE research_level = 'borg'")
+    cursor.execute("SELECT url FROM bookmarks WHERE research_level = 'tormentnexus'")
     processed = {normalize_url(row[0]) for row in cursor.fetchall()}
-    cursor.execute("SELECT COUNT(*) FROM bookmarks WHERE research_level = 'borg'")
-    existing_borg_rows = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(*) FROM bookmarks WHERE research_level = 'tormentnexus'")
+    existing_tormentnexus_rows = cursor.fetchone()[0]
     
     urls = []
     with open(BOOKMARKS_FILE, 'r', encoding='utf-8', errors='ignore') as f:
@@ -477,7 +477,7 @@ def main():
         'last_error': None,
         'sleep_seconds': None,
         'remaining_urls': len(urls),
-        'borg_rows': existing_borg_rows,
+        'tormentnexus_rows': existing_tormentnexus_rows,
         'version': '2.0',
         'stats': {'accepted': 0, 'rejected': 0, 'fetch_failed': 0, 'decode_failed': 0},
     }
@@ -485,7 +485,7 @@ def main():
     complexity_counts = {'simple': 0, 'medium': 0, 'complex': 0}
     for u in urls:
         complexity_counts[classify_url_complexity(u)] += 1
-    logger.info('Borg Intelligence Phase: %d links remaining.', len(urls))
+    logger.info('Tormentnexus Intelligence Phase: %d links remaining.', len(urls))
     logger.info('  Complexity: %s', complexity_counts)
     
     for index, url in enumerate(urls):
@@ -509,23 +509,23 @@ def main():
             write_status(status)
             continue
         
-        write_feed(f"Starting Borg research on: {url}", "research")
-        rdata = borg_research_url(url, content, status)
+        write_feed(f"Starting Tormentnexus research on: {url}", "research")
+        rdata = tormentnexus_research_url(url, content, status)
         if rdata:
             write_feed(f"Finalizing extraction for: {url}", "process")
             from worker_wrapper import pulse
-            pulse("Borg Research Worker", f"Assimilating: {url}", {"remaining": len(urls) - index, "borg_rows": status.get('borg_rows')})
+            pulse("Tormentnexus Research Worker", f"Assimilating: {url}", {"remaining": len(urls) - index, "tormentnexus_rows": status.get('tormentnexus_rows')})
             try:
                 cursor.execute('''
                     INSERT INTO bookmarks (url, category, short_description, long_description, tags, main_features, research_level, innovation_score)
-                    VALUES (?, ?, ?, ?, ?, ?, 'borg', ?)
+                    VALUES (?, ?, ?, ?, ?, ?, 'tormentnexus', ?)
                     ON CONFLICT(url) DO UPDATE SET
                         category=excluded.category,
                         short_description=excluded.short_description,
                         long_description=excluded.long_description,
                         tags=excluded.tags,
                         main_features=excluded.main_features,
-                        research_level='borg',
+                        research_level='tormentnexus',
                         innovation_score=excluded.innovation_score
                 ''', (
                     url,
@@ -537,7 +537,7 @@ def main():
                     rdata.get('INNOVATION_SCORE', 0),
                 ))
                 conn.commit()
-                logger.info("Borg Intelligence Extracted: %s", url)
+                logger.info("Tormentnexus Intelligence Extracted: %s", url)
                 status['stats']['accepted'] += 1
                 status.update({
                     'state': 'processing',
@@ -546,7 +546,7 @@ def main():
                     'last_error': None,
                     'sleep_seconds': None,
                     'remaining_urls': len(urls) - index - 1,
-                    'borg_rows': status.get('borg_rows', len(processed)) + 1,
+                    'tormentnexus_rows': status.get('tormentnexus_rows', len(processed)) + 1,
                     'last_model': llm_pool.active_model_name,
                 })
                 write_status(status)
@@ -569,7 +569,7 @@ def main():
 
     # Final summary
     logger.info('=' * 60)
-    logger.info('Borg Intelligence Run Complete')
+    logger.info('Tormentnexus Intelligence Run Complete')
     logger.info('  Accepted: %d', status['stats']['accepted'])
     logger.info('  Rejected (garbage): %d', status['stats']['rejected'])
     logger.info('  Fetch failed: %d', status['stats']['fetch_failed'])
@@ -577,8 +577,8 @@ def main():
     logger.info('=' * 60)
 
     # Phase 2: Final memory and stats dump
-    mem = getattr(borg_research_url, '_memory', None)
-    heal = getattr(borg_research_url, '_healing_engine', None)
+    mem = getattr(tormentnexus_research_url, '_memory', None)
+    heal = getattr(tormentnexus_research_url, '_healing_engine', None)
     if mem:
         mem.flush_l1_to_l2()
         mem_stats = mem.get_memory_stats()

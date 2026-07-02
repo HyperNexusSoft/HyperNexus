@@ -3,8 +3,8 @@ import os
 ROOT_DIR = r"c:\Users\hyper\workspace"
 TARGET_DIRS = [
     ".agent",
-    ".borg",
-    "borg",
+    ".tormentnexus",
+    "tormentnexus",
     "skillzhub",
     "mcp-superassistant",
     "onetool-mcp",

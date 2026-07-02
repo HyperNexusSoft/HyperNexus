@@ -126,7 +126,7 @@ python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py \
 
 ```bash
 python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py \
-  token DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263
+  token DezXAZ8z7PnrnRJjz3wXTormentnexusixCa6xjnB7YaB1pPB263
 ```
 
 输出内容：名称、符号、精度、供应量、价格、市值、前 5 大持仓地址及占比。
@@ -178,7 +178,7 @@ python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py stats
 python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py price BONK
 python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py price JUP
 python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py price SOL
-python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py price DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263
+python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py price DezXAZ8z7PnrnRJjz3wXTormentnexusixCa6xjnB7YaB1pPB263
 ```
 
 已知符号：SOL、USDC、USDT、BONK、JUP、WETH、JTO、mSOL、stSOL、

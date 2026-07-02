@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Borg Research Worker v2.6 - Enrich remaining entries, including fetch-failed ones using metadata"""
+"""Tormentnexus Research Worker v2.6 - Enrich remaining entries, including fetch-failed ones using metadata"""
 import os
 import re
 import json
@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 ATLAS_DB = 'atlas.db'
 LMSTUDIO_URL = "http://localhost:1234/v1/chat/completions"
 
-BORG_TAXONOMY = [
+TORMENTNEXUS_TAXONOMY = [
     "Agent Orchestration & Workflow",
     "Context Engineering & Isolation",
     "Memory & Persistence Architecture",
@@ -226,7 +226,7 @@ def parse_llm_response(raw):
         if cls:
             result['CATEGORY'] = cls.group(1).strip()
         else:
-            for cat in BORG_TAXONOMY:
+            for cat in TORMENTNEXUS_TAXONOMY:
                 if cat.lower() in stripped.lower():
                     result['CATEGORY'] = cat
                     break
@@ -335,7 +335,7 @@ def build_prompt(url, fit_text, gh_meta=None, reddit_ctx=None, existing_sd=None)
     else:
         prompt += "\n(Note: Page content could not be fetched. Classify based on URL and metadata above.)\n\n"
 
-    prompt += "Categories: " + ", ".join(BORG_TAXONOMY) + "\n\n"
+    prompt += "Categories: " + ", ".join(TORMENTNEXUS_TAXONOMY) + "\n\n"
     prompt += (
         "Return JSON with these fields:\n"
         "- CATEGORY: one of the above categories\n"
@@ -397,7 +397,7 @@ def main():
         ORDER BY e.is_github DESC, e.id DESC""")
     all_entries = a.fetchall()
 
-    logger.info("Borg Research Worker v2.6 starting")
+    logger.info("Tormentnexus Research Worker v2.6 starting")
     logger.info(f"Entries to research: {len(all_entries):,}")
 
     accepted = 0
@@ -530,7 +530,7 @@ def main():
              new_innov, quality, signal, is_standout, '', eid))
 
         mapped = CAT_MAP.get(category, category)
-        if mapped and mapped in BORG_TAXONOMY:
+        if mapped and mapped in TORMENTNEXUS_TAXONOMY:
             reclassify_entry(a, eid, mapped)
 
         atl.commit()

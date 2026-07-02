@@ -1,5 +1,5 @@
 # 💻 Coding Tools & IDEs
-> Borg Intelligence Atlas v8 · 2026-06-17 · 1,254 tools
+> Tormentnexus Intelligence Atlas v8 · 2026-06-17 · 1,254 tools
 > AI editors, autocomplete, code review, refactoring, testing
 
 | Metric | Value |
@@ -1275,7 +1275,7 @@ The tool allows developers or AI agents to query specific information related to
 `8.8` ★ ⚡74 Q0.7⭐ ⭐ Excellent
 ↗2 layers
 
-**This resource discusses the technical aspects of GitHub Copilot, a code completion tool integrated with GitHub, and its potential role in enhancing Borg's agent orchestration and workflow automation. It covers how Copilot can assist developers in writing efficient code, manage workflows, and integrate with various development environments.**
+**This resource discusses the technical aspects of GitHub Copilot, a code completion tool integrated with GitHub, and its potential role in enhancing Tormentnexus's agent orchestration and workflow automation. It covers how Copilot can assist developers in writing efficient code, manage workflows, and integrate with various development environments.**
 
 **Features:**
 - code generation
@@ -9228,7 +9228,7 @@ This tool provides a comprehensive set of CLI insights and leverages AI for task
 `8.8` ★ ⚡92 Q0.9🏆 🏆 World-class
 ↗2 layers
 
-**The Borg project presents a comprehensive developer platform designed to enhance modern software engineering practices. It integrates advanced AI capabilities such as code generation, intelligent code review, and automated workflow management, all while emphasizing security through enterprise-grade protection mechanisms. The platform supports seamless connectivity with external tools and services, enabling developers to maintain agility without compromising on security or compliance.**
+**The Tormentnexus project presents a comprehensive developer platform designed to enhance modern software engineering practices. It integrates advanced AI capabilities such as code generation, intelligent code review, and automated workflow management, all while emphasizing security through enterprise-grade protection mechanisms. The platform supports seamless connectivity with external tools and services, enabling developers to maintain agility without compromising on security or compliance.**
 
 **Features:**
 - AI-powered code generation
@@ -9524,7 +9524,7 @@ This tool provides a comprehensive set of CLI insights and leverages AI for task
 `8.8` ★ ⚡88 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The MCP server facilitates seamless communication between the Borg platform and external AI models, allowing developers to embed documentation directly into conversations. It supports automated workflows, secure code management, and integration with tools like GitHub Copilot and Smithery for streamlined development processes.**
+**The MCP server facilitates seamless communication between the Tormentnexus platform and external AI models, allowing developers to embed documentation directly into conversations. It supports automated workflows, secure code management, and integration with tools like GitHub Copilot and Smithery for streamlined development processes.**
 
 **Features:**
 - MCP server integration
@@ -9689,10 +9689,10 @@ This tool provides a comprehensive set of CLI insights and leverages AI for task
 
 ---
 
-### 34. [robertpelloni/borg](https://github.com/robertpelloni/borg/branches)
+### 34. [robertpelloni/tormentnexus](https://github.com/robertpelloni/tormentnexus/branches)
 `9.0` ★★ ⚡85 Q0.8🏆 🏆 World-class
 
-**Borg is a Git client that offers advanced features for managing branches, merges, and version control within the GitHub ecosystem. It focuses on improving the developer experience by offering intuitive tools for branch operations and integration with GitHub workflows.**
+**Tormentnexus is a Git client that offers advanced features for managing branches, merges, and version control within the GitHub ecosystem. It focuses on improving the developer experience by offering intuitive tools for branch operations and integration with GitHub workflows.**
 
 **Features:**
 - Git client
@@ -11279,7 +11279,7 @@ This tool is essential for quickly sharing code snippets, configuration files, a
 `8.8` ★ ⚡89 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project provides a comprehensive developer platform that integrates AI-powered tools such as GitHub Copilot and Didlogic MCP to streamline software development workflows. It offers features for code generation, workflow automation, secure deployment, and integration with various external services, enabling teams to modernize their applications efficiently.**
+**The Tormentnexus Project provides a comprehensive developer platform that integrates AI-powered tools such as GitHub Copilot and Didlogic MCP to streamline software development workflows. It offers features for code generation, workflow automation, secure deployment, and integration with various external services, enabling teams to modernize their applications efficiently.**
 
 **Features:**
 - AI-assisted coding with Copilot
@@ -13422,7 +13422,7 @@ The resource provides categorization and tags to help users discover games based
 `10.0` ★★★ ⚡92 Q0.8🏆 🏆 World-class
 ↗3 layers
 
-**This technical resource provides comprehensive documentation on the Borg Intelligence database, detailing its architecture, integration capabilities, and usage instructions. It emphasizes the use of advanced AI tools like Claude Code, Gemini CLI, and Codex to enhance developer workflows through knowledge graph queries and context-aware assistance.**
+**This technical resource provides comprehensive documentation on the Tormentnexus Intelligence database, detailing its architecture, integration capabilities, and usage instructions. It emphasizes the use of advanced AI tools like Claude Code, Gemini CLI, and Codex to enhance developer workflows through knowledge graph queries and context-aware assistance.**
 
 **Features:**
 - Graphify integration for code navigation and querying
@@ -14500,7 +14500,7 @@ Key features include easy tutorials for drawing graphics, playing sounds, and it
 `10.0` ★★★ ⚡91 Q0.8🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project intelligence database includes an extensive collection of apps and tools designed to work seamlessly with OpenRouter, providing access to over 300 AI models through a single API. This resource serves as a valuable reference for developers and organizations looking to enhance their workflows by integrating advanced AI capabilities into their projects.**
+**The Tormentnexus Project intelligence database includes an extensive collection of apps and tools designed to work seamlessly with OpenRouter, providing access to over 300 AI models through a single API. This resource serves as a valuable reference for developers and organizations looking to enhance their workflows by integrating advanced AI capabilities into their projects.**
 
 **Features:**
 - Access to 300+ AI models from major providers
@@ -15346,7 +15346,7 @@ This tool focuses on bridging the gap between traditional note-taking tools (Obs
 `10.0` ★★★ ⚡96 Q0.9🏆 🏆 World-class
 ↗3 layers
 
-**The Borg Project provides a comprehensive platform for modernizing software development through AI integration, offering tools for code generation, model deployment, secure coding, and automated workflows. It leverages Hugging Face's MCP (Machine Learning Cloud) services to enable seamless use of pre-trained models, supports Claude Desktop mode for interactive AI interactions, and integrates with CI/CD pipelines, cloud infrastructure, and enterprise security features.**
+**The Tormentnexus Project provides a comprehensive platform for modernizing software development through AI integration, offering tools for code generation, model deployment, secure coding, and automated workflows. It leverages Hugging Face's MCP (Machine Learning Cloud) services to enable seamless use of pre-trained models, supports Claude Desktop mode for interactive AI interactions, and integrates with CI/CD pipelines, cloud infrastructure, and enterprise security features.**
 
 **Features:**
 - AI-powered code generation and model deployment
@@ -16842,7 +16842,7 @@ The tool provides a preview build for a media player, highlighting an ambition t
 `8.8` ★ ⚡86 Q0.8🏆 🏆 World-class
 ↗3 layers
 
-**The 'Borg' Project's gmail-mcp repository provides a GitHub-based solution to search, retrieve, and manage emails from Gmail using the MCP (Machine-to-Machine Protocol). It integrates with Claude CLI for advanced email automation, offering features such as email content retrieval, message listing, and workflow orchestration. The project emphasizes developer experience with tools like Copilot, Code Review, and CI/CD integration.**
+**The 'Tormentnexus' Project's gmail-mcp repository provides a GitHub-based solution to search, retrieve, and manage emails from Gmail using the MCP (Machine-to-Machine Protocol). It integrates with Claude CLI for advanced email automation, offering features such as email content retrieval, message listing, and workflow orchestration. The project emphasizes developer experience with tools like Copilot, Code Review, and CI/CD integration.**
 
 **Features:**
 - Search emails

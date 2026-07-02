@@ -2,7 +2,7 @@ import sqlite3
 import re
 from collections import Counter
 
-DB_PATH = r"c:\Users\hyper\workspace\borg\catalog.db"
+DB_PATH = r"c:\Users\hyper\workspace\tormentnexus\catalog.db"
 
 def analyze_failures():
     conn = sqlite3.connect(DB_PATH)

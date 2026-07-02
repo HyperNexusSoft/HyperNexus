@@ -1,4 +1,4 @@
-# Borg Intelligence — Definitive Feature Roadmap
+# Tormentnexus Intelligence — Definitive Feature Roadmap
 
 ## Phase 1: MEMORY (Foundation)
 - Knowledge Graph mapping between skills, tools, and past session history.

@@ -1,5 +1,5 @@
 # 🛠 Coding Harness Tools
-> Borg Intelligence Atlas v8 · 2026-06-17 · 253 tools
+> Tormentnexus Intelligence Atlas v8 · 2026-06-17 · 253 tools
 > Agent harnesses, skills, governance, spec-driven dev, bridges
 
 | Metric | Value |
@@ -884,7 +884,7 @@
 `9.0` ★★ ⚡84 Q0.8⭐ ⭐ Excellent
 ↗2 layers
 
-**The Borg Project intelligence database analyzes SkillBoss's technical resource to evaluate its capabilities in managing AI agents, connecting diverse tools, and automating workflows across platforms. It highlights the platform's ability to centralize access to over 700 APIs and 1000+ skills, enabling agents to perform tasks such as content generation, data scraping, marketing automation, and more without requiring separate API keys or configurations.**
+**The Tormentnexus Project intelligence database analyzes SkillBoss's technical resource to evaluate its capabilities in managing AI agents, connecting diverse tools, and automating workflows across platforms. It highlights the platform's ability to centralize access to over 700 APIs and 1000+ skills, enabling agents to perform tasks such as content generation, data scraping, marketing automation, and more without requiring separate API keys or configurations.**
 
 **Features:**
 - Access to 700+ APIs
@@ -1040,7 +1040,7 @@
 - cross-domain experimentation
 - iterative evaluation framework
 
-*Tags: agent, code, ai, autorearch, optimization, mlops, promptengineering, borg...*
+*Tags: agent, code, ai, autorearch, optimization, mlops, promptengineering, tormentnexus...*
 
 ---
 
@@ -1862,7 +1862,7 @@
 `8.5` ★ ⚡68 Q0.6✓ ✓ Solid
 ↗2 layers
 
-**The resource outlines the technical framework for deploying and managing Claude Code within a Borg environment, focusing on automation, workflow orchestration, and developer experience.**
+**The resource outlines the technical framework for deploying and managing Claude Code within a Tormentnexus environment, focusing on automation, workflow orchestration, and developer experience.**
 
 **Features:**
 - automated code integration
@@ -2301,7 +2301,7 @@
 `8.8` ★ ⚡80 Q0.7⭐ ⭐ Excellent
 ↗3 layers
 
-**The Borg Project's Warp is an open-source terminal emulator that integrates agent harness functionality, allowing users to leverage AI models directly within the terminal environment. This approach aims to enhance productivity by enabling seamless interaction between code execution and AI services. The project emphasizes a collaborative development model, where community contributions guide product evolution through real-time feedback and suggestions.**
+**The Tormentnexus Project's Warp is an open-source terminal emulator that integrates agent harness functionality, allowing users to leverage AI models directly within the terminal environment. This approach aims to enhance productivity by enabling seamless interaction between code execution and AI services. The project emphasizes a collaborative development model, where community contributions guide product evolution through real-time feedback and suggestions.**
 
 **Features:**
 - Open-source terminal emulator
@@ -3179,7 +3179,7 @@ This resource focuses on the integration layer between the BIM world (Revit) and
 `9.0` ★★ ⚡83 Q0.8⭐ ⭐ Excellent
 ↗4 layers
 
-**The Borg Project's analysis of Amazon's Kiro IDE highlights its focus on bridging the gap between rapid prototyping and production-ready software. Kiro uses structured requirements, spec-driven development, and automated 'hooks' to ensure code quality and maintainability. It emphasizes developer control through approvals, live testing, and security checks, aiming to prevent technical debt in AI-assisted coding.**
+**The Tormentnexus Project's analysis of Amazon's Kiro IDE highlights its focus on bridging the gap between rapid prototyping and production-ready software. Kiro uses structured requirements, spec-driven development, and automated 'hooks' to ensure code quality and maintainability. It emphasizes developer control through approvals, live testing, and security checks, aiming to prevent technical debt in AI-assisted coding.**
 
 **Features:**
 - spec-driven development
@@ -3349,7 +3349,7 @@ This resource focuses on the integration layer between the BIM world (Revit) and
 `9.0` ★★ ⚡91 Q0.9🏆 🏆 World-class
 ↗4 layers
 
-**The Borg Project's lighthouse-mcp repository provides a web-based interface for running comprehensive Lighthouse audits on any URL. It allows integration with AI assistants like Claude to analyze performance metrics and automatically suggest optimizations. The tool supports device emulation, network throttling, and customizable audit categories, making it suitable for modern DevOps and CI/CD pipelines.**
+**The Tormentnexus Project's lighthouse-mcp repository provides a web-based interface for running comprehensive Lighthouse audits on any URL. It allows integration with AI assistants like Claude to analyze performance metrics and automatically suggest optimizations. The tool supports device emulation, network throttling, and customizable audit categories, making it suitable for modern DevOps and CI/CD pipelines.**
 
 **Features:**
 - Integration with Google Lighthouse for performance audits

@@ -13416,7 +13416,7 @@ sig=   83 | MetaMCP Documentation - MetaMCP
 
 sig=   83 | Notion | Where teams and agents work together
   URL: https://hd3ns092ns.notion.site/ebd/1b3dc3333315802a9e99cafedb321048?v=1b3dc33333
-  Borg Intelligence Database Architecture, Agent Orchestration Frameworks, Context
+  Tormentnexus Intelligence Database Architecture, Agent Orchestration Frameworks, Context
 
 sig=   83 | mcp-launch ? one URL for many MCP servers (via mcpo) | MCP S
   URL: https://lobehub.com/pl/mcp/devguyrash-mcp-launch
@@ -14651,7 +14651,7 @@ sig=   82 | GitHub - umbraco/Umbraco-CMS-MCP-Dev
   Secure Umbraco API integration, Natural language interaction for content managem
 
 sig=   82 | n/a
-  URL: https://github.com/hypercodehq/hypercode
+  URL: https://github.com/tormentnexushq/tormentnexus
   AI control plane, local-first architecture, MCP unification, provider routing, e
 
 sig=   82 | n/a

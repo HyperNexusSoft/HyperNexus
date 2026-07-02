@@ -11,7 +11,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 PROXY_URL = "http://localhost:4000/v1/chat/completions"
 LMSTUDIO_URL = "http://localhost:1234/v1/chat/completions"
-DB_PATH = r"c:\Users\hyper\workspace\borg\catalog.db"
+DB_PATH = r"c:\Users\hyper\workspace\tormentnexus\catalog.db"
 
 SYSTEM_PROMPT = """You are an expert developer building a database of Model Context Protocol (MCP) server launch commands.
 Your task is to read the provided README.md of a GitHub repository and extract the EXACT commands required to launch the MCP server via stdio.

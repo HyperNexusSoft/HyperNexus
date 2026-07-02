@@ -3,7 +3,7 @@ import sqlite3
 import json
 
 BOOKMARKS_DB = r"c:\Users\hyper\workspace\bobbybookmarks\bookmarks.db"
-CATALOG_DB = r"c:\Users\hyper\workspace\borg\catalog.db"
+CATALOG_DB = r"c:\Users\hyper\workspace\tormentnexus\catalog.db"
 
 def inspect_db(db_path, query, params=()):
     if not os.path.exists(db_path):

@@ -103,7 +103,7 @@ a fresh secret to the logs.
 
 Coolify exposes the named volume on the host filesystem under
 `/var/lib/docker/volumes/<project-id>_agentmemory-data/_data`. Back it
-up with your existing host-level snapshot tooling (Restic, Borg,
+up with your existing host-level snapshot tooling (Restic, Tormentnexus,
 `rsync`, BTRFS snapshots, etc.) or via Coolify's built-in *Backups*
 feature for Docker volumes.
 
