@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.0-alpha.234] - 2026-07-02
+
+### Fixed
+- **Go Unit Test Hanging on Windows**: Wrapped the blocking system tray message loop `systray.Start` call inside `httpapi.New` to prevent it from executing during `go test` runs (utilizing lightweight package-less `flag.Lookup("test.v")` check).
+
 ## [1.0.0-alpha.233] - 2026-07-02
 
 ### Fixed

@@ -1,5 +1,10 @@
 # MEMORY.md — Multi-Agent Observations
 
+## Session 2026-07-02 (Go Unit Test Stabilization & Message Loops)
+
+### Go Unit Tests on Windows
+- **Blocking GUI Message Loops**: Spawning system tray icon loops (`systray.Start`) during Go unit test execution on Windows causes the tests to hang indefinitely because headless environments do not dispatch Windows messages. Wrapping the startup logic inside `if flag.Lookup("test.v") == nil` safely bypasses it when running `go test`.
+
 ## Session 2026-07-02 (Next.js tRPC Proxy Stability & Webpack Dev Server Migration)
 
 ### tRPC Proxy Resilience

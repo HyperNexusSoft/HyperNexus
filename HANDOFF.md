@@ -42,14 +42,19 @@
    - Cleared and untracked stale logs, local PIDs, and placeholder keys.
 
 10. **Version Alignment & Package Sync**:
-   - Pinned all workspace project and extension package configurations to `v1.0.0-alpha.233` using the standard `sync-versions` runner.
+    - Pinned all workspace project and extension package configurations to `v1.0.0-alpha.234` using the standard `sync-versions` runner.
 
 11. **tRPC Proxy Health & Webpack Dev Server (v1.0.0-alpha.233)**:
-   - Added a 3-second abort timeout to Next.js tRPC proxy upstream fetches in [route.ts](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/src/app/api/trpc/[trpc]/route.ts) to prevent the server from hanging when the TS control plane is offline.
-   - Added `startupStatus` to `GO_NATIVE_PROCEDURES` in [route.ts](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/src/app/api/trpc/[trpc]/route.ts) to bypass the TS proxy and retrieve status directly from the Go sidecar.
-   - Switched the Next.js dev server to Webpack mode (`--webpack`) to avoid SST cache corruption and filesystem `ENOENT` crashes encountered with Turbopack on Windows.
-   - Rebuilt the `better-sqlite3` native Node.js bindings on Node 24 runtime to resolve loading errors.
-   - Verified all 5 dev readiness checks (web, core, go-sidecar, startup-status, and mcp-status) pass successfully.
+    - Added a 3-second abort timeout to Next.js tRPC proxy upstream fetches in [route.ts](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/src/app/api/trpc/[trpc]/route.ts) to prevent the server from hanging when the TS control plane is offline.
+    - Added `startupStatus` to `GO_NATIVE_PROCEDURES` in [route.ts](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/src/app/api/trpc/[trpc]/route.ts) to bypass the TS proxy and retrieve status directly from the Go sidecar.
+    - Switched the Next.js dev server to Webpack mode (`--webpack`) to avoid SST cache corruption and filesystem `ENOENT` crashes encountered with Turbopack on Windows.
+    - Rebuilt the `better-sqlite3` native Node.js bindings on Node 24 runtime to resolve loading errors.
+    - Verified all 5 dev readiness checks (web, core, go-sidecar, startup-status, and mcp-status) pass successfully.
+
+12. **Go Unit Test Loop Stabilization (v1.0.0-alpha.234)**:
+    - Wrapped the Windows GUI message loop start `systray.Start` inside [server.go](file:///c:/Users/hyper/workspace/tormentnexus/go/internal/httpapi/server.go) to bypass execution during `go test` runs (utilizing lightweight `flag.Lookup("test.v")` check).
+    - Prevented headless Windows test threads from hanging indefinitely during test execution.
+    - Validated that the Go backend compiles cleanly and the entire Next.js React dashboard package typechecks without any errors.
 
 ## Next Steps for Successor Models
 - **Monitor Dev Environment Stability**: Keep running the Next.js dev server in Webpack mode on Windows.

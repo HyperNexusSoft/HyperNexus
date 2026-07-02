@@ -9,6 +9,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"flag"
 	"fmt"
 	"github.com/MDMAtk/TormentNexus/internal/ai"
 	"github.com/MDMAtk/TormentNexus/internal/catalogingestor"
@@ -587,7 +588,9 @@ func New(cfg config.Config, detector controlplane.ToolProvider) *Server {
 
 	// --- Initialize new Go-native services ---
 	server.eventBus = eventbus.New(1000)
-	systray.Start(server.eventBus)
+	if flag.Lookup("test.v") == nil {
+		systray.Start(server.eventBus)
+	}
 	memoryVS, _ := memorystore.NewVectorStore(filepath.Join(cfg.ConfigDir, "memory.db"))
 	tools.GlobalVectorStore = memoryVS
 	server.memoryReactor = memorystore.NewMemoryReactor(cfg.WorkspaceRoot, memoryVS)
