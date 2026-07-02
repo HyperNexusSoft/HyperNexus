@@ -18,8 +18,12 @@
    - Added the **OS Protocol Registry** card to Section 4 of the consolidated Dashboard UI, enabling developers to register deep link protocol hooks with a single click.
    - Rebuilt the Go sidecar binary, copied it to the workspace root, and restarted the active background daemon on port `7778` to register and process deep link routing parameters (`attach`, `create`).
 
-4. **Version Alignment & Package Sync**:
-   - Pinned all workspace project and extension package configurations to `v1.0.0-alpha.222` using the standard `sync-versions` runner.
+4. **Secure P2P Mesh Gossip Protocol Payloads (v1.0.0-alpha.223)**:
+   - Secured cross-machine memory-sharing UDP packets with industry-standard AES-GCM encryption using the local mesh shared cryptographic key default helper.
+   - Verified that both local test runners and multi-peer discovery event logs operate smoothly without decryption failures.
+
+5. **Version Alignment & Package Sync**:
+   - Pinned all workspace project and extension package configurations to `v1.0.0-alpha.223` using the standard `sync-versions` runner.
 
 ## Next Steps for Successor Models
 - **Monitor Deep Link Interactions**: Confirm that clicking custom `tormentnexus://attach?session=ID` or `tormentnexus://create?cliType=CMD&workingDirectory=DIR` links successfully dispatches actions to the local server node.
