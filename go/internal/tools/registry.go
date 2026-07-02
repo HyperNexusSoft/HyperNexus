@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/memorystore"
+	"github.com/MDMAtk/TormentNexus/internal/memorystore"
 )
 
 var GlobalVectorStore *memorystore.VectorStore

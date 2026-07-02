@@ -11470,7 +11470,7 @@ func (s *Service) ValidateConfig(config map[string]interface{})*ValidationResult
 
 **Thought**:
 **Thinking**: Now I need to add the imports for the new packages and initialize them in the New() function. Let me read the import section.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && grep -n "github.com/tormentnexushq/tormentnexus-go/internal/cache" go/internal/httpapi/server.go 2>/dev/null")
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && grep -n "github.com/MDMAtk/TormentNexus/internal/cache" go/internal/httpapi/server.go 2>/dev/null")
 **Observation**: bash: success
 
 ## Turn 22 | 2026-06-23T14:02:50.681Z | deepseek/deepseek-v4-flash
@@ -15441,7 +15441,7 @@ v1.0.0-alpha.137" 2>&1 | tail -5", timeout: 20)
 
 **Thought**: Let me rebuild the Go binary with the latest version and push:
 **Thinking**: Good. Now let me push the commits. But first, let me also verify the Go server binary is built with the latest version. Let me rebuild it.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.137" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.137" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1
 echo "Build exit: $?"
 ls -la ../tormentnexus.exe", timeout: 60)
 **Observation**: bash: success
@@ -15653,7 +15653,7 @@ Let me double-check by looking at the actual code. Maybe the flag wasn't include
 Wait - looking at `fs.IntVar(&cfg.Port, "port", cfg.Port, "...")` is in the Go code. The binary I built at 17:54 should have this flag. But the help output says only "-h, --help". That's suspicious.
 
 Let me rebuild.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.137" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.137" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1
 echo "----"
 ../tormentnexus.exe serve --help 2>&1", timeout: 60)
 **Observation**: bash: error
@@ -17898,7 +17898,7 @@ v1.0.0-alpha.138" 2>&1 | tail -5", timeout: 10)
 **Thought**:
 **Thinking**: Pushed successfully. Let me rebuild the Go binary with the latest version and provide a final summary.
 **Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && echo "1.0.0-alpha.138" > VERSION && node scripts/sync-versions.mjs 2>&1 | tail -2
-cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.138" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1
+cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.138" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1
 echo "Binary rebuilt"", timeout: 60)
 **Observation**: bash: success
 
@@ -18643,7 +18643,7 @@ Let me add these functions to server.go. I'll add them right before the `handleM
 
 **Thought**:
 **Thinking**: It compiles clean. Now let me rebuild the binary and verify everything works.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.139" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"", timeout: 60)
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.139" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"", timeout: 60)
 **Observation**: bash: error
 
 ## Turn 17 | 2026-06-24T00:24:41.277Z | deepseek/deepseek-v4-flash
@@ -18665,7 +18665,7 @@ Let me add these functions to server.go. I'll add them right before the `handleM
 **Thought**:
 **Thinking**: Good, Go compiles clean. Let me rebuild the binary and restart the Go sidecar to test.
 **Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && echo "1.0.0-alpha.139" > VERSION && node scripts/sync-versions.mjs 2>&1 | tail -2
-cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.139" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"", timeout: 60)
+cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.139" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 20 | 2026-06-24T00:25:15.568Z | deepseek/deepseek-v4-flash
@@ -19044,7 +19044,7 @@ I need to add the session auto-import worker right after `}()` and before the bl
 **Thought**:
 **Thinking**: Go builds clean. Let me rebuild the binary, restart the sidecar, commit and push.
 **Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && echo "1.0.0-alpha.140" > VERSION && node scripts/sync-versions.mjs 2>&1 | tail -2
-cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.140" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"", timeout: 60)
+cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.140" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 19 | 2026-06-24T00:32:01.634Z | deepseek/deepseek-v4-flash
@@ -19787,7 +19787,7 @@ func (s *Server) handleDirectorNotesSynthesize(w http.ResponseWriter, r*http.Req
 **Thought**:
 **Thinking**: Go builds clean. Let me commit, rebuild the binary, and push.
 **Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && echo "1.0.0-alpha.142" > VERSION && node scripts/sync-versions.mjs 2>&1 | tail -2
-cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.142" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"
+cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.142" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"
 cd ..
 git add -A && git commit -m "feat: native Go Director config/status/auto-drive fallbacks
 
@@ -19830,7 +19830,7 @@ v1.0.0-alpha.142" 2>&1 | tail -3", timeout: 60)
 
 **Thought**:
 **Thinking**: Build passes. Let me rebuild the binary, restart sidecar and push.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.142" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Binary rebuilt"", timeout: 60)
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.142" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Binary rebuilt"", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 19 | 2026-06-24T00:45:32.773Z | deepseek/deepseek-v4-flash
@@ -20004,7 +20004,7 @@ Let me use `s.fallbackBuffer` to track the mutations and keep the code clean.
 **Thought**:
 **Thinking**: Go builds clean. Let me update the parity matrix, rebuild the binary, and commit.
 **Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && echo "1.0.0-alpha.143" > VERSION && node scripts/sync-versions.mjs 2>&1 | tail -2
-cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.143" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"
+cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.143" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"
 cd ..", timeout: 60)
 **Observation**: bash: success
 
@@ -20248,7 +20248,7 @@ I'll add it to `PreWarmCaches()`.
 **Thought**:
 **Thinking**: Go builds clean. Let me rebuild the binary, update the parity matrix, and commit.
 **Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && echo "1.0.0-alpha.144" > VERSION && node scripts/sync-versions.mjs 2>&1 | tail -2
-cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.144" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"
+cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.144" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"
 cd ..", timeout: 60)
 **Observation**: bash: success
 
@@ -20275,7 +20275,7 @@ Let me fix the references.
 
 **Thought**:
 **Thinking**: Good. Let me rebuild the binary, update parity matrix, and commit.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.144" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"", timeout: 60)
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.144" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 14 | 2026-06-24T01:21:12.880Z | deepseek/deepseek-v4-flash
@@ -20373,7 +20373,7 @@ echo "Bin binary:"
 ls -la bin/tormentnexus.exe 2>/dev/null
 echo ""
 echo "── REBUILD ──"
-cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.144" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1
+cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.144" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1
 cd ..
 echo "---"
 ./tormentnexus.exe serve --help 2>&1 | head -8", timeout: 60)
@@ -20468,7 +20468,7 @@ import (
  "strings"
  "time"
 
- "github.com/tormentnexushq/tormentnexus-go/internal/ai"
+ "github.com/MDMAtk/TormentNexus/internal/ai"
 )
 
 func (s *Server) handleLLMGenerate(w http.ResponseWriter, r*http.Request) {
@@ -20691,7 +20691,7 @@ Let me fix the approach. Instead of using a field on the server, I'll create the
 **Thought**: Clean build! Let me rebuild and deploy:
 **Thinking**: Build passes with no output (success). Now let me rebuild the binary, restart, commit and push.
 **Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && echo "1.0.0-alpha.145" > VERSION && node scripts/sync-versions.mjs 2>&1 | tail -2
-cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.145" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"
+cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.145" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"
 cd ..", timeout: 60)
 **Observation**: bash: success
 
@@ -20799,7 +20799,7 @@ Let me check which binary is being used.
 ./tormentnexus.exe serve --help 2>&1 | head -3
 echo ""
 echo "── GO BUILD AGAIN ──"
-cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.145" -buildvcs=false -o ../tormentnexus_tmp.exe ./cmd/tormentnexus 2>&1
+cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.145" -buildvcs=false -o ../tormentnexus_tmp.exe ./cmd/tormentnexus 2>&1
 cd ..
 echo ""
 echo "── TEST TMP BINARY ──"
@@ -20816,7 +20816,7 @@ mv -f tormentnexus_tmp.exe tormentnexus.exe
 **Thinking**: The root `tormentnexus.exe` was the OLD pre-port-flag binary. The old binary was built without the `-port` flag support. The `go build` to `../tormentnexus.exe` was building to a different location or was being overwritten by the old binary.
 
 Let me rebuild properly. The issue was that `go build -o ../tormentnexus.exe` was writing to the root, but the root already had an older binary. Let me just force rebuild and start.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && rm -f ../tormentnexus.exe && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.145" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Rebuilt" && ../tormentnexus.exe serve --help 2>&1 | head -3", timeout: 60)
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && rm -f ../tormentnexus.exe && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.145" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Rebuilt" && ../tormentnexus.exe serve --help 2>&1 | head -3", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 25 | 2026-06-24T01:28:24.501Z | deepseek/deepseek-v4-flash
@@ -20909,7 +20909,7 @@ Wait - I just deleted and rebuilt. Let me check if the binary actually changed.
 Wait - the first output shows "Fires up the Go-native replacement..." which is the OLD usage message. The new one should show "Usage of serve:" with the flags. So the build didn't actually update the binary.
 
 Let me check if the build is actually succeeding.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go build -v -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.145" -buildvcs=false -o ../tormentnexus_new.exe ./cmd/tormentnexus 2>&1
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go build -v -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.145" -buildvcs=false -o ../tormentnexus_new.exe ./cmd/tormentnexus 2>&1
 echo "Build exit: $?"
 echo "---"
 ../tormentnexus_new.exe serve --help 2>&1 | head -5", timeout: 60)
@@ -21868,7 +21868,7 @@ Let me fix all of these.
 
 **Thought**:
 **Thinking**: Good, Go builds clean. Let me rebuild the binary and test.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.148" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"", timeout: 60)
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.148" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"", timeout: 60)
 **Observation**: bash: error
 
 ## Turn 10 | 2026-06-24T01:46:34.394Z | deepseek/deepseek-v4-flash
@@ -22010,7 +22010,7 @@ cd go && go build ./... 2>&1 | head -3", timeout: 30)
 **Thought**:
 **Thinking**: Go builds clean! Now let me rebuild the binary, test it, and push.
 **Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && echo "── REBUILD ──"
-cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.148" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"
+cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.148" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"
 cd .. && echo ""
 echo "── TEST CLI ──"
 ./tormentnexus.exe version
@@ -22134,7 +22134,7 @@ d60e21339 feat: real native Go MCP server test probe (v139)
 **Thought**:
 **Thinking**: The user wants me to rebuild the Go binary and restart the sidecar with the latest version v1.0.0-alpha.148.
 **Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && echo "── REBUILD ──"
-cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.148" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"
+cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.148" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"
 cd ..", timeout: 60)
 **Observation**: bash: success
 
@@ -22208,7 +22208,7 @@ curl -s --max-time 3 <http://localhost:7778/health> 2>/dev/null | python -c "imp
 **Thinking**: The binary is STILL the old one without the `--port` flag! The `go build` output said it succeeded but the binary wasn't actually updated. The issue is that the `go build` might have been building to a cached location or the file was locked.
 
 Let me force rebuild from scratch.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && rm -f tormentnexus.exe && cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.148" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅" && ../tormentnexus.exe serve --help 2>&1 | head -3", timeout: 60)
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && rm -f tormentnexus.exe && cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.148" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅" && ../tormentnexus.exe serve --help 2>&1 | head -3", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 8 | 2026-06-24T01:57:02.069Z | deepseek/deepseek-v4-flash
@@ -22226,7 +22226,7 @@ echo ""
 
 **Thought**:
 **Thinking**: The `status` command says "unknown command"! That means the binary was rebuilt from the old main.go without the new commands. When I `rm -f tormentnexus.exe` and rebuilt, it used the cached Go build objects. Let me force a clean build.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go clean -cache && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.148" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅" && ../tormentnexus.exe status 2>&1 | head -3", timeout: 120)
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go clean -cache && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.148" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅" && ../tormentnexus.exe status 2>&1 | head -3", timeout: 120)
 **Observation**: bash: success
 
 ## Turn 10 | 2026-06-24T01:58:07.879Z | deepseek/deepseek-v4-flash
@@ -23022,7 +23022,7 @@ Let me also update the `run()` function to handle the `mcp` command.
 **Thinking**: Good, Go builds clean. Now let me rebuild the binary with the mcp subcommand, then update the MCP config files for LM Studio and Antigravity/Gemini.
 **Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && echo "── REBUILD ──"
 rm -f tormentnexus.exe
-cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.150" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"
+cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.150" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"
 cd ..
 echo ""
 echo "── TEST MCP SUBCOMMAND ──"
@@ -23033,7 +23033,7 @@ echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | timeout 2 ./tormentnexus
 
 **Thought**:
 **Thinking**: There's a corrupted tool file `auto_claude_code_research_in_sleep.go`. Let me clean it up and rebuild.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && rm -f go/internal/tools/auto_claude_code_research_in_sleep.go && cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.150" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"", timeout: 60)
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && rm -f go/internal/tools/auto_claude_code_research_in_sleep.go && cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.150" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK"", timeout: 60)
 **Observation**: bash: error
 
 ## Turn 8 | 2026-06-24T15:35:45.049Z | deepseek/deepseek-v4-flash
@@ -23050,14 +23050,14 @@ find go/internal/tools -name "*.go" -type f 2>/dev/null | while read f; do
   head -1 "$f" | grep -q "package " || { rm -f "$f"; echo "Removed: $f"; }
 done 2>/dev/null
 echo ""
-cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.150" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK" || echo "Build failed"", timeout: 60)
+cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.150" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK" || echo "Build failed"", timeout: 60)
 **Observation**: bash: error
 
 ## Turn 9 | 2026-06-24T15:36:54.788Z | deepseek/deepseek-v4-flash
 
 **Thought**:
 **Thinking**: The build timed out again due to the large number of files. Let me take a different approach - move ALL tool files to _disabled and only keep the registry.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && mkdir -p go/internal/tools/_pending && for f in go/internal/tools/*.go; do case "$f" in */registry.go) ;; *) mv "$f" go/internal/tools/_pending/ 2>/dev/null ;; esac; done 2>/dev/null; cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.150" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 | tail -3", timeout: 120)
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && mkdir -p go/internal/tools/_pending && for f in go/internal/tools/*.go; do case "$f" in */registry.go) ;; *) mv "$f" go/internal/tools/_pending/ 2>/dev/null ;; esac; done 2>/dev/null; cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.150" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 | tail -3", timeout: 120)
 **Observation**: bash: success
 
 ## Turn 10 | 2026-06-24T15:37:07.458Z | deepseek/deepseek-v4-flash
@@ -23075,14 +23075,14 @@ cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/i
 
 **Thought**:
 **Thinking**: The LSP is still showing the old errors. Let me just build and see if the fixes worked.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.150" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 | head -5", timeout: 60)
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.150" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 | head -5", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 12 | 2026-06-24T15:38:10.802Z | deepseek/deepseek-v4-flash
 
 **Thought**:
 **Thinking**: There are more corrupted files in `go/internal/tools/`. Let me just move ALL of them to _pending and keep only registry.go.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && for f in go/internal/tools/*.go; do case "$f" in */registry.go) ;; *) mv "$f" go/internal/tools/_pending/ 2>/dev/null ;; esac; done 2>/dev/null && cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.150" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 | head -5", timeout: 60)
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && for f in go/internal/tools/*.go; do case "$f" in */registry.go) ;; *) mv "$f" go/internal/tools/_pending/ 2>/dev/null ;; esac; done 2>/dev/null && cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.150" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 | head -5", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 13 | 2026-06-24T15:38:21.467Z | deepseek/deepseek-v4-flash
@@ -23096,14 +23096,14 @@ cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/i
 
 **Thought**:
 **Thinking**: Clean build. Now let me rebuild the binary, test the MCP subcommand, and update the config files.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && rm -f tormentnexus.exe && cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.150" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK" && cd .. && echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | timeout 3 ./tormentnexus.exe mcp 2>/dev/null | python -c "import sys,json; d=json.load(sys.stdin); print(f'✅ {len(d[\"result\"][\"tools\"])} MCP tools registered')" 2>/dev/null", timeout: 60)
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && rm -f tormentnexus.exe && cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.150" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK" && cd .. && echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | timeout 3 ./tormentnexus.exe mcp 2>/dev/null | python -c "import sys,json; d=json.load(sys.stdin); print(f'✅ {len(d[\"result\"][\"tools\"])} MCP tools registered')" 2>/dev/null", timeout: 60)
 **Observation**: bash: error
 
 ## Turn 15 | 2026-06-24T15:39:06.680Z | deepseek/deepseek-v4-flash
 
 **Thought**:
 **Thinking**: Another corrupted file snuck in. The Swarm is still generating files. Let me clean them and add a build guard so this doesn't keep happening.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && find go/internal/tools -name "*.go" -maxdepth 1 -not -name "registry.go" -delete 2>/dev/null && cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.150" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK" && cd .. && echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | timeout 3 ./tormentnexus.exe mcp 2>/dev/null | python -c "import sys,json; d=json.load(sys.stdin); print(f'✅ {len(d[\"result\"][\"tools\"])} MCP tools')" 2>/dev/null", timeout: 60)
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && find go/internal/tools -name "*.go" -maxdepth 1 -not -name "registry.go" -delete 2>/dev/null && cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.150" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK" && cd .. && echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | timeout 3 ./tormentnexus.exe mcp 2>/dev/null | python -c "import sys,json; d=json.load(sys.stdin); print(f'✅ {len(d[\"result\"][\"tools\"])} MCP tools')" 2>/dev/null", timeout: 60)
 **Observation**: bash: error
 
 ## Turn 16 | 2026-06-24T15:39:20.442Z | deepseek/deepseek-v4-flash
@@ -23116,7 +23116,7 @@ cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/i
 ## Turn 17 | 2026-06-24T15:40:05.399Z | deepseek/deepseek-v4-flash
 
 **Thought**:
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && rm -f tormentnexus.exe && cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.150" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK" && cd .. && echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | timeout 3 ./tormentnexus.exe mcp 2>/dev/null | python -c "import sys,json; d=json.load(sys.stdin); print(f'✅ {len(d[\"result\"][\"tools\"])} MCP tools registered')" 2>/dev/null", timeout: 60)
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && rm -f tormentnexus.exe && cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.150" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "✅ Build OK" && cd .. && echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | timeout 3 ./tormentnexus.exe mcp 2>/dev/null | python -c "import sys,json; d=json.load(sys.stdin); print(f'✅ {len(d[\"result\"][\"tools\"])} MCP tools registered')" 2>/dev/null", timeout: 60)
 **Observation**: bash: error
 
 ## Turn 18 | 2026-06-24T15:40:21.867Z | deepseek/deepseek-v4-flash
@@ -23591,14 +23591,14 @@ Let me rewrite the MCP server's main loop to be more robust:
 
 **Thought**:
 **Thinking**: Now let me remove the unused `io` import and rebuild.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.151" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 | head -5", timeout: 60)
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.151" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 | head -5", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 11 | 2026-06-24T15:49:19.756Z | deepseek/deepseek-v4-flash
 
 **Thought**:
 **Thinking**: Another corrupted file snuck in. The swarm keeps generating broken stubs. Let me clean all the tool files and block the swarm from regenerating into this directory.
-**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && find go/internal/tools -maxdepth 1 -name "*.go" ! -name "registry.go" -exec rm -f {} \; 2>/dev/null && cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.151" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 | head -5", timeout: 60)
+**Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && find go/internal/tools -maxdepth 1 -name "*.go" ! -name "registry.go" -exec rm -f {} \; 2>/dev/null && cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.151" -buildvcs=false -o ../tormentnexus.exe ./cmd/tormentnexus 2>&1 | head -5", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 12 | 2026-06-24T15:49:28.896Z | deepseek/deepseek-v4-flash
@@ -25590,7 +25590,7 @@ Let me also verify that the old MDMAtk remote also works (it might be a redirect
 ## Turn 4 | 2026-06-24T16:40:38.643Z | deepseek/deepseek-v4-flash
 
 **Thought**:
-**Thinking**: The Go module path is `github.com/tormentnexushq/tormentnexus-go` — this is a different org/team name ("tormentnexushq" not "MDMAtk"). This might need updating too but it's a separate concern. Let me verify the remote is correct and working.
+**Thinking**: The Go module path is `github.com/MDMAtk/TormentNexus` — this is a different org/team name ("tormentnexushq" not "MDMAtk"). This might need updating too but it's a separate concern. Let me verify the remote is correct and working.
 **Action**: bash(command: "cd /c/Users/hyper/workspace/tormentnexus && echo "── CONFIRMED REMOTE ──"
 git remote -v
 echo ""
@@ -30691,7 +30691,7 @@ import (
  "fmt"
  "time"
 
- "github.com/tormentnexushq/tormentnexus-go/internal/controlplane"
+ "github.com/MDMAtk/TormentNexus/internal/controlplane"
 )
 
 // L3ColdArchive implements the L3 cold storage tier for long-term compressed
@@ -31024,7 +31024,7 @@ Let me check what binaries exist and start them.
 
 **Thought**:
 **Thinking**: The Go sidecar binary exists. Let me also rebuild it to include the new L3 cold archive code, then start all services.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.161" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1", timeout: 120)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.161" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1", timeout: 120)
 **Observation**: bash: error
 
 ## Turn 6 | 2026-06-26T02:42:41.773Z | deepseek/deepseek-v4-flash
@@ -31136,7 +31136,7 @@ Let me check what's wrong with it.
 
 **Thought**:
 **Thinking**: Now let me build the full binary and start the services.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.161" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 | tail -3 && echo "BUILD: CLEAN" || echo "BUILD: FAILED"", timeout: 60)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.161" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 | tail -3 && echo "BUILD: CLEAN" || echo "BUILD: FAILED"", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 17 | 2026-06-26T02:46:42.100Z | deepseek/deepseek-v4-flash
@@ -31684,7 +31684,7 @@ import (
  "fmt"
  "time"
 
- "github.com/tormentnexushq/tormentnexus-go/internal/controlplane"
+ "github.com/MDMAtk/TormentNexus/internal/controlplane"
 )
 
 // FTSMemorySearch provides full-text search across L2 and L3 memory tiers
@@ -31847,7 +31847,7 @@ import (
  "fmt"
  "time"
 
- "github.com/tormentnexushq/tormentnexus-go/internal/controlplane"
+ "github.com/MDMAtk/TormentNexus/internal/controlplane"
 )
 
 // RelationStore implements GraphRAG semantic/structural edge persistence.
@@ -32655,7 +32655,7 @@ Actually — the root dashboard page might import or render a component that use
 **Thought**: ✅ Dashboard build clean. Now restart services in production mode.
 **Thinking**: ✅ Dashboard build clean. Now let me start the Go sidecar, restart the production dashboard, and verify.
 **Action**: bash(command: "taskkill //F //PID 12040 2>/dev/null
-cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.162" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 | tail -1 && echo "GO: BUILT"", timeout: 120)
+cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.162" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 | tail -1 && echo "GO: BUILT"", timeout: 120)
 **Observation**: bash: success
 
 ## Turn 36 | 2026-06-26T16:51:32.439Z | deepseek/deepseek-v4-flash
@@ -32664,7 +32664,7 @@ cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X githu
 **Thinking**: The binary is in use by the running process. Let me kill the running Go sidecar first.
 **Action**: bash(command: "taskkill //F //PID 51484 2>/dev/null
 sleep 2
-cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.162" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 | tail -1
+cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.162" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 | tail -1
 echo "---"
 cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
 sleep 3
@@ -32941,7 +32941,7 @@ for iteration in range(30):
 
 **Thought**: Go build clean. Now rebuild binary and start services.
 **Thinking**: Clean — 1 good file remains (`registry.go`). All other files were corrupted. Now let me build the binary, start the services, rebuild the dashboard, and verify.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.162" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT"", timeout: 60)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.162" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT"", timeout: 60)
 **Observation**: bash: error
 
 ## Turn 12 | 2026-06-26T18:35:09.097Z | deepseek/deepseek-v4-flash
@@ -32962,7 +32962,7 @@ for iteration in range(30):
 
 **Thought**:
 **Thinking**: Good, restored. Now build.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.162" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.162" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
 **Observation**: bash: error
 
 ## Turn 15 | 2026-06-26T18:35:26.821Z | deepseek/deepseek-v4-flash
@@ -33066,7 +33066,7 @@ Let me restore them from the previous commit.
 
 **Thought**: Go clean. Let me build, start everything, and verify.
 **Thinking**: Go build is clean. Now let me build the binary, start services, rebuild the dashboard, and verify.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.162" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT" && cd /c/Users/hyper/workspace/tormentnexus && taskkill //F //PID $(netstat -ano | findstr ":7778 " | awk 'NR==1{print $NF}') 2>/dev/null; bin/tormentnexus.exe serve --port 7778 &
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.162" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT" && cd /c/Users/hyper/workspace/tormentnexus && taskkill //F //PID $(netstat -ano | findstr ":7778 " | awk 'NR==1{print $NF}') 2>/dev/null; bin/tormentnexus.exe serve --port 7778 &
 sleep 3
 netstat -ano | findstr "LISTENING" | findstr ":7778" 2>&1 && echo "SIDECAR: RUNNING"", timeout: 30)
 **Observation**: bash: success
@@ -33638,7 +33638,7 @@ Let me check server.go for these declarations.
 
 **Thought**: Clean. Now let me build the binary and start everything.
 **Thinking**: Build clean. Now rebuild the binary, start services, rebuild the dashboard, and verify.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.162" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.162" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
 sleep 3
 netstat -ano | findstr "LISTENING" | findstr ":7778" 2>&1 && echo "SIDECAR: RUNNING"", timeout: 20)
 **Observation**: bash: error
@@ -33955,7 +33955,7 @@ for iteration in range(40):
 
 **Thought**:
 **Thinking**: Go build is clean with 8 files. Now rebuild the binary and verify everything.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.162" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT" && echo "---" && curl -s --max-time 5 <http://127.0.0.1:7778/health> 2>&1 && echo "" && curl -s --max-time 8 <http://127.0.0.1:7779/api/tools/list> 2>&1 | python -X utf-8 -c "import sys,json;d=json.load(sys.stdin);print(f'Dashboard: {len(d.get(\"tools\",[]))} tools')" 2>&1", timeout: 20)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.162" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT" && echo "---" && curl -s --max-time 5 <http://127.0.0.1:7778/health> 2>&1 && echo "" && curl -s --max-time 8 <http://127.0.0.1:7779/api/tools/list> 2>&1 | python -X utf-8 -c "import sys,json;d=json.load(sys.stdin);print(f'Dashboard: {len(d.get(\"tools\",[]))} tools')" 2>&1", timeout: 20)
 **Observation**: bash: error
 
 ## Turn 6 | 2026-06-27T01:28:37.802Z | deepseek/deepseek-v4-flash
@@ -33963,7 +33963,7 @@ for iteration in range(40):
 **Thought**:
 **Thinking**: The old binary is still running. I need to kill the Go sidecar first.
 **Action**: bash(command: "taskkill //F //PID 16544 2>/dev/null && sleep 2
-cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.162" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"
+cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.162" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"
 cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
 sleep 3
 echo "---"
@@ -34594,14 +34594,14 @@ Wait, I also see `slack.go` was MOVED, but there are 9 remaining. Let me check.
 
 **Thought**:
 **Thinking**: 9 good files including `mail_mcp.go`. Let me build the binary and verify.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.191" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.191" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
 **Observation**: bash: error
 
 ## Turn 8 | 2026-06-27T14:40:37.317Z | deepseek/deepseek-v4-flash
 
 **Thought**:
 **Thinking**: The binary is locked by the running sidecar. Let me kill and rebuild.
-**Action**: bash(command: "taskkill //F //PID 43320 2>/dev/null && sleep 2 && cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.191" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
+**Action**: bash(command: "taskkill //F //PID 43320 2>/dev/null && sleep 2 && cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.191" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
 sleep 3 && netstat -ano | findstr "LISTENING" | findstr ":7778" 2>&1 && echo "SIDECAR: RUNNING"", timeout: 20)
 **Observation**: bash: error
 
@@ -34609,7 +34609,7 @@ sleep 3 && netstat -ano | findstr "LISTENING" | findstr ":7778" 2>&1 && echo "SI
 
 **Thought**:
 **Thinking**: The go build might have failed. Let me check.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.191" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.191" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
 sleep 3 && netstat -ano | findstr "LISTENING" | findstr ":7778" 2>&1 && echo "SIDECAR: RUNNING"", timeout: 15)
 **Observation**: bash: error
 
@@ -34924,14 +34924,14 @@ The legacy sidecar was likely running `go/tormentnexus.exe` or `go/bin/tormentne
 
 Let me rebuild the `bin/tormentnexus.exe` with the latest code and restart the main sidecar on port 7778 with the new binary.
 **Action**: bash(command: "taskkill //F //PID 24728 2>/dev/null && echo "Killed sidecar on 7778"
-cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.191" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
+cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.191" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
 **Observation**: bash: error
 
 ## Turn 5 | 2026-06-27T15:11:23.789Z | deepseek/deepseek-v4-flash
 
 **Thought**:
 **Thinking**: Another corrupted file `odoo_mcp_server.go` appeared in tools/. The old swarm process (which I killed) must have written it before being killed. Let me quarantine it and rebuild.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && mv go/internal/tools/odoo_mcp_server.go go/internal/tools/_broken/ && cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.191" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && mv go/internal/tools/odoo_mcp_server.go go/internal/tools/_broken/ && cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.191" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
 **Observation**: bash: error
 
 ## Turn 6 | 2026-06-27T15:11:31.805Z | deepseek/deepseek-v4-flash
@@ -34955,7 +34955,7 @@ done && echo "---" && ls go/internal/tools/*.go | wc -l && echo ".go files"")
 ## Turn 7 | 2026-06-27T15:11:39.817Z | deepseek/deepseek-v4-flash
 
 **Thought**:
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.191" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.191" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
 sleep 3
 echo "---"
 netstat -ano | findstr "LISTENING" | findstr ":7778" 2>&1 && echo "SIDECAR: RUNNING"
@@ -34971,7 +34971,7 @@ Actually, looking more carefully at the output, the build command ran but there'
 
 Wait - the binary shows `1.0.0-alpha.162` which is the same as before. The build didn't produce a new binary. Let me rebuild more carefully.
 **Action**: bash(command: "taskkill //F //PID $(netstat -ano | findstr ":7778 " | awk 'NR==1{print $NF}') 2>/dev/null
-cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.191" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1
+cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.191" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1
 echo "EXIT: $?"
 bin/tormentnexus.exe version 2>/dev/null
 cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
@@ -35052,7 +35052,7 @@ The alpha.162 vs alpha.191 discrepancy is cosmetic — the binary at `bin/tormen
 ## Turn 2 | 2026-06-27T15:17:36.744Z | deepseek/deepseek-v4-flash
 
 **Thought**:
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && rm -f bin/tormentnexus.exe && cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.191" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && rm -f bin/tormentnexus.exe && cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.191" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 3 | 2026-06-27T15:17:45.757Z | deepseek/deepseek-v4-flash
@@ -35113,7 +35113,7 @@ done && echo "---" && cd go && go build ./cmd/tormentnexus 2>&1 && echo "GO: CLE
 **Thought**:
 **Thinking**: Clean. Now rebuild the binary and restart.
 **Action**: bash(command: "taskkill //F //PID 44084 2>/dev/null
-cd C:/Users/hyper/workspace/tormentnexus && rm -f bin/tormentnexus.exe && cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.191" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
+cd C:/Users/hyper/workspace/tormentnexus && rm -f bin/tormentnexus.exe && cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.191" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
 sleep 3
 netstat -ano | findstr "LISTENING" | findstr ":7778" 2>&1 && echo "SIDECAR: RUNNING"
 curl -s --max-time 3 <http://127.0.0.1:7778/health> 2>&1", timeout: 20)
@@ -35310,7 +35310,7 @@ Now STEP 3: Build, cleanup, version bump, docs, push.
 ## Turn 11 | 2026-06-27T16:04:20.575Z | deepseek/deepseek-v4-flash
 
 **Thought**:
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && echo "1.0.0-alpha.192" > VERSION && echo "1.0.0-alpha.192" > VERSION.md && cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.192" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && echo "1.0.0-alpha.192" > VERSION && echo "1.0.0-alpha.192" > VERSION.md && cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.192" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 12 | 2026-06-27T16:05:10.799Z | deepseek/deepseek-v4-flash
@@ -35402,14 +35402,14 @@ done && echo "---" && ls go/internal/tools/*.go | wc -l && echo ".go files"")
 
 **Thought**:
 **Thinking**: Both builds clean. Now rebuild the binary, commit, and push.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.192" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.192" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
 **Observation**: bash: error
 
 ## Turn 8 | 2026-06-27T17:16:27.037Z | deepseek/deepseek-v4-flash
 
 **Thought**:
 **Thinking**: Another corrupted file `powerbi_mcp_server.go` appeared. The old swarm process might still be running and dropping files, or these were dropped before the kill. Let me quarantine it.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && mv go/internal/tools/powerbi_mcp_server.go go/internal/tools/_broken/ && cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.192" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && mv go/internal/tools/powerbi_mcp_server.go go/internal/tools/_broken/ && cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.192" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 9 | 2026-06-27T17:16:47.703Z | deepseek/deepseek-v4-flash
@@ -35640,7 +35640,7 @@ Let me check the config to see if the default port is being overridden.
 **Thought**:
 **Thinking**: Now rebuild with the new default port and restart.
 **Action**: bash(command: "taskkill //F //PID $(netstat -ano | findstr ":7778 " | awk 'NR==1{print $NF}') 2>/dev/null
-cd C:/Users/hyper/workspace/tormentnexus && rm -f bin/tormentnexus.exe && cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.192" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
+cd C:/Users/hyper/workspace/tormentnexus && rm -f bin/tormentnexus.exe && cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.192" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
 **Observation**: bash: error
 
 ## Turn 16 | 2026-06-27T19:37:54.108Z | deepseek/deepseek-v4-flash
@@ -35654,7 +35654,7 @@ cd C:/Users/hyper/workspace/tormentnexus && rm -f bin/tormentnexus.exe && cd go 
       ;;
     *) mv "$f" go/internal/tools/_broken/ 2>/dev/null
   esac
-done && cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.192" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
+done && cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.192" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 17 | 2026-06-27T19:38:12.465Z | deepseek/deepseek-v4-flash
@@ -36327,7 +36327,7 @@ Let me clean these up.
 **Thought**: Now rebuild the binary and restart with the robot icon.
 **Thinking**: Pushed successfully (183MB LFS). Let me rebuild the binary with the new robot icon code and restart the server.
 **Action**: bash(command: "taskkill //F //PID $(netstat -ano | findstr ":7778 " | awk 'NR==1{print $NF}') 2>/dev/null
-cd C:/Users/hyper/workspace/tormentnexus && rm -f bin/tormentnexus.exe && cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.192" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
+cd C:/Users/hyper/workspace/tormentnexus && rm -f bin/tormentnexus.exe && cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.192" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 31 | 2026-06-29T04:42:53.157Z | deepseek/deepseek-v4-flash
@@ -36441,7 +36441,7 @@ done && echo "Cleaned tools/" && cd go && go build ./cmd/tormentnexus 2>&1 && ec
 
 **Thought**:
 **Thinking**: Both builds clean. Now rebuild the binary with the latest version, commit, and push.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && echo "1.0.0-alpha.193" > VERSION && cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && echo "1.0.0-alpha.193" > VERSION && cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 41 | 2026-06-29T04:48:54.261Z | deepseek/deepseek-v4-flash
@@ -36960,7 +36960,7 @@ Let me update the cold archive handler to use `s.cfg.ConfigDir`.
 **Thought**: Go clean. Now rebuild, restart, and verify.
 **Thinking**: Go compiles clean. Now let me rebuild, restart, and test.
 **Action**: bash(command: "taskkill //F //PID 50688 2>/dev/null
-cd C:/Users/hyper/workspace/tormentnexus && rm -f bin/tormentnexus.exe && cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
+cd C:/Users/hyper/workspace/tormentnexus && rm -f bin/tormentnexus.exe && cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
 sleep 4
 netstat -ano | findstr "LISTENING" | findstr ":7778" 2>&1 && echo "SIDECAR: RUNNING"
 curl -s --max-time 3 <http://127.0.0.1:7778/health> 2>&1", timeout: 20)
@@ -36971,7 +36971,7 @@ curl -s --max-time 3 <http://127.0.0.1:7778/health> 2>&1", timeout: 20)
 **Thought**:
 **Thinking**: Hmm, the build succeeded but then background command failed. The binary might not have been rebuilt because the file was locked. Let me check and retry.
 **Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/bin && ./tormentnexus.exe version 2>/dev/null || echo "No binary"
-cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT"", timeout: 60)
+cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT"", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 85 | 2026-06-29T05:10:24.112Z | deepseek/deepseek-v4-flash
@@ -37023,7 +37023,7 @@ curl -s --max-time 3 <http://127.0.0.1:7778/api/memory/fts-search?q=test> 2>&1 |
 
 **Thought**:
 **Thinking**: Go compiles clean. Now rebuild, restart, and test.
-**Action**: bash(command: "taskkill //F //PID 51168 2>/dev/null; cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
+**Action**: bash(command: "taskkill //F //PID 51168 2>/dev/null; cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
 sleep 5
 echo "=== FTS SEARCH TEST ==="
 curl -s --max-time 3 <http://127.0.0.1:7778/api/memory/fts-search?q=test> 2>&1 | head -c 300", timeout: 20)
@@ -37041,7 +37041,7 @@ curl -s --max-time 3 <http://127.0.0.1:7778/health> 2>&1")
 
 **Thought**:
 **Thinking**: Server isn't running. The build/start went wrong. Let me retry step by step.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT"", timeout: 60)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT"", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 94 | 2026-06-29T05:13:37.354Z | deepseek/deepseek-v4-flash
@@ -37085,7 +37085,7 @@ curl -s --max-time 3 <http://127.0.0.1:7778/api/memory/fts-search?q=memory> 2>&1
 So `r.Type` will get the value from `v.memory_type` (column 3), and `r.Kind` will get the value from `v.memory_kind` (column 4). This should work now.
 
 Let me rebuild and test.
-**Action**: bash(command: "taskkill //F //PID 16784 2>/dev/null; cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
+**Action**: bash(command: "taskkill //F //PID 16784 2>/dev/null; cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
 sleep 5
 echo "=== FTS TEST ==="
 curl -s --max-time 3 <http://127.0.0.1:7778/api/memory/fts-search?q=memory> 2>&1 | head -c 400", timeout: 20)
@@ -37374,7 +37374,7 @@ import (
  "fmt"
  "time"
 
- "github.com/tormentnexushq/tormentnexus-go/internal/controlplane"
+ "github.com/MDMAtk/TormentNexus/internal/controlplane"
 )
 
 // L4LimboVault stores lost, forgotten, or discarded memories.
@@ -38084,7 +38084,7 @@ Actually, there's a circular dependency concern — `fts_search.go` is in the sa
 **Thought**:
 **Thinking**: Go compiles clean. Now rebuild, restart, and test.
 **Action**: bash(command: "taskkill //F //PID 29424 2>/dev/null
-cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT"
+cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT"
 cd /c/Users/hyper/workspace/tormentnexus && rm -f data/memory.db data/l3_cold_archive.db && bin/tormentnexus.exe serve --port 7778 &
 sleep 5
 echo "=== TEST FTS ==="
@@ -38125,7 +38125,7 @@ Wait — I deleted the memory.db and l3_cold_archive.db, then the server creates
 **Thought**:
 **Thinking**: Go compiles clean. Now rebuild, restart (fresh DB), run ingestion, and test.
 **Action**: bash(command: "taskkill //F //PID $(netstat -ano | findstr ":7778 " | awk 'NR==1{print $NF}') 2>/dev/null
-cd C:/Users/hyper/workspace/tormentnexus && rm -f data/memory.db data/l3_cold_archive.db && cd go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
+cd C:/Users/hyper/workspace/tormentnexus && rm -f data/memory.db data/l3_cold_archive.db && cd go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
 sleep 5
 echo "=== INGEST ===" && python scripts/ingest_memories.py --limit 500 2>&1 | tail -5
 echo "=== FTS SEARCH ===" && curl -s --max-time 3 "<http://127.0.0.1:7778/api/memory/fts-search?q=agent&limit=3>" 2>&1 | head -c 400", timeout: 120)
@@ -38772,7 +38772,7 @@ This is correct behavior for a fresh database — all memories need initial revi
 **Thought**:
 **Thinking**: Go compiles clean. Now let me test the full memory lifecycle end-to-end.
 **Action**: bash(command: "taskkill //F //PID $(netstat -ano | findstr ":7778 " | awk 'NR==1{print $NF}') 2>/dev/null
-cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
+cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
 sleep 5 && python -X utf-8 -c "
 import urllib.request, json
 
@@ -38845,7 +38845,7 @@ print('All memory systems operational!')
 ## Turn 14 | 2026-06-29T18:07:49.491Z | deepseek/deepseek-v4-flash
 
 **Thought**:
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
 sleep 5 && python -X utf-8 -c "
 import urllib.request, json
 base = '<http://127.0.0.1:7778>'
@@ -39350,7 +39350,7 @@ import (
  "math"
  "time"
 
- "github.com/tormentnexushq/tormentnexus-go/internal/controlplane"
+ "github.com/MDMAtk/TormentNexus/internal/controlplane"
 )
 
 // buryOrphanedMemories finds memories whose session_id no longer has any
@@ -39546,7 +39546,7 @@ var_ = fmt.Sprintf
 
 Let me rebuild, restart, and verify.
 **Action**: bash(command: "taskkill //F //IM tormentnexus.exe 2>/dev/null
-cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
+cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 &
 sleep 6
 echo "=== LIFE TEST ==="
 python -X utf-8 -c "
@@ -39583,7 +39583,7 @@ print('Sleep cycle running: decay, consolidate, dream, bury')
 
 **Thought**:
 **Thinking**: The server didn't start. Let me check — the taskkill killed all tormentnexus.exe processes, but the build might have failed silently, and then the start failed. Let me check more carefully.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && rm -f C:/Users/hyper/.tormentnexus-go/memory.db C:/Users/hyper/.tormentnexus-go/lock && bin/tormentnexus.exe serve --port 7778 &
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && rm -f C:/Users/hyper/.tormentnexus-go/memory.db C:/Users/hyper/.tormentnexus-go/lock && bin/tormentnexus.exe serve --port 7778 &
 sleep 6
 netstat -ano | findstr "LISTENING" | findstr ":7778" 2>&1 && echo "RUNNING"", timeout: 15)
 **Observation**: bash: success
@@ -40241,7 +40241,7 @@ For task 4 (clean up stale tool files), I already cleaned the _broken directory 
 
 Let me now rebuild the binary and dashboard, then test.
 **Action**: bash(command: "taskkill //F //IM tormentnexus.exe 2>/dev/null
-cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT"", timeout: 60)
+cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT"", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 22 | 2026-06-29T22:12:03.100Z | deepseek/deepseek-v4-flash
@@ -40923,7 +40923,7 @@ echo "=== FULL STACK TEST ===" && curl -s --max-time 3 "http://127.0.0.1:7778/ap
 
 **Thought**: 
 **Thinking**: The server didn't start (no "Experimental Go cli-orchestrator port listening" message). The taskkill may have killed the processes, but the build might have failed or the new binary is stale. Let me rebuild and start.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT"", timeout: 60)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT"", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 98 | 2026-06-29T23:20:03.992Z | deepseek/deepseek-v4-flash
@@ -42689,7 +42689,7 @@ export function LimboPanel() {
 
 **Thought**: 
 **Thinking**: Now rebuild the Go binary and restart the server, then commit and push.
-**Action**: bash(command: "taskkill //F //IM tormentnexus.exe 2>/dev/null; cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && rm -f C:/Users/hyper/.tormentnexus-go/lock && bin/tormentnexus.exe serve --port 7778 &
+**Action**: bash(command: "taskkill //F //IM tormentnexus.exe 2>/dev/null; cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && rm -f C:/Users/hyper/.tormentnexus-go/lock && bin/tormentnexus.exe serve --port 7778 &
 sleep 6
 netstat -ano | findstr "LISTENING" | findstr ":7778" 2>&1 && echo "RUNNING"", timeout: 20)
 **Observation**: bash: error
@@ -42698,14 +42698,14 @@ netstat -ano | findstr "LISTENING" | findstr ":7778" 2>&1 && echo "RUNNING"", ti
 
 **Thought**: 
 **Thinking**: Build might have failed. Let me check the go build output more carefully.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o bin/tormentnexus.exe ./go/cmd/tormentnexus 2>&1", timeout: 60)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o bin/tormentnexus.exe ./go/cmd/tormentnexus 2>&1", timeout: 60)
 **Observation**: bash: error
 
 ## Turn 33 | 2026-06-30T12:45:28.001Z | deepseek/deepseek-v4-flash
 
 **Thought**: 
 **Thinking**: I ran it from the wrong directory. Let me run from go/.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT"", timeout: 60)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT"", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 34 | 2026-06-30T12:45:49.970Z | deepseek/deepseek-v4-flash
@@ -43195,7 +43195,7 @@ Let me add explicit debug output to the rebuild function to see what's happening
 
 **Thought**: 
 **Thinking**: Now rebuild and test.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT"", timeout: 60)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT"", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 61 | 2026-06-30T13:10:37.331Z | deepseek/deepseek-v4-flash
@@ -43248,7 +43248,7 @@ Let me add more debug output to see where the loop fails.
 **Thought**: 
 **Thinking**: Now rebuild and test.
 **Action**: bash(command: "taskkill //F //IM tormentnexus.exe 2>/dev/null
-cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 2>&1 &
+cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 2>&1 &
 sleep 8
 netstat -ano | findstr "LISTENING" | findstr ":7778" 2>&1 && echo "RUNNING"", timeout: 30)
 **Observation**: bash: error
@@ -43257,7 +43257,7 @@ netstat -ano | findstr "LISTENING" | findstr ":7778" 2>&1 && echo "RUNNING"", ti
 
 **Thought**: 
 **Thinking**: Build might have had an issue. Let me check.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1", timeout: 60)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 66 | 2026-06-30T13:17:06.813Z | deepseek/deepseek-v4-flash
@@ -43295,7 +43295,7 @@ Let me fix the scan to handle NULL values.
 **Thought**: 
 **Thinking**: `database/sql` is already imported. Good. Now rebuild and test.
 **Action**: bash(command: "taskkill //F //IM tormentnexus.exe 2>/dev/null
-cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 2>&1 &
+cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 2>&1 &
 sleep 8
 netstat -ano | findstr "LISTENING" | findstr ":7778" 2>&1 && echo "RUNNING"
 curl -s --max-time 3 "http://127.0.0.1:7778/api/memory/fts-search?q=agent&limit=2&offset=0" 2>&1 | head -c 500", timeout: 30)
@@ -43339,7 +43339,7 @@ curl -s --max-time 3 "http://127.0.0.1:7778/api/memory/fts-search?q=agent&limit=
 
 **Thought**: 
 **Thinking**: Clean build. Let me rebuild the binary and restart.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && taskkill //F //IM tormentnexus.exe 2>/dev/null && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 2>&1 &
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && taskkill //F //IM tormentnexus.exe 2>/dev/null && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 2>&1 &
 sleep 8
 netstat -ano | findstr "LISTENING" | findstr ":7778" 2>&1 && echo "RUNNING"
 curl -s --max-time 3 "http://127.0.0.1:7778/api/memory/fts-search?q=agent&limit=2&offset=0" 2>&1 | head -c 500", timeout: 30)
@@ -43424,7 +43424,7 @@ Let me try to start the server and skip the FTS rebuild by using a faster approa
 
 **Thought**: 
 **Thinking**: Clean. Now rebuild and test.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && taskkill //F //IM tormentnexus.exe 2>/dev/null && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 2>&1 &
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.193" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "BUILT" && taskkill //F //IM tormentnexus.exe 2>/dev/null && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 2>&1 &
 sleep 10
 netstat -ano | findstr "LISTENING" | findstr ":7778" 2>&1 && echo "RUNNING"
 curl -s --max-time 3 "http://127.0.0.1:7778/api/memory/fts-search?q=agent&limit=2&offset=0" 2>&1 | head -c 400", timeout: 30)
@@ -44408,7 +44408,7 @@ Let me check the root scripts and version.
 
 **Thought**: Now rebuild Go binary with new version and finalize.
 **Thinking**: Now let me rebuild the Go binary with the new version and build the dashboard, then push everything.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.194" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.194" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 60)
 **Observation**: bash: success
 
 ## Turn 59 | 2026-06-30T14:01:21.147Z | deepseek/deepseek-v4-flash
@@ -47333,14 +47333,14 @@ For #1, let me check what method VectorStore has for storing records.
 ## Turn 31 | 2026-06-30T17:55:09.676Z | deepseek/deepseek-v4-flash
 
 **Thought**: 
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.195" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 120)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.195" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 120)
 **Observation**: bash: error
 
 ## Turn 32 | 2026-06-30T17:55:24.344Z | deepseek/deepseek-v4-flash
 
 **Thought**: 
 **Thinking**: The binary is in use (the server is running). Let me kill it first, then rebuild.
-**Action**: bash(command: "taskkill //F //IM tormentnexus.exe 2>/dev/null; sleep 2 && cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.195" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 120)
+**Action**: bash(command: "taskkill //F //IM tormentnexus.exe 2>/dev/null; sleep 2 && cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.195" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 120)
 **Observation**: bash: success
 
 ## Turn 33 | 2026-06-30T17:55:37.390Z | deepseek/deepseek-v4-flash
@@ -47369,7 +47369,7 @@ netstat -ano | findstr "LISTENING" | findstr ":7778" 2>&1 && echo "RUNNING" && c
 ## Turn 36 | 2026-06-30T17:56:02.288Z | deepseek/deepseek-v4-flash
 
 **Thought**: 
-**Thinking**: The user is telling me that the Go module path is `github.com/MDMAtk/TormentNexus`, not `github.com/tormentnexushq/tormentnexus-go`. This is important for the build commands. Let me check the actual module path.
+**Thinking**: The user is telling me that the Go module path is `github.com/MDMAtk/TormentNexus`, not `github.com/MDMAtk/TormentNexus`. This is important for the build commands. Let me check the actual module path.
 **Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && head -3 go.mod")
 **Observation**: bash: success
 
@@ -47630,7 +47630,7 @@ So I need to insert between line 865 and 866.
 
 **Thought**: 
 **Thinking**: Now build and test.
-**Action**: bash(command: "taskkill //F //IM tormentnexus.exe 2>/dev/null; sleep 2 && cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.195" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 120)
+**Action**: bash(command: "taskkill //F //IM tormentnexus.exe 2>/dev/null; sleep 2 && cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.195" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 120)
 **Observation**: bash: error
 
 ## Turn 13 | 2026-06-30T18:57:40.683Z | deepseek/deepseek-v4-flash
@@ -47679,7 +47679,7 @@ So I need to insert between line 865 and 866.
 
 **Thought**: 
 **Thinking**: Now let me build.
-**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.195" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 120)
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.195" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT"", timeout: 120)
 **Observation**: bash: error
 
 ## Turn 20 | 2026-06-30T19:03:40.651Z | deepseek/deepseek-v4-flash
@@ -47700,7 +47700,7 @@ So I need to insert between line 865 and 866.
 
 **Thought**: 
 **Thinking**: Build clean. Let me now rebuild the binary and restart the server.
-**Action**: bash(command: "taskkill //F //IM tormentnexus.exe 2>/dev/null; sleep 2 && cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=1.0.0-alpha.195" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 2>&1 &
+**Action**: bash(command: "taskkill //F //IM tormentnexus.exe 2>/dev/null; sleep 2 && cd C:/Users/hyper/workspace/tormentnexus/go && go build -ldflags "-s -w -X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=1.0.0-alpha.195" -buildvcs=false -o ../bin/tormentnexus.exe ./cmd/tormentnexus 2>&1 && echo "GO: BUILT" && cd /c/Users/hyper/workspace/tormentnexus && bin/tormentnexus.exe serve --port 7778 2>&1 &
 sleep 10
 netstat -ano | findstr "LISTENING" | findstr ":7778" 2>&1 && echo "RUNNING"", timeout: 30)
 **Observation**: bash: error

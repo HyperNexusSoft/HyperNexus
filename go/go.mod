@@ -1,4 +1,4 @@
-module github.com/tormentnexushq/tormentnexus-go
+module github.com/MDMAtk/TormentNexus
 
 go 1.26
 

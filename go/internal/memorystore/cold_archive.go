@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/controlplane"
+	"github.com/MDMAtk/TormentNexus/internal/controlplane"
 )
 
 // L3ColdArchive implements the L3 cold storage tier for long-term compressed

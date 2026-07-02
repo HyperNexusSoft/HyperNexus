@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/codeexec"
-	"github.com/tormentnexushq/tormentnexus-go/internal/enterprise"
+	"github.com/MDMAtk/TormentNexus/internal/codeexec"
+	"github.com/MDMAtk/TormentNexus/internal/enterprise"
 )
 
 // handleCodeExec runs code in the process-based sandbox.

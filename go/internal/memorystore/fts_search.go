@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/controlplane"
+	"github.com/MDMAtk/TormentNexus/internal/controlplane"
 )
 
 // FTSMemorySearch provides full-text search across L2 and L3 memory tiers

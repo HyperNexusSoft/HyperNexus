@@ -30,7 +30,7 @@ fi
 # 2. Build Go sidecar
 if [ "$SKIP_GO" = false ] && command -v go &>/dev/null; then
   echo "[2/4] Building Go sidecar..."
-  (cd go && go build -ldflags "-X github.com/tormentnexushq/tormentnexus-go/internal/buildinfo.Version=${VER}" -buildvcs=false -o ../bin/tormentnexus ./cmd/tormentnexus)
+  (cd go && go build -ldflags "-X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=${VER}" -buildvcs=false -o ../bin/tormentnexus ./cmd/tormentnexus)
   echo "      ✓ bin/tormentnexus built"
 else
   echo "[2/4] Skipping Go build"

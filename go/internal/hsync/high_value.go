@@ -15,9 +15,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/ai"
-	"github.com/tormentnexushq/tormentnexus-go/internal/harnesses"
-	mcp_pkg "github.com/tormentnexushq/tormentnexus-go/internal/mcp"
+	"github.com/MDMAtk/TormentNexus/internal/ai"
+	"github.com/MDMAtk/TormentNexus/internal/harnesses"
+	mcp_pkg "github.com/MDMAtk/TormentNexus/internal/mcp"
 )
 
 type HighValueIngestor struct {

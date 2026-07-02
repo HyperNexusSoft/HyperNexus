@@ -3,7 +3,7 @@
 package systray
 
 import (
-	"github.com/tormentnexushq/tormentnexus-go/internal/eventbus"
+	"github.com/MDMAtk/TormentNexus/internal/eventbus"
 )
 
 // Start is a no-op on non-Windows platforms

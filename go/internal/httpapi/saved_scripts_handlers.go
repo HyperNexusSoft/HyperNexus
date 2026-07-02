@@ -23,7 +23,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/config"
+	"github.com/MDMAtk/TormentNexus/internal/config"
 	"github.com/google/uuid"
 )
 

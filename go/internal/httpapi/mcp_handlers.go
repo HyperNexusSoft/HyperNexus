@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/mcp"
-	"github.com/tormentnexushq/tormentnexus-go/internal/cache"
+	"github.com/MDMAtk/TormentNexus/internal/mcp"
+	"github.com/MDMAtk/TormentNexus/internal/cache"
 	roottools "github.com/NexusSoftMDMA/TormentNexus/tools"
 )
 

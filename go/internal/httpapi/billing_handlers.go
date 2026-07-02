@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/providers"
+	"github.com/MDMAtk/TormentNexus/internal/providers"
 )
 
 func (s *Server) handleBillingStatus(w http.ResponseWriter, r *http.Request) {

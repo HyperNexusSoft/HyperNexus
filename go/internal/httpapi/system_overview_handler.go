@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/buildinfo"
+	"github.com/MDMAtk/TormentNexus/internal/buildinfo"
 )
 
 // handleSystemOverview returns a unified snapshot using Go-native data

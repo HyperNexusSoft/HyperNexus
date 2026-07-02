@@ -7,11 +7,11 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/config"
-	"github.com/tormentnexushq/tormentnexus-go/internal/interop"
-	"github.com/tormentnexushq/tormentnexus-go/internal/memorystore"
-	"github.com/tormentnexushq/tormentnexus-go/internal/mesh"
-	"github.com/tormentnexushq/tormentnexus-go/internal/cache"
+	"github.com/MDMAtk/TormentNexus/internal/config"
+	"github.com/MDMAtk/TormentNexus/internal/interop"
+	"github.com/MDMAtk/TormentNexus/internal/memorystore"
+	"github.com/MDMAtk/TormentNexus/internal/mesh"
+	"github.com/MDMAtk/TormentNexus/internal/cache"
 )
 
 type StartupBlockingReason struct {

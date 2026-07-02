@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
-	"github.com/tormentnexushq/tormentnexus-go/internal/eventbus"
+	"github.com/MDMAtk/TormentNexus/internal/eventbus"
 )
 
 var upgrader = websocket.Upgrader{

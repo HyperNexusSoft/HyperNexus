@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/tools"
+	"github.com/MDMAtk/TormentNexus/internal/tools"
 )
 
 // ShellStep creates a step that runs a shell command

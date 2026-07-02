@@ -10,7 +10,7 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/eventbus"
+	"github.com/MDMAtk/TormentNexus/internal/eventbus"
 	"golang.org/x/sys/windows"
 )
 

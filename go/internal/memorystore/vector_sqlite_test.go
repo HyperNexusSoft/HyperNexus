@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/controlplane"
+	"github.com/MDMAtk/TormentNexus/internal/controlplane"
 )
 
 func TestVectorStoreAdvancedFeatures(t *testing.T) {

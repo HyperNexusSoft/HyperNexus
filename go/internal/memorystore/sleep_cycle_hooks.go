@@ -7,7 +7,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/controlplane"
+	"github.com/MDMAtk/TormentNexus/internal/controlplane"
 )
 
 // buryOrphanedMemories finds memories whose session_id no longer has any

@@ -20,13 +20,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/config"
-	"github.com/tormentnexushq/tormentnexus-go/internal/controlplane"
-	"github.com/tormentnexushq/tormentnexus-go/internal/interop"
-	"github.com/tormentnexushq/tormentnexus-go/internal/lockfile"
-	"github.com/tormentnexushq/tormentnexus-go/internal/memorystore"
-	"github.com/tormentnexushq/tormentnexus-go/internal/providers"
-	"github.com/tormentnexushq/tormentnexus-go/internal/sessionimport"
+	"github.com/MDMAtk/TormentNexus/internal/config"
+	"github.com/MDMAtk/TormentNexus/internal/controlplane"
+	"github.com/MDMAtk/TormentNexus/internal/interop"
+	"github.com/MDMAtk/TormentNexus/internal/lockfile"
+	"github.com/MDMAtk/TormentNexus/internal/memorystore"
+	"github.com/MDMAtk/TormentNexus/internal/providers"
+	"github.com/MDMAtk/TormentNexus/internal/sessionimport"
 	_ "modernc.org/sqlite"
 )
 

@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/lockfile"
+	"github.com/MDMAtk/TormentNexus/internal/lockfile"
 )
 
 func TestResolveTRPCBasesUsesConfiguredExclusivelyWhenSet(t *testing.T) {

@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/eventbus"
-	"github.com/tormentnexushq/tormentnexus-go/internal/protocol"
-	"github.com/tormentnexushq/tormentnexus-go/internal/supervisor"
+	"github.com/MDMAtk/TormentNexus/internal/eventbus"
+	"github.com/MDMAtk/TormentNexus/internal/protocol"
+	"github.com/MDMAtk/TormentNexus/internal/supervisor"
 )
 
 // handleTormentNexusProtocol handles inbound tormentnexus:// deep links passed from the OS

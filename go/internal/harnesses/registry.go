@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"sort"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/controlplane"
+	"github.com/MDMAtk/TormentNexus/internal/controlplane"
 )
 
 type Definition struct {

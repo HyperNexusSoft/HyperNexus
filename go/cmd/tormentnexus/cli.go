@@ -12,7 +12,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/buildinfo"
+	"github.com/MDMAtk/TormentNexus/internal/buildinfo"
 )
 
 type managedProcess struct {

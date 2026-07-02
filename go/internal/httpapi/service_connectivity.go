@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/config"
+	"github.com/MDMAtk/TormentNexus/internal/config"
 )
 
 // handleServiceConnectivity reports the health of connections between

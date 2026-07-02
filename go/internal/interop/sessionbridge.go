@@ -13,8 +13,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/config"
-	"github.com/tormentnexushq/tormentnexus-go/internal/lockfile"
+	"github.com/MDMAtk/TormentNexus/internal/config"
+	"github.com/MDMAtk/TormentNexus/internal/lockfile"
 )
 
 // sharedTRPCClient returns a singleton HTTP client with connection pooling

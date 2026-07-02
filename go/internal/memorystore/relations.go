@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/controlplane"
+	"github.com/MDMAtk/TormentNexus/internal/controlplane"
 )
 
 // RelationStore implements GraphRAG semantic/structural edge persistence.

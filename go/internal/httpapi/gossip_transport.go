@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/gossip"
-	"github.com/tormentnexushq/tormentnexus-go/internal/mesh"
+	"github.com/MDMAtk/TormentNexus/internal/gossip"
+	"github.com/MDMAtk/TormentNexus/internal/mesh"
 )
 
 type HTTPGossipTransport struct {

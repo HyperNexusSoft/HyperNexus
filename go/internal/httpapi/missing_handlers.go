@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/controlplane"
-	"github.com/tormentnexushq/tormentnexus-go/internal/memorystore"
-	"github.com/tormentnexushq/tormentnexus-go/internal/tools"
+	"github.com/MDMAtk/TormentNexus/internal/controlplane"
+	"github.com/MDMAtk/TormentNexus/internal/memorystore"
+	"github.com/MDMAtk/TormentNexus/internal/tools"
 )
 
 func (s *Server) handleGetMemory(w http.ResponseWriter, r *http.Request) {

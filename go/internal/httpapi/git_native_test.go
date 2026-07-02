@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/config"
+	"github.com/MDMAtk/TormentNexus/internal/config"
 )
 
 func TestSubmoduleUpdateAllFallsBackToNativeGitReport(t *testing.T) {

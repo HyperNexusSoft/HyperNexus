@@ -14,14 +14,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tormentnexushq/tormentnexus-go/internal/buildinfo"
-	"github.com/tormentnexushq/tormentnexus-go/internal/config"
-	"github.com/tormentnexushq/tormentnexus-go/internal/controlplane"
-	"github.com/tormentnexushq/tormentnexus-go/internal/httpapi"
-	"github.com/tormentnexushq/tormentnexus-go/internal/license"
-	"github.com/tormentnexushq/tormentnexus-go/internal/lockfile"
-	"github.com/tormentnexushq/tormentnexus-go/internal/protocol"
-	"github.com/tormentnexushq/tormentnexus-go/internal/sessionimport"
+	"github.com/MDMAtk/TormentNexus/internal/buildinfo"
+	"github.com/MDMAtk/TormentNexus/internal/config"
+	"github.com/MDMAtk/TormentNexus/internal/controlplane"
+	"github.com/MDMAtk/TormentNexus/internal/httpapi"
+	"github.com/MDMAtk/TormentNexus/internal/license"
+	"github.com/MDMAtk/TormentNexus/internal/lockfile"
+	"github.com/MDMAtk/TormentNexus/internal/protocol"
+	"github.com/MDMAtk/TormentNexus/internal/sessionimport"
 	"path/filepath"
 )
 

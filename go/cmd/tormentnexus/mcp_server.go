@@ -15,9 +15,9 @@ import (
 	"time"
 
 	roottools "github.com/NexusSoftMDMA/TormentNexus/tools"
-	"github.com/tormentnexushq/tormentnexus-go/internal/config"
-	"github.com/tormentnexushq/tormentnexus-go/internal/lockfile"
-	"github.com/tormentnexushq/tormentnexus-go/internal/mcpimpl"
+	"github.com/MDMAtk/TormentNexus/internal/config"
+	"github.com/MDMAtk/TormentNexus/internal/lockfile"
+	"github.com/MDMAtk/TormentNexus/internal/mcpimpl"
 )
 
 // ─── Supervisor Settings and Profiles ───
