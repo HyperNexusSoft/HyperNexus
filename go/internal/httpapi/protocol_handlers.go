@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/tormentnexushq/tormentnexus-go/internal/eventbus"
+	"github.com/tormentnexushq/tormentnexus-go/internal/protocol"
 	"github.com/tormentnexushq/tormentnexus-go/internal/supervisor"
 )
 
@@ -183,4 +184,28 @@ func (s *Server) handleTormentNexusProtocol(w http.ResponseWriter, r *http.Reque
 			"error":   "unknown action '" + action + "'; supported: attach, create",
 		})
 	}
+}
+
+// handleRegisterProtocol registers the custom protocol with the OS
+func (s *Server) handleRegisterProtocol(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeJSON(w, http.StatusMethodNotAllowed, map[string]any{
+			"success": false,
+			"error":   "Method not allowed",
+		})
+		return
+	}
+
+	if err := protocol.RegisterProtocol(); err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]any{
+			"success": false,
+			"error":   "failed to register protocol handler: " + err.Error(),
+		})
+		return
+	}
+
+	writeJSON(w, http.StatusOK, map[string]any{
+		"success": true,
+		"message": "Successfully registered tormentnexus:// protocol handler in Windows registry.",
+	})
 }

@@ -1427,6 +1427,28 @@ export function DashboardHomeView({
             setDeployStatus(prev => ({ ...prev, [site]: "success" }));
         }, 2500);
     };
+
+    const [registeringProtocol, setRegisteringProtocol] = useState(false);
+    const [protocolRegistered, setProtocolRegistered] = useState(false);
+
+    const registerOSProtocol = async () => {
+        setRegisteringProtocol(true);
+        try {
+            const resp = await fetch("/api/go/api/native/protocol/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+            });
+            const data = await resp.json();
+            if (data.success) {
+                setProtocolRegistered(true);
+            }
+        } catch (e) {
+            console.error("Failed to register protocol handler:", e);
+        } finally {
+            setRegisteringProtocol(false);
+        }
+    };
+
     const overviewMetrics = buildOverviewMetrics(mcpStatus, sessions, providers, isBootstrapping);
     const startupChecklist = buildStartupChecklist(startupStatus, isBootstrapping, installSurfaceArtifacts);
     const startupBlockingReasons = isBootstrapping
@@ -2388,7 +2410,7 @@ export function DashboardHomeView({
                         <h2 className="text-lg font-bold text-white tracking-wide">Prompt Collections &amp; Global Static Deployments</h2>
                         <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold font-semibold">Deployments</span>
                     </div>
-                    <div className="grid gap-6 md:grid-cols-2">
+                    <div className="grid gap-6 md:grid-cols-3">
                         {/* Prompt Library */}
                         <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4">
                             <div className="flex items-center gap-2">
@@ -2455,6 +2477,28 @@ export function DashboardHomeView({
                                             {deployStatus["hypernexus.site"] === "deploying" ? "Deploying..." : deployStatus["hypernexus.site"] === "success" ? "Published ✓" : "Deploy Site"}
                                         </button>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* OS Protocol Registry */}
+                        <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4 flex flex-col justify-between">
+                            <div>
+                                <div className="flex items-center gap-2">
+                                    <h2 className="text-base font-semibold text-white">OS Protocol Registry</h2>
+                                    <span className="text-cyan-400 cursor-help text-xs" title="Registers tormentnexus:// protocol handler in HKCU registry to intercept deep link attach/create hooks from the browser.">💡</span>
+                                </div>
+                                <p className="text-xs text-slate-400">
+                                    Attaches tormentnexus:// links directly to the local sidecar runtime daemon.
+                                </p>
+                                <div className="pt-4">
+                                    <button
+                                        onClick={registerOSProtocol}
+                                        disabled={registeringProtocol}
+                                        className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs px-4 py-2.5 rounded disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                                    >
+                                        {registeringProtocol ? "Registering..." : protocolRegistered ? "Registered Successfully ✓" : "Register tormentnexus:// Protocol"}
+                                    </button>
                                 </div>
                             </div>
                         </div>

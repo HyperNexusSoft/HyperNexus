@@ -1126,6 +1126,7 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/native/healer/history", s.handleNativeHealerHistory)
 	s.mux.HandleFunc("/api/native/healer/vault", s.handleNativeHealerVault)
 	s.mux.HandleFunc("/api/native/protocol/tormentnexus", s.handleTormentNexusProtocol)
+	s.mux.HandleFunc("/api/native/protocol/register", s.handleRegisterProtocol)
 	s.mux.HandleFunc("/api/native/harvester/add", s.handleHarvesterAdd)
 	s.mux.HandleFunc("/api/native/harvester/search", s.handleHarvesterSearch)
 	s.mux.HandleFunc("/api/native/harvester/report", s.handleHarvesterReport)
