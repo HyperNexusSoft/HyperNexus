@@ -32,12 +32,17 @@
 7. **Sidebar Menu Elimination & High-Density UI Layout (v1.0.0-alpha.226)**:
    - Removed the left sidebar navigation menu (`Sidebar.tsx`) completely from `layout.tsx` to let the consolidated single-page dashboard control plane expand to full width and occupy 100% viewport space.
 
-8. **Legacy Git Submodule Decommissioning (v1.0.0-alpha.227)**:
+8. **Legacy Git Submodule Decommissioning & Worktree Pruning (v1.0.0-alpha.227)**:
    - De-registered, un-tracked, and deleted the final legacy Git submodule (`apps/maestro` pointing to robertpelloni/Maestro) from the repository layout, clearing `.gitmodules` completely.
-   - Cleared and pruned internal Git worktree registries (`git worktree prune`).
+   - Disabled git worktree allocation inside [supervisor.go](file:///c:/Users/hyper/workspace/tormentnexus/go/internal/supervisor/supervisor.go#L589-L604) and deleted the `.tormentnexus/worktrees` folder structure completely.
 
-9. **Version Alignment & Package Sync**:
-   - Pinned all workspace project and extension package configurations to `v1.0.0-alpha.227` using the standard `sync-versions` runner.
+9. **Workspace Clean-up & Documentation Consolidation (v1.0.0-alpha.228)**:
+   - Consolidated 11 root documentation files into the central `docs/` folder.
+   - Relocated 15 legacy and helper testing scripts from the root into the `archive/` folder.
+   - Cleared and untracked stale logs, local PIDs, and placeholder keys.
+
+10. **Version Alignment & Package Sync**:
+   - Pinned all workspace project and extension package configurations to `v1.0.0-alpha.228` using the standard `sync-versions` runner.
 
 ## Next Steps for Successor Models
 - **Monitor Deep Link Interactions**: Confirm that clicking custom `tormentnexus://attach?session=ID` or `tormentnexus://create?cliType=CMD&workingDirectory=DIR` links successfully dispatches actions to the local server node.
