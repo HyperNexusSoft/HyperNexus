@@ -1,5 +1,17 @@
 # MEMORY.md — Multi-Agent Observations
 
+## Session 2026-07-02 (Secure P2P Gossip, OS Deep Links & Wails GUI Compilation)
+
+### Secure UDP Gossip Protocol
+- **AES-GCM Shared-Key Payload Encryption**: When gossiping memory state over P2P network sockets, encrypting raw serialization data using AES-GCM with a default shared key secures transport channels against network interception.
+- **Optimized Re-Gossip Routing**: To minimize JSON marshaling and encryption computational latency on intermediate peer nodes, store and forward raw incoming encrypted packets directly, bypassing decrypt-encrypt cycles during packet gossiping.
+
+### OS Deep Link Integration
+- **Non-Privileged Registry Mapping**: Custom protocol schemes (like `tormentnexus://`) can be registered under `HKCU\Software\Classes` on Windows. This registry mapping does not require administrator privileges, allowing the sidecar daemon to configure deep-link routing automatically.
+
+### Wails Standalone Asset Build
+- **Next.js Turbopack Packaging**: Standard Next.js builds can be packaged into Wails-native embedded resources by utilizing `copy-assets.mjs` to target and copy production client static resources recursively to the Wails assets compile folder.
+
 ## Session 2026-07-01 (Native Go Session Ingestion & Windows IPv6 Gotchas)
 
 ### Port Binding and IPv6 Resolution
