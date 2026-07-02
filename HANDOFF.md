@@ -32,8 +32,12 @@
 7. **Sidebar Menu Elimination & High-Density UI Layout (v1.0.0-alpha.226)**:
    - Removed the left sidebar navigation menu (`Sidebar.tsx`) completely from `layout.tsx` to let the consolidated single-page dashboard control plane expand to full width and occupy 100% viewport space.
 
-8. **Version Alignment & Package Sync**:
-   - Pinned all workspace project and extension package configurations to `v1.0.0-alpha.226` using the standard `sync-versions` runner.
+8. **Legacy Git Submodule Decommissioning (v1.0.0-alpha.227)**:
+   - De-registered, un-tracked, and deleted the final legacy Git submodule (`apps/maestro` pointing to robertpelloni/Maestro) from the repository layout, clearing `.gitmodules` completely.
+   - Cleared and pruned internal Git worktree registries (`git worktree prune`).
+
+9. **Version Alignment & Package Sync**:
+   - Pinned all workspace project and extension package configurations to `v1.0.0-alpha.227` using the standard `sync-versions` runner.
 
 ## Next Steps for Successor Models
 - **Monitor Deep Link Interactions**: Confirm that clicking custom `tormentnexus://attach?session=ID` or `tormentnexus://create?cliType=CMD&workingDirectory=DIR` links successfully dispatches actions to the local server node.
