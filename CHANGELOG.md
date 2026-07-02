@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.0-alpha.235] - 2026-07-02
+
+### Changed
+- **E2E Integration Verification**: Configured the E2E verification script to dynamically resolve and test against the active Go sidecar port `7778` instead of the legacy decommissioned `4300` port.
+
 ## [1.0.0-alpha.234] - 2026-07-02
 
 ### Fixed

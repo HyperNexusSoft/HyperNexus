@@ -42,7 +42,7 @@
    - Cleared and untracked stale logs, local PIDs, and placeholder keys.
 
 10. **Version Alignment & Package Sync**:
-    - Pinned all workspace project and extension package configurations to `v1.0.0-alpha.234` using the standard `sync-versions` runner.
+    - Pinned all workspace project and extension package configurations to `v1.0.0-alpha.235` using the standard `sync-versions` runner.
 
 11. **tRPC Proxy Health & Webpack Dev Server (v1.0.0-alpha.233)**:
     - Added a 3-second abort timeout to Next.js tRPC proxy upstream fetches in [route.ts](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/src/app/api/trpc/[trpc]/route.ts) to prevent the server from hanging when the TS control plane is offline.
@@ -55,6 +55,10 @@
     - Wrapped the Windows GUI message loop start `systray.Start` inside [server.go](file:///c:/Users/hyper/workspace/tormentnexus/go/internal/httpapi/server.go) to bypass execution during `go test` runs (utilizing lightweight `flag.Lookup("test.v")` check).
     - Prevented headless Windows test threads from hanging indefinitely during test execution.
     - Validated that the Go backend compiles cleanly and the entire Next.js React dashboard package typechecks without any errors.
+
+13. **E2E Integration Verification updates (v1.0.0-alpha.235)**:
+    - Reconfigured the E2E verification test helper script in [e2e_integration_verify.py](file:///c:/Users/hyper/workspace/tormentnexus/scratch/e2e_integration_verify.py) to execute against the active Go sidecar port `7778` instead of the legacy `4300` port.
+    - Executed and validated that the Go-native Skill Registry, Prompt Library, and Memory schemas are fully functional.
 
 ## Next Steps for Successor Models
 - **Monitor Dev Environment Stability**: Keep running the Next.js dev server in Webpack mode on Windows.

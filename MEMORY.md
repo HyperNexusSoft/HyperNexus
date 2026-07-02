@@ -1,5 +1,10 @@
 # MEMORY.md — Multi-Agent Observations
 
+## Session 2026-07-02 (E2E Integration Verification & Port Configuration)
+
+### E2E Port Configuration
+- **Active Port Routing**: Verification scripts (like `e2e_integration_verify.py`) must be configured to target the active Go sidecar port `7778` instead of the legacy `4300` port to prevent connection refused failures when verifying native endpoints.
+
 ## Session 2026-07-02 (Go Unit Test Stabilization & Message Loops)
 
 ### Go Unit Tests on Windows

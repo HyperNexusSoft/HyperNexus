@@ -1,8 +1,9 @@
+import os
 import requests
 import time
 import json
 
-BASE_URL = "http://localhost:4300"
+BASE_URL = f"http://127.0.0.1:{os.getenv('TORMENTNEXUS_GO_PORT', '7778')}"
 
 def test_connectivity():
     print("--- Testing Service Connectivity ---")
@@ -107,7 +108,7 @@ import urllib.request
 import json
 import os
 
-BASE_URL = "http://localhost:4300"
+BASE_URL = f"http://127.0.0.1:{os.getenv('TORMENTNEXUS_GO_PORT', '7778')}"
 SAMPLE_REPO = "/tmp/tormentnexus-sample"
 
 def call_endpoint(path, method='GET', payload=None):
