@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.0-alpha.219] - 2026-07-02
+
+### Added
+- **Single-Page Dashboard Consolidation Phase 3**:
+  - **Live Immune Self-Healing Radar**: Embedded the pathogen diagnosis streams and live heal history list.
+  - **Persistent SQLite L2 Vault**: Connected L2 long-term memory records with importance weights.
+  - **Autonomous Workflow Orchestration**: Added workflow selection, active node graphs, and execution pause/resume handles.
+  - **Integration Hub Surfaces**: Integrated auto-detected editor extension surfaces and live connected telemetry client channels.
+
 ## [1.0.0-alpha.218] - 2026-07-02
 
 ### Added

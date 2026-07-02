@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useHealerStream, WorkflowVisualizer } from '@tormentnexus/ui';
 import { trpc } from '../../utils/trpc';
 import { useState, useEffect, useCallback } from 'react';
 
@@ -1084,6 +1085,56 @@ export function DashboardHomeView({
             setSettingsLog(`❌ Error saving config: ${e.message}`);
         }
     };
+    // --- IMMUNE SYSTEM & LIVE HEALER ---
+    const { events: healerEvents } = useHealerStream();
+    const [healerLimit, setHealerLimit] = useState(10);
+    const { data: healerVaultRecords, refetch: refetchHealerVault } = trpc.healer.vaultRecords.useQuery(
+        { limit: healerLimit },
+        { refetchInterval: 5000 }
+    );
+    const livePathogens = healerEvents ? healerEvents.filter((e: any) => !e.success) : [];
+    const autoNeutralized = healerEvents ? healerEvents.filter((e: any) => e.success) : [];
+
+    // --- AUTONOMOUS WORKFLOW ORCHESTRATOR ---
+    const [selectedWorkflowId, setSelectedWorkflowId] = useState<string | null>("test-workflow");
+    const [activeExecutionId, setActiveExecutionId] = useState<string | null>(null);
+    const { data: workflowsList } = trpc.workflow.list.useQuery();
+    const { data: workflowGraph } = trpc.workflow.getGraph.useQuery(
+        { workflowId: selectedWorkflowId! },
+        { enabled: !!selectedWorkflowId }
+    );
+    const { data: workflowExecutions, refetch: refetchWorkflowExecutions } = trpc.workflow.listExecutions.useQuery(
+        undefined,
+        { refetchInterval: 5000 }
+    );
+    const startWorkflowMutation = trpc.workflow.start.useMutation();
+    const resumeWorkflowMutation = trpc.workflow.resume.useMutation();
+    const pauseWorkflowMutation = trpc.workflow.pause.useMutation();
+
+    const triggerRunWorkflow = async () => {
+        if (!selectedWorkflowId) return;
+        try {
+            const res = await startWorkflowMutation.mutateAsync({ workflowId: selectedWorkflowId });
+            if (res && (res as any).id) {
+                setActiveExecutionId((res as any).id);
+                refetchWorkflowExecutions();
+            }
+        } catch {}
+    };
+
+    // --- INTEGRATION HUB & TARGET SURFACES ---
+    const browserStatusQuery = trpc.browser.status.useQuery(undefined, { refetchInterval: 10000 });
+    const syncTargetsQuery = trpc.mcpServers.syncTargets.useQuery();
+    
+    // safe wrappers for detectCliHarnesses and detectInstallSurfaces
+    const toolsClient = trpc.tools as any;
+    const cliDetectionsQuery = toolsClient?.detectCliHarnesses?.useQuery
+        ? toolsClient.detectCliHarnesses.useQuery()
+        : { data: [] };
+    const installArtifactsQuery = toolsClient?.detectInstallSurfaces?.useQuery
+        ? toolsClient.detectInstallSurfaces.useQuery(undefined, { refetchInterval: 10000 })
+        : { data: [] };
+
 
     // --- L3 COLD ARCHIVE LOGIC ---
     const [coldQuery, setColdQuery] = useState("");
@@ -2156,6 +2207,116 @@ export function DashboardHomeView({
                                 />
                             )}
                         </div>
+
+                        {/* Live Immune Self-Healing Radar */}
+                        <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4 md:col-span-2 font-mono">
+                            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                                <div className="flex items-center gap-2">
+                                    <h2 className="text-base font-semibold text-white">Live Immune System Self-Healing Radar</h2>
+                                    <span className={`h-2.5 w-2.5 rounded-full ${livePathogens.length > 0 ? 'bg-red-500 animate-ping' : 'bg-green-500 animate-pulse'}`} />
+                                    <span className="text-cyan-400 cursor-help text-xs" title="Actively monitors, diagnoses, and self-heals broken files, runtime exceptions, and type drift.">🛡️</span>
+                                </div>
+                                <div className="text-[10px] text-slate-500 font-mono">
+                                    {livePathogens.length > 0 ? `${livePathogens.length} Active Errors Detected` : "System Secure & Healthy"}
+                                </div>
+                            </div>
+                            <p className="text-xs text-slate-400">
+                                Real-time system errors captured, auto-diagnosed, and corrected.
+                            </p>
+                            
+                            <div className="grid gap-4 md:grid-cols-2 max-h-[300px] overflow-y-auto pr-1">
+                                {/* Pathogens Column */}
+                                <div className="border border-slate-850 bg-zinc-950/40 p-3.5 rounded space-y-2">
+                                    <span className="text-[10px] font-bold text-red-400 tracking-wider block">ACTIVE PATHOGENS ({livePathogens.length})</span>
+                                    {livePathogens.length === 0 ? (
+                                        <div className="text-center text-xs text-slate-550 py-8">No pathogens detected in stream.</div>
+                                    ) : (
+                                        livePathogens.map((inf: any, idx: number) => (
+                                            <div key={idx} className="border border-red-900/40 bg-red-950/10 p-2.5 rounded text-[11px]">
+                                                <div className="text-white font-mono break-all">{inf.error}</div>
+                                                {inf.fix?.diagnosis && (
+                                                    <div className="text-amber-400 mt-1">Diagnosis: {inf.fix.diagnosis.errorType} ({inf.fix.diagnosis.file})</div>
+                                                )}
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+
+                                {/* Neutralized Column */}
+                                <div className="border border-slate-850 bg-zinc-950/40 p-3.5 rounded space-y-2">
+                                    <span className="text-[10px] font-bold text-emerald-400 tracking-wider block">AUTO-NEUTRALIZED ({autoNeutralized.length})</span>
+                                    {autoNeutralized.length === 0 ? (
+                                        <div className="text-center text-xs text-slate-550 py-8">Awaiting recovery events...</div>
+                                    ) : (
+                                        autoNeutralized.slice(0, 10).map((entry: any, idx: number) => (
+                                            <div key={idx} className="border border-emerald-900/40 bg-emerald-950/10 p-2.5 rounded text-[11px]">
+                                                <div className="text-slate-300 font-mono truncate">{entry.error}</div>
+                                                {entry.fix && (
+                                                    <div className="text-emerald-400 mt-1 font-semibold">Healed: {entry.fix.diagnosis?.file?.split('/').pop()}</div>
+                                                )}
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* SQLite L2 Vector Vault Log */}
+                        <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4 md:col-span-2 font-mono">
+                            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                                <div className="flex items-center gap-2">
+                                    <h2 className="text-base font-semibold text-white">SQLite L2 Persistent Vector Vault</h2>
+                                    <span className="text-cyan-400 cursor-help text-xs" title="Stores long-term agent memories, observations, and facts inside a persistent vector database.">🗄️</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <select
+                                        value={healerLimit}
+                                        onChange={(e) => setHealerLimit(Number(e.target.value))}
+                                        className="bg-black text-[10px] border border-slate-800 rounded px-1.5 py-0.5 text-slate-300 focus:outline-none"
+                                    >
+                                        <option value={10}>10 items</option>
+                                        <option value={30}>30 items</option>
+                                        <option value={50}>50 items</option>
+                                    </select>
+                                    <button
+                                        onClick={() => refetchHealerVault()}
+                                        className="px-2 py-0.5 bg-zinc-800 hover:bg-zinc-700 text-slate-200 text-[10px] rounded transition-colors"
+                                    >
+                                        🔄 Re-sync DB
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="space-y-2.5 max-h-[300px] overflow-y-auto pr-1">
+                                {!healerVaultRecords || healerVaultRecords.length === 0 ? (
+                                    <div className="text-center text-xs text-slate-500 py-8">Vault register is empty.</div>
+                                ) : (
+                                    healerVaultRecords.map((record: any, idx: number) => {
+                                        const importance = Math.round((record.Importance || 0) * 100);
+                                        const heat = Math.round(record.HeatScore || 50);
+                                        return (
+                                            <div key={idx} className="bg-zinc-950/60 border border-slate-850 p-3 rounded-lg flex flex-col justify-between">
+                                                <div className="flex items-center justify-between text-[10px] text-slate-500 mb-1.5 font-mono">
+                                                    <span className="bg-blue-500/10 border border-blue-500/20 text-blue-400 px-1.5 py-0.2 rounded font-bold uppercase">{record.Type || "Episodic"}</span>
+                                                    <span>{new Date(record.CreatedAt || Date.now()).toLocaleTimeString()}</span>
+                                                </div>
+                                                <p className="text-xs text-slate-350 leading-relaxed break-words font-sans">{record.Content}</p>
+                                                <div className="mt-2 pt-2 border-t border-slate-850/60 flex items-center justify-between text-[9px] text-slate-500">
+                                                    <div className="flex items-center gap-1">
+                                                        <span>Importance:</span>
+                                                        <span className="font-semibold text-slate-350">{importance}%</span>
+                                                        <div className="w-16 bg-slate-900 h-1 rounded-full overflow-hidden ml-1">
+                                                            <div className="h-full bg-blue-500" style={{ width: `${importance}%` }} />
+                                                        </div>
+                                                    </div>
+                                                    <span className="text-orange-400">Heat: {heat}°</span>
+                                                </div>
+                                            </div>
+                                        );
+                                    })
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -2439,6 +2600,209 @@ export function DashboardHomeView({
                                         </div>
                                     ))
                                 )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* SECTION 6: AUTONOMOUS WORKFLOW ORCHESTRATION */}
+                <div className="space-y-4 pt-8 pb-8 border-t border-slate-800">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <h2 className="text-lg font-bold text-white tracking-wide font-mono">Autonomous Workflow Orchestration</h2>
+                        <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">Workflow Engine</span>
+                    </div>
+                    
+                    <div className="grid gap-6 md:grid-cols-3">
+                        {/* Workflow Library */}
+                        <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4 md:col-span-1">
+                            <div className="flex items-center gap-2">
+                                <h2 className="text-base font-semibold text-white">Workflow Library</h2>
+                                <span className="text-cyan-400 cursor-help text-xs" title="Lists all configured workflow definition topologies.">💡</span>
+                            </div>
+                            <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1 font-mono">
+                                {workflowsList && workflowsList.length > 0 ? (
+                                    workflowsList.map((wf: any) => (
+                                        <button
+                                            key={wf.id}
+                                            onClick={() => setSelectedWorkflowId(wf.id)}
+                                            className={`w-full text-left p-2.5 rounded text-xs transition-colors flex items-center justify-between border ${
+                                                selectedWorkflowId === wf.id
+                                                    ? "border-cyan-500/40 bg-cyan-500/10 text-white font-bold"
+                                                    : "border-slate-800 bg-zinc-950/60 text-slate-400 hover:text-slate-200"
+                                            }`}
+                                        >
+                                            <span>{wf.name || wf.id}</span>
+                                            <span className="text-[9px] text-slate-500 font-mono">{wf.id}</span>
+                                        </button>
+                                    ))
+                                ) : (
+                                    <>
+                                        <button
+                                            onClick={() => setSelectedWorkflowId("test-workflow")}
+                                            className={`w-full text-left p-2.5 rounded text-xs transition-colors flex items-center justify-between border ${
+                                                selectedWorkflowId === "test-workflow"
+                                                    ? "border-cyan-500/40 bg-cyan-500/10 text-white font-bold"
+                                                    : "border-slate-800 bg-zinc-950/60 text-slate-400 hover:text-slate-200"
+                                            }`}
+                                        >
+                                            <span>Test Workflow</span>
+                                            <span className="text-[9px] text-slate-500 font-mono">default</span>
+                                        </button>
+                                        <div className="text-[10px] text-slate-500 italic text-center py-2">No other custom workflows saved.</div>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Visualizer & Executions */}
+                        <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4 md:col-span-2 flex flex-col justify-between font-mono">
+                            <div>
+                                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                                    <div className="flex items-center gap-2">
+                                        <h2 className="text-base font-semibold text-white">Active Node Visualizer</h2>
+                                        <span className="text-cyan-400 cursor-help text-xs" title="Visualizes active step transitions inside the multi-agent graph model.">💡</span>
+                                    </div>
+                                    <button
+                                        onClick={triggerRunWorkflow}
+                                        disabled={!selectedWorkflowId || startWorkflowMutation.isPending}
+                                        className="bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs px-3.5 py-1 rounded transition-colors disabled:opacity-50"
+                                    >
+                                        {startWorkflowMutation.isPending ? "Starting..." : "Run Active Workflow"}
+                                    </button>
+                                </div>
+
+                                <div className="h-48 border border-slate-850 bg-zinc-955 rounded my-3 flex items-center justify-center relative overflow-hidden">
+                                    {workflowGraph ? (
+                                        <WorkflowVisualizer
+                                            data={workflowGraph as any}
+                                            activeNodeId={
+                                                workflowExecutions?.find((x: any) => x.id === activeExecutionId)?.currentNode
+                                            }
+                                            className="h-full w-full border-0 rounded"
+                                        />
+                                    ) : (
+                                        <span className="text-xs text-slate-500 font-mono">No Graph Data Loaded for {selectedWorkflowId || "None"}</span>
+                                    )}
+                                </div>
+
+                                <div className="pt-2">
+                                    <span className="text-[10px] font-bold text-slate-400 tracking-wider block mb-2">RUNNING EXECUTIONS ({workflowExecutions?.length || 0})</span>
+                                    <div className="space-y-1.5 max-h-[150px] overflow-y-auto pr-1">
+                                        {!workflowExecutions || workflowExecutions.length === 0 ? (
+                                            <div className="text-xs text-slate-600 italic">No executions currently active.</div>
+                                        ) : (
+                                            workflowExecutions.map((exec: any) => (
+                                                <div key={exec.id} className="border border-slate-850 bg-zinc-955 p-2.5 rounded flex items-center justify-between text-xs">
+                                                    <div className="flex items-center gap-2">
+                                                        <span className={`px-1.5 py-0.2 rounded text-[9px] font-bold font-mono ${
+                                                            exec.status === "running" ? "bg-cyan-500/10 text-cyan-400" : "bg-zinc-800 text-slate-400"
+                                                        }`}>{exec.status}</span>
+                                                        <span className="font-mono text-slate-200 select-all">{exec.id?.slice(0, 12)}...</span>
+                                                        <span className="text-slate-500 font-mono">Node: {exec.currentNode || "none"}</span>
+                                                    </div>
+                                                    <div className="flex gap-1.5">
+                                                        {exec.status === 'running' && (
+                                                            <button
+                                                                onClick={() => pauseWorkflowMutation.mutate({ executionId: exec.id })}
+                                                                className="px-2 py-0.5 bg-zinc-800 hover:bg-zinc-700 text-[10px] rounded"
+                                                            >
+                                                                Pause
+                                                            </button>
+                                                        )}
+                                                        {exec.status === 'paused' && (
+                                                            <button
+                                                                onClick={() => resumeWorkflowMutation.mutate({ executionId: exec.id })}
+                                                                className="px-2 py-0.5 bg-cyan-600 hover:bg-cyan-500 text-[10px] rounded"
+                                                            >
+                                                                Resume
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* SECTION 7: INTEGRATION HUB & TARGET SURFACES */}
+                <div className="space-y-4 pt-8 pb-8 border-t border-slate-800">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <h2 className="text-lg font-bold text-white tracking-wide font-mono">Integration Hub &amp; Target Surfaces</h2>
+                        <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">Integrations</span>
+                    </div>
+
+                    <div className="grid gap-6 md:grid-cols-3">
+                        {/* Browser & Editor Surfaces */}
+                        <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4 md:col-span-2 font-mono">
+                            <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+                                <h2 className="text-base font-semibold text-white">Supported Coding Surfaces</h2>
+                                <span className="text-cyan-400 cursor-help text-xs" title="Auto-detects IDE extensions and command line adapters in this project structure.">💡</span>
+                            </div>
+                            
+                            <div className="space-y-3">
+                                {installArtifactsQuery.data && (installArtifactsQuery.data as any[]).length > 0 ? (
+                                    (installArtifactsQuery.data as any[]).map((surface: any) => (
+                                        <div key={surface.id} className="border border-slate-850 bg-zinc-955 p-3 rounded-lg flex flex-col justify-between text-xs space-y-1.5">
+                                            <div className="flex items-center justify-between">
+                                                <span className="font-bold text-slate-200">{surface.title}</span>
+                                                <span className="px-1.5 py-0.2 rounded font-mono text-[9px] uppercase bg-zinc-800 text-slate-400">{surface.platforms}</span>
+                                            </div>
+                                            <div className="text-[10px] text-slate-500 font-mono truncate">{surface.repoPath}</div>
+                                            <div className="text-[11px] text-slate-400">{surface.installHint}</div>
+                                            <div className="pt-1.5 flex items-center justify-between text-[10px] border-t border-slate-850/60">
+                                                <span className="text-slate-500">Action: <code className="text-cyan-400">{surface.operatorActionLabel}</code></span>
+                                                <span className="font-semibold text-slate-350">{surface.statusLabel}</span>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="space-y-3 text-xs">
+                                        <div className="border border-slate-850 bg-zinc-955 p-3 rounded-lg flex flex-col justify-between space-y-1.5">
+                                            <div className="flex items-center justify-between font-bold text-slate-200">
+                                                <span>Browser Telemetry Extension</span>
+                                                <span className="px-1.5 py-0.2 rounded font-mono text-[9px] bg-zinc-800 text-slate-400">CHROME/EDGE</span>
+                                            </div>
+                                            <p className="text-[11px] text-slate-400">Captures web search context logs, screenshots, and live CDP channels.</p>
+                                            <div className="text-[10px] text-slate-500 font-mono">Path: apps/tormentnexus-extension</div>
+                                        </div>
+                                        <div className="border border-slate-850 bg-zinc-955 p-3 rounded-lg flex flex-col justify-between space-y-1.5">
+                                            <div className="flex items-center justify-between font-bold text-slate-200">
+                                                <span>VS Code Sidecar Extension</span>
+                                                <span className="px-1.5 py-0.2 rounded font-mono text-[9px] bg-zinc-800 text-slate-400">VSCODE</span>
+                                            </div>
+                                            <p className="text-[11px] text-slate-400">Directly syncs file buffer saves and command execution terminals.</p>
+                                            <div className="text-[10px] text-slate-500 font-mono">Path: apps/vscode</div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Connected Bridges */}
+                        <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4 md:col-span-1 flex flex-col justify-between font-mono">
+                            <div>
+                                <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+                                    <h2 className="text-base font-semibold text-white">Live Clients Connected</h2>
+                                    <span className="text-cyan-400 cursor-help text-xs" title="Lists active extension connections currently linked to the Go Kernel tRPC loop.">💡</span>
+                                </div>
+                                <div className="space-y-2 mt-3 max-h-[250px] overflow-y-auto pr-1">
+                                    {browserStatusQuery.data && (browserStatusQuery.data as any).activePages?.length > 0 ? (
+                                        (browserStatusQuery.data as any).activePages.map((page: any, idx: number) => (
+                                            <div key={idx} className="border border-slate-850 bg-zinc-955 p-2.5 rounded text-xs flex flex-col">
+                                                <span className="font-semibold text-slate-350 truncate">{page.title}</span>
+                                                <span className="text-[10px] text-slate-500 font-mono mt-0.5 truncate">{page.url}</span>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="border border-slate-850 bg-zinc-955 p-3 rounded text-center text-xs text-slate-550">
+                                            📡 No extension clients or browser telemetry pipes currently registered.
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
