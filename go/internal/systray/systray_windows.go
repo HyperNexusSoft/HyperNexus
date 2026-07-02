@@ -4,6 +4,7 @@ package systray
 
 import (
 	"fmt"
+	"os/exec"
 	"sync"
 	"syscall"
 	"time"
@@ -269,6 +270,8 @@ func hiddenWndProc(hWnd windows.HWND, msg uint32, wParam uintptr, lParam uintptr
 	case WM_TRAY:
 		switch lParam {
 		case WM_LBUTTONUP, WM_LBUTTONDBLCLK:
+			// Launch the user's default browser pointing to the local dashboard portal
+			_ = exec.Command("cmd", "/c", "start", "http://127.0.0.1:7779/dashboard").Start()
 			showLogWindow()
 		}
 		return 0
