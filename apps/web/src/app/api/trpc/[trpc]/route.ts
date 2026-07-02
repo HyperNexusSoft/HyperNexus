@@ -397,6 +397,7 @@ async function tryCompatFallback(
  */
 const GO_NATIVE_PROCEDURES = new Set([
 	"health",
+	"startupStatus",
 	"mcp.getStatus",
 	"mcp.listServers",
 	"mcp.getToolSelectionTelemetry",
@@ -513,11 +514,15 @@ async function handler(req: Request): Promise<Response> {
 
 	let upstreamResponse: Response;
 	try {
+		const controller = new AbortController();
+		const timeout = setTimeout(() => controller.abort(), 3000);
 		upstreamResponse = await fetch(upstreamUrl, {
 			method: req.method,
 			headers,
 			body,
+			signal: controller.signal,
 		});
+		clearTimeout(timeout);
 	} catch (error) {
 		const compatFallback = await tryCompatFallback(req, procedurePath);
 		if (compatFallback) {

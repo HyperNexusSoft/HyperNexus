@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.0-alpha.233] - 2026-07-02
+
+### Fixed
+- **Next.js tRPC Proxy Stability**: Added abort timeouts to proxy requests to prevent hanging when TS core is down, and integrated Go-native tRPC redirect fallback path for `startupStatus`.
+- **Development Server Stability**: Switched Next.js dev server from Turbopack to Webpack to fix persistent cache corruption and filesystem errors on Windows.
+- **Dependency Compatibility**: Rebuilt `better-sqlite3` native bindings for Node 24 runtime to resolve native database loading errors.
+
 ## [1.0.0-alpha.221] - 2026-07-02
 
 ### Fixed

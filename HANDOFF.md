@@ -42,10 +42,17 @@
    - Cleared and untracked stale logs, local PIDs, and placeholder keys.
 
 10. **Version Alignment & Package Sync**:
-   - Pinned all workspace project and extension package configurations to `v1.0.0-alpha.228` using the standard `sync-versions` runner.
+   - Pinned all workspace project and extension package configurations to `v1.0.0-alpha.233` using the standard `sync-versions` runner.
+
+11. **tRPC Proxy Health & Webpack Dev Server (v1.0.0-alpha.233)**:
+   - Added a 3-second abort timeout to Next.js tRPC proxy upstream fetches in [route.ts](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/src/app/api/trpc/[trpc]/route.ts) to prevent the server from hanging when the TS control plane is offline.
+   - Added `startupStatus` to `GO_NATIVE_PROCEDURES` in [route.ts](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/src/app/api/trpc/[trpc]/route.ts) to bypass the TS proxy and retrieve status directly from the Go sidecar.
+   - Switched the Next.js dev server to Webpack mode (`--webpack`) to avoid SST cache corruption and filesystem `ENOENT` crashes encountered with Turbopack on Windows.
+   - Rebuilt the `better-sqlite3` native Node.js bindings on Node 24 runtime to resolve loading errors.
+   - Verified all 5 dev readiness checks (web, core, go-sidecar, startup-status, and mcp-status) pass successfully.
 
 ## Next Steps for Successor Models
-- **Monitor Deep Link Interactions**: Confirm that clicking custom `tormentnexus://attach?session=ID` or `tormentnexus://create?cliType=CMD&workingDirectory=DIR` links successfully dispatches actions to the local server node.
+- **Monitor Dev Environment Stability**: Keep running the Next.js dev server in Webpack mode on Windows.
 - **Wails Desktop Testing**: Run the compiled `tormentnexus-gui.exe` to verify rendering logic and local system tray notification loops.
 - **Mesh / Gossip Protocol Telemetry**: Watch the gossip server updates to check for cross-machine memory-sharing logs.
 - **Swarm Queue Supervision**: Watch `swarm_v7.py` outputs as the multi-model generation pipeline indexes remaining catalog resources.

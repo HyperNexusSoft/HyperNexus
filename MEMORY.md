@@ -1,5 +1,14 @@
 # MEMORY.md — Multi-Agent Observations
 
+## Session 2026-07-02 (Next.js tRPC Proxy Stability & Webpack Dev Server Migration)
+
+### tRPC Proxy Resilience
+- **Proxy Abort Handlers**: Integrating a `3000ms` `AbortController` timeout on Next.js upstream tRPC fetches prevents the proxy handler from blocking indefinitely when the TS control plane is offline.
+- **Go Sidecar Redirects**: Adding `startupStatus` to `GO_NATIVE_PROCEDURES` inside [route.ts](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/src/app/api/trpc/[trpc]/route.ts) bypasses the TS core proxy completely, routing status checks directly to the Go sidecar (`7778`) for immediate, reliable responses.
+
+### Next.js Dev Server on Windows
+- **Turbopack Cache Corruption**: On Windows hosts, Turbopack (`next dev`) frequently runs into `ENOENT` or `os error 3` path errors when compiling SST cache directories. Using the `--webpack` flag restores dev server stability.
+
 ## Session 2026-07-02 (Secure P2P Gossip, OS Deep Links & Wails GUI Compilation)
 
 ### Secure UDP Gossip Protocol
