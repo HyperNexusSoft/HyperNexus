@@ -1,1 +1,0 @@
-graph_mode=ppr was accepted but the commit carries no authored edges and no vector index is configured; PPR degraded to the identity pass.

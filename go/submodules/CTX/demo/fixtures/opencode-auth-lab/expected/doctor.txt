@@ -1,4 +1,0 @@
-CTX Doctor
-config: ok
-graph: ok
-local_only: true

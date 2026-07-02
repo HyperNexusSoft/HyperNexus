@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "linkup": {
-      "command": "python",
-      "args": ["<SERVER_DIR>/server.py"]
-    }
-  }
-}

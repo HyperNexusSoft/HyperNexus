@@ -1,1 +1,0 @@
-rootProject.name = "agent-memory-client-java"

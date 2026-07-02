@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "atlassian-confluence": {
-      "command": "python",
-      "args": ["<SERVER_DIR>/server.py"]
-    }
-  }
-}

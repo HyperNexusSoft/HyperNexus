@@ -1,4 +1,0 @@
-- npm run dev
-- do not run npm run build
-- update the lockfile
-- restart the development server

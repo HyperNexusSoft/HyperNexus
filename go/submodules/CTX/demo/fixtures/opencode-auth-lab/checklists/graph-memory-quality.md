@@ -1,3 +1,0 @@
-- Run targeted auth tests before completion.
-- Fix root cause instead of bypassing refresh-token failures.
-- Prefer auth fixtures when debugging token rotation failures.

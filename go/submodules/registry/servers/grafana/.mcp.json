@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "grafana": {
-      "command": "python",
-      "args": ["<SERVER_DIR>/server.py"]
-    }
-  }
-}
