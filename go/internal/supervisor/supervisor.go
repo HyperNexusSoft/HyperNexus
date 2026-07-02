@@ -587,20 +587,7 @@ func (m *Manager) restoreSessions() {
 }
 
 func (m *Manager) allocateWorktreeLocked(sessionID string, requestedWorkingDirectory string, requestedIsolation bool) (bool, string, string) {
-	if !requestedIsolation {
-		return false, "", ""
-	}
-	if m.worktreeManager == nil {
-		return false, "", "Worktree isolation requested, but no Go worktree manager is configured; continuing without isolation."
-	}
-	if !m.shouldUseWorktreeLocked(requestedWorkingDirectory) {
-		return false, "", ""
-	}
-	worktreePath, err := m.worktreeManager.CreateTaskEnvironment(sessionID)
-	if err != nil {
-		return false, "", "Worktree isolation requested, but native Go worktree creation failed; continuing without isolation: " + err.Error()
-	}
-	return true, worktreePath, "Worktree isolation enabled at " + worktreePath
+	return false, "", ""
 }
 
 func (m *Manager) shouldUseWorktreeLocked(workingDirectory string) bool {
