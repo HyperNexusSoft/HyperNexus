@@ -15,7 +15,6 @@ import (
 	"time"
 
 	"github.com/tormentnexushq/tormentnexus-go/internal/mcp"
-	worktreegit "github.com/tormentnexushq/tormentnexus-go/internal/git"
 )
 
 type SessionState string
@@ -159,7 +158,6 @@ type Manager struct {
 	autoResumeOnStart bool
 	restartDelay      time.Duration
 	restoreStatus     RestoreStatus
-	worktreeManager   *worktreegit.WorktreeManager
 	monitor           *ConversationMonitor
 }
 
@@ -188,9 +186,6 @@ func NewManager(options ...ManagerOptions) *Manager {
 			RestoredSessionCount: 0,
 			AutoResumeCount:      0,
 		},
-	}
-	if strings.TrimSpace(cfg.WorktreeRoot) != "" {
-		manager.worktreeManager = worktreegit.NewWorktreeManager(cfg.WorktreeRoot)
 	}
 	manager.restoreSessions()
 	return manager
@@ -588,38 +583,6 @@ func (m *Manager) restoreSessions() {
 
 func (m *Manager) allocateWorktreeLocked(sessionID string, requestedWorkingDirectory string, requestedIsolation bool) (bool, string, string) {
 	return false, "", ""
-}
-
-func (m *Manager) shouldUseWorktreeLocked(workingDirectory string) bool {
-	resolvedDir, err := filepath.Abs(strings.TrimSpace(workingDirectory))
-	if err != nil {
-		resolvedDir = filepath.Clean(strings.TrimSpace(workingDirectory))
-	}
-	if strings.TrimSpace(resolvedDir) == "" {
-		return false
-	}
-	for _, session := range m.sessions {
-		if !sessionUsesActiveWorkspace(session) {
-			continue
-		}
-		activeDir, err := filepath.Abs(strings.TrimSpace(session.WorkingDirectory))
-		if err != nil {
-			activeDir = filepath.Clean(strings.TrimSpace(session.WorkingDirectory))
-		}
-		if activeDir == resolvedDir {
-			return true
-		}
-	}
-	return false
-}
-
-func sessionUsesActiveWorkspace(session *SupervisedSession) bool {
-	switch session.State {
-	case StateCreated, StateStarting, StateRunning, StateRestarting:
-		return true
-	default:
-		return false
-	}
 }
 
 func (m *Manager) normalizeRestoredSession(session SupervisedSession) (*SupervisedSession, bool) {
