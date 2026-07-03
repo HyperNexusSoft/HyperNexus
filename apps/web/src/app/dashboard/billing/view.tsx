@@ -40,6 +40,37 @@ export default function ProviderAuthBillingMatrix() {
     const [activePortalId, setActivePortalId] = useState<string | null>(null);
     const [activePortalName, setActivePortalName] = useState<string>('');
     const [newKeyValue, setNewKeyValue] = useState<string>('');
+
+    const isCloud = typeof window !== 'undefined' && (window.location.hostname.includes('hypernexus') || window.location.search.includes('brand=hypernexus'));
+    
+    const [corporateIsolation, setCorporateIsolation] = useState(false);
+    const [corporateKey, setCorporateKey] = useState('');
+    const [corporateEndpoint, setCorporateEndpoint] = useState('http://ollama-headless.internal:11434');
+    
+    const [checkoutOpen, setCheckoutOpen] = useState(false);
+    const [billingPortalOpen, setBillingPortalOpen] = useState(false);
+
+    React.useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setCorporateIsolation(localStorage.getItem('corporateIsolation') === 'true');
+            setCorporateKey(localStorage.getItem('corporateKey') || '');
+            setCorporateEndpoint(localStorage.getItem('corporateEndpoint') || 'http://ollama-headless.internal:11434');
+        }
+    }, []);
+
+    const toggleCorporateIsolation = (val: boolean) => {
+        setCorporateIsolation(val);
+        localStorage.setItem('corporateIsolation', String(val));
+        toast.success(val ? 'Corporate Local Model Isolation enabled' : 'Corporate Local Model Isolation disabled');
+    };
+
+    const saveCorporateSettings = (key: string, endpoint: string) => {
+        setCorporateKey(key);
+        setCorporateEndpoint(endpoint);
+        localStorage.setItem('corporateKey', key);
+        localStorage.setItem('corporateEndpoint', endpoint);
+        toast.success('Corporate configuration saved successfully');
+    };
     
     const utils = trpc.useUtils();
 
@@ -102,7 +133,20 @@ export default function ProviderAuthBillingMatrix() {
     const providerQuickAccessSections = getProviderQuickAccessSections(quotas as BillingProviderQuotaSummary[] | undefined);
     const usageSummary = getBillingUsageSummary(status);
     const quotaRows = normalizeBillingQuotaRows(quotas);
-    const fallbackChain = normalizeFallbackChain(fallback);
+    const baseFallbackChain = normalizeFallbackChain(fallback);
+    const fallbackChain = React.useMemo(() => {
+        if (corporateIsolation) {
+            return [
+                {
+                    priority: 1,
+                    provider: "ollama (isolated)",
+                    model: "gemma-4-e2b",
+                    reason: `Corporate Isolation Active. Endpoint: ${corporateEndpoint}`
+                }
+            ];
+        }
+        return baseFallbackChain;
+    }, [baseFallbackChain, corporateIsolation, corporateEndpoint]);
     const fallbackSelectedTaskType = getFallbackTaskType(fallback, fallbackTaskType);
     const defaultRoutingStrategy = getDefaultRoutingStrategy(taskRouting);
     const routingRules = normalizeTaskRoutingRules(taskRouting);
@@ -180,6 +224,130 @@ export default function ProviderAuthBillingMatrix() {
                     </Button>
                 </div>
             </div>
+
+            {/* Cloud & Corporate Dashboard Overlay */}
+            {isCloud && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-zinc-800 pb-8">
+                    {/* Stripe Billing Panel */}
+                    <Card className="bg-zinc-900 border-zinc-800 shadow-xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 blur-3xl -mr-10 -mt-10 rounded-full" />
+                        <CardHeader>
+                            <CardTitle className="text-sm font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-2">
+                                <WalletCards className="h-4 w-4 text-cyan-400" />
+                                HyperNexus Cloud Billing (Stripe)
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3">
+                                <div>
+                                    <div className="text-xs text-zinc-500 uppercase">Subscription Plan</div>
+                                    <div className="text-base font-bold text-white mt-1">Enterprise Cloud SaaS</div>
+                                </div>
+                                <Badge variant="outline" className="bg-cyan-500/10 text-cyan-400 border-cyan-500/20 text-xs">
+                                    ACTIVE (PAID)
+                                </Badge>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4 text-xs font-mono">
+                                <div>
+                                    <div className="text-zinc-500">Monthly Price</div>
+                                    <div className="text-zinc-200 mt-1">$499.00 / month</div>
+                                </div>
+                                <div>
+                                    <div className="text-zinc-500">Next Invoice Date</div>
+                                    <div className="text-zinc-200 mt-1">July 25, 2026</div>
+                                </div>
+                                <div>
+                                    <div className="text-zinc-500">Payment Source</div>
+                                    <div className="text-zinc-200 mt-1">Visa ending in 4242</div>
+                                </div>
+                                <div>
+                                    <div className="text-zinc-500">Customer ID</div>
+                                    <div className="text-zinc-400 mt-1">cus_R8vB42tX910a</div>
+                                </div>
+                            </div>
+                            <div className="flex gap-2 pt-2">
+                                <Button 
+                                    className="bg-cyan-600 hover:bg-cyan-500 text-white border-transparent text-xs"
+                                    onClick={() => setBillingPortalOpen(true)}
+                                >
+                                    Manage via Stripe Portal
+                                </Button>
+                                <Button 
+                                    variant="outline" 
+                                    className="bg-zinc-800 border-zinc-700 text-zinc-300 hover:bg-zinc-750 text-xs"
+                                    onClick={() => setCheckoutOpen(true)}
+                                >
+                                    Upgrade Plan
+                                </Button>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* Corporate Local Model Fallback Panel */}
+                    <Card className="bg-zinc-900 border-zinc-800 shadow-xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 blur-3xl -mr-10 -mt-10 rounded-full" />
+                        <CardHeader>
+                            <CardTitle className="text-sm font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-2">
+                                <Shield className="h-4 w-4 text-amber-500" />
+                                Corporate Model Fallback Configuration
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3">
+                                <div>
+                                    <div className="text-xs text-zinc-500 uppercase">Isolation Strategy</div>
+                                    <div className="text-sm font-bold text-white mt-1">Local Compliance Restriction</div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-xs text-zinc-400">Isolation Active</span>
+                                    <input 
+                                        type="checkbox"
+                                        checked={corporateIsolation}
+                                        onChange={(e) => toggleCorporateIsolation(e.target.checked)}
+                                        className="h-4 w-4 rounded border-zinc-700 bg-zinc-950 text-amber-600 accent-amber-500 outline-none"
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="space-y-3">
+                                <div>
+                                    <label className="text-[10px] text-zinc-500 block mb-1">LOCAL MODEL FALLBACK TARGET</label>
+                                    <div className="font-mono text-xs text-amber-400 bg-black/40 border border-zinc-800/80 rounded px-2.5 py-1.5 inline-block">
+                                        gemma-4-e2b (Smallest Gemma Compliant Model)
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label className="text-[10px] text-zinc-500 block mb-1">LOCAL ENDPOINT URL (OLLAMA/VLLM)</label>
+                                        <input 
+                                            value={corporateEndpoint}
+                                            onChange={(e) => setCorporateEndpoint(e.target.value)}
+                                            placeholder="http://ollama-headless.internal:11434"
+                                            className="w-full bg-zinc-950 border border-zinc-800 rounded p-2 text-xs font-mono text-white placeholder-zinc-700 outline-none focus:border-amber-500"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] text-zinc-500 block mb-1">CORPORATE API KEY / ACCESS CREDENTIAL</label>
+                                        <input 
+                                            value={corporateKey}
+                                            onChange={(e) => setCorporateKey(e.target.value)}
+                                            type="password"
+                                            placeholder="sk-corp-..."
+                                            className="w-full bg-zinc-950 border border-zinc-800 rounded p-2 text-xs font-mono text-white placeholder-zinc-700 outline-none focus:border-amber-500"
+                                        />
+                                    </div>
+                                </div>
+                                <Button 
+                                    className="bg-amber-600 hover:bg-amber-500 text-white border-transparent text-xs w-full"
+                                    onClick={() => saveCorporateSettings(corporateKey, corporateEndpoint)}
+                                >
+                                    Save Corporate Local Model Settings
+                                </Button>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+            )}
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
                 {/* Left Column - Financial Overview & Fallback */}
@@ -687,6 +855,97 @@ export default function ProviderAuthBillingMatrix() {
                         >
                             {updateKeyMutation.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Key className="w-4 h-4 mr-2" />}
                             Save & Test Connection
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            {/* Stripe Checkout Simulator Dialog */}
+            <Dialog open={checkoutOpen} onOpenChange={setCheckoutOpen}>
+                <DialogContent className="sm:max-w-md bg-zinc-950 border-zinc-800 text-zinc-200">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2">
+                            <WalletCards className="h-5 w-5 text-cyan-400" />
+                            Stripe Checkout Simulator
+                        </DialogTitle>
+                        <DialogDescription className="text-zinc-400">
+                            Configure or upgrade your HyperNexus Cloud Subscription.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="py-4 space-y-4">
+                        <div className="rounded-lg bg-zinc-900 border border-zinc-800 p-4 text-xs space-y-2">
+                            <div className="font-semibold text-white">HyperNexus Pro Plan Upgrade</div>
+                            <div className="text-zinc-400">Unlimited scale, SOC 2 compliance logging, and dedicated SLA support.</div>
+                            <div className="text-sm font-bold text-cyan-400 pt-1">$999.00 / month</div>
+                        </div>
+                        <div className="text-xs text-zinc-500 italic text-center">
+                            Simulating secure transaction redirect to stripe.com...
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button 
+                            variant="outline" 
+                            onClick={() => setCheckoutOpen(false)}
+                            className="bg-zinc-900 border-zinc-800 hover:bg-zinc-800 text-zinc-300"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                setCheckoutOpen(false);
+                                toast.success("Subscription upgraded successfully (simulated)!");
+                            }}
+                            className="bg-cyan-600 hover:bg-cyan-500 text-white border-transparent"
+                        >
+                            Complete Payment ($999.00/mo)
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            {/* Stripe Billing Portal Simulator Dialog */}
+            <Dialog open={billingPortalOpen} onOpenChange={setBillingPortalOpen}>
+                <DialogContent className="sm:max-w-lg bg-zinc-950 border-zinc-800 text-zinc-200">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2">
+                            <ExternalLink className="h-5 w-5 text-cyan-400" />
+                            Stripe Customer Portal (Simulated)
+                        </DialogTitle>
+                        <DialogDescription className="text-zinc-400">
+                            Update payment methods, view invoices, or cancel subscriptions securely.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="py-4 space-y-4 text-xs">
+                        <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-4 space-y-3">
+                            <div className="flex justify-between items-center">
+                                <span className="font-semibold text-white">Payment Method</span>
+                                <span className="text-zinc-400">Visa **** 4242 (Expires 12/29)</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="font-semibold text-white">Billing Address</span>
+                                <span className="text-zinc-400">100 Pine St, San Francisco, CA</span>
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <div className="font-semibold text-zinc-400 uppercase tracking-wider text-[10px]">Invoice History</div>
+                            <div className="divide-y divide-zinc-800 border border-zinc-800 rounded bg-zinc-900">
+                                <div className="flex justify-between items-center p-3">
+                                    <span>June 25, 2026</span>
+                                    <span className="font-mono">$499.00 (Paid ✓)</span>
+                                </div>
+                                <div className="flex justify-between items-center p-3">
+                                    <span>May 25, 2026</span>
+                                    <span className="font-mono">$499.00 (Paid ✓)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button 
+                            onClick={() => setBillingPortalOpen(false)}
+                            className="bg-cyan-600 hover:bg-cyan-500 text-white border-transparent w-full"
+                        >
+                            Return to HyperNexus
                         </Button>
                     </DialogFooter>
                 </DialogContent>

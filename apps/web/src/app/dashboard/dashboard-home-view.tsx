@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useHealerStream, WorkflowVisualizer } from '@tormentnexus/ui';
 import { trpc } from '../../utils/trpc';
 import { useState, useEffect, useCallback } from 'react';
+import ProviderAuthBillingMatrix from "./billing/view";
 
 export interface DashboardStatusSummary {
     initialized: boolean;
@@ -1640,33 +1641,8 @@ export function DashboardHomeView({
                     )}
                 </div>
 
-                {/* UNIFIED COMMAND NAVIGATION TABS */}
-                <div className="flex flex-wrap gap-2 border-b border-slate-800 pb-2 mb-2">
-                    {[
-                        { id: "console", label: "🛡️ Mission Control", desc: "System health status, memory dreaming telemetry, diagnostics, and auto-healer logs." },
-                        { id: "mcp", label: "🔧 MCP & Tool Registry", desc: "Manage native & community Model Context Protocol tools, parity overrides, and routing." },
-                        { id: "memory", label: "🧠 Memory & GraphRAG", desc: "Cold archives, imported episodic sessions, and GraphRAG semantic relations builder." },
-                        { id: "workflows", label: "🤖 Swarm & Workflows", desc: "Monitor autonomous multi-agent pipelines and trigger swarm simulation runs." },
-                        { id: "settings", label: "⚙️ Settings & Enterprise", desc: "SSO integrations, compliance matrix, and global config.json configuration edits." }
-                    ].map((tab) => (
-                        <button
-                            key={tab.id}
-                            onClick={() => onTabChange?.(tab.id)}
-                            title={tab.desc}
-                            className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer border ${
-                                activeTab === tab.id
-                                    ? "bg-cyan-950/60 border-cyan-500 text-cyan-200 shadow-md shadow-cyan-950/20"
-                                    : "bg-slate-900/50 border-slate-800 text-slate-400 hover:bg-slate-800/80 hover:text-white hover:border-slate-700"
-                            }`}
-                        >
-                            {tab.label}
-                        </button>
-                    ))}
-                </div>
-                
                 {/* SECTION 1: COGNITIVE MEMORY ENGINES & SKILL REGISTRIES */}
-                {activeTab === "console" && (
-                    <div className="space-y-4">
+                <div className="space-y-4">
                         <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                             <h2 className="text-lg font-bold text-white tracking-wide">Cognitive Memory Engines &amp; Skill Registries</h2>
                             <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">Active Core</span>
@@ -1702,11 +1678,9 @@ export function DashboardHomeView({
                             </div>
                         </div>
                     </div>
-                )}
 
                 {/* TABS - MEMORY & GRAPHRAG */}
-                {activeTab === "memory" && (
-                    <div className="space-y-4">
+                <div className="space-y-4 pt-8 border-t border-slate-800">
                         <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                             <h2 className="text-lg font-bold text-white tracking-wide">GraphRAG &amp; Cold Archives</h2>
                             <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">Knowledge Graph</span>
@@ -1924,11 +1898,9 @@ export function DashboardHomeView({
                         </div>
                     </div>
                 </div>
-                )}
 
                 {/* SECTION 2: NATIVE GO MCP ORCHESTRATION & TOOL CONTROL */}
-                {activeTab === "mcp" && (
-                    <div className="space-y-4 pt-8">
+                <div className="space-y-4 pt-8 border-t border-slate-800">
                         <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                             <h2 className="text-lg font-bold text-white tracking-wide">Native Go MCP Orchestration &amp; Tool Control</h2>
                             <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">Execution Layer</span>
@@ -2170,11 +2142,9 @@ export function DashboardHomeView({
                         </div>
                     </div>
                 </div>
-                )}
 
                 {/* SECTION: SWARM & WORKFLOWS PIPELINES */}
-                {activeTab === "workflows" && (
-                    <div className="space-y-4 pt-8">
+                <div className="space-y-4 pt-8 border-t border-slate-800">
                         <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                             <h2 className="text-lg font-bold text-white tracking-wide">Autonomous Swarm Workflows &amp; Pipelines</h2>
                             <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">Simulation Control</span>
@@ -2255,11 +2225,9 @@ export function DashboardHomeView({
                             </div>
                         </div>
                     </div>
-                )}
 
                 {/* SECTION 3: SYSTEM RECOVERY & ACTIVE DATABASE SYNC */}
-                {activeTab === "console" && (
-                    <div className="space-y-4 pt-8">
+                <div className="space-y-4 pt-8 border-t border-slate-800">
                     <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                         <h2 className="text-lg font-bold text-white tracking-wide">System Recovery &amp; Active Database Sync</h2>
                         <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">Integrity Sweep</span>
@@ -2742,12 +2710,9 @@ export function DashboardHomeView({
                         </div>
                     </div>
                 </div>
-                )}
 
                 {/* SECTION 4: PROMPT COLLECTIONS & GLOBAL STATIC DEPLOYMENTS */}
-                {activeTab === "settings" && (
-                    <>
-                        <div className="space-y-4 pt-8 pb-8">
+                <div className="space-y-4 pt-8 pb-8 border-t border-slate-800">
                     <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                         <h2 className="text-lg font-bold text-white tracking-wide">Prompt Collections &amp; Global Static Deployments</h2>
                         <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold font-semibold">Deployments</span>
@@ -2845,6 +2810,11 @@ export function DashboardHomeView({
                             </div>
                         </div>
                     </div>
+                </div>
+
+                {/* SECTION: BILLING & PROVIDER AUTH MATRIX */}
+                <div className="pt-8 border-t border-slate-800">
+                    <ProviderAuthBillingMatrix />
                 </div>
 
                 {/* SECTION 5: ENTERPRISE SECURITY & AUDITING */}
@@ -3255,8 +3225,6 @@ export function DashboardHomeView({
                         </div>
                     </div>
                 </div>
-                    </>
-                )}
                 {/* Telemetry fallback children widgets */}
                 {children && (
                     <div className="mt-6 border-t border-slate-800 pt-6">
