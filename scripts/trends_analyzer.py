@@ -20,6 +20,12 @@ from collections import Counter
 from datetime import datetime
 from pathlib import Path
 
+import sys
+if sys.platform.startswith('win'):
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+        sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+
 WORKSPACE = Path(__file__).resolve().parent.parent
 TRENDS_DB = WORKSPACE / "data" / "trends.db"
 LOG_PATH = WORKSPACE / "data" / "trends_analysis.log"
