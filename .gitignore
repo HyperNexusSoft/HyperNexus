@@ -270,3 +270,5 @@ watchdog.py
 # Swarm build artifacts
 go/internal/tools/_staging/
 go/internal/tools/_broken/
+go/bin/tormentnexus
+go/*.db
