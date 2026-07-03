@@ -49,6 +49,37 @@ ARRAY_CONFIGS = {
     "Continue Config": HOME / ".continue" / "config.json"
 }
 
+# Zed editor settings config files
+ZED_CONFIGS = {
+    "Zed Editor Settings": HOME / ".config" / "zed" / "settings.json",
+    "Zed Editor Settings (Windows)": APPDATA / "Zed" / "settings.json"
+}
+
+def update_zed_config(name, file_path):
+    file_path = Path(file_path)
+    try:
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        config_data = {}
+        if file_path.exists():
+            try:
+                with open(file_path, "r", encoding="utf-8") as f:
+                    config_data = json.load(f)
+            except Exception:
+                print(f"[Installer] Warning: Failed to parse existing {name} config. Overwriting.")
+        if "mcp" not in config_data:
+            config_data["mcp"] = {}
+        if "servers" not in config_data["mcp"]:
+            config_data["mcp"]["servers"] = {}
+        config_data["mcp"]["servers"]["tormentnexus"] = {
+            "path": EXE_STR,
+            "args": ["mcp"]
+        }
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(config_data, f, indent=2)
+        print(f"[Installer] Successfully configured {name} at {file_path}")
+    except Exception as e:
+        print(f"[Installer] FAILED to configure {name} at {file_path}: {e}")
+
 def update_dict_config(name, file_path):
     file_path = Path(file_path)
     try:
@@ -118,6 +149,11 @@ for name, path in DICT_CONFIGS.items():
 
 for name, path in ARRAY_CONFIGS.items():
     update_array_config(name, path)
+
+for name, path in ZED_CONFIGS.items():
+    if "Windows" in name and os.name != "nt":
+        continue
+    update_zed_config(name, path)
 
 # Inject instructions directly to working directory instruction files
 print("\n--- Starting Workspace Instruction Injection ---")
