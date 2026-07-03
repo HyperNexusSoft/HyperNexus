@@ -590,6 +590,7 @@ func New(cfg config.Config, detector controlplane.ToolProvider) *Server {
 	server.eventBus = eventbus.New(1000)
 	if flag.Lookup("test.v") == nil {
 		systray.Start(server.eventBus)
+		StartInstructionWatcher(cfg.WorkspaceRoot)
 	}
 	memoryVS, _ := memorystore.NewVectorStore(filepath.Join(cfg.ConfigDir, "memory.db"))
 	tools.GlobalVectorStore = memoryVS
