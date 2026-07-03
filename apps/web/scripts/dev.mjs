@@ -86,7 +86,8 @@ if (existsSync(buildDir)) {
 
 writePortMarker();
 
-const child = spawn(process.execPath, [nextBin, 'dev', '--port', port], {
+const devArgs = process.platform === 'win32' ? [nextBin, 'dev', '--webpack', '--port', port] : [nextBin, 'dev', '--port', port];
+const child = spawn(process.execPath, devArgs, {
   stdio: 'inherit',
   cwd: webDir,
   env: {
