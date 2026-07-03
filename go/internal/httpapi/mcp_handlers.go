@@ -554,6 +554,10 @@ type AlwaysOnConfig struct {
 	Tools map[string]bool `json:"tools"`
 }
 
+type NativeConfig struct {
+	Tools map[string]bool `json:"tools"`
+}
+
 func (s *Server) loadAlwaysOnTools() map[string]bool {
 	path := filepath.Join(s.cfg.WorkspaceRoot, "data", "always-on-tools.json")
 	data, err := os.ReadFile(path)
@@ -567,8 +571,42 @@ func (s *Server) loadAlwaysOnTools() map[string]bool {
 	return config.Tools
 }
 
+func (s *Server) saveAlwaysOnTools(tools map[string]bool) error {
+	path := filepath.Join(s.cfg.WorkspaceRoot, "data", "always-on-tools.json")
+	config := AlwaysOnConfig{Tools: tools}
+	data, err := json.MarshalIndent(config, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(path, data, 0644)
+}
+
+func (s *Server) loadNativeConfig() map[string]bool {
+	path := filepath.Join(s.cfg.WorkspaceRoot, "data", "native-tools.json")
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return map[string]bool{}
+	}
+	var config NativeConfig
+	if err := json.Unmarshal(data, &config); err != nil {
+		return map[string]bool{}
+	}
+	return config.Tools
+}
+
+func (s *Server) saveNativeConfig(tools map[string]bool) error {
+	path := filepath.Join(s.cfg.WorkspaceRoot, "data", "native-tools.json")
+	config := NativeConfig{Tools: tools}
+	data, err := json.MarshalIndent(config, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(path, data, 0644)
+}
+
 func (s *Server) injectAlwaysOnStatus(tools []map[string]any) []map[string]any {
 	alwaysOnMap := s.loadAlwaysOnTools()
+	nativeMap := s.loadNativeConfig()
 
 	// List of parity tools that must always be always-on by default
 	parityTools := map[string]bool{
@@ -601,6 +639,11 @@ func (s *Server) injectAlwaysOnStatus(tools []map[string]any) []map[string]any {
 		isAlwaysOn := parityTools[name] || alwaysOnMap[name]
 		tool["alwaysOn"] = isAlwaysOn
 		tool["alwaysShow"] = isAlwaysOn
+
+		// Determine if native status is active
+		isGoNative := s.toolsRegistry != nil && s.toolsRegistry.HasTool(name)
+		isNativeDisabled := nativeMap[name] == false
+		tool["native"] = isGoNative && !isNativeDisabled
 	}
 	return tools
 }

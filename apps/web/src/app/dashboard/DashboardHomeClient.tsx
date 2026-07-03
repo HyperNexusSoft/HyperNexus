@@ -46,10 +46,11 @@ const SESSION_STATUS_PRIORITY: Record<
 };
 
 const TABS = [
-	{ id: "page-c", label: "Memory & Skills" },
-	{ id: "page-b", label: "Go MCP & Tools" },
-	{ id: "page-a", label: "Recovery & Sync" },
-	{ id: "page-d", label: "Prompts & Deployments" },
+	{ id: "console", label: "Mission Control" },
+	{ id: "mcp", label: "MCP & Tool Registry" },
+	{ id: "memory", label: "Memory & GraphRAG" },
+	{ id: "workflows", label: "Swarm & Workflows" },
+	{ id: "settings", label: "Settings & Enterprise" },
 ] as const;
 
 export function sortSessions(sessions: DashboardSessionSummary[]) {
@@ -85,7 +86,7 @@ export function DashboardHomeClient() {
 function DashboardHomeClientContent() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const activeTab = searchParams.get("tab") || "page-c";
+	const activeTab = searchParams.get("tab") || "console";
 
 	const handleTabChange = (tabId: string) => {
 		router.replace(`/dashboard?tab=${tabId}`);
@@ -360,7 +361,7 @@ function DashboardHomeClientContent() {
 	const renderActiveTab = () => {
 		return (
 			<DashboardHomeView
-				activeTab={activeTab as "page-a" | "page-b" | "page-c" | "page-d"}
+				activeTab={activeTab}
 				generatedAtLabel={
 					currentTimestamp
 						? new Date(currentTimestamp).toLocaleTimeString()

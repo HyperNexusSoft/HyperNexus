@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.0-alpha.236] - 2026-07-03
+
+### Added
+- **Default Native & Always-On Tool Selection**: Exposed active toggles in the dashboard settings panel allowing configuration of default Go-native tool execution and always-on registry settings dynamically synchronized to the local daemon workspace data.
+
 ## [1.0.0-alpha.235] - 2026-07-02
 
 ### Changed

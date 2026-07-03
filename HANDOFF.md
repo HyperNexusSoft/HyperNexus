@@ -1,67 +1,25 @@
 # Session Handoff & Architecture Summary
-**Date:** July 2, 2026 (Local Time)
+**Date:** July 3, 2026 (Local Time)
 **Model:** Antigravity (Google DeepMind pair programmer)
 
 ## Key Achievements & Modifications
 
-1. **Unified Single-Page Dashboard Consolidation & Refactoring (v1.0.0-alpha.220)**:
-   - Successfully combined all features, subpages, views, and navigation tabs from across the workspace into a single scrollable dashboard page ([dashboard-home-view.tsx](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/src/app/dashboard/dashboard-home-view.tsx)).
-   - Rearranged layout elements by high-value importance, placing Cognitive Memory, MCP Orchestration, Workflows, Database Sync, Immune Radar, and Editor integration surface fields prominently.
-   - Removed sub-tabs in [DashboardHomeClient.tsx](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/src/app/dashboard/DashboardHomeClient.tsx) to force a seamless, consolidated layout view.
+1. **Default Native & Always-On Tool Selection (v1.0.0-alpha.236)**:
+   - Implemented dynamic configuration endpoints `/api/tools/always-on` and `/api/tools/native` inside the Go HTTP sidecar server to write configuration state dynamically to `data/always-on-tools.json` and `data/native-tools.json`.
+   - Exposed interactive checkboxes in the **Mission Control Settings** panel allowing selecting which tools run Go-natively and which ones are registered as always available to the model.
+   - Refactored the tool execution dispatcher in [server.go](file:///c:/Users/hyper/workspace/tormentnexus/go/internal/httpapi/server.go) to verify and respect native override states dynamically at runtime.
 
-2. **AI Agent Competitor Parity & Evidence Lock Gate Card**:
-   - Rendered a comprehensive status matrix details table (Levels L0–L3) highlighting first-party verification status blocks (OpenCode, Claude Code, Cursor, Windsurf, Copilot, Codex, etc.).
-   - Visualized the TormentNexus Readiness Gate checkpoints checklist with tooltips (`🔒`) highlighting byte-level client schema compatibility.
+2. **System Tray Integration Enhancements**:
+   - Added context popup menu handlers to the system tray (`systray_windows.go`) enabling operators to right-click the notification icon to access shortcuts to the dashboard portal, log viewer, or gracefully shut down all background runner scripts and server services.
 
-3. **OS Deep Link Protocol Implementation (v1.0.0-alpha.222)**:
-   - Implemented a new REST endpoint `/api/native/protocol/register` in the Go HTTP sidecar server to programmatically write `tormentnexus://` custom protocol associations to the Windows Registry.
-   - Added the **OS Protocol Registry** card to Section 4 of the consolidated Dashboard UI, enabling developers to register deep link protocol hooks with a single click.
-   - Rebuilt the Go sidecar binary, copied it to the workspace root, and restarted the active background daemon on port `7778` to register and process deep link routing parameters (`attach`, `create`).
+3. **Unified Navigation Tabs**:
+   - Replaced multi-tab structures with single-tab components in the consolidated Dashboard view, enabling the operator to switch context between Mission Control, MCP, memory, and settings panels.
 
-4. **Secure P2P Mesh Gossip Protocol Payloads (v1.0.0-alpha.223)**:
-   - Secured cross-machine memory-sharing UDP packets with industry-standard AES-GCM encryption using the local mesh shared cryptographic key default helper.
-   - Verified that both local test runners and multi-peer discovery event logs operate smoothly without decryption failures.
-
-5. **Wails Desktop GUI Application Compilation (v1.0.0-alpha.224)**:
-   - Built the complete frontend Next.js production bundle using Turbopack via `pnpm build:wails` and exported/copied all compiled static resources directly into the Wails GUI assets compiler target directory (`go/cmd/tormentnexus-gui/frontend/dist`).
-   - Compiled the native Go desktop application shell (`go build ./cmd/tormentnexus-gui`) to produce the single-binary executable `tormentnexus-gui.exe` (21MB) and copied it to the workspace root directory.
-
-6. **Tray Icon Browser Dashboard Launch Integration (v1.0.0-alpha.225)**:
-   - Enhanced `systray_windows.go` to listen to tray clicks (`WM_LBUTTONUP` / `WM_LBUTTONDBLCLK`) and programmatically launch the operator's default browser pointing directly to the local dashboard portal (`http://127.0.0.1:7779/dashboard`).
-
-7. **Sidebar Menu Elimination & High-Density UI Layout (v1.0.0-alpha.226)**:
-   - Removed the left sidebar navigation menu (`Sidebar.tsx`) completely from `layout.tsx` to let the consolidated single-page dashboard control plane expand to full width and occupy 100% viewport space.
-
-8. **Legacy Git Submodule Decommissioning & Worktree Pruning (v1.0.0-alpha.227)**:
-   - De-registered, un-tracked, and deleted the final legacy Git submodule (`apps/maestro` pointing to robertpelloni/Maestro) from the repository layout, clearing `.gitmodules` completely.
-   - Disabled git worktree allocation inside [supervisor.go](file:///c:/Users/hyper/workspace/tormentnexus/go/internal/supervisor/supervisor.go#L589-L604) and deleted the `.tormentnexus/worktrees` folder structure completely.
-
-9. **Workspace Clean-up & Documentation Consolidation (v1.0.0-alpha.228)**:
-   - Consolidated 11 root documentation files into the central `docs/` folder.
-   - Relocated 15 legacy and helper testing scripts from the root into the `archive/` folder.
-   - Cleared and untracked stale logs, local PIDs, and placeholder keys.
-
-10. **Version Alignment & Package Sync**:
-    - Pinned all workspace project and extension package configurations to `v1.0.0-alpha.235` using the standard `sync-versions` runner.
-
-11. **tRPC Proxy Health & Webpack Dev Server (v1.0.0-alpha.233)**:
-    - Added a 3-second abort timeout to Next.js tRPC proxy upstream fetches in [route.ts](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/src/app/api/trpc/[trpc]/route.ts) to prevent the server from hanging when the TS control plane is offline.
-    - Added `startupStatus` to `GO_NATIVE_PROCEDURES` in [route.ts](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/src/app/api/trpc/[trpc]/route.ts) to bypass the TS proxy and retrieve status directly from the Go sidecar.
-    - Switched the Next.js dev server to Webpack mode (`--webpack`) to avoid SST cache corruption and filesystem `ENOENT` crashes encountered with Turbopack on Windows.
-    - Rebuilt the `better-sqlite3` native Node.js bindings on Node 24 runtime to resolve loading errors.
-    - Verified all 5 dev readiness checks (web, core, go-sidecar, startup-status, and mcp-status) pass successfully.
-
-12. **Go Unit Test Loop Stabilization (v1.0.0-alpha.234)**:
-    - Wrapped the Windows GUI message loop start `systray.Start` inside [server.go](file:///c:/Users/hyper/workspace/tormentnexus/go/internal/httpapi/server.go) to bypass execution during `go test` runs (utilizing lightweight `flag.Lookup("test.v")` check).
-    - Prevented headless Windows test threads from hanging indefinitely during test execution.
-    - Validated that the Go backend compiles cleanly and the entire Next.js React dashboard package typechecks without any errors.
-
-13. **E2E Integration Verification updates (v1.0.0-alpha.235)**:
-    - Reconfigured the E2E verification test helper script in [e2e_integration_verify.py](file:///c:/Users/hyper/workspace/tormentnexus/scratch/e2e_integration_verify.py) to execute against the active Go sidecar port `7778` instead of the legacy `4300` port.
-    - Executed and validated that the Go-native Skill Registry, Prompt Library, and Memory schemas are fully functional.
+4. **Workspace Version Synchronization**:
+   - Synchronized all workspace packages to version `1.0.0-alpha.236` and verified that the Go backend and Next.js React frontend build and typecheck with 100% success.
 
 ## Next Steps for Successor Models
-- **Monitor Dev Environment Stability**: Keep running the Next.js dev server in Webpack mode on Windows.
+- **Verify Settings persistence**: Validate tool executions dynamically toggle native execution paths.
 - **Wails Desktop Testing**: Run the compiled `tormentnexus-gui.exe` to verify rendering logic and local system tray notification loops.
 - **Mesh / Gossip Protocol Telemetry**: Watch the gossip server updates to check for cross-machine memory-sharing logs.
 - **Swarm Queue Supervision**: Watch `swarm_v7.py` outputs as the multi-model generation pipeline indexes remaining catalog resources.

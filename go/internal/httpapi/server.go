@@ -982,6 +982,7 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/protocol/tormentnexus", s.handleTormentNexusProtocol)
 
 	s.mux.HandleFunc("/health", s.handleHealth)
+	s.mux.HandleFunc("/api/shutdown", s.handleShutdown)
 	s.mux.HandleFunc("/trpc/", s.handleTRPC)
 	s.mux.HandleFunc("/version", s.handleVersion)
 	s.mux.HandleFunc("/.well-known/agent-card", s.handleAgentCard)
@@ -1405,6 +1406,7 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/tools/upsert-batch", s.handleToolsUpsertBatch)
 	s.mux.HandleFunc("/api/tools/delete", s.handleToolsDelete)
 	s.mux.HandleFunc("/api/tools/always-on", s.handleToolsAlwaysOn)
+	s.mux.HandleFunc("/api/tools/native", s.handleToolsNative)
 	s.mux.HandleFunc("/api/tool-sets", s.handleToolSetsList)
 	s.mux.HandleFunc("/api/tool-sets/get", s.handleToolSetsGet)
 	s.mux.HandleFunc("/api/tool-sets/create", s.handleToolSetsCreate)
@@ -1667,6 +1669,18 @@ func (s *Server) handleHealth(w http.ResponseWriter, _ *http.Request) {
 		"uptimeSec": int(time.Since(s.startedAt).Seconds()),
 		"baseUrl":   s.cfg.BaseURL(),
 	})
+}
+
+func (s *Server) handleShutdown(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeJSON(w, http.StatusMethodNotAllowed, map[string]any{"success": false, "error": "method not allowed"})
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"success": true, "message": "Initiating server shutdown..."})
+	go func() {
+		time.Sleep(500 * time.Millisecond)
+		systray.TriggerFullShutdown()
+	}()
 }
 
 func (s *Server) handleVersion(w http.ResponseWriter, _ *http.Request) {
@@ -6703,7 +6717,60 @@ func (s *Server) handleToolsDelete(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) handleToolsAlwaysOn(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeJSON(w, http.StatusMethodNotAllowed, map[string]any{"success": false, "error": "method not allowed"})
+		return
+	}
+	var payload struct {
+		Name     string `json:"name"`
+		AlwaysOn bool   `json:"alwaysOn"`
+	}
+	var bodyBytes []byte
+	if r.Body != nil {
+		var err error
+		bodyBytes, err = io.ReadAll(r.Body)
+		if err == nil {
+			r.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+			_ = json.Unmarshal(bodyBytes, &payload)
+		}
+	}
+
+	if payload.Name != "" {
+		alwaysOnMap := s.loadAlwaysOnTools()
+		alwaysOnMap[payload.Name] = payload.AlwaysOn
+		_ = s.saveAlwaysOnTools(alwaysOnMap)
+	}
+
+	if len(bodyBytes) > 0 {
+		r.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+	}
 	s.handleTRPCBridgeBodyCall(w, r, "tools.setAlwaysOn")
+}
+
+func (s *Server) handleToolsNative(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeJSON(w, http.StatusMethodNotAllowed, map[string]any{"success": false, "error": "method not allowed"})
+		return
+	}
+	var payload struct {
+		Name   string `json:"name"`
+		Native bool   `json:"native"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]any{"success": false, "error": "invalid JSON body"})
+		return
+	}
+
+	if payload.Name != "" {
+		nativeMap := s.loadNativeConfig()
+		nativeMap[payload.Name] = payload.Native
+		if err := s.saveNativeConfig(nativeMap); err != nil {
+			writeJSON(w, http.StatusInternalServerError, map[string]any{"success": false, "error": err.Error()})
+			return
+		}
+	}
+
+	writeJSON(w, http.StatusOK, map[string]any{"success": true})
 }
 
 func (s *Server) handleToolSetsList(w http.ResponseWriter, r *http.Request) {
@@ -6980,7 +7047,8 @@ func (s *Server) handleAgentRunTool(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 1. Try native Go tool handlers first (Total Autonomy)
-	if s.toolsRegistry != nil && s.toolsRegistry.HasTool(payload.Name) {
+	isNativeDisabled := s.loadNativeConfig()[payload.Name] == false
+	if s.toolsRegistry != nil && s.toolsRegistry.HasTool(payload.Name) && !isNativeDisabled {
 		result, err := s.toolsRegistry.Execute(r.Context(), payload.Name, payload.Arguments)
 
 		// Audit Tool Execution (Enterprise Tier)

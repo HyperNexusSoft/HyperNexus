@@ -1,5 +1,10 @@
 # MEMORY.md — Multi-Agent Observations
 
+## Session 2026-07-03 (Default Tool Selection & React Fragment Tab Wrapping)
+
+### React JSX Tab Wrapping
+- **React Fragment Wrapper requirements**: When wrapping multiple sibling layout elements (like consecutive dashboard section divs) inside conditional tab blocks (e.g. `{activeTab === "settings" && (...)`), they must be enclosed in React Fragments (`<>...</>`) to satisfy JSX single-root compiling constraints.
+
 ## Session 2026-07-02 (E2E Integration Verification & Port Configuration)
 
 ### E2E Port Configuration

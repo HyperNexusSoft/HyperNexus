@@ -3,6 +3,7 @@
 package systray
 
 import (
+	"os"
 	"github.com/MDMAtk/TormentNexus/internal/eventbus"
 )
 
@@ -14,4 +15,10 @@ func Start(eb *eventbus.EventBus) {
 // NotifyActivity is a no-op on non-Windows platforms
 func NotifyActivity(dir string) {
 	// Headless mode: do nothing
+}
+
+// TriggerFullShutdown is a stub on non-Windows platforms that simply exits the process
+func TriggerFullShutdown() {
+	// Headless mode: just exit
+	os.Exit(0)
 }

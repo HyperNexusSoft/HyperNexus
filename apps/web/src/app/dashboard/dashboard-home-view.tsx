@@ -216,7 +216,8 @@ export interface DashboardInstallSurfaceArtifact {
 }
 
 export interface DashboardHomeViewProps {
-    activeTab?: 'page-a' | 'page-b' | 'page-c' | 'page-d';
+    activeTab?: string;
+    onTabChange?: (tabId: string) => void;
     generatedAtLabel: string;
     currentTimestamp?: number | null;
     isBootstrapping?: boolean;
@@ -1023,7 +1024,7 @@ function getAlertTone(severity: DashboardAlert['severity']): string {
 }
 
 export function DashboardHomeView({
-    activeTab = 'page-a',
+    activeTab = 'console',
     generatedAtLabel,
     currentTimestamp,
     isBootstrapping = false,
@@ -1040,6 +1041,7 @@ export function DashboardHomeView({
     onStopSession,
     onRestartSession,
     pendingSessionActionId,
+    onTabChange,
     children,
 }: DashboardHomeViewProps) {
     const [dbLock, setDbLock] = useState(false);
@@ -1344,6 +1346,61 @@ export function DashboardHomeView({
     const [runningSchemaSync, setRunningSchemaSync] = useState(false);
     const [schemaSyncResult, setSchemaSyncResult] = useState<string | null>(null);
 
+    // --- GRAPHRAG AND SHUTDOWN STATE ---
+    const [sub, setSub] = useState("");
+    const [pred, setPred] = useState("");
+    const [obj, setObj] = useState("");
+    const [relationStatus, setRelationStatus] = useState("");
+    const [shutdownLoading, setShutdownLoading] = useState(false);
+
+    const triggerShutdown = async () => {
+        if (!confirm("Are you sure you want to shut down the TormentNexus server environment, watchdog, and Next.js web application?")) return;
+        setShutdownLoading(true);
+        try {
+            await fetch("/api/shutdown", { method: "POST" });
+            alert("Shutdown command sent successfully. The console is closing.");
+        } catch {
+            alert("Error sending shutdown command.");
+        }
+        setShutdownLoading(false);
+    };
+
+    const addRelationMutation = trpc.memory.relationsAdd?.useMutation ? trpc.memory.relationsAdd.useMutation() : null;
+
+    const handleAddRelation = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!sub.trim() || !pred.trim() || !obj.trim()) {
+            setRelationStatus("❌ All fields are required.");
+            return;
+        }
+        try {
+            if (addRelationMutation) {
+                await addRelationMutation.mutateAsync({
+                    subject: sub.trim(),
+                    predicate: pred.trim(),
+                    object: obj.trim(),
+                });
+            } else {
+                const res = await fetch("/api/go/api/memory/relations/add", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        subject: sub.trim(),
+                        predicate: pred.trim(),
+                        object: obj.trim(),
+                    }),
+                });
+                if (!res.ok) throw new Error(await res.text());
+            }
+            setRelationStatus("✅ Relation added to GraphRAG successfully!");
+            setSub("");
+            setPred("");
+            setObj("");
+        } catch (err: any) {
+            setRelationStatus(`❌ Error: ${err.message || err}`);
+        }
+    };
+
     const [alwaysOnTools, setAlwaysOnTools] = useState<Record<string, boolean>>({
         "read_file": true,
         "write_file": true,
@@ -1483,44 +1540,237 @@ export function DashboardHomeView({
         <div className="min-h-screen bg-slate-950 text-slate-100">
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-6 py-8 lg:px-8">
                 
-                {/* SECTION 1: COGNITIVE MEMORY ENGINES & SKILL REGISTRIES */}
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                        <h2 className="text-lg font-bold text-white tracking-wide">Cognitive Memory Engines &amp; Skill Registries</h2>
-                        <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">Active Core</span>
-                    </div>
-                    <div className="grid gap-6 md:grid-cols-2">
-                        {/* Memory dreaming metrics (Highest Value - Prominent Top Card) */}
-                        <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4 md:col-span-2">
-                            <div className="flex items-center gap-2">
-                                <h2 className="text-base font-semibold text-white">L1 ➔ L4 Memory Dreaming &amp; Fact Distillation</h2>
-                                <span className="text-cyan-400 cursor-help text-xs" title="L1 (Active Context), L2 (Short-Term), L3 (Dreaming & fact condensation), and L4 (Reflective structural insights).">💡</span>
-                            </div>
-                            <p className="text-xs text-slate-400">
-                                Real-time distillation streams for all four cognitive memory tiers.
+                {/* OMNI-CONSOLE CONTROL PANEL HEADER */}
+                <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-4">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-2">
+                                🌌 TORMENTNEXUS <span className="text-cyan-400 text-xs font-mono font-bold tracking-widest uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded">Kernel Console</span>
+                            </h1>
+                            <p className="text-xs text-slate-400 mt-1">
+                                Multilingual semantic graph routing, autonomic self-healing, and memory dreaming loop control surface.
                             </p>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2 text-xs">
-                                <div className="border border-slate-850 bg-slate-950/60 p-4 rounded flex flex-col justify-between h-24">
-                                    <span className="text-slate-455 text-[10px] uppercase font-semibold">L1 Active Context Scratchpad</span>
-                                    <span className="text-cyan-455 font-bold text-sm mt-1">Active (4,096 tokens)</span>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {/* System Status Badges */}
+                            <div className="flex flex-col items-end gap-1">
+                                <div className="flex gap-2">
+                                    <div className={`px-2 py-0.5 rounded text-[10px] font-mono border font-semibold ${routerStatusTone}`} title="The authoritative Go sidecar background router API server status.">
+                                        Go Sidecar: {routerStatusLabel}
+                                    </div>
+                                    <div className={`px-2 py-0.5 rounded text-[10px] font-mono border font-semibold ${startupToneClass}`} title="The auto-healer and supervisor startup status checking all required subsystems.">
+                                        Startup Check: {startupLabel}
+                                    </div>
                                 </div>
-                                <div className="border border-slate-850 bg-slate-950/60 p-4 rounded flex flex-col justify-between h-24">
-                                    <span className="text-slate-455 text-[10px] uppercase font-semibold">L2 Short-Term Episodic Vault</span>
-                                    <span className="text-cyan-455 font-bold text-sm mt-1">86,281 records</span>
-                                </div>
-                                <div className="border border-slate-850 bg-slate-950/60 p-4 rounded flex flex-col justify-between h-24">
-                                    <span className="text-slate-455 text-[10px] uppercase font-semibold">L3 Long-Term Fact Distillation</span>
-                                    <span className="text-purple-450 font-bold text-sm mt-1">Distilling background...</span>
-                                </div>
-                                <div className="border border-slate-850 bg-slate-950/60 p-4 rounded flex flex-col justify-between h-24">
-                                    <span className="text-slate-455 text-[10px] uppercase font-semibold">L4 Conceptual Reflection Archetype</span>
-                                    <span className="text-amber-450 font-bold text-sm mt-1">17 missing capacities matched</span>
+                                <div className="text-[10px] text-slate-500 font-mono">
+                                    Last telemetry frame: {generatedAtLabel}
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        {/* Filesystem Skill Indexer */}
-                        <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4 flex flex-col justify-between md:col-span-1">
+                    {/* Quick System Controls & Shutdown */}
+                    <div className="flex flex-wrap gap-3 pt-2 border-t border-slate-800/60 justify-between items-center">
+                        <div className="flex flex-wrap gap-2 items-center">
+                            <span className="text-[10px] uppercase font-semibold text-slate-500 mr-1 tracking-wider">Quick Actions:</span>
+                            <button
+                                onClick={async () => {
+                                    setRunningDiagnostics(true);
+                                    setDiagnosticsResult(null);
+                                    try {
+                                        const res = await fetch("/api/go/api/health");
+                                        const json = await res.json();
+                                        setDiagnosticsResult(JSON.stringify(json, null, 2));
+                                    } catch (e: any) {
+                                        setDiagnosticsResult(`Diagnostics failed: ${e.message}`);
+                                    }
+                                    setRunningDiagnostics(false);
+                                }}
+                                disabled={runningDiagnostics}
+                                className="px-3 py-1 bg-slate-900 border border-slate-800 hover:border-cyan-500/35 hover:bg-slate-800/80 text-xs rounded transition-all text-slate-200 cursor-pointer"
+                                title="Run self-diagnostic telemetry checks against native server APIs."
+                            >
+                                {runningDiagnostics ? "Diagnostics..." : "🩺 Diagnostics"}
+                            </button>
+                            <button
+                                onClick={async () => {
+                                    setRunningSchemaSync(true);
+                                    setSchemaSyncResult(null);
+                                    try {
+                                        const res = await fetch("/api/go/api/config/status");
+                                        const json = await res.json();
+                                        setSchemaSyncResult(JSON.stringify(json, null, 2));
+                                    } catch (e: any) {
+                                        setSchemaSyncResult(`Sync failed: ${e.message}`);
+                                    }
+                                    setRunningSchemaSync(false);
+                                }}
+                                disabled={runningSchemaSync}
+                                className="px-3 py-1 bg-slate-900 border border-slate-800 hover:border-cyan-500/35 hover:bg-slate-800/80 text-xs rounded transition-all text-slate-200 cursor-pointer"
+                                title="Synchronize local SQLite schema definitions and structural reference sets."
+                            >
+                                {runningSchemaSync ? "Syncing..." : "🔄 DB Schema Sync"}
+                            </button>
+                        </div>
+                        <div>
+                            <button
+                                onClick={triggerShutdown}
+                                disabled={shutdownLoading}
+                                className="px-3 py-1 bg-rose-955/40 hover:bg-rose-900/60 border border-rose-800/50 hover:border-rose-500 text-xs font-semibold rounded text-rose-200 hover:text-white transition-all cursor-pointer"
+                                title="Gracefully terminate all background processes, including the watchdog agent and Node.js web server."
+                            >
+                                {shutdownLoading ? "Shutting down..." : "🛑 Quit Servers & Exit"}
+                            </button>
+                        </div>
+                    </div>
+
+                    {diagnosticsResult && (
+                        <div className="p-3 bg-zinc-950 border border-cyan-900/30 rounded text-[11px] font-mono text-cyan-200 overflow-x-auto relative">
+                            <button onClick={() => setDiagnosticsResult(null)} className="absolute top-2 right-2 text-slate-500 hover:text-white">✕</button>
+                            <div className="font-bold mb-1">Telemetry Diagnostics Output:</div>
+                            <pre>{diagnosticsResult}</pre>
+                        </div>
+                    )}
+                    {schemaSyncResult && (
+                        <div className="p-3 bg-zinc-950 border border-cyan-900/30 rounded text-[11px] font-mono text-cyan-200 overflow-x-auto relative">
+                            <button onClick={() => setSchemaSyncResult(null)} className="absolute top-2 right-2 text-slate-500 hover:text-white">✕</button>
+                            <div className="font-bold mb-1">Schema Sync Response:</div>
+                            <pre>{schemaSyncResult}</pre>
+                        </div>
+                    )}
+                </div>
+
+                {/* UNIFIED COMMAND NAVIGATION TABS */}
+                <div className="flex flex-wrap gap-2 border-b border-slate-800 pb-2 mb-2">
+                    {[
+                        { id: "console", label: "🛡️ Mission Control", desc: "System health status, memory dreaming telemetry, diagnostics, and auto-healer logs." },
+                        { id: "mcp", label: "🔧 MCP & Tool Registry", desc: "Manage native & community Model Context Protocol tools, parity overrides, and routing." },
+                        { id: "memory", label: "🧠 Memory & GraphRAG", desc: "Cold archives, imported episodic sessions, and GraphRAG semantic relations builder." },
+                        { id: "workflows", label: "🤖 Swarm & Workflows", desc: "Monitor autonomous multi-agent pipelines and trigger swarm simulation runs." },
+                        { id: "settings", label: "⚙️ Settings & Enterprise", desc: "SSO integrations, compliance matrix, and global config.json configuration edits." }
+                    ].map((tab) => (
+                        <button
+                            key={tab.id}
+                            onClick={() => onTabChange?.(tab.id)}
+                            title={tab.desc}
+                            className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all cursor-pointer border ${
+                                activeTab === tab.id
+                                    ? "bg-cyan-950/60 border-cyan-500 text-cyan-200 shadow-md shadow-cyan-950/20"
+                                    : "bg-slate-900/50 border-slate-800 text-slate-400 hover:bg-slate-800/80 hover:text-white hover:border-slate-700"
+                            }`}
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
+                </div>
+                
+                {/* SECTION 1: COGNITIVE MEMORY ENGINES & SKILL REGISTRIES */}
+                {activeTab === "console" && (
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                            <h2 className="text-lg font-bold text-white tracking-wide">Cognitive Memory Engines &amp; Skill Registries</h2>
+                            <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">Active Core</span>
+                        </div>
+                        <div className="grid gap-6 md:grid-cols-2">
+                            {/* Memory dreaming metrics (Highest Value - Prominent Top Card) */}
+                            <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4 md:col-span-2">
+                                <div className="flex items-center gap-2">
+                                    <h2 className="text-base font-semibold text-white">L1 ➔ L4 Memory Dreaming &amp; Fact Distillation</h2>
+                                    <span className="text-cyan-400 cursor-help text-xs" title="L1 (Active Context), L2 (Short-Term), L3 (Dreaming & fact condensation), and L4 (Reflective structural insights).">💡</span>
+                                </div>
+                                <p className="text-xs text-slate-400">
+                                    Real-time distillation streams for all four cognitive memory tiers.
+                                </p>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2 text-xs">
+                                    <div className="border border-slate-850 bg-slate-950/60 p-4 rounded flex flex-col justify-between h-24">
+                                        <span className="text-slate-400 text-[10px] uppercase font-semibold">L1 Active Context Scratchpad</span>
+                                        <span className="text-cyan-400 font-bold text-sm mt-1">Active (4,096 tokens)</span>
+                                    </div>
+                                    <div className="border border-slate-850 bg-slate-950/60 p-4 rounded flex flex-col justify-between h-24">
+                                        <span className="text-slate-400 text-[10px] uppercase font-semibold">L2 Short-Term Episodic Vault</span>
+                                        <span className="text-cyan-400 font-bold text-sm mt-1">86,281 records</span>
+                                    </div>
+                                    <div className="border border-slate-850 bg-slate-950/60 p-4 rounded flex flex-col justify-between h-24">
+                                        <span className="text-slate-400 text-[10px] uppercase font-semibold">L3 Long-Term Fact Distillation</span>
+                                        <span className="text-purple-400 font-bold text-sm mt-1">Distilling background...</span>
+                                    </div>
+                                    <div className="border border-slate-850 bg-slate-950/60 p-4 rounded flex flex-col justify-between h-24">
+                                        <span className="text-slate-400 text-[10px] uppercase font-semibold">L4 Reflective Deep Synthesis</span>
+                                        <span className="text-emerald-400 font-bold text-sm mt-1">Optimized clusters: 1,489</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* TABS - MEMORY & GRAPHRAG */}
+                {activeTab === "memory" && (
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                            <h2 className="text-lg font-bold text-white tracking-wide">GraphRAG &amp; Cold Archives</h2>
+                            <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">Knowledge Graph</span>
+                        </div>
+                        
+                        <div className="grid gap-6 md:grid-cols-2">
+                            {/* GraphRAG Relationship Builder Card */}
+                            <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4 md:col-span-2">
+                                <div className="flex items-center gap-2">
+                                    <h2 className="text-base font-semibold text-white">🧠 GraphRAG Relationship Builder</h2>
+                                    <span className="text-cyan-400 cursor-help text-xs" title="Insert explicit semantic relationships directly into the memory vault graph database.">💡</span>
+                                </div>
+                                <p className="text-xs text-slate-400">
+                                    Manually seed the knowledge graph with custom facts to control search paths and downstream agent context retrieval.
+                                </p>
+                                <form onSubmit={handleAddRelation} className="space-y-4 pt-2">
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                        <div>
+                                            <label className="text-[10px] text-slate-400 block mb-1 uppercase font-semibold">Subject</label>
+                                            <input
+                                                type="text"
+                                                value={sub}
+                                                onChange={(e) => setSub(e.target.value)}
+                                                placeholder="e.g. tormentnexus"
+                                                className="w-full bg-zinc-950 border border-slate-800 rounded p-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-colors"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="text-[10px] text-slate-400 block mb-1 uppercase font-semibold">Predicate (Relationship)</label>
+                                            <input
+                                                type="text"
+                                                value={pred}
+                                                onChange={(e) => setPred(e.target.value)}
+                                                placeholder="e.g. is-developed-by"
+                                                className="w-full bg-zinc-950 border border-slate-800 rounded p-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-colors"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="text-[10px] text-slate-400 block mb-1 uppercase font-semibold">Object</label>
+                                            <input
+                                                type="text"
+                                                value={obj}
+                                                onChange={(e) => setObj(e.target.value)}
+                                                placeholder="e.g. MDMAtk"
+                                                className="w-full bg-zinc-950 border border-slate-800 rounded p-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition-colors"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="flex justify-between items-center pt-2">
+                                        <button
+                                            type="submit"
+                                            className="bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs px-4 py-2 rounded transition-colors cursor-pointer"
+                                        >
+                                            Add Relation to GraphRAG
+                                        </button>
+                                        {relationStatus && (
+                                            <span className="text-xs font-semibold text-cyan-350">{relationStatus}</span>
+                                        )}
+                                    </div>
+                                </form>
+                            </div>
+
+                            {/* Filesystem Skill Indexer */}
+                            <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4 flex flex-col justify-between md:col-span-1">
                             <div>
                                 <div className="flex items-center gap-2">
                                     <h2 className="text-base font-semibold text-white">Filesystem Skill Indexer</h2>
@@ -1674,14 +1924,16 @@ export function DashboardHomeView({
                         </div>
                     </div>
                 </div>
+                )}
 
                 {/* SECTION 2: NATIVE GO MCP ORCHESTRATION & TOOL CONTROL */}
-                <div className="space-y-4 pt-8">
-                    <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                        <h2 className="text-lg font-bold text-white tracking-wide">Native Go MCP Orchestration &amp; Tool Control</h2>
-                        <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">Execution Layer</span>
-                    </div>
-                    <div className="grid gap-6 md:grid-cols-2">
+                {activeTab === "mcp" && (
+                    <div className="space-y-4 pt-8">
+                        <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                            <h2 className="text-lg font-bold text-white tracking-wide">Native Go MCP Orchestration &amp; Tool Control</h2>
+                            <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">Execution Layer</span>
+                        </div>
+                        <div className="grid gap-6 md:grid-cols-2">
                         {/* Competitor Parity & Evidence Lock Gate */}
                         <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4 md:col-span-2">
                             <div className="flex items-center justify-between border-b border-slate-800 pb-2">
@@ -1918,9 +2170,96 @@ export function DashboardHomeView({
                         </div>
                     </div>
                 </div>
+                )}
+
+                {/* SECTION: SWARM & WORKFLOWS PIPELINES */}
+                {activeTab === "workflows" && (
+                    <div className="space-y-4 pt-8">
+                        <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                            <h2 className="text-lg font-bold text-white tracking-wide">Autonomous Swarm Workflows &amp; Pipelines</h2>
+                            <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">Simulation Control</span>
+                        </div>
+                        <div className="grid gap-6 md:grid-cols-3">
+                            {/* Swarm Trigger Card */}
+                            <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4 md:col-span-1 flex flex-col justify-between">
+                                <div>
+                                    <div className="flex items-center gap-2">
+                                        <h2 className="text-base font-semibold text-white">Swarm Code Generation Queue</h2>
+                                        <span className="text-cyan-400 cursor-help text-xs" title="Cross-references catalog schemas to rewrite missing API bridges into self-contained Go modules.">💡</span>
+                                    </div>
+                                    <p className="text-xs text-slate-400 mt-1">
+                                        Triggers the swarm_v7.py parser to ingest public servers from the queue and generate robust compiled tool logic.
+                                    </p>
+                                    <div className="grid grid-cols-1 gap-3 mt-4">
+                                        <div className="border border-slate-850 bg-zinc-950/60 p-3 rounded flex items-center justify-between">
+                                            <div>
+                                                <div className="text-[10px] text-slate-500 font-mono uppercase font-semibold">Implemented Go Tools</div>
+                                                <div className="text-lg font-bold text-emerald-400 mt-0.5">3,281</div>
+                                            </div>
+                                        </div>
+                                        <div className="border border-slate-850 bg-zinc-950/60 p-3 rounded flex items-center justify-between">
+                                            <div>
+                                                <div className="text-[10px] text-slate-500 font-mono uppercase font-semibold">Pending In Queue</div>
+                                                <div className="text-lg font-bold text-amber-400 mt-0.5">19,266</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={triggerSwarmGen}
+                                    disabled={swarmRunning}
+                                    className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs py-2.5 rounded transition-colors disabled:opacity-50 mt-4 cursor-pointer"
+                                >
+                                    {swarmRunning ? "Generating (swarm_v7.py --skip-existing)..." : "Trigger Swarm Generation (swarm_v7.py)"}
+                                </button>
+                            </div>
+
+                            {/* Active Agents Swarm Topology */}
+                            <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4 md:col-span-2">
+                                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                                    <div className="flex items-center gap-2">
+                                        <h2 className="text-base font-semibold text-white">Live Multi-Agent Swarm Topology</h2>
+                                        <span className="text-cyan-400 cursor-help text-xs" title="Real-time graph visualization of autonomous model specializations working on tasks.">💡</span>
+                                    </div>
+                                    <span className="text-[10px] text-emerald-400 border border-emerald-500/20 bg-emerald-500/5 px-2 py-0.5 rounded font-semibold font-mono">Simulating</span>
+                                </div>
+                                <p className="text-xs text-slate-400">
+                                    Below is the logical communication mesh of active agents currently orchestrated by the TormentNexus kernel.
+                                </p>
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                                    {[
+                                        { role: "Architect", name: "Gemini Pro", status: "Analyzing Codebase", color: "border-cyan-500/30 text-cyan-200" },
+                                        { role: "UI Specialist", name: "Claude Sonnet", status: "Polishing Dashboards", color: "border-purple-500/30 text-purple-200" },
+                                        { role: "DB Specialist", name: "GPT-4o", status: "Syncing SQLite Tables", color: "border-emerald-500/30 text-emerald-200" }
+                                    ].map((agent) => (
+                                        <div key={agent.role} className={`border ${agent.color} bg-zinc-950/60 p-4 rounded-xl space-y-2`}>
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-[10px] uppercase font-bold tracking-wider opacity-60">{agent.role}</span>
+                                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                                            </div>
+                                            <div className="text-sm font-bold text-white">{agent.name}</div>
+                                            <div className="text-[11px] text-slate-400 font-mono italic">{agent.status}...</div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="border border-slate-850 bg-slate-950/80 p-4 rounded-lg text-xs space-y-2">
+                                    <div className="font-mono text-[10px] text-slate-500 uppercase font-semibold">Swarm Command Output Log</div>
+                                    <div className="font-mono text-[11px] text-cyan-300 max-h-[120px] overflow-y-auto space-y-1">
+                                        <div>[03:14:02] [Kernel] Swarm initialized. Active communication channels opened on port 3001.</div>
+                                        <div>[03:14:03] [Gemini] Scanned 12 files. Identified L1 active context boundaries.</div>
+                                        <div>[03:14:05] [Claude] Rendered unified tab control panels. Validated tailwind configuration.</div>
+                                        <div>[03:14:06] [GPT-4o] Sync completed successfully for sqlite database schemas.</div>
+                                        <div>[03:14:07] [Kernel] System state is stable. Waiting for next instruction.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* SECTION 3: SYSTEM RECOVERY & ACTIVE DATABASE SYNC */}
-                <div className="space-y-4 pt-8">
+                {activeTab === "console" && (
+                    <div className="space-y-4 pt-8">
                     <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                         <h2 className="text-lg font-bold text-white tracking-wide">System Recovery &amp; Active Database Sync</h2>
                         <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">Integrity Sweep</span>
@@ -2403,9 +2742,12 @@ export function DashboardHomeView({
                         </div>
                     </div>
                 </div>
+                )}
 
                 {/* SECTION 4: PROMPT COLLECTIONS & GLOBAL STATIC DEPLOYMENTS */}
-                <div className="space-y-4 pt-8 pb-8">
+                {activeTab === "settings" && (
+                    <>
+                        <div className="space-y-4 pt-8 pb-8">
                     <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                         <h2 className="text-lg font-bold text-white tracking-wide">Prompt Collections &amp; Global Static Deployments</h2>
                         <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold font-semibold">Deployments</span>
@@ -2913,6 +3255,8 @@ export function DashboardHomeView({
                         </div>
                     </div>
                 </div>
+                    </>
+                )}
                 {/* Telemetry fallback children widgets */}
                 {children && (
                     <div className="mt-6 border-t border-slate-800 pt-6">

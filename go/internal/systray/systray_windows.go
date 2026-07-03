@@ -4,6 +4,7 @@ package systray
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 	"sync"
 	"syscall"
@@ -34,6 +35,12 @@ var (
 	pLoadIcon         = user32.NewProc("LoadIconW")
 	pDestroyWindow    = user32.NewProc("DestroyWindow")
 
+	pCreatePopupMenu   = user32.NewProc("CreatePopupMenu")
+	pAppendMenu        = user32.NewProc("AppendMenuW")
+	pTrackPopupMenu     = user32.NewProc("TrackPopupMenu")
+	pGetCursorPos      = user32.NewProc("GetCursorPos")
+	pSetForegroundWindow = user32.NewProc("SetForegroundWindow")
+
 	pShellNotifyIcon = shell32.NewProc("Shell_NotifyIconW")
 )
 
@@ -44,6 +51,15 @@ const (
 	NIF_MESSAGE = 1
 	NIF_ICON    = 2
 	NIF_TIP     = 4
+
+	MF_STRING       = 0x00000000
+	TPM_LEFTALIGN   = 0x0000
+	TPM_RIGHTBUTTON = 0x0002
+	TPM_RETURNCMD   = 0x0100
+
+	IDM_DASHBOARD = 1001
+	IDM_LOGS      = 1002
+	IDM_EXIT      = 1003
 
 	WM_CREATE        = 0x0001
 	WM_DESTROY       = 0x0002
@@ -270,9 +286,42 @@ func hiddenWndProc(hWnd windows.HWND, msg uint32, wParam uintptr, lParam uintptr
 	case WM_TRAY:
 		switch lParam {
 		case WM_LBUTTONUP, WM_LBUTTONDBLCLK:
-			// Launch the user's default browser pointing to the local dashboard portal
 			_ = exec.Command("cmd", "/c", "start", "http://127.0.0.1:7779/dashboard").Start()
 			showLogWindow()
+		case WM_RBUTTONUP:
+			pSetForegroundWindow.Call(uintptr(hWnd))
+			hMenu, _, _ := pCreatePopupMenu.Call()
+
+			dashboardText, _ := syscall.UTF16PtrFromString("Open Dashboard")
+			logsText, _ := syscall.UTF16PtrFromString("Show Event Logs")
+			exitText, _ := syscall.UTF16PtrFromString("Shutdown Server & Exit")
+
+			pAppendMenu.Call(hMenu, MF_STRING, IDM_DASHBOARD, uintptr(unsafe.Pointer(dashboardText)))
+			pAppendMenu.Call(hMenu, MF_STRING, IDM_LOGS, uintptr(unsafe.Pointer(logsText)))
+			pAppendMenu.Call(hMenu, MF_STRING, 0, 0) // Separator
+			pAppendMenu.Call(hMenu, MF_STRING, IDM_EXIT, uintptr(unsafe.Pointer(exitText)))
+
+			var pos struct { X, Y int32 }
+			pGetCursorPos.Call(uintptr(unsafe.Pointer(&pos)))
+
+			cmd, _, _ := pTrackPopupMenu.Call(
+				hMenu,
+				TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_RETURNCMD,
+				uintptr(pos.X),
+				uintptr(pos.Y),
+				0,
+				uintptr(hWnd),
+				0,
+			)
+
+			switch cmd {
+			case IDM_DASHBOARD:
+				_ = exec.Command("cmd", "/c", "start", "http://127.0.0.1:7779/dashboard").Start()
+			case IDM_LOGS:
+				showLogWindow()
+			case IDM_EXIT:
+				go TriggerFullShutdown()
+			}
 		}
 		return 0
 	case WM_DESTROY:
@@ -281,6 +330,26 @@ func hiddenWndProc(hWnd windows.HWND, msg uint32, wParam uintptr, lParam uintptr
 	}
 	ret, _, _ := pDefWindowProc.Call(uintptr(hWnd), uintptr(msg), wParam, lParam)
 	return ret
+}
+
+func TriggerFullShutdown() {
+	// 1. Terminate watchdog
+	_ = exec.Command("taskkill", "/F", "/FI", "WINDOWTITLE eq TormentNexus Watchdog").Run()
+	_ = exec.Command("wmic", "process", "where", "CommandLine like '%watchdog.py%'", "call", "terminate").Run()
+
+	// 2. Terminate scripts
+	_ = exec.Command("wmic", "process", "where", "CommandLine like '%swarm_v7.py%'", "call", "terminate").Run()
+	_ = exec.Command("wmic", "process", "where", "CommandLine like '%bobbybookmarks_sync.py%'", "call", "terminate").Run()
+	_ = exec.Command("wmic", "process", "where", "CommandLine like '%trends_analyzer.py%'", "call", "terminate").Run()
+
+	// 3. Terminate Node dashboard processes
+	_ = exec.Command("wmic", "process", "where", "CommandLine like '%next-dev%' or CommandLine like '%next build%' or CommandLine like '%next start%'", "call", "terminate").Run()
+
+	// 4. Terminate freellm
+	_ = exec.Command("taskkill", "/F", "/IM", "freellm.exe").Run()
+
+	// 5. Exit sidecar
+	os.Exit(0)
 }
 
 func showLogWindow() {

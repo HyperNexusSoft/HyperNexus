@@ -5,4 +5,6 @@
   - [x] Verify Go compilation
 - [x] Refactor `vector_sqlite.go` `Commit` and `SemanticSearch` to use standard tables and Go-native cosine similarity matching
 - [x] Implement in-memory L1 cache and L3 cold archive database tables and flow
-- [x] Fix any compile issues and run unit tests to verify validation.
+- [x] Implement local native config handlers in Go (`mcp_handlers.go`)
+- [x] Add endpoints for native and always-on toggles in `server.go`
+- [x] Update execution dispatch and accessory tool merging to respect native overridesfy validation.

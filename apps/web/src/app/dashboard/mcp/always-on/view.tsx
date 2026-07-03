@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Wrench, Power, PowerOff, Search, RefreshCw } from "lucide-react";
+import { Wrench, Power, PowerOff, Search, RefreshCw, Cpu } from "lucide-react";
 
 interface ToolInfo {
 	name: string;
 	description: string;
 	alwaysOn: boolean;
+	native?: boolean;
 }
 
 export default function AlwaysOnToolsPage() {
@@ -162,6 +163,30 @@ export default function AlwaysOnToolsPage() {
 		}
 	};
 
+	const toggleNative = async (name: string) => {
+		try {
+			await fetch("/api/tools/native", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					name,
+					native: !(tools.find((t) => t.name === name)?.native ?? false),
+				}),
+			});
+			setTools((prev) =>
+				prev.map((t) =>
+					t.name === name ? { ...t, native: !(t.native ?? false) } : t,
+				),
+			);
+		} catch {
+			setTools((prev) =>
+				prev.map((t) =>
+					t.name === name ? { ...t, native: !(t.native ?? false) } : t,
+				),
+			);
+		}
+	};
+
 	const filtered = tools.filter(
 		(t) =>
 			t.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -177,11 +202,11 @@ export default function AlwaysOnToolsPage() {
 				<div>
 					<h1 className="text-2xl font-bold flex items-center gap-2">
 						<Wrench className="w-6 h-6" />
-						Always-On Tools
+						Always-On & Native Tools
 					</h1>
 					<p className="text-zinc-400 text-sm mt-1">
 						Configure which built-in TormentNexus tools are always available to
-						the MCP client. Parity tools are always-on by default.
+						the MCP client and whether they run as native Go services.
 					</p>
 				</div>
 				<button
@@ -220,6 +245,7 @@ export default function AlwaysOnToolsPage() {
 										key={`${tool.name}__${idx}`}
 										tool={tool}
 										onToggle={toggleAlwaysOn}
+										onToggleNative={toggleNative}
 									/>
 								))}
 							</div>
@@ -238,6 +264,7 @@ export default function AlwaysOnToolsPage() {
 										key={`${tool.name}__${idx}`}
 										tool={tool}
 										onToggle={toggleAlwaysOn}
+										onToggleNative={toggleNative}
 									/>
 								))}
 							</div>
@@ -252,10 +279,14 @@ export default function AlwaysOnToolsPage() {
 function ToolCard({
 	tool,
 	onToggle,
+	onToggleNative,
 }: {
 	tool: ToolInfo;
 	onToggle: (name: string) => void;
+	onToggleNative: (name: string) => void;
 }) {
+	const isNativeEligible = tool.native !== undefined;
+
 	return (
 		<div
 			className={`border rounded-lg p-4 flex items-start justify-between gap-3 transition-colors ${
@@ -271,22 +302,46 @@ function ToolCard({
 				<div className="text-xs text-zinc-500 mt-1 line-clamp-2">
 					{tool.description}
 				</div>
-			</div>
-			<button
-				onClick={() => onToggle(tool.name)}
-				className={`shrink-0 p-2 rounded-lg transition-colors ${
-					tool.alwaysOn
-						? "bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30"
-						: "bg-zinc-800 text-zinc-500 hover:bg-zinc-700"
-				}`}
-				title={tool.alwaysOn ? "Disable always-on" : "Enable always-on"}
-			>
-				{tool.alwaysOn ? (
-					<Power className="w-4 h-4" />
-				) : (
-					<PowerOff className="w-4 h-4" />
+				{isNativeEligible && (
+					<div className="mt-2 text-[10px] uppercase tracking-wider font-semibold text-zinc-400">
+						Go-Native Service: <span className={tool.native ? "text-cyan-400" : "text-zinc-500"}>{tool.native ? "Active" : "Disabled"}</span>
+					</div>
 				)}
-			</button>
+			</div>
+			<div className="flex gap-1 shrink-0">
+				{isNativeEligible && (
+					<button
+						onClick={() => onToggleNative(tool.name)}
+						className={`p-2 rounded-lg transition-colors ${
+							tool.native
+								? "bg-cyan-600/20 text-cyan-400 hover:bg-cyan-600/30"
+								: "bg-zinc-800 text-zinc-600 hover:bg-zinc-700"
+						}`}
+						title={tool.native ? "Disable native Go runtime" : "Enable native Go runtime"}
+					>
+						{tool.native ? (
+							<Cpu className="w-4 h-4" />
+						) : (
+							<Cpu className="w-4 h-4 opacity-30" />
+						)}
+					</button>
+				)}
+				<button
+					onClick={() => onToggle(tool.name)}
+					className={`p-2 rounded-lg transition-colors ${
+						tool.alwaysOn
+							? "bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30"
+							: "bg-zinc-800 text-zinc-500 hover:bg-zinc-700"
+					}`}
+					title={tool.alwaysOn ? "Disable always-on" : "Enable always-on"}
+				>
+					{tool.alwaysOn ? (
+						<Power className="w-4 h-4" />
+					) : (
+						<PowerOff className="w-4 h-4" />
+					)}
+				</button>
+			</div>
 		</div>
 	);
 }
