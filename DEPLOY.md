@@ -153,3 +153,41 @@ pnpm run check:release-gate:ci:strict-visuals
 ## Health Checks
 - `http://localhost:4000/api/config/status` - Main control plane health
 - `http://localhost:3000` - Dashboard
+
+---
+
+## Corporate Cloud Deployment (HyperNexus)
+
+HyperNexus supports enterprise cloud requirements including Single Sign-On (SSO), Role-Based Access Control (RBAC), Server-Sent Events (SSE) MCP network connections with authentication, and containerized data isolation.
+
+### 1. SSO & RBAC System Integration
+* **OIDC Identity Federation**: HyperNexus interfaces with industry-standard OIDC providers (Okta, Azure AD, Auth0, etc.). Toggle **SSO Active** in the settings console and configure your Client ID, Secret, and Issuer URL.
+* **Granular RBAC**: Manage functional capabilities per identity role (Admin, Operator, Viewer) through the interactive role permission matrix.
+
+### 2. Authenticated SSE MCP Connector
+To connect external tools/processes to the cloud control plane:
+1. Enable **SSE Client Authentication** in the Cloud Settings view.
+2. Generate an SSE Client token (`CLOUDMCP_SSE_AUTH_TOKEN`).
+3. Connect using standard Model Context Protocol (MCP) clients to:
+   ```http
+   GET http://YOUR_CLOUD_IP:4300/api/sse?token=hk_prod_YOUR_TOKEN
+   ```
+4. Client requests are POSTed as JSON-RPC payloads to `/api/sse/message?sessionId=client-xyz`.
+
+### 3. Multi-Tenant Docker Process Isolation
+For secure data and process separation per account:
+* Spawn account services using the isolated compose blueprint:
+  ```bash
+  export TENANT_ID="tenant-company-a"
+  export TENANT_PORT="3005"
+  export CLOUDMCP_SSE_AUTH_TOKEN="hk_prod_secure_token_for_tenant_a"
+  docker-compose -f docker-compose.isolated.yml up -d
+  ```
+* Resource boundaries, directory mounting (`/var/lib/hypernexus/tenants/tenant-company-a/`), and network interfaces are isolated automatically.
+
+### 4. Cloud Autoscaling VM Groups
+To configure automated horizontal scaling:
+1. **VM Machine Image**: Create a base image (AMI/Snapshot) with Docker and Compose installed. Configure `systemd` to start the hypernexus orchestrator.
+2. **Stateless Scale**: Ensure VM instances join a load balancer. Keep state stored in an external shared DB (e.g. Postgres RDS/Cloud SQL) and cache layers (Redis Enterprise) as defined in `docker-compose.yml`.
+3. **Autoscaling Policies**: Setup CPU threshold triggers (e.g. scale up at >=70% CPU, scale down at <=30% CPU) using AWS Auto Scaling Groups, Azure VMSS, or Google Compute Engine Managed Instance Groups.
+

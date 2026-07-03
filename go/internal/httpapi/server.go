@@ -1655,6 +1655,7 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/repograph/search", s.handleRepoGraphSearch)
 
 	s.mux.HandleFunc("/api/sse", s.handleSSE)
+	s.mux.HandleFunc("/api/sse/message", s.handleSSEMessage)
 	s.mux.HandleFunc("/api/sse/history", s.handleSSEHistory)
 
 	// --- New Go-native handlers (alpha.11+) ---

@@ -50,11 +50,42 @@ export default function ProviderAuthBillingMatrix() {
     const [checkoutOpen, setCheckoutOpen] = useState(false);
     const [billingPortalOpen, setBillingPortalOpen] = useState(false);
 
+    // SSO States
+    const [ssoProvider, setSsoProvider] = useState('https://identity.hypernexus.site/oauth/v2');
+    const [ssoClientId, setSsoClientId] = useState('hypernexus-dashboard-prod');
+    const [ssoClientSecret, setSsoClientSecret] = useState('••••••••••••••••••••••••••••••••');
+    const [ssoEnabled, setSsoEnabled] = useState(false);
+
+    // RBAC States
+    const [adminPerms, setAdminPerms] = useState<string[]>(['read', 'write', 'admin', 'audit']);
+    const [operatorPerms, setOperatorPerms] = useState<string[]>(['read', 'write', 'execute']);
+    const [viewerPerms, setViewerPerms] = useState<string[]>(['read']);
+
+    // SSE Token States
+    const [sseToken, setSseToken] = useState('hk_prod_99f2b8a7c6e54321');
+    const [sseAuthEnabled, setSseAuthEnabled] = useState(true);
+
     React.useEffect(() => {
         if (typeof window !== 'undefined') {
             setCorporateIsolation(localStorage.getItem('corporateIsolation') === 'true');
             setCorporateKey(localStorage.getItem('corporateKey') || '');
             setCorporateEndpoint(localStorage.getItem('corporateEndpoint') || 'http://ollama-headless.internal:11434');
+            
+            setSsoProvider(localStorage.getItem('ssoProvider') || 'https://identity.hypernexus.site/oauth/v2');
+            setSsoClientId(localStorage.getItem('ssoClientId') || 'hypernexus-dashboard-prod');
+            setSsoEnabled(localStorage.getItem('ssoEnabled') === 'true');
+            
+            if (localStorage.getItem('adminPerms')) {
+                setAdminPerms(JSON.parse(localStorage.getItem('adminPerms')!));
+            }
+            if (localStorage.getItem('operatorPerms')) {
+                setOperatorPerms(JSON.parse(localStorage.getItem('operatorPerms')!));
+            }
+            if (localStorage.getItem('viewerPerms')) {
+                setViewerPerms(JSON.parse(localStorage.getItem('viewerPerms')!));
+            }
+            setSseToken(localStorage.getItem('sseToken') || 'hk_prod_99f2b8a7c6e54321');
+            setSseAuthEnabled(localStorage.getItem('sseAuthEnabled') !== 'false');
         }
     }, []);
 
@@ -70,6 +101,60 @@ export default function ProviderAuthBillingMatrix() {
         localStorage.setItem('corporateKey', key);
         localStorage.setItem('corporateEndpoint', endpoint);
         toast.success('Corporate configuration saved successfully');
+    };
+
+    const toggleSsoEnabled = (val: boolean) => {
+        setSsoEnabled(val);
+        localStorage.setItem('ssoEnabled', String(val));
+        toast.success(val ? 'SSO Single Sign-On enabled' : 'SSO Single Sign-On disabled');
+    };
+
+    const saveSsoSettings = (prov: string, cid: string, secret: string) => {
+        setSsoProvider(prov);
+        setSsoClientId(cid);
+        setSsoClientSecret(secret);
+        localStorage.setItem('ssoProvider', prov);
+        localStorage.setItem('ssoClientId', cid);
+        toast.success('Identity provider configuration saved');
+    };
+
+    const toggleRbacPermission = (role: 'admin' | 'operator' | 'viewer', permission: string) => {
+        let currentPerms: string[] = [];
+        let setter: React.Dispatch<React.SetStateAction<string[]>> = () => {};
+        let storageKey = '';
+
+        if (role === 'admin') {
+            currentPerms = [...adminPerms];
+            setter = setAdminPerms;
+            storageKey = 'adminPerms';
+        } else if (role === 'operator') {
+            currentPerms = [...operatorPerms];
+            setter = setOperatorPerms;
+            storageKey = 'operatorPerms';
+        } else {
+            currentPerms = [...viewerPerms];
+            setter = setViewerPerms;
+            storageKey = 'viewerPerms';
+        }
+
+        const index = currentPerms.indexOf(permission);
+        if (index > -1) {
+            currentPerms.splice(index, 1);
+        } else {
+            currentPerms.push(permission);
+        }
+
+        setter(currentPerms);
+        localStorage.setItem(storageKey, JSON.stringify(currentPerms));
+        toast.success(`RBAC permissions updated for role: ${role}`);
+    };
+
+    const generateSseToken = () => {
+        const randHex = Array.from({length: 16}, () => Math.floor(Math.random()*16).toString(16)).join('');
+        const newToken = `hk_prod_${randHex}`;
+        setSseToken(newToken);
+        localStorage.setItem('sseToken', newToken);
+        toast.success('New cloud SSE authentication token generated');
     };
     
     const utils = trpc.useUtils();
@@ -227,7 +312,8 @@ export default function ProviderAuthBillingMatrix() {
 
             {/* Cloud & Corporate Dashboard Overlay */}
             {isCloud && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-zinc-800 pb-8">
+                <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-zinc-800 pb-8">
                     {/* Stripe Billing Panel */}
                     <Card className="bg-zinc-900 border-zinc-800 shadow-xl relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 blur-3xl -mr-10 -mt-10 rounded-full" />
@@ -347,7 +433,175 @@ export default function ProviderAuthBillingMatrix() {
                         </CardContent>
                     </Card>
                 </div>
-            )}
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border-b border-zinc-800 pb-8 mt-6">
+                    {/* SSO Configuration Card */}
+                    <Card className="bg-zinc-900 border-zinc-800 shadow-xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 blur-3xl -mr-10 -mt-10 rounded-full" />
+                        <CardHeader>
+                            <CardTitle className="text-sm font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-2">
+                                <Settings className="h-4 w-4 text-blue-400" />
+                                SSO Identity Provider (OIDC)
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                            <div className="flex items-center justify-between border-b border-zinc-800/80 pb-2">
+                                <span className="text-xs text-zinc-400">OIDC Authentication</span>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-xs text-zinc-500">{ssoEnabled ? "Active" : "Disabled"}</span>
+                                    <input 
+                                        type="checkbox"
+                                        checked={ssoEnabled}
+                                        onChange={(e) => toggleSsoEnabled(e.target.checked)}
+                                        className="h-4 w-4 rounded border-zinc-700 bg-zinc-950 text-blue-600 accent-blue-500 outline-none"
+                                    />
+                                </div>
+                            </div>
+                            <div className="space-y-2 text-xs">
+                                <div>
+                                    <label className="text-[10px] text-zinc-500 block mb-1">ISSUER URL (IDP)</label>
+                                    <input 
+                                        value={ssoProvider}
+                                        onChange={(e) => setSsoProvider(e.target.value)}
+                                        className="w-full bg-zinc-950 border border-zinc-800 rounded p-2 font-mono text-white outline-none focus:border-blue-500"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] text-zinc-500 block mb-1">CLIENT ID</label>
+                                    <input 
+                                        value={ssoClientId}
+                                        onChange={(e) => setSsoClientId(e.target.value)}
+                                        className="w-full bg-zinc-950 border border-zinc-800 rounded p-2 font-mono text-white outline-none focus:border-blue-500"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[10px] text-zinc-500 block mb-1">CLIENT SECRET</label>
+                                    <input 
+                                        type="password"
+                                        value={ssoClientSecret}
+                                        onChange={(e) => setSsoClientSecret(e.target.value)}
+                                        className="w-full bg-zinc-950 border border-zinc-800 rounded p-2 font-mono text-white outline-none focus:border-blue-500"
+                                    />
+                                </div>
+                            </div>
+                            <Button 
+                                className="bg-blue-600 hover:bg-blue-500 text-white border-transparent text-xs w-full mt-2"
+                                onClick={() => saveSsoSettings(ssoProvider, ssoClientId, ssoClientSecret)}
+                            >
+                                Save SSO Settings
+                            </Button>
+                        </CardContent>
+                    </Card>
+                    
+                    {/* RBAC Settings Card */}
+                    <Card className="bg-zinc-900 border-zinc-800 shadow-xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 blur-3xl -mr-10 -mt-10 rounded-full" />
+                        <CardHeader>
+                            <CardTitle className="text-sm font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-2">
+                                <Shield className="h-4 w-4 text-purple-400" />
+                                Role-Based Access Control (RBAC)
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                            <div className="text-xs text-zinc-400 mb-2">Configure functional permissions across enterprise roles:</div>
+                            <div className="space-y-3 text-xs">
+                                <div className="space-y-1">
+                                    <div className="font-semibold text-zinc-300">Admin Role</div>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {['read', 'write', 'admin', 'audit'].map(perm => (
+                                            <button 
+                                                key={perm}
+                                                onClick={() => toggleRbacPermission('admin', perm)}
+                                                className={`px-2 py-0.5 rounded text-[10px] transition-colors border ${adminPerms.includes(perm) ? 'bg-purple-500/20 text-purple-400 border-purple-500/40' : 'bg-zinc-950 text-zinc-600 border-zinc-800'}`}
+                                            >
+                                                {perm}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="space-y-1">
+                                    <div className="font-semibold text-zinc-300">Operator Role</div>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {['read', 'write', 'execute'].map(perm => (
+                                            <button 
+                                                key={perm}
+                                                onClick={() => toggleRbacPermission('operator', perm)}
+                                                className={`px-2 py-0.5 rounded text-[10px] transition-colors border ${operatorPerms.includes(perm) ? 'bg-purple-500/20 text-purple-400 border-purple-500/40' : 'bg-zinc-950 text-zinc-600 border-zinc-800'}`}
+                                            >
+                                                {perm}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="space-y-1">
+                                    <div className="font-semibold text-zinc-300">Viewer Role</div>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {['read', 'write', 'execute'].map(perm => (
+                                            <button 
+                                                key={perm}
+                                                onClick={() => toggleRbacPermission('viewer', perm)}
+                                                className={`px-2 py-0.5 rounded text-[10px] transition-colors border ${viewerPerms.includes(perm) ? 'bg-purple-500/20 text-purple-400 border-purple-500/40' : 'bg-zinc-950 text-zinc-600 border-zinc-800'}`}
+                                            >
+                                                {perm}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* Cloud MCP SSE Network Connector Card */}
+                    <Card className="bg-zinc-900 border-zinc-800 shadow-xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 blur-3xl -mr-10 -mt-10 rounded-full" />
+                        <CardHeader>
+                            <CardTitle className="text-sm font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-2">
+                                <Zap className="h-4 w-4 text-emerald-400" />
+                                Cloud MCP SSE Connector
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                            <div className="flex items-center justify-between border-b border-zinc-800/80 pb-2">
+                                <span className="text-xs text-zinc-400">SSE Authentication Token</span>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-xs text-zinc-500">{sseAuthEnabled ? "Active" : "Disabled"}</span>
+                                    <input 
+                                        type="checkbox"
+                                        checked={sseAuthEnabled}
+                                        onChange={(e) => {
+                                            setSseAuthEnabled(e.target.checked);
+                                            localStorage.setItem('sseAuthEnabled', String(e.target.checked));
+                                        }}
+                                        className="h-4 w-4 rounded border-zinc-700 bg-zinc-950 text-emerald-600 accent-emerald-500 outline-none"
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="space-y-2 text-xs font-mono">
+                                <div>
+                                    <label className="text-[10px] text-zinc-500 block mb-1">CLOUDMCP_SSE_AUTH_TOKEN</label>
+                                    <div className="w-full bg-zinc-950 border border-zinc-800 rounded p-2 text-zinc-300 select-all overflow-x-auto whitespace-nowrap">
+                                        {sseToken}
+                                    </div>
+                                </div>
+                                <div className="pt-1">
+                                    <label className="text-[10px] text-zinc-500 block mb-1">SSE MCP CONNECTION ENDPOINT</label>
+                                    <div className="text-[10px] text-zinc-400 break-all select-all">
+                                        http://localhost:4300/api/sse?token={sseToken}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <Button 
+                                className="bg-emerald-600 hover:bg-emerald-500 text-white border-transparent text-xs w-full mt-2"
+                                onClick={generateSseToken}
+                            >
+                                Generate New SSE Client Token
+                            </Button>
+                        </CardContent>
+                    </Card>
+                </div>
+            </>)}
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
                 {/* Left Column - Financial Overview & Fallback */}

@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # Isolated per-account client process
+  core-isolated:
+    image: tormentnexus-core:latest
+    build:
+      context: .
+      target: core
+    # Account isolation resource constraints
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 2048M
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    security_opt:
+      - no-new-privileges:true
+    read_only: false
+    tmpfs:
+      - /tmp
+      - /run
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - TENANT_ID=${TENANT_ID:-default-tenant}
+      - DATABASE_URL=/app/data/tenant_isolated.db
+      - CLOUDMCP_SSE_AUTH_TOKEN=${CLOUDMCP_SSE_AUTH_TOKEN:-hk_prod_secure_fallback_token}
+    volumes:
+      # Isolate storage directory for the specific tenant
+      - /var/lib/hypernexus/tenants/${TENANT_ID:-default-tenant}/data:/app/data
+      - /var/lib/hypernexus/tenants/${TENANT_ID:-default-tenant}/sessions:/app/sessions
+      - /var/lib/hypernexus/tenants/${TENANT_ID:-default-tenant}/profiles:/app/profiles
+      - /var/lib/hypernexus/tenants/${TENANT_ID:-default-tenant}/logs:/app/logs
+    networks:
+      - tenant-network
+    restart: on-failure:5
+
+  # Isolated web dashboard portal per account group
+  web-isolated:
+    image: tormentnexus-web:latest
+    build:
+      context: .
+      target: web
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://core-isolated:3000
+    depends_on:
+      - core-isolated
+    ports:
+      # Port mapped dynamically per tenant by the cloud orchestrator
+      - "${TENANT_PORT:-3001}:3000"
+    networks:
+      - tenant-network
+    restart: on-failure:5
+
+networks:
+  tenant-network:
+    internal: false
