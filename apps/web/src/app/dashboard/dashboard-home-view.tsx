@@ -1408,8 +1408,8 @@ export function DashboardHomeView({
         "run_command": true,
         "grep_search": true,
         "view_file": true,
-        "list_dir": false,
-        "search_web": false,
+        "list_dir": true,
+        "search_web": true,
     });
     const [swarmRunning, setSwarmRunning] = useState(false);
 
@@ -2017,7 +2017,7 @@ export function DashboardHomeView({
                                 {Object.keys(alwaysOnTools).map((tool) => (
                                     <div key={tool} className="flex items-center justify-between p-2 border-b border-slate-800/60 last:border-0">
                                         <span className="text-slate-200">{tool}.go</span>
-                                        {tool === "read_file" || tool === "write_file" || tool === "run_command" ? (
+                                        {tool === "read_file" || tool === "write_file" || tool === "run_command" || tool === "grep_search" || tool === "view_file" || tool === "list_dir" || tool === "search_web" ? (
                                             <span className="text-[10px] text-amber-400 border border-amber-500/30 bg-amber-500/10 px-1.5 py-0.5 rounded">
                                                 Locked Always-On
                                             </span>

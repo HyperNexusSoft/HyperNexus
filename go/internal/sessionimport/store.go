@@ -639,9 +639,11 @@ func (s *ImportedSessionStore) scanImportedSessionRow(ctx context.Context, db *s
 	if strings.TrimSpace(transcript) == "" && transcriptArchivePath.Valid {
 		archived, err := readGzipFile(filepath.Join(s.archiveRoot, filepath.FromSlash(transcriptArchivePath.String)))
 		if err != nil {
-			return nil, err
+			fmt.Printf("[SessionImport] Warning: missing transcript archive file at %s: %v\n", transcriptArchivePath.String, err)
+			transcript = "[Error: Transcript archive file missing from storage]"
+		} else {
+			transcript = string(archived)
 		}
-		transcript = string(archived)
 	}
 	memories, err := s.listParsedMemories(ctx, db, id)
 	if err != nil {

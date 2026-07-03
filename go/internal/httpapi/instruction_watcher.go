@@ -61,7 +61,7 @@ func StartInstructionWatcher(workspaceRoot string) {
 				// Match targeted instruction files
 				lowerName := strings.ToLower(name)
 				isTarget := false
-				if lowerName == "agent.md" || lowerName == "agents.md" || lowerName == "s.md" ||
+				if lowerName == "agent.md" || lowerName == "agents.md" ||
 					lowerName == "claude.md" || lowerName == "jules.md" || lowerName == "skill.md" {
 					isTarget = true
 				}

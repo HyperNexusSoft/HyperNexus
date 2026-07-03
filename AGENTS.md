@@ -1,6 +1,11 @@
 <!-- [TORMENTNEXUS_AUTO_INJECTED] -->
 > [!IMPORTANT]
-> You are running within the TormentNexus environment. You MUST use your available tools frequently and proactively for researching, editing, executing, and validating your work. Always prioritize tool execution.
+> **TormentNexus Advanced Agent Mandates:**
+> 1. **Proactive Tooling**: You MUST use available tools frequently and proactively. Prioritize tool execution for researching, editing, executing, and validating.
+> 2. **Codebase AST & Search**: Always analyze impact and dependencies using codebase analysis/AST/search tools (`tormentnexus__repograph_search`, `tormentnexus__repograph_find_references`) before modifying code.
+> 3. **Context Harvesting & Compaction**: Perform automatic context harvesting and compaction/pruning of the LLM context to prevent token blowups. Summarize or discard old logs/history dynamically.
+> 4. **Tool Output Compaction & Deduplication**: Deduplicate and compact verbose tool outputs. Avoid displaying duplicate or redundant logs in responses.
+> 5. **Session & Skill Injection**: Inspect and update sessions and memory states using scratchpads (`memory_scratchpad_set`) to persist key findings, rules, and skill recommendations.
 
 # AGENTS — TormentNexus Kernel & TormentNexus Contributor Guide
 
