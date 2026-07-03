@@ -20,6 +20,7 @@ const (
 )
 
 // StartInstructionWatcher starts a background goroutine scanning the workspace for instruction files.
+// It only checks the working directory and 1 level inside it.
 func StartInstructionWatcher(workspaceRoot string) {
 	go func() {
 		for {
@@ -28,9 +29,24 @@ func StartInstructionWatcher(workspaceRoot string) {
 					return nil // Skip error files
 				}
 
+				// Calculate path depth relative to workspaceRoot
+				rel, err := filepath.Rel(workspaceRoot, path)
+				if err != nil {
+					return nil
+				}
+
+				if rel != "." {
+					seps := strings.Count(rel, string(filepath.Separator))
+					// If this is a directory and is already 1 level deep (depth 2), skip traversing it.
+					// e.g. workspaceRoot/subfolder is depth 1 (seps == 0), workspaceRoot/subfolder/nested is depth 2 (seps == 1)
+					if d.IsDir() && seps >= 1 {
+						return filepath.SkipDir
+					}
+				}
+
 				name := d.Name()
 
-				// Skip build, dependency, and hidden directories
+				// Skip build, dependency, and hidden directories at the root level
 				if d.IsDir() {
 					lowerName := strings.ToLower(name)
 					if lowerName == "node_modules" || lowerName == ".git" || lowerName == ".next" ||
