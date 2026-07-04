@@ -392,8 +392,12 @@ function DashboardHomeClientContent() {
 				}}
 				pendingSessionActionId={pendingSessionActionId}
 			>
-				<BrowserToolWidget />
-				<VibeCheckWidget />
+				{activeTab === "browser" && (
+					<>
+						<BrowserToolWidget />
+						<VibeCheckWidget />
+					</>
+				)}
 			</DashboardHomeView>
 		);
 	};
