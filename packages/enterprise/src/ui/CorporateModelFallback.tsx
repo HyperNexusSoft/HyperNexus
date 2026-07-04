@@ -6,12 +6,13 @@ import { Shield } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function CorporateModelFallback() {
-    const [corporateIsolation, setCorporateIsolation] = useState(() => {
+    const [corporateIsolation, setCorporateIsolation] = useState(false);
+
+    React.useEffect(() => {
         if (typeof window !== 'undefined') {
-            return localStorage.getItem('corporateIsolation') === 'true';
+            setCorporateIsolation(localStorage.getItem('corporateIsolation') === 'true');
         }
-        return false;
-    });
+    }, []);
 
     const toggleCorporateIsolation = (checked: boolean) => {
         setCorporateIsolation(checked);

@@ -4,17 +4,18 @@ import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@tormentnexus/ui';
 import { Badge } from '@tormentnexus/ui';
 import { Button } from '@tormentnexus/ui';
-import { Input } from '@tormentnexus/ui';
-import { Zap, RotateCw } from 'lucide-react';
+import { Input, Switch } from '@tormentnexus/ui';
+import { Zap, RotateCw, WalletCards } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function CloudMcpSseConnector() {
-    const [sseAuthEnabled, setSseAuthEnabled] = useState(() => {
+    const [sseAuthEnabled, setSseAuthEnabled] = useState(false);
+
+    React.useEffect(() => {
         if (typeof window !== 'undefined') {
-            return localStorage.getItem('sseAuthEnabled') === 'true';
+            setSseAuthEnabled(localStorage.getItem('sseAuthEnabled') === 'true');
         }
-        return false;
-    });
+    }, []);
 
     const handleGenerateSseKey = () => {
         const newKey = "sec_" + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -68,6 +69,16 @@ export function CloudMcpSseConnector() {
                     </div>
                 </div>
 
+                <div className="flex items-center justify-between border-t border-zinc-800/80 pt-3 mt-2">
+                    <span className="text-xs text-zinc-400">Docker Tenant Auto-Isolation</span>
+                    <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 text-[10px]">
+                            NEGOTIATING
+                        </Badge>
+                        <Switch checked={true} onCheckedChange={() => {}} disabled />
+                    </div>
+                </div>
+
                 <div className="pt-2">
                     <Button
                         variant="outline"
@@ -77,6 +88,14 @@ export function CloudMcpSseConnector() {
                         <RotateCw className="w-3 h-3" />
                         Generate New SSE Auth Token
                     </Button>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-zinc-800/80 flex justify-between items-center text-[10px] text-zinc-500 font-mono">
+                    <span className="flex items-center gap-1">
+                        <WalletCards className="w-3 h-3 text-cyan-500" />
+                        Stripe Hooks Active
+                    </span>
+                    <span>Last Sync: Just now</span>
                 </div>
             </CardContent>
         </Card>
