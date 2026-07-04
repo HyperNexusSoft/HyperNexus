@@ -691,6 +691,7 @@ func New(cfg config.Config, detector controlplane.ToolProvider) *Server {
 	server.healerService = healer.NewHealerService(nil, "", nil, memoryVS) // LLM provider wired later
 	server.cacheService = cache.New(cache.CacheOptions{MaxSize: 500, DefaultTTL: 60000})
 	server.repoGraph = repograph.NewRepoGraphService(cfg.WorkspaceRoot)
+	tools.GlobalRepoGraph = server.repoGraph
 
 	// Register workspace on startup
 	_ = server.workspaceTracker.RegisterWorkspace(cfg.WorkspaceRoot)

@@ -7,9 +7,11 @@ import (
 	"sync"
 
 	"github.com/MDMAtk/TormentNexus/internal/memorystore"
+	"github.com/MDMAtk/TormentNexus/internal/repograph"
 )
 
 var GlobalVectorStore *memorystore.VectorStore
+var GlobalRepoGraph *repograph.RepoGraphService
 
 type ToolResponse struct {
 	Content []TextContent `json:"content"`
@@ -77,6 +79,8 @@ func NewRegistry() *Registry {
 	// mcpimpl dispatch (5,400+ generated handlers).
 	r.Register("echo", HandleEcho)
 	r.Register("hello_world", HandleHelloWorld)
+	r.Register("codebase_search", HandleCodebaseSearch)
+	r.Register("codebase_outline", HandleCodebaseOutline)
 	// Memory scratchpad tools — served via the Go sidecar HTTP API (/api/memory/*)
 	return r
 }

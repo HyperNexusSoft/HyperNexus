@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.0-alpha.238] - 2026-07-04
+
+### Added
+- **Codebase Analysis Native Tools**: Implemented `codebase_search` and `codebase_outline` native Go tools mapping the in-memory repository structure built on startup.
+
 ## [1.0.0-alpha.237] - 2026-07-04
 
 ### Added
