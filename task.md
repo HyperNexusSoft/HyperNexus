@@ -1,4 +1,7 @@
-- [x] Modify `foundation.go` to replace `sqlite-vec` virtual tables with standard SQLite tables for embeddings
+- [x] Modify `foundation.go` to replace `sqlite-vec` virtual tables with standard SQLite
+- [x] Implement corporate settings endpoints on Go sidecar
+- [x] Implement Stripe subscription persistence endpoints on Go sidecar
+- [x] Update fallback chain generator on Go sidecar to restrict to Ollama when isolated
 - [x] Expose GraphRAG Relation Endpoints in Go sidecar
   - [x] Add `handleMemoryAddRelation` and `handleMemoryGetRelations` in `go/internal/httpapi/memory_handlers.go`
   - [x] Register endpoints in `go/internal/httpapi/server.go`

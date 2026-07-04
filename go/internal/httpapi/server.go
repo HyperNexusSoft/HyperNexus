@@ -1038,6 +1038,7 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/sessions/supervisor/clear", s.handleSupervisorSessionClear)
 	s.mux.HandleFunc("/api/sessions/supervisor/heartbeat", s.handleSupervisorSessionHeartbeat)
 	s.mux.HandleFunc("/api/sessions/supervisor/restore", s.handleSupervisorSessionRestore)
+	s.mux.HandleFunc("/api/sessions/supervisor/restore-imported", s.handleSupervisorSessionRestoreImported)
 	s.mux.HandleFunc("/api/sessions/imported/list", s.handleImportedSessionList)
 	s.mux.HandleFunc("/api/sessions/imported/get", s.handleImportedSessionGet)
 	s.mux.HandleFunc("/api/sessions/imported/scan", s.handleImportedSessionScan)
@@ -1054,6 +1055,9 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/billing/depleted-models", s.handleBillingDepletedModels)
 	s.mux.HandleFunc("/api/billing/fallback-history", s.handleBillingFallbackHistory)
 	s.mux.HandleFunc("/api/billing/fallback-history/clear", s.handleBillingClearFallbackHistory)
+	s.mux.HandleFunc("/api/config/corporate-settings", s.handleGetCorporateSettings)
+	s.mux.HandleFunc("/api/config/corporate-settings/set", s.handleSetCorporateSettings)
+	s.mux.HandleFunc("/api/billing/stripe/subscribe", s.handleStripeSubscribe)
 	s.mux.HandleFunc("/api/mcp/status", s.handleMCPStatus)
 	s.mux.HandleFunc("/api/system/overview", s.handleSystemOverview)
 	s.mux.HandleFunc("/api/mcp/servers/runtime", s.handleMCPRuntimeServers)
@@ -1750,6 +1754,7 @@ func (s *Server) handleAPIIndex(w http.ResponseWriter, _ *http.Request) {
 				{Path: "/api/sessions/supervisor/clear", Category: "sessions", Description: "Clear the shared TypeScript session-manager state."},
 				{Path: "/api/sessions/supervisor/heartbeat", Category: "sessions", Description: "Touch the shared TypeScript session-manager heartbeat."},
 				{Path: "/api/sessions/supervisor/restore", Category: "sessions", Description: "Restore supervised sessions through the TypeScript control plane."},
+				{Path: "/api/sessions/supervisor/restore-imported", Category: "sessions", Description: "Restore an imported session into the active supervised workspace."},
 				{Path: "/api/sessions/imported/list", Category: "sessions", Description: "Bridge to imported sessions already processed by the TypeScript control plane."},
 				{Path: "/api/sessions/imported/get", Category: "sessions", Description: "Bridge to a specific imported session record from the TypeScript control plane."},
 				{Path: "/api/sessions/imported/scan", Category: "sessions", Description: "Trigger TypeScript imported-session scanning, import, and memory extraction."},

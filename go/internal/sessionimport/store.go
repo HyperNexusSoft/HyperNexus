@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/google/uuid"
@@ -119,9 +120,10 @@ type importedSessionArchiveSidecar struct {
 }
 
 type ImportedSessionStore struct {
-	dbPath      string
-	archiveRoot string
-	docsDir     string
+	dbPath        string
+	archiveRoot   string
+	docsDir       string
+	warnedMissing sync.Map
 }
 
 func NewImportedSessionStore(workspaceRoot string) *ImportedSessionStore {
@@ -639,7 +641,9 @@ func (s *ImportedSessionStore) scanImportedSessionRow(ctx context.Context, db *s
 	if strings.TrimSpace(transcript) == "" && transcriptArchivePath.Valid {
 		archived, err := readGzipFile(filepath.Join(s.archiveRoot, filepath.FromSlash(transcriptArchivePath.String)))
 		if err != nil {
-			fmt.Printf("[SessionImport] Warning: missing transcript archive file at %s: %v\n", transcriptArchivePath.String, err)
+			if _, loaded := s.warnedMissing.LoadOrStore(transcriptArchivePath.String, true); !loaded {
+				fmt.Printf("[SessionImport] Warning: missing transcript archive file at %s: %v\n", transcriptArchivePath.String, err)
+			}
 			transcript = "[Error: Transcript archive file missing from storage]"
 		} else {
 			transcript = string(archived)

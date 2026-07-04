@@ -19,6 +19,6 @@ tormentnexus/
 ├── data/                    # Database files (.db, assimilated states)
 ├── archive/                 # Retired submodules or legacy ports (untracked)
 │   ├── go_bobbybookmarks/   # Archived bookmarks scraper
-│   └── go_enterprise_sales_bot/ # Archived enterprise sales bot
+│   └── go_marketing_agent/ # Archived enterprise sales bot
 └── docs/                    # Architecture, API, and LLM instructions
 ```

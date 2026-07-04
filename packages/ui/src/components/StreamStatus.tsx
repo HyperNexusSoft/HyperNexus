@@ -29,8 +29,8 @@ export function StreamStatus() {
     return () => clearInterval(timer);
   }, []);
 
-  const tsLive = healthQuery.data?.status === 'running';
-  const isError = healthQuery.isError;
+  const tsLive = healthQuery.data?.status === 'running' || healthQuery.data?.ok === true;
+  const isError = healthQuery.isError && sidecarOnline === false;
 
   return (
     <div className="flex items-center gap-2">

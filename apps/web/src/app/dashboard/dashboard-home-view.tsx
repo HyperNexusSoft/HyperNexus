@@ -1237,6 +1237,27 @@ export function DashboardHomeView({
         } catch {}
     };
 
+    const restoreImportedSession = async (session: any) => {
+        try {
+            const res = await fetch("/api/go/api/sessions/supervisor/restore-imported", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id: session.id,
+                }),
+            });
+            if (res.ok) {
+                alert("Session restored successfully in Supervisor!");
+            } else {
+                const data = await res.json();
+                alert("Failed to restore session: " + (data.error || "Unknown error"));
+            }
+            fetchImportedSessions();
+        } catch (e: any) {
+            alert("Error: " + e.message);
+        }
+    };
+
     // --- ENTERPRISE SECURITY LOGIC ---
     const [license, setLicense] = useState<any | null>(null);
     const [auditLogs, setAuditLogs] = useState<any[]>([]);

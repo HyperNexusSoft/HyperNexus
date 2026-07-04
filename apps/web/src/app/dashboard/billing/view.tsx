@@ -65,8 +65,30 @@ export default function ProviderAuthBillingMatrix() {
     const [sseToken, setSseToken] = useState('hk_prod_99f2b8a7c6e54321');
     const [sseAuthEnabled, setSseAuthEnabled] = useState(true);
 
+    const { data: corpSettings } = trpc.billing.getCorporateSettings.useQuery(undefined, {
+        refetchOnWindowFocus: false,
+    });
+
     React.useEffect(() => {
-        if (typeof window !== 'undefined') {
+        if (corpSettings) {
+            setCorporateIsolation(corpSettings.corporateIsolation);
+            setCorporateKey(corpSettings.corporateKey || '');
+            setCorporateEndpoint(corpSettings.corporateEndpoint || 'http://ollama-headless.internal:11434');
+            setSsoProvider(corpSettings.ssoProvider || 'https://identity.hypernexus.site/oauth/v2');
+            setSsoClientId(corpSettings.ssoClientId || 'hypernexus-dashboard-prod');
+            setSsoEnabled(corpSettings.ssoEnabled);
+            if (corpSettings.adminPerms) {
+                setAdminPerms(corpSettings.adminPerms);
+            }
+            if (corpSettings.operatorPerms) {
+                setOperatorPerms(corpSettings.operatorPerms);
+            }
+            if (corpSettings.viewerPerms) {
+                setViewerPerms(corpSettings.viewerPerms);
+            }
+            setSseToken(corpSettings.sseToken || 'hk_prod_99f2b8a7c6e54321');
+            setSseAuthEnabled(corpSettings.sseAuthEnabled);
+        } else if (typeof window !== 'undefined') {
             setCorporateIsolation(localStorage.getItem('corporateIsolation') === 'true');
             setCorporateKey(localStorage.getItem('corporateKey') || '');
             setCorporateEndpoint(localStorage.getItem('corporateEndpoint') || 'http://ollama-headless.internal:11434');
@@ -87,11 +109,30 @@ export default function ProviderAuthBillingMatrix() {
             setSseToken(localStorage.getItem('sseToken') || 'hk_prod_99f2b8a7c6e54321');
             setSseAuthEnabled(localStorage.getItem('sseAuthEnabled') !== 'false');
         }
-    }, []);
+    }, [corpSettings]);
+
+    const saveSettingsToBackend = (updatedFields: Record<string, any>) => {
+        const nextSettings = {
+            corporateIsolation: updatedFields.corporateIsolation !== undefined ? updatedFields.corporateIsolation : corporateIsolation,
+            corporateKey: updatedFields.corporateKey !== undefined ? updatedFields.corporateKey : corporateKey,
+            corporateEndpoint: updatedFields.corporateEndpoint !== undefined ? updatedFields.corporateEndpoint : corporateEndpoint,
+            ssoProvider: updatedFields.ssoProvider !== undefined ? updatedFields.ssoProvider : ssoProvider,
+            ssoClientId: updatedFields.ssoClientId !== undefined ? updatedFields.ssoClientId : ssoClientId,
+            ssoClientSecret: updatedFields.ssoClientSecret !== undefined ? updatedFields.ssoClientSecret : ssoClientSecret,
+            ssoEnabled: updatedFields.ssoEnabled !== undefined ? updatedFields.ssoEnabled : ssoEnabled,
+            adminPerms: updatedFields.adminPerms !== undefined ? updatedFields.adminPerms : adminPerms,
+            operatorPerms: updatedFields.operatorPerms !== undefined ? updatedFields.operatorPerms : operatorPerms,
+            viewerPerms: updatedFields.viewerPerms !== undefined ? updatedFields.viewerPerms : viewerPerms,
+            sseToken: updatedFields.sseToken !== undefined ? updatedFields.sseToken : sseToken,
+            sseAuthEnabled: updatedFields.sseAuthEnabled !== undefined ? updatedFields.sseAuthEnabled : sseAuthEnabled,
+        };
+        setCorporateSettingsMutation.mutate(nextSettings);
+    };
 
     const toggleCorporateIsolation = (val: boolean) => {
         setCorporateIsolation(val);
         localStorage.setItem('corporateIsolation', String(val));
+        saveSettingsToBackend({ corporateIsolation: val });
         toast.success(val ? 'Corporate Local Model Isolation enabled' : 'Corporate Local Model Isolation disabled');
     };
 
@@ -100,12 +141,13 @@ export default function ProviderAuthBillingMatrix() {
         setCorporateEndpoint(endpoint);
         localStorage.setItem('corporateKey', key);
         localStorage.setItem('corporateEndpoint', endpoint);
-        toast.success('Corporate configuration saved successfully');
+        saveSettingsToBackend({ corporateKey: key, corporateEndpoint: endpoint });
     };
 
     const toggleSsoEnabled = (val: boolean) => {
         setSsoEnabled(val);
         localStorage.setItem('ssoEnabled', String(val));
+        saveSettingsToBackend({ ssoEnabled: val });
         toast.success(val ? 'SSO Single Sign-On enabled' : 'SSO Single Sign-On disabled');
     };
 
@@ -115,7 +157,7 @@ export default function ProviderAuthBillingMatrix() {
         setSsoClientSecret(secret);
         localStorage.setItem('ssoProvider', prov);
         localStorage.setItem('ssoClientId', cid);
-        toast.success('Identity provider configuration saved');
+        saveSettingsToBackend({ ssoProvider: prov, ssoClientId: cid, ssoClientSecret: secret });
     };
 
     const toggleRbacPermission = (role: 'admin' | 'operator' | 'viewer', permission: string) => {
@@ -146,6 +188,14 @@ export default function ProviderAuthBillingMatrix() {
 
         setter(currentPerms);
         localStorage.setItem(storageKey, JSON.stringify(currentPerms));
+        
+        if (role === 'admin') {
+            saveSettingsToBackend({ adminPerms: currentPerms });
+        } else if (role === 'operator') {
+            saveSettingsToBackend({ operatorPerms: currentPerms });
+        } else {
+            saveSettingsToBackend({ viewerPerms: currentPerms });
+        }
         toast.success(`RBAC permissions updated for role: ${role}`);
     };
 
@@ -154,7 +204,7 @@ export default function ProviderAuthBillingMatrix() {
         const newToken = `hk_prod_${randHex}`;
         setSseToken(newToken);
         localStorage.setItem('sseToken', newToken);
-        toast.success('New cloud SSE authentication token generated');
+        saveSettingsToBackend({ sseToken: newToken });
     };
     
     const utils = trpc.useUtils();
@@ -165,6 +215,26 @@ export default function ProviderAuthBillingMatrix() {
     const { data: pricing, isLoading: isPricingLoading } = trpc.billing.getModelPricing.useQuery();
     const { data: fallback, isLoading: isFallbackLoading } = trpc.billing.getFallbackChain.useQuery({ taskType: fallbackTaskType });
     const { data: taskRouting, isLoading: isTaskRoutingLoading } = trpc.billing.getTaskRoutingRules.useQuery();
+
+    const setCorporateSettingsMutation = trpc.billing.setCorporateSettings.useMutation({
+        onSuccess: () => {
+            utils.billing.getCorporateSettings.invalidate();
+            utils.billing.getFallbackChain.invalidate();
+        },
+        onError: (err: any) => {
+            toast.error(`Backend persistence failed: ${err.message}`);
+        }
+    });
+
+    const stripeSubscribeMutation = trpc.billing.stripeSubscribe.useMutation({
+        onSuccess: (data: any) => {
+            toast.success(data?.message || "Subscription status persisted successfully via Stripe!");
+            utils.billing.getStatus.invalidate();
+        },
+        onError: (err: any) => {
+            toast.error(`Stripe persistence failed: ${err.message}`);
+        }
+    });
     const setRoutingStrategyMutation = trpc.billing.setRoutingStrategy.useMutation({
         onSuccess: async () => {
             toast.success('Default provider routing updated');
@@ -327,28 +397,28 @@ export default function ProviderAuthBillingMatrix() {
                             <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3">
                                 <div>
                                     <div className="text-xs text-zinc-500 uppercase">Subscription Plan</div>
-                                    <div className="text-base font-bold text-white mt-1">Enterprise Cloud SaaS</div>
+                                    <div className="text-base font-bold text-white mt-1">{status?.plan_name || "Enterprise Cloud SaaS"}</div>
                                 </div>
                                 <Badge variant="outline" className="bg-cyan-500/10 text-cyan-400 border-cyan-500/20 text-xs">
-                                    ACTIVE (PAID)
+                                    {(status?.status || "ACTIVE (PAID)").toUpperCase()}
                                 </Badge>
                             </div>
                             <div className="grid grid-cols-2 gap-4 text-xs font-mono">
                                 <div>
                                     <div className="text-zinc-500">Monthly Price</div>
-                                    <div className="text-zinc-200 mt-1">$499.00 / month</div>
+                                    <div className="text-zinc-200 mt-1">{status?.monthly_price !== undefined ? `$${status.monthly_price.toFixed(2)} / month` : "$499.00 / month"}</div>
                                 </div>
                                 <div>
                                     <div className="text-zinc-500">Next Invoice Date</div>
-                                    <div className="text-zinc-200 mt-1">July 25, 2026</div>
+                                    <div className="text-zinc-200 mt-1">{status?.next_invoice || "July 25, 2026"}</div>
                                 </div>
                                 <div>
                                     <div className="text-zinc-500">Payment Source</div>
-                                    <div className="text-zinc-200 mt-1">Visa ending in 4242</div>
+                                    <div className="text-zinc-200 mt-1">{status?.payment_source || "Visa ending in 4242"}</div>
                                 </div>
                                 <div>
                                     <div className="text-zinc-500">Customer ID</div>
-                                    <div className="text-zinc-400 mt-1">cus_R8vB42tX910a</div>
+                                    <div className="text-zinc-400 mt-1">{status?.customer_id || "cus_R8vB42tX910a"}</div>
                                 </div>
                             </div>
                             <div className="flex gap-2 pt-2">
@@ -1147,11 +1217,15 @@ export default function ProviderAuthBillingMatrix() {
                         <Button
                             onClick={() => {
                                 setCheckoutOpen(false);
-                                toast.success("Subscription upgraded successfully (simulated)!");
+                                stripeSubscribeMutation.mutate({
+                                    planId: "hypernexus-pro-plan",
+                                    priceId: "price_999_mo"
+                                });
                             }}
                             className="bg-cyan-600 hover:bg-cyan-500 text-white border-transparent"
+                            disabled={stripeSubscribeMutation.isPending}
                         >
-                            Complete Payment ($999.00/mo)
+                            {stripeSubscribeMutation.isPending ? "Processing..." : "Complete Payment ($999.00/mo)"}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

@@ -112,6 +112,15 @@ function getCompatRoute(procedurePath: string, input: unknown): string | null {
 				: 20;
 		return `/api/billing/fallback-history?limit=${normalizedLimit}`;
 	}
+	if (procedurePath === "billing.getCorporateSettings") {
+		return "/api/config/corporate-settings";
+	}
+	if (procedurePath === "billing.setCorporateSettings") {
+		return "/api/config/corporate-settings/set";
+	}
+	if (procedurePath === "billing.stripeSubscribe") {
+		return "/api/billing/stripe/subscribe";
+	}
 	// ── Director (Go-native with local fallback) ──
 	if (procedurePath === "director.status") {
 		return "/api/director/status";
@@ -273,9 +282,18 @@ function getCompatRoute(procedurePath: string, input: unknown): string | null {
 	return null;
 }
 
+const MUTATION_PROCEDURES = new Set([
+	"billing.setCorporateSettings",
+	"billing.stripeSubscribe",
+	"git.revert",
+	"lsp.indexProject",
+	"knowledge.ingest",
+]);
+
 async function getCompatPayload(
 	procedurePath: string,
 	input: unknown,
+	method: string = "GET",
 ): Promise<unknown | null> {
 	const compatRoute = getCompatRoute(procedurePath, input);
 	if (!compatRoute) {
@@ -285,7 +303,13 @@ async function getCompatPayload(
 	const goApiBase = resolveGoApiBase().replace(/\/$/, "");
 
 	try {
-		const compatResponse = await fetch(`${goApiBase}${compatRoute}`);
+		const isMutation = MUTATION_PROCEDURES.has(procedurePath) || method === "POST";
+		const fetchOptions: RequestInit = {
+			method: isMutation ? "POST" : "GET",
+			headers: isMutation ? { "Content-Type": "application/json" } : undefined,
+			body: isMutation ? JSON.stringify(input ?? {}) : undefined,
+		};
+		const compatResponse = await fetch(`${goApiBase}${compatRoute}`, fetchOptions);
 		if (!compatResponse.ok) {
 			return null;
 		}
@@ -350,8 +374,29 @@ async function tryCompatFallback(
 	req: Request,
 	procedurePath: string,
 ): Promise<Response | null> {
+	const hasBody = req.method !== "GET" && req.method !== "HEAD";
+	let bodyInput: any = {};
+	let postInputs: any = {};
+	if (hasBody) {
+		try {
+			const text = await req.clone().text();
+			const parsed = JSON.parse(text);
+			if (parsed && typeof parsed === "object") {
+				postInputs = parsed;
+				if ("0" in parsed) {
+					bodyInput = parsed["0"];
+				} else if (Array.isArray(parsed)) {
+					bodyInput = parsed[0];
+				} else {
+					bodyInput = parsed;
+				}
+			}
+		} catch {}
+	}
+
 	if (!procedurePath.includes(",")) {
-		const compatPayload = await getCompatPayload(procedurePath, {});
+		const input = hasBody ? bodyInput : {};
+		const compatPayload = await getCompatPayload(procedurePath, input, req.method);
 		if (compatPayload === null) {
 			return null;
 		}
@@ -370,12 +415,15 @@ async function tryCompatFallback(
 		return null;
 	}
 
-	const batchInput = parseBatchInput(req);
+	const batchInput = hasBody ? postInputs : parseBatchInput(req);
 	const entries = [];
 	for (const [index, procedure] of procedures.entries()) {
+		const input = hasBody
+			? (Array.isArray(batchInput) ? batchInput[index] : batchInput[String(index)])
+			: (batchInput[String(index)] ?? {});
 		const entry = await fetchSingleProcedureEntry(
 			procedure,
-			batchInput[String(index)] ?? {},
+			input,
 		);
 		if (!entry) {
 			return null;
@@ -438,6 +486,9 @@ const GO_NATIVE_PROCEDURES = new Set([
 	"memory.searchUserPrompts",
 	"memory.searchMemoryPivot",
 	"memory.searchSessionSummaries",
+	"billing.getCorporateSettings",
+	"billing.setCorporateSettings",
+	"billing.stripeSubscribe",
 	"memory.getRecentObservations",
 	"memory.getRecentUserPrompts",
 	"memory.getRecentSessionSummaries",
@@ -445,6 +496,18 @@ const GO_NATIVE_PROCEDURES = new Set([
 
 async function handler(req: Request): Promise<Response> {
 	const procedurePath = getProcedurePath(req);
+	const hasBody = req.method !== "GET" && req.method !== "HEAD";
+	let bodyText = "";
+	let postInputs: any = {};
+	if (hasBody) {
+		try {
+			bodyText = await req.clone().text();
+			const parsed = JSON.parse(bodyText);
+			if (parsed && typeof parsed === "object") {
+				postInputs = parsed;
+			}
+		} catch {}
+	}
 
 	const isBatch = procedurePath.includes(",");
 	if (isBatch) {
@@ -454,13 +517,17 @@ async function handler(req: Request): Promise<Response> {
 			.filter(Boolean);
 		const allNative = procedures.length > 0 && procedures.every((proc) => GO_NATIVE_PROCEDURES.has(proc));
 		if (allNative) {
-			const batchInput = parseBatchInput(req);
+			const batchInput = hasBody ? postInputs : parseBatchInput(req);
 			const entries = [];
 			let allSuccessful = true;
 			for (const [index, procedure] of procedures.entries()) {
+				const input = hasBody
+					? (Array.isArray(batchInput) ? batchInput[index] : batchInput[String(index)])
+					: (batchInput[String(index)] ?? {});
 				const compatPayload = await getCompatPayload(
 					procedure,
-					batchInput[String(index)] ?? {},
+					input,
+					req.method,
 				);
 				if (compatPayload !== null) {
 					entries.push({ result: { data: compatPayload } });
@@ -480,10 +547,23 @@ async function handler(req: Request): Promise<Response> {
 
 	const firstProc = isBatch ? "" : (procedurePath.trim() ?? "");
 	if (firstProc && GO_NATIVE_PROCEDURES.has(firstProc)) {
-		const batchInput = parseBatchInput(req);
+		let input: any = {};
+		if (hasBody) {
+			if ("0" in postInputs) {
+				input = postInputs["0"];
+			} else if (Array.isArray(postInputs)) {
+				input = postInputs[0];
+			} else {
+				input = postInputs;
+			}
+		} else {
+			const batchInput = parseBatchInput(req);
+			input = batchInput["0"] ?? {};
+		}
 		const compatPayload = await getCompatPayload(
 			firstProc,
-			batchInput["0"] ?? {},
+			input,
+			req.method,
 		);
 		if (compatPayload !== null) {
 			return new Response(
@@ -496,8 +576,7 @@ async function handler(req: Request): Promise<Response> {
 
 	const upstreamUrl = buildUpstreamUrl(req);
 	const headers = cloneHeaders(req);
-	const hasBody = req.method !== "GET" && req.method !== "HEAD";
-	const body = hasBody ? await req.text() : undefined;
+	const body = hasBody ? bodyText : undefined;
 
 	// Check tRPC response cache for frequently-polled procedures
 	const cacheTTL = getCacheTTL(procedurePath);

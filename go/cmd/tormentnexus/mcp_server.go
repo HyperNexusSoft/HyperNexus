@@ -337,7 +337,7 @@ func (s *MCPServer) registerTools() {
 		},
 		{
 			Name:        "click_action_buttons",
-			Description: "Click UI buttons by label text",
+			Description: "Redundant. Use the simpler click_chat_button tool instead.",
 			InputSchema: InputSchema{
 				Type: "object",
 				Properties: map[string]PropertySchema{

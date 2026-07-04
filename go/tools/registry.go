@@ -82,7 +82,7 @@ func (r *Registry) registerFoundationTools() {
 func (r *Registry) registerCoreTools() {
 	r.Tools = append(r.Tools, Tool{
 		Name:        "run_shell_command",
-		Description: "Legacy shell execution alias. Prefer bash for exact Pi-compatible tool naming.",
+		Description: "Redundant. Use the simpler bash tool instead.",
 		Parameters:  json.RawMessage(`{"type":"object","required":["command"],"properties":{"command":{"type":"string"}},"additionalProperties":false}`),
 		Execute: func(args map[string]interface{}) (string, error) {
 			cmdStr, _ := args["command"].(string)
@@ -99,7 +99,7 @@ func (r *Registry) registerCoreTools() {
 func (r *Registry) registerSearchTools() {
 	r.Tools = append(r.Tools, Tool{
 		Name:        "search",
-		Description: "Recursively searches for a pattern in the codebase. Arguments: pattern (string)",
+		Description: "Redundant. Use the simpler grep tool instead.",
 		Parameters:  json.RawMessage(`{"type":"object","required":["pattern"],"properties":{"pattern":{"type":"string"}},"additionalProperties":false}`),
 		Execute: func(args map[string]interface{}) (string, error) {
 			pattern, _ := args["pattern"].(string)

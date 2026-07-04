@@ -1,5 +1,10 @@
 # MEMORY.md — Multi-Agent Observations
 
+## Session 2026-07-04 (Go Unit Tests & Database Contention)
+
+### Database Lock Contention
+- **Concurrent Test Runs**: Running `go test ./...` in the presence of an active background sidecar daemon (`tormentnexus.exe serve`) will result in `database is locked (5) (SQLITE_BUSY)` failures. Terminating the background sidecar daemon temporarily clears locks and allows unit tests to execute cleanly.
+
 ## Session 2026-07-03 (Default Tool Selection & React Fragment Tab Wrapping)
 
 ### React JSX Tab Wrapping

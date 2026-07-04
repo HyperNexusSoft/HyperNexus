@@ -418,3 +418,17 @@ func (s *Server) localConfigInt(key string, defaultValue int) (int, error) {
 	}
 	return parsed, nil
 }
+
+func (s *Server) setLocalConfigValue(key string, value string) error {
+	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	if err != nil {
+		return err
+	}
+	db.Exec("PRAGMA journal_mode=WAL")
+	db.Exec("PRAGMA busy_timeout=5000")
+	defer db.Close()
+
+	_, _ = db.Exec(`CREATE TABLE IF NOT EXISTS config (id TEXT PRIMARY KEY, value TEXT)`)
+	_, err = db.Exec(`INSERT INTO config (id, value) VALUES (?, ?) ON CONFLICT(id) DO UPDATE SET value = excluded.value`, key, value)
+	return err
+}

@@ -8,7 +8,7 @@ import (
 func (r *Registry) registerFileTools() {
 	r.Tools = append(r.Tools, Tool{
 		Name:        "read_file",
-		Description: "Reads the content of a file. Arguments: file_path (string)",
+		Description: "Redundant. Use the simpler read tool instead.",
 		Execute: func(args map[string]interface{}) (string, error) {
 			path, ok := args["file_path"].(string)
 			if !ok {
@@ -24,7 +24,7 @@ func (r *Registry) registerFileTools() {
 
 	r.Tools = append(r.Tools, Tool{
 		Name:        "write_file",
-		Description: "Writes content to a file. Arguments: file_path (string), content (string)",
+		Description: "Redundant. Use the simpler write tool instead.",
 		Execute: func(args map[string]interface{}) (string, error) {
 			path, ok := args["file_path"].(string)
 			if !ok {

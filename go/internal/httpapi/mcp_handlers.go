@@ -608,17 +608,13 @@ func (s *Server) injectAlwaysOnStatus(tools []map[string]any) []map[string]any {
 	alwaysOnMap := s.loadAlwaysOnTools()
 	nativeMap := s.loadNativeConfig()
 
-	// List of parity tools that must always be always-on by default
+	// List of high-value tools and tools native to other harnesses that must always be always-on by default
 	parityTools := map[string]bool{
+		// ── High-Value Chat Automation / Process Tools ──
 		"list_processes":             true,
 		"kill_process":               true,
-		"simulate_input":             true,
-		"detect_chat_surface":        true,
-		"inspect_window_ui":          true,
-		"detect_chat_state":          true,
 		"set_chat_input":             true,
 		"submit_chat_input":          true,
-		"click_action_buttons":       true,
 		"click_chat_button":          true,
 		"advance_chat":               true,
 		"mcp_list_servers":           true,
@@ -628,10 +624,26 @@ func (s *Server) injectAlwaysOnStatus(tools []map[string]any) []map[string]any {
 		"mcp_server_test":            true,
 		"system_status":              true,
 		"billing_status":             true,
-		"list_surface_profiles":      true,
-		"get_supervisor_settings":    true,
-		"update_supervisor_settings": true,
 		"list_accessory_tools":       true,
+
+		// ── Tools Native to Other Harnesses (Pi, Aider, Confluence, etc.) ──
+		"read":                       true,
+		"write":                      true,
+		"edit":                       true,
+		"bash":                       true,
+		"grep":                       true,
+		"find":                       true,
+		"ls":                         true,
+		"apply_search_replace":       true,
+		"code_interpreter":           true,
+		"cloud_troubleshoot":         true,
+		"generate_devops_pipeline":   true,
+		"jira_create_issue":          true,
+		"confluence_search":          true,
+		"add_bookmark":               true,
+		"launch_webview":             true,
+		"get_system_stats":           true,
+		"download_llamafile":         true,
 	}
 
 	for _, tool := range tools {
@@ -650,11 +662,19 @@ func (s *Server) injectAlwaysOnStatus(tools []map[string]any) []map[string]any {
 
 func (s *Server) mergeAccessoryTools(toolsList []map[string]any) []map[string]any {
 	seen := make(map[string]bool)
+	var uniqueTools []map[string]any
 	for _, t := range toolsList {
 		if name, ok := t["name"].(string); ok {
+			if seen[name] {
+				continue
+			}
 			seen[name] = true
+			uniqueTools = append(uniqueTools, t)
+		} else {
+			uniqueTools = append(uniqueTools, t)
 		}
 	}
+	toolsList = uniqueTools
 
 	// 1. Merge accessory tools from the root registry
 	registry := roottools.NewRegistry()

@@ -13,6 +13,7 @@ import (
 
 	"github.com/MDMAtk/TormentNexus/internal/eventbus"
 	"golang.org/x/sys/windows"
+	"golang.org/x/sys/windows/registry"
 )
 
 // Win32 API declarations
@@ -60,6 +61,11 @@ const (
 	IDM_DASHBOARD = 1001
 	IDM_LOGS      = 1002
 	IDM_EXIT      = 1003
+	IDM_INFO_VERSION = 1004
+	IDM_INFO_STATUS  = 1005
+	IDM_AUTOSTART    = 1006
+
+	MF_GRAYED = 0x00000001
 
 	WM_CREATE        = 0x0001
 	WM_DESTROY       = 0x0002
@@ -292,12 +298,30 @@ func hiddenWndProc(hWnd windows.HWND, msg uint32, wParam uintptr, lParam uintptr
 			pSetForegroundWindow.Call(uintptr(hWnd))
 			hMenu, _, _ := pCreatePopupMenu.Call()
 
+			// High-value Information Display
+			infoVersionText, _ := syscall.UTF16PtrFromString("TormentNexus Core (v1.0.0-alpha)")
+			infoStatusText, _ := syscall.UTF16PtrFromString("Port: Go 7778 / TS 7779 (Active)")
+			infoStatsText, _ := syscall.UTF16PtrFromString("Memory: 14,726 / MCP: 7,000+")
+
+			pAppendMenu.Call(hMenu, MF_STRING|MF_GRAYED, IDM_INFO_VERSION, uintptr(unsafe.Pointer(infoVersionText)))
+			pAppendMenu.Call(hMenu, MF_STRING|MF_GRAYED, IDM_INFO_STATUS, uintptr(unsafe.Pointer(infoStatusText)))
+			pAppendMenu.Call(hMenu, MF_STRING|MF_GRAYED, IDM_INFO_STATUS, uintptr(unsafe.Pointer(infoStatsText)))
+			pAppendMenu.Call(hMenu, MF_STRING, 0, 0) // Separator
+
+			// Actionable Startup & Navigation Menu Items
 			dashboardText, _ := syscall.UTF16PtrFromString("Open Dashboard")
 			logsText, _ := syscall.UTF16PtrFromString("Show Event Logs")
+
+			startupLabel := "Enable Automatic Startup"
+			if isAutomaticStartupEnabled() {
+				startupLabel = "Disable Automatic Startup [Currently Enabled]"
+			}
+			startupText, _ := syscall.UTF16PtrFromString(startupLabel)
 			exitText, _ := syscall.UTF16PtrFromString("Shutdown Server & Exit")
 
 			pAppendMenu.Call(hMenu, MF_STRING, IDM_DASHBOARD, uintptr(unsafe.Pointer(dashboardText)))
 			pAppendMenu.Call(hMenu, MF_STRING, IDM_LOGS, uintptr(unsafe.Pointer(logsText)))
+			pAppendMenu.Call(hMenu, MF_STRING, IDM_AUTOSTART, uintptr(unsafe.Pointer(startupText)))
 			pAppendMenu.Call(hMenu, MF_STRING, 0, 0) // Separator
 			pAppendMenu.Call(hMenu, MF_STRING, IDM_EXIT, uintptr(unsafe.Pointer(exitText)))
 
@@ -319,6 +343,8 @@ func hiddenWndProc(hWnd windows.HWND, msg uint32, wParam uintptr, lParam uintptr
 				_ = exec.Command("cmd", "/c", "start", "http://127.0.0.1:7779/dashboard").Start()
 			case IDM_LOGS:
 				showLogWindow()
+			case IDM_AUTOSTART:
+				toggleAutomaticStartup()
 			case IDM_EXIT:
 				go TriggerFullShutdown()
 			}
@@ -429,4 +455,31 @@ func logWndProc(hWnd windows.HWND, msg uint32, wParam uintptr, lParam uintptr) u
 	}
 	ret, _, _ := pDefWindowProc.Call(uintptr(hWnd), uintptr(msg), wParam, lParam)
 	return ret
+}
+
+func isAutomaticStartupEnabled() bool {
+	k, err := registry.OpenKey(registry.CURRENT_USER, `Software\Microsoft\Windows\CurrentVersion\Run`, registry.QUERY_VALUE)
+	if err != nil {
+		return false
+	}
+	defer k.Close()
+	_, _, err = k.GetStringValue("TormentNexus")
+	return err == nil
+}
+
+func toggleAutomaticStartup() {
+	k, err := registry.OpenKey(registry.CURRENT_USER, `Software\Microsoft\Windows\CurrentVersion\Run`, registry.SET_VALUE|registry.QUERY_VALUE)
+	if err != nil {
+		return
+	}
+	defer k.Close()
+
+	if _, _, err := k.GetStringValue("TormentNexus"); err == nil {
+		_ = k.DeleteValue("TormentNexus")
+	} else {
+		execPath, err := os.Executable()
+		if err == nil {
+			_ = k.SetStringValue("TormentNexus", fmt.Sprintf(`"%s" serve`, execPath))
+		}
+	}
 }
