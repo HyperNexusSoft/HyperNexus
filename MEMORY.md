@@ -2,6 +2,10 @@
 
 ## Session 2026-07-04 (Go Unit Tests & Database Contention)
 
+### Session Restoration UI integration
+- **Cross-Origins & Proxies**: Calling Go-native supervisor endpoints directly from Next.js web application requires mapping correct callback functions (`restoreImportedSession`) and targeting the Go API proxy port `7778` natively.
+- **Go Compilation Warnings**: Go 1.24+ treats unused package imports (like `"path/filepath"`) as direct build errors. Keeping unused libraries pruned from internal HTTP handler files ensures smooth compilation.
+
 ### Database Lock Contention
 - **Concurrent Test Runs**: Running `go test ./...` in the presence of an active background sidecar daemon (`tormentnexus.exe serve`) will result in `database is locked (5) (SQLITE_BUSY)` failures. Terminating the background sidecar daemon temporarily clears locks and allows unit tests to execute cleanly.
 

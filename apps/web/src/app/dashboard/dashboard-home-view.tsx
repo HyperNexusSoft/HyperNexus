@@ -2523,14 +2523,23 @@ export function DashboardHomeView({
                                                             </ul>
                                                         </div>
                                                     )}
-                                                    {session.valid && !session.imported && (
-                                                        <div className="pt-2">
+                                                    {session.valid && (
+                                                        <div className="pt-2 flex flex-wrap gap-2">
+                                                            {!session.imported && (
+                                                                <button
+                                                                    onClick={() => importSessionData(session)}
+                                                                    className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-2xs font-semibold transition-colors"
+                                                                    title="Ingest session facts and conversation transcript logs directly to database"
+                                                                >
+                                                                    Import Session Into Core
+                                                                </button>
+                                                            )}
                                                             <button
-                                                                onClick={() => importSessionData(session)}
-                                                                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-2xs font-semibold transition-colors"
-                                                                title="Ingest session facts and conversation transcript logs directly to database"
+                                                                onClick={() => restoreImportedSession(session)}
+                                                                className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded text-2xs font-semibold transition-colors"
+                                                                title="Restore this session into an active supervised session"
                                                             >
-                                                                Import Session Into Core
+                                                                Restore in Supervisor
                                                             </button>
                                                         </div>
                                                     )}

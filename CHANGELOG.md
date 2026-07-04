@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.0-alpha.237] - 2026-07-04
+
+### Added
+- **Session Supervisor Restoration UI**: Integrated a "Restore in Supervisor" action button on candidate imported sessions inside the dashboard to trigger active supervised session restoration via the sidecar `/api/sessions/supervisor/restore-imported` endpoint.
+
+### Fixed
+- **Go Sidecar Server Compilation**: Fixed an unused import warning (`"path/filepath"`) blocking the compilation of the Go daemon on newer Go compilers.
+
 ## [1.0.0-alpha.236] - 2026-07-03
 
 ### Added

@@ -1,6 +1,6 @@
 {
   "name": "@tormentnexus/ui",
-  "version": "1.0.0-alpha.236",
+  "version": "1.0.0-alpha.237",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
