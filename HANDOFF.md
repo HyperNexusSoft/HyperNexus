@@ -4,22 +4,25 @@
 
 ## Key Achievements & Modifications
 
-1. **Default Native & Always-On Tool Selection (v1.0.0-alpha.236)**:
-   - Implemented dynamic configuration endpoints `/api/tools/always-on` and `/api/tools/native` inside the Go HTTP sidecar server to write configuration state dynamically to `data/always-on-tools.json` and `data/native-tools.json`.
-   - Exposed interactive checkboxes in the **Mission Control Settings** panel allowing selecting which tools run Go-natively and which ones are registered as always available to the model.
-   - Refactored the tool execution dispatcher in [server.go](file:///c:/Users/hyper/workspace/tormentnexus/go/internal/httpapi/server.go) to verify and respect native override states dynamically at runtime.
+1. **Workspace Instruction Auto-Injector**:
+   - Added a background loop `StartInstructionWatcher` to the Go sidecar to scan the root workspace every 5 seconds.
+   - Enforced a directory depth check to scan only the root directory and 1 level inside it (depth <= 2), ignoring cache and build files.
+   - Automatically prepends advanced agent mandates (tool-use, AST analysis, context harvesting/compaction, and session inspection) to standard instruction files (`AGENT.md`, `AGENTS.md`, `CLAUDE.md`, `JULES.md`, `SKILL.md`).
 
-2. **System Tray Integration Enhancements**:
-   - Added context popup menu handlers to the system tray (`systray_windows.go`) enabling operators to right-click the notification icon to access shortcuts to the dashboard portal, log viewer, or gracefully shut down all background runner scripts and server services.
+2. **Multi-Client MCP Configurator & Installer**:
+   - Upgraded `scripts/install-mcp-clients.py` to auto-configure TormentNexus in Claude Desktop, Claude Code, Cline, Roo-Code, VS Code, Antigravity, Continue, Pi-Agent, OpenCode, Codex, and Zed Editor.
+   - Programmatically injected the local instruction guidelines (`AGENTS.md`, `CLAUDE.md`).
 
-3. **Unified Navigation Tabs**:
-   - Replaced multi-tab structures with single-tab components in the consolidated Dashboard view, enabling the operator to switch context between Mission Control, MCP, memory, and settings panels.
+3. **Tool Always-On UI Locking**:
+   - Modified `apps/web/src/app/dashboard/dashboard-home-view.tsx` to set `list_dir`, `search_web`, `grep_search`, and `view_file` to `true` by default and lock them in the UI as **Locked Always-On**.
 
-4. **Workspace Version Synchronization**:
-   - Synchronized all workspace packages to version `1.0.0-alpha.236` and verified that the Go backend and Next.js React frontend build and typecheck with 100% success.
+4. **Graceful Handling of Gzip Database Errors**:
+   - Configured `go/internal/sessionimport/store.go` to handle missing `.txt.gz` archive files gracefully during stats/retention sweeps, logging a warning and inserting placeholders instead of failing the database scan queries.
+
+5. **Python UTF-8 Encoder Fix**:
+   - Added standard output encoding reconfiguration to `scripts/trends_analyzer.py` to avoid UnicodeEncodeErrors when printing non-cp1252 characters to Windows consoles.
 
 ## Next Steps for Successor Models
-- **Verify Settings persistence**: Validate tool executions dynamically toggle native execution paths.
+- **Monitor Context Compaction & Harvesting**: Check sidecar log activity when client agents are running to trace compaction steps.
 - **Wails Desktop Testing**: Run the compiled `tormentnexus-gui.exe` to verify rendering logic and local system tray notification loops.
-- **Mesh / Gossip Protocol Telemetry**: Watch the gossip server updates to check for cross-machine memory-sharing logs.
-- **Swarm Queue Supervision**: Watch `swarm_v7.py` outputs as the multi-model generation pipeline indexes remaining catalog resources.
+- **Swarm Queue Supervision**: Monitor `swarm_v7.py` and `trends_analyzer.py` output.
