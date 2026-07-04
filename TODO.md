@@ -1,6 +1,6 @@
 # TODO
 
-_Last updated: 2026-07-02, version 1.0.0-alpha.224_
+_Last updated: 2026-07-04, version 1.0.0-alpha.237_
 
 ## P0 — Must do now (Stability, Testing & Validation)
 - [x] **Track A: MCP Discovery**: Execute discovery script to rank top 500 MCP servers and seed state DB. (14,250 rows in assimilation_state.db)
