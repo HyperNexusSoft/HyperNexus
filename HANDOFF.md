@@ -1,21 +1,22 @@
 # Session Handoff & Architecture Summary
 **Date:** July 4, 2026 (Local Time)
+**Version:** v1.0.0-alpha.238
 **Model:** Antigravity (Google DeepMind pair programmer)
 
 ## Key Achievements & Modifications
 
-1. **Restore in Supervisor UI Integration**:
-   - Added `restoreImportedSession` to [dashboard-home-view.tsx](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/src/app/dashboard/dashboard-home-view.tsx).
-   - Injected the **Restore in Supervisor** button for valid candidate sessions, enabling direct restoration of external sessions into supervised ones using the Go API endpoint `/api/sessions/supervisor/restore-imported`.
+1. **Unified PowerShell Setup & Restart**:
+   - Implemented [install_all.ps1](file:///c:/Users/hyper/workspace/tormentnexus/install_all.ps1) to compile workspaces, package extensions (VS Code & Browser), synchronize MCP config files to client AppData directories, clean stale processes, and launch supervisors.
+   - All ports are verified listening: Go Sidecar (`7778`), Next.js Dashboard (`7779`), LLM proxy (`4000`), and Watchdog.
 
-2. **Go Compilation Correction**:
-   - Resolved an unused import compilation blocker (`"path/filepath"`) in [session_supervisor_handlers.go](file:///c:/Users/hyper/workspace/tormentnexus/go/internal/httpapi/session_supervisor_handlers.go).
-   - Confirmed a successful build output of `go build ./cmd/tormentnexus`.
+2. **Codebase Analysis Native Tools**:
+   - Querying the `bobbybookmarks/atlas` database revealed comparative techniques including Chunkhound, Probe, and CodeGraphContext.
+   - Implemented [codebase_analysis.go](file:///c:/Users/hyper/workspace/tormentnexus/go/internal/tools/codebase_analysis.go) containing two native tool handlers: `codebase_search` (with modes `symbols`, `definitions`, `references`) and `codebase_outline` (outlining a file or querying specific symbols).
+   - Registered the handlers in [registry.go](file:///c:/Users/hyper/workspace/tormentnexus/go/internal/tools/registry.go) and successfully compiled/verified the Go sidecar.
 
-3. **Version Propagation**:
-   - Bumped system version to `1.0.0-alpha.237`.
-   - Propagated modifications recursively to all monorepo package metadata.
+3. **Remote Push Verification**:
+   - Pushed LFS binaries successfully to `origin` and `origin-backup` remotes.
 
 ## Next Steps for Successor Models
-- **Verify Runtime Integration**: Ensure the Next.js frontend properly talks to the Go sidecar's `/api/sessions/supervisor/restore-imported` endpoint at runtime during active testing.
-- **Verification on Desktop/Wails**: Re-compile and check the layout inside Wails if changes are to be previewed locally.
+- **Test at Runtime**: Verify tool outputs via `/api/tools` or execution paths inside the CLI interface.
+- **Frontend Dashboard Integration**: Expose `codebase_search` results inside the Dashboard UI.
