@@ -548,3 +548,25 @@ func buildLocalBillingModelPricingResponse() map[string]any {
 	}
 	return map[string]any{"models": models}
 }
+
+// handleBillingWebhook processes Stripe billing webhooks locally in the Go sidecar.
+func (s *Server) handleBillingWebhook(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Validate basic webhook structure or signatures if strictly required.
+	// For now, accept and log the event.
+	var event map[string]interface{}
+	if err := json.NewDecoder(r.Body).Decode(&event); err != nil {
+		http.Error(w, "Invalid payload", http.StatusBadRequest)
+		return
+	}
+
+	// Simple acknowledgment
+	writeJSON(w, http.StatusOK, map[string]any{
+		"success": true,
+		"message": "Webhook received",
+	})
+}

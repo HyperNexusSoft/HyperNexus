@@ -44,7 +44,7 @@ if "!WEB_CHECK!"=="200" (
     echo   Next.js dashboard already running on port %DASH_PORT%.
 ) else (
     echo   Starting Next.js dashboard on port %DASH_PORT%...
-    start /B cmd /c "cd apps\web && set NEXT_PRIVATE_DISABLE_TURBOPACK_CACHE=1 && npx next dev --port %DASH_PORT% > nul 2>&1"
+    start /B cmd /c "cd apps\web && set NEXT_PRIVATE_DISABLE_TURBOPACK_CACHE=1 && npx next dev --port %DASH_PORT% --webpack > nul 2>&1"
 )
 
 echo.

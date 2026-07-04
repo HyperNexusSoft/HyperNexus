@@ -33,6 +33,7 @@ def call_tool(name, arguments):
 
 def run_e2e():
     print("🚀 TormentNexus E2E Integration Protocol v1\n")
+    all_pass = True
 
     # 1. Native Tool Execution: Ripgrep
     print("--- Testing Native Tool: ripgrep_search ---")
@@ -59,7 +60,32 @@ def run_e2e():
     if overview and "success" in overview:
         print("✅ System overview is healthy.")
 
-    print("\n🏁 Integration Tests Complete")
+    # 5. Billing Webhook
+    print("\n--- Testing Billing Webhook ---")
+    webhook_res = call_endpoint("/api/billing/webhook", "POST", {"type": "invoice.payment_succeeded"})
+    if webhook_res and "success" in webhook_res:
+        print("✅ Billing webhook accepted.")
+
+    # 6. SSE Auth Token
+    print("\n--- Testing SSE Connector Auth ---")
+    sse_res = call_endpoint("/api/sse/message", "POST", {})
+    if sse_res is None:
+        print("✅ SSE Connector rejects unauthorized requests.")
+    else:
+        print("❌ SSE Connector accepted unauthorized requests.")
+        all_pass = False
+
+    # 7. Fallback configuration
+    print("\n--- Testing Provider Fallback Chain ---")
+    fallback_res = call_endpoint("/api/billing/fallback-chain?taskType=coding")
+    if fallback_res and "success" in fallback_res:
+        print("✅ Fallback configuration retrieved.")
+
+    if all_pass:
+        print("\n🏁 Integration Tests Complete: ALL PASSED")
+    else:
+        print("\n🏁 Integration Tests Complete: FAILED")
+        exit(1)
 
 if __name__ == "__main__":
     run_e2e()

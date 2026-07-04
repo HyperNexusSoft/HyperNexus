@@ -1054,6 +1054,7 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/billing/depleted-models", s.handleBillingDepletedModels)
 	s.mux.HandleFunc("/api/billing/fallback-history", s.handleBillingFallbackHistory)
 	s.mux.HandleFunc("/api/billing/fallback-history/clear", s.handleBillingClearFallbackHistory)
+	s.mux.HandleFunc("/api/billing/webhook", s.handleBillingWebhook)
 	s.mux.HandleFunc("/api/mcp/status", s.handleMCPStatus)
 	s.mux.HandleFunc("/api/system/overview", s.handleSystemOverview)
 	s.mux.HandleFunc("/api/mcp/servers/runtime", s.handleMCPRuntimeServers)
@@ -1766,6 +1767,7 @@ func (s *Server) handleAPIIndex(w http.ResponseWriter, _ *http.Request) {
 				{Path: "/api/billing/depleted-models", Category: "providers", Description: "Read depleted model state, with a local Go empty-state preview when the TypeScript billing router is unavailable."},
 				{Path: "/api/billing/fallback-history", Category: "providers", Description: "Read provider fallback history, with a local Go empty-state preview when the TypeScript billing router is unavailable."},
 				{Path: "/api/billing/fallback-history/clear", Category: "providers", Description: "Clear provider fallback history, with a local Go no-op when the TypeScript billing router is unavailable."},
+				{Path: "/api/billing/webhook", Category: "providers", Description: "Handle Stripe billing webhooks locally in the Go sidecar."},
 				{Path: "/api/mcp/status", Category: "mcp", Description: "Bridge to TypeScript MCP runtime status and pool state."},
 				{Path: "/api/mcp/servers/runtime", Category: "mcp", Description: "Bridge to TypeScript runtime MCP server visibility."},
 				{Path: "/api/mcp/servers/configured", Category: "mcp", Description: "Bridge to configured MCP server records managed by the TypeScript control plane."},
