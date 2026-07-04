@@ -413,6 +413,11 @@ function runJetBrainsBuild() {
     return;
   }
 
+  if (!existsSync(path.join(jetbrainsRoot, "build.gradle")) && !existsSync(path.join(jetbrainsRoot, "build.gradle.kts")) && !existsSync(path.join(jetbrainsRoot, "settings.gradle")) && !existsSync(path.join(jetbrainsRoot, "settings.gradle.kts"))) {
+    printStep("Skipping JetBrains plugin build because `packages/jetbrains` has no gradle configuration files.");
+    return;
+  }
+
   const gradle = detectGradleCommand(jetbrainsRoot);
   if (!gradle) {
     const strictJetBrainsBuild = process.env.TORMENTNEXUS_REQUIRE_JETBRAINS_BUILD === "true";
