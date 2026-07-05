@@ -86,7 +86,7 @@ TormentNexus is a **decision system and universal bridge** — not just an aggre
 | **Browser Automation** | Beta | Native chromedp handlers: navigate, screenshot, evaluate, click, fill, get HTML |
 | **Skill Registry** | Stable | 3,229+ assimilated skills from 7 harness ecosystems (Aider, Agent, CCS, Hermes, Pi, etc.) with Jaccard deduplication |
 | **Dashboard** | Stable | Next.js 16 + React 19 + Tailwind CSS 4 with real-time telemetry, knowledge graph, healer view, swarm visualizer |
-| **tRPC Bridge** | Stable | Type-safe API layer (port 4100) connecting UI to Go sidecar |
+| **tRPC Bridge** | Stable | Type-safe API layer (port 7778) connecting UI to Go sidecar |
 | **Session Import** | Beta | Automatic ingestion of Claude, Aider, and other harness session artifacts |
 | **Enterprise Licensing** | Experimental | Ed25519-signed license token validation with offline verification |
 | **Supervisor Nudge** | Stable | Autonomous Windows UI automation to maintain development momentum across AI chat surfaces |
@@ -104,18 +104,13 @@ TormentNexus is a **high-performance Go modular monolith** with a **TypeScript/N
 │  OPERATOR LAYER                                             │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐       │
 │  │  Web Dash   │  │  CLI (TS)   │  │  VS Code    │       │
-│  │  Port 3000  │  │  tormentnexus│  │  Extension  │       │
+│  │  Port 7779  │  │  tormentnexus│  │  Extension  │       │
 │  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘       │
 │         │                │                │                 │
 │         └────────────────┴────────────────┘                 │
 │                          │                                │
 │  ┌───────────────────────┴───────────────────────┐        │
-│  │  TYPESCRIPT CONTROL PLANE (Port 4100)        │        │
-│  │  tRPC routers · NativeSidecarDaemon · ResilientStream  │
-│  └───────────────────────┬───────────────────────┘        │
-│                          │                                │
-│  ┌───────────────────────┴───────────────────────┐        │
-│  │  GO SIDECAR (Port 4300) — The Authoritative Kernel    │
+│  │  GO SIDECAR (Port 7778) — The Authoritative Kernel    │
 │  │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐     │
 │  │  │ SkillStore│ │ EventBus │ │  Vault  │ │ Healer  │     │
 │  │  │ (BM25)  │ │ (Swarm) │ │(sqlite) │ │(Immune) │     │
@@ -138,9 +133,8 @@ TormentNexus is a **high-performance Go modular monolith** with a **TypeScript/N
 
 | Service | Port | Purpose |
 |---------|------|---------|
-| Next.js Dashboard | 3000 | Web observation deck |
-| tRPC Bridge | 4100 | TypeScript Control Plane API |
-| Go Sidecar | 4300 | Authoritative native kernel |
+| Go Sidecar | 7778 | Authoritative native kernel (HTTP API + tRPC) |
+| Next.js Dashboard | 7779 | Web observation deck |
 
 ---
 

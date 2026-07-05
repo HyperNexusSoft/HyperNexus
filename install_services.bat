@@ -21,6 +21,12 @@ sc create "TormentNexusWatchdog" binPath="\"C:\Python314\pythonw.exe\" -u \"C:\U
 if %errorlevel%==0 (echo ✅) else (echo ⚠️ may already exist)
 echo.
 
+echo Installing Pi Coding Agent Extension...
+if not exist "%USERPROFILE%\.pi\agent\extensions" mkdir "%USERPROFILE%\.pi\agent\extensions"
+copy /Y "C:\Users\hyper\workspace\tormentnexus\.pi\extensions\tormentnexus.ts" "%USERPROFILE%\.pi\agent\extensions\tormentnexus.ts"
+if %errorlevel%==0 (echo ✅ Pi extension installed) else (echo ⚠️ Pi extension copy failed)
+echo.
+
 echo ========================================
 echo  Done! Starting services...
 echo ========================================
