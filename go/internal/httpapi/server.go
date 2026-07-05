@@ -12784,7 +12784,7 @@ func (s *Server) localBrowserExtensionMemories(search, tag string, limit, offset
 		ORDER BY saved_at DESC
 	`)
 	if err != nil {
-		if strings.Contains(err.Error(), "no such table: web_memories") {
+		if strings.Contains(err.Error(), "no such table: web_memories") || strings.Contains(err.Error(), "file is not a database") {
 			return map[string]any{
 				"items": []map[string]any{},
 				"total": 0,
@@ -12876,7 +12876,7 @@ func (s *Server) localBrowserExtensionStats() (any, error) {
 		FROM web_memories
 	`)
 	if err != nil {
-		if strings.Contains(err.Error(), "no such table: web_memories") {
+		if strings.Contains(err.Error(), "no such table: web_memories") || strings.Contains(err.Error(), "file is not a database") {
 			return map[string]any{
 				"totalMemories": 0,
 				"uniqueUrls":    0,
@@ -14302,7 +14302,7 @@ func (s *Server) localToolChains() ([]map[string]any, error) {
 		ORDER BY created_at DESC
 	`)
 	if err != nil {
-		if strings.Contains(strings.ToLower(err.Error()), "no such table") {
+		if strings.Contains(strings.ToLower(err.Error()), "no such table") || strings.Contains(err.Error(), "file is not a database") {
 			return []map[string]any{}, nil
 		}
 		return nil, err
@@ -14367,7 +14367,7 @@ func (s *Server) localToolChain(id string) (any, error) {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
 		}
-		if strings.Contains(strings.ToLower(err.Error()), "no such table") {
+		if strings.Contains(strings.ToLower(err.Error()), "no such table") || strings.Contains(err.Error(), "file is not a database") {
 			return nil, nil
 		}
 		return nil, err
@@ -14398,7 +14398,7 @@ func localToolChainSteps(db *sql.DB, chainID string) ([]map[string]any, error) {
 		ORDER BY step_order ASC
 	`, chainID)
 	if err != nil {
-		if strings.Contains(strings.ToLower(err.Error()), "no such table") {
+		if strings.Contains(strings.ToLower(err.Error()), "no such table") || strings.Contains(err.Error(), "file is not a database") {
 			return []map[string]any{}, nil
 		}
 		return nil, err
@@ -14447,7 +14447,7 @@ func (s *Server) localToolAliases() ([]map[string]any, error) {
 		ORDER BY created_at DESC
 	`)
 	if err != nil {
-		if strings.Contains(strings.ToLower(err.Error()), "no such table") {
+		if strings.Contains(strings.ToLower(err.Error()), "no such table") || strings.Contains(err.Error(), "file is not a database") {
 			return []map[string]any{}, nil
 		}
 		return nil, err
@@ -14504,7 +14504,7 @@ func (s *Server) localToolAlias(name string) (any, error) {
 		if errors.Is(err, sql.ErrNoRows) {
 			return map[string]any{"resolved": false}, nil
 		}
-		if strings.Contains(strings.ToLower(err.Error()), "no such table") {
+		if strings.Contains(strings.ToLower(err.Error()), "no such table") || strings.Contains(err.Error(), "file is not a database") {
 			return map[string]any{"resolved": false}, nil
 		}
 		return nil, err
@@ -14579,7 +14579,7 @@ func (s *Server) localDBTools() ([]map[string]any, error) {
 		ORDER BY t.name
 	`)
 	if err != nil {
-		if strings.Contains(strings.ToLower(err.Error()), "no such table") {
+		if strings.Contains(strings.ToLower(err.Error()), "no such table") || strings.Contains(err.Error(), "file is not a database") {
 			return []map[string]any{}, nil
 		}
 		return nil, err
@@ -17157,7 +17157,7 @@ func (s *Server) localConfiguredMCPServersFromDB() ([]map[string]any, error) {
 		ORDER BY name ASC
 	`)
 	if err != nil {
-		if strings.Contains(strings.ToLower(err.Error()), "no such table") {
+		if strings.Contains(strings.ToLower(err.Error()), "no such table") || strings.Contains(err.Error(), "file is not a database") {
 			return []map[string]any{}, nil
 		}
 		return nil, err
@@ -17270,7 +17270,7 @@ func (s *Server) localWorkspaceSecretEnv() (map[string]string, error) {
 		FROM workspace_secrets
 	`)
 	if err != nil {
-		if strings.Contains(strings.ToLower(err.Error()), "no such table") {
+		if strings.Contains(strings.ToLower(err.Error()), "no such table") || strings.Contains(err.Error(), "file is not a database") {
 			return map[string]string{}, nil
 		}
 		return nil, err

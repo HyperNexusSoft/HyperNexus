@@ -7,7 +7,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/NexusSoftMDMA/TormentNexus/tormentnexus"
 	"github.com/NexusSoftMDMA/TormentNexus/foundation/adapters"
 	"github.com/NexusSoftMDMA/TormentNexus/tools"
 	"github.com/sashabaranov/go-openai"
@@ -17,8 +16,7 @@ type Agent struct {
 	client       *openai.Client
 	messages     []openai.ChatCompletionMessage
 	tools        *tools.Registry
-	TormentNexusAdapter  *tormentnexus.Adapter
-	HyperAdapter *adapters.TormentNexusAdapter
+		HyperAdapter *adapters.TormentNexusAdapter
 }
 
 func NewAgent() *Agent {
@@ -28,8 +26,7 @@ func NewAgent() *Agent {
 	}
 
 	registry := tools.NewRegistry()
-	tormentnexusAdapter := tormentnexus.NewAdapter()
-	cwd, _ := os.Getwd()
+		cwd, _ := os.Getwd()
 	hyperAdapter := adapters.NewTormentNexusAdapter(cwd)
 	systemPrompt := strings.Join([]string{
 		"You are TormentNexus, a Go-native coding and terminal assistant integrated with TormentNexus and TormentNexus.",
@@ -48,7 +45,7 @@ func NewAgent() *Agent {
 			},
 		},
 		tools:        registry,
-		TormentNexusAdapter:  tormentnexusAdapter,
+
 		HyperAdapter: hyperAdapter,
 	}
 }

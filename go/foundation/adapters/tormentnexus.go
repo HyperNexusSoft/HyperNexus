@@ -7,7 +7,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/NexusSoftMDMA/TormentNexus/tormentnexus"
 )
 
 type TormentNexusStatus struct {
@@ -22,29 +21,25 @@ type TormentNexusStatus struct {
 }
 
 type TormentNexusAdapter struct {
-	tormentnexusAdapter *tormentnexus.Adapter
-	workingDir  string
+		workingDir  string
 	homeDir     string
 }
 
 func NewTormentNexusAdapter(workingDir string) *TormentNexusAdapter {
 	homeDir, _ := os.UserHomeDir()
 	return &TormentNexusAdapter{
-		tormentnexusAdapter: tormentnexus.NewAdapter(),
-		workingDir:  workingDir,
+				workingDir:  workingDir,
 		homeDir:     homeDir,
 	}
 }
 
 func (a *TormentNexusAdapter) Status() TormentNexusStatus {
 	status := TormentNexusStatus{
-		Assimilated:   a.tormentnexusAdapter != nil && a.tormentnexusAdapter.Assimilated,
+		Assimilated: false,
 		MemoryContext: a.MemoryContext(),
 		Provider:      BuildProviderStatus(),
 	}
-	if a.tormentnexusAdapter != nil {
-		status.TormentNexusCoreURL = a.tormentnexusAdapter.TormentNexusCoreURL
-	}
+
 	if repoPath, ok := a.findTormentNexusRepo(); ok {
 		status.TormentNexusRepoPath = repoPath
 	} else {
@@ -60,17 +55,11 @@ func (a *TormentNexusAdapter) Status() TormentNexusStatus {
 }
 
 func (a *TormentNexusAdapter) MemoryContext() string {
-	if a.tormentnexusAdapter == nil {
-		return ""
-	}
-	return a.tormentnexusAdapter.GetMemoryContext()
+	return ""
 }
 
 func (a *TormentNexusAdapter) RouteMCP(request string) string {
-	if a.tormentnexusAdapter == nil {
-		return request
-	}
-	return a.tormentnexusAdapter.RouteMCP(request)
+	return request
 }
 
 func (a *TormentNexusAdapter) BuildSystemContext() string {

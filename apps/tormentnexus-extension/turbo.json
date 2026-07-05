@@ -1,7 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "extends": ["//"],
-  "tasks": {
+    "tasks": {
     "ready": {
       "dependsOn": ["^ready"],
       "outputs": ["../../dist/**", "dist/**"],

@@ -7,7 +7,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/NexusSoftMDMA/TormentNexus/tormentnexus"
 )
 
 type MCPStatus struct {
@@ -42,7 +41,6 @@ type MCPCallResult struct {
 }
 
 type MCPAdapter struct {
-	tormentnexusAdapter *tormentnexus.Adapter
 	workingDir  string
 	homeDir     string
 }
@@ -50,7 +48,6 @@ type MCPAdapter struct {
 func NewMCPAdapter(workingDir string) *MCPAdapter {
 	homeDir, _ := os.UserHomeDir()
 	return &MCPAdapter{
-		tormentnexusAdapter: tormentnexus.NewAdapter(),
 		workingDir:  workingDir,
 		homeDir:     homeDir,
 	}
@@ -101,10 +98,7 @@ func (a *MCPAdapter) ListTools() ([]string, error) {
 
 func (a *MCPAdapter) RouteCall(serverName, request string) string {
 	payload := fmt.Sprintf("%s:%s", strings.TrimSpace(serverName), strings.TrimSpace(request))
-	if a.tormentnexusAdapter == nil {
-		return payload
-	}
-	return a.tormentnexusAdapter.RouteMCP(payload)
+	return payload
 }
 
 func (a *MCPAdapter) CallTool(req MCPCallRequest) (MCPCallResult, error) {
@@ -169,10 +163,7 @@ func defaultToolHintsForServer(name string, server MCPServerConfig) []string {
 }
 
 func (a *MCPAdapter) routeHint(name string) string {
-	if a.tormentnexusAdapter == nil {
-		return name
-	}
-	return a.tormentnexusAdapter.RouteMCP(name)
+	return name
 }
 
 func commandResolvable(command string) bool {

@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 
 import { useEffect, useMemo, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -392,8 +393,12 @@ function DashboardHomeClientContent() {
 				}}
 				pendingSessionActionId={pendingSessionActionId}
 			>
-				<BrowserToolWidget />
-				<VibeCheckWidget />
+				{activeTab === 'browser' && (
+					<React.Fragment>
+						<BrowserToolWidget />
+						<VibeCheckWidget />
+					</React.Fragment>
+				)}
 			</DashboardHomeView>
 		);
 	};
