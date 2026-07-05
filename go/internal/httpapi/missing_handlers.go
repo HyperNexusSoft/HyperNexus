@@ -190,6 +190,68 @@ func (s *Server) handleMemoryFTSearch(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+func (s *Server) handleMemoryMaintenance(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeJSON(w, http.StatusMethodNotAllowed, map[string]any{"success": false, "error": "use POST"})
+		return
+	}
+	if tools.GlobalVectorStore == nil {
+		writeJSON(w, http.StatusServiceUnavailable, map[string]any{"success": false, "error": "vector store not initialized"})
+		return
+	}
+	vs := tools.GlobalVectorStore
+	ctx := r.Context()
+
+	var results []string
+
+	if err := vs.ForgettingCurveDecay(ctx); err != nil {
+		results = append(results, "forgetting-curve-decay: "+err.Error())
+	} else {
+		results = append(results, "forgetting-curve-decay: complete")
+	}
+
+	if err := vs.ConsolidateMemories(ctx); err != nil {
+		results = append(results, "consolidation: "+err.Error())
+	} else {
+		results = append(results, "consolidation: complete")
+	}
+
+	if err := vs.ApplyDecay(ctx); err != nil {
+		results = append(results, "apply-decay: "+err.Error())
+	} else {
+		results = append(results, "apply-decay: complete")
+	}
+
+	limbo, lErr := memorystore.NewLimboVault(vs.DB())
+	if lErr == nil {
+		if err := memorystore.BuryOrphanedMemories(ctx, vs.DB(), limbo); err != nil {
+			results = append(results, "orphan-burial: "+err.Error())
+		} else {
+			results = append(results, "orphan-burial: complete")
+		}
+		if err := memorystore.DreamCycle(ctx, vs.DB()); err != nil {
+			results = append(results, "dream-cycle: "+err.Error())
+		} else {
+			results = append(results, "dream-cycle: complete")
+		}
+	}
+
+	var vaultCount, coldCount int
+	_ = vs.DB().QueryRowContext(ctx, "SELECT COUNT(*) FROM l2_vault").Scan(&vaultCount)
+	dbPath := filepath.Join(s.cfg.ConfigDir, "l3_cold_archive.db")
+	if cold, err := memorystore.NewColdArchive(dbPath); err == nil {
+		coldCount, _ = cold.Count(ctx)
+		cold.Close()
+	}
+
+	writeJSON(w, http.StatusOK, map[string]any{
+		"success": true,
+		"data":    results,
+		"vault":   vaultCount,
+		"cold":    coldCount,
+	})
+}
+
 func (s *Server) handleColdArchiveSearch(w http.ResponseWriter, r *http.Request) {
 	query := strings.TrimSpace(r.URL.Query().Get("q"))
 	if query == "" {
