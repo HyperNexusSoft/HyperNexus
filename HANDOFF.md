@@ -20,3 +20,8 @@
 ## Next Steps for Successor Models
 - **Test at Runtime**: Verify tool outputs via `/api/tools` or execution paths inside the CLI interface.
 - **Frontend Dashboard Integration**: Expose `codebase_search` results inside the Dashboard UI.
+
+4. **Extension v4 Rollout & Bug Fixes**:
+   - Fixed the `build_all.mjs` JetBrains compilation errors blocking the pipeline.
+   - Removed missing dependencies in Go sidecar to stabilize build and cleared unit test hanging/failures due to missing schema via fallback `is not a database` checks.
+   - Rolled out the Pi Extension v4 features (RBAC, subagents, interactive forms, hooks) to the `apps/pi-extension` workspace.

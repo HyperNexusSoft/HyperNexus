@@ -1,12 +1,17 @@
 # ROADMAP: TormentNexus Kernel & TormentNexus Dashboard
 
-_Last updated: 2026-07-01, version 1.0.0-alpha.221_
+_Last updated: 2026-07-06, version 1.0.0-alpha.238_
 
 ## Status Legend
 - **Stable** — Production-intended, tested, maintained
 - **Beta** — Usable, still evolving
 - **Experimental** — Active R&D, not dependable
 - **Vision** — Directional only
+
+## Completed (v1.0.0-alpha.238)
+- **Extension v4 Rollout**: Implemented enterprise RBAC policies, slash commands, subagents, interactive widgets, and deep shortcuts across client integrations.
+- **Memory Maintenance Endpoint**: Fixed and stabilized `/api/memory/maintenance` to allow manual trigger of SQLite state compactions safely.
+- **Pi Extension Installer**: Added TormentNexus Pi Extension to automate installation of local tool injection plugins.
 
 ## Completed (v1.0.0-alpha.132)
 ### 1. Comprehensive Documentation & Merge (STABLE)
