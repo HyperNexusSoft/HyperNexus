@@ -670,6 +670,22 @@ TormentNexus is built by a **multi-agent swarm** of specialized AI models (Gemin
 
 ---
 
+## Community
+
+### pi Extension (npm)
+
+```bash
+pi install npm:tormentnexus
+```
+
+Connects pi to the TormentNexus control plane — persistent L2 memory, tool search, session import, skill registry, code search, subagent orchestration, enterprise RBAC. Full source at `packages/tormentnexus/`.
+
+### Rust Port
+
+A community Rust port of the pi extension is maintained by **codewhale** at `github.com/robertpelloni/tormentnexus-rs`.
+
+---
+
 ## License
 
 TormentNexus uses a **dual-licensing model**:

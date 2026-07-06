@@ -18,6 +18,7 @@ L2 Vault (hot/warm) ──decay──▶ L3 Cold Archive (cool/cold) ──buria
 | L2 | Long-Term Vault | Active memories with heat scores | Indefinite (while heat > 10) |
 | L3 | Cold Archive | Compressed long-term storage | Indefinite |
 | L4 | Limbo | Discarded/lost/orphaned memories | 90 days |
+| Project | .memdb | Portable git-tracked per-project file | Indefinite |
 
 ## Heat Score System
 
@@ -159,6 +160,63 @@ Node A ◀──state update──── Node B (if B has newer data)
 - Gossip port: 7778 (UDP)
 - Protocol: Ed25519-signed messages with vector clocks for conflict resolution
 
+## Per-Project .memdb System
+
+### Overview
+
+Every TormentNexus project can have a `.memdb` file in its root directory — a portable, git-tracked SQLite database containing project-specific memories. These files survive clones, branches, and merges.
+
+```
+project-root/
+  .memdb              ← git-tracked, portable memories for this project
+  src/...
+
+~/.tormentnexus/
+  memory.db           ← global unified index (aggregates all .memdb files)
+```
+
+### How Memories Flow
+
+```
+tn_memory_store(content="fix: build bug", project="tormentnexus", tags=["pattern:build"])
+  ├── Global L2 vault (memory.db) — for unified search
+  └── Project tag added ──→ triggers workspace .memdb scan
+                              └── tormentnexus/.memdb created/updated
+                                  └── imported into global index on next scan
+```
+
+### Server Scanning
+
+- **Startup**: 10s after boot, scans `workspace/` for all `.memdb` files and imports into global L2
+- **Hourly**: Rescans to pick up new projects from `git pull`, `git clone`, or manual creation
+- **Manual**: `POST /api/memory/project/sync` triggers on-demand
+- **Retroactive split**: `POST /api/memory/project/split` reads existing global memories with `project:` tags and writes them into per-project `.memdb` files
+
+### API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/memory/project/sync` | POST | Scan workspace, import all `.memdb` files into global index
+| `/api/memory/project/split` | POST | Split global memories by project tag into per-project `.memdb` files
+
+### Pi Extension Usage
+
+The `tn_memory_store` tool accepts an optional `project` parameter:
+
+```
+tn_memory_store(
+  content="Architecture decision: use FTS5 for full-text search",
+  project="tormentnexus",
+  tags=["pattern:search", "decision:architecture"],
+  category="decision"
+)
+```
+
+This stores the memory in both the global L2 vault AND triggers a workspace scan that writes it to `tormentnexus/.memdb`. The `.memdb` file can be committed to git and will be auto-imported when the project is cloned on another machine.
+
 ## Configuration
 
-The maintenance interval is hardcoded at **4 hours** in the server startup code. The initial delay before the first cycle is **2 minutes** to let the server settle.
+- Config directory: `~/.tormentnexus` (auto-migrated from `~/.tormentnexus-go`)
+- Override: `TORMENTNEXUS_CONFIG_DIR` env var
+- Maintenance interval: 4 hours (hardcoded)
+- Initial delay: 2 minutes

@@ -4,16 +4,25 @@
 
 ### Added
 
-- **Memory Maintenance API**: `POST /api/memory/maintenance` — manual trigger for all 5 lifecycle phases (forgetting-curve decay, consolidation, orphan burial, dream cycle)
-- **TormentNexus pi extension v4**: RBAC tool-call enforcement, 6 slash commands (`/tn-store`, `/tn-search`, `/tn-status`, `/tn-plan`, `/tn-purge`, `/tn-summary`), subagent orchestration via `tn_subagent` tool, live editor widget with memory/mesh stats, custom footer, keyboard shortcuts (`Ctrl+Shift+M/T/P`), `@memory:key` inline context expansion, inter-extension event bus
-- **pi-intercom v0.6.0 + pi-subagents v0.33.1**: Cross-session message broker and subagent orchestration packages installed
-- **Memory Maintenance Documentation**: `docs/ai/deployment/memory-maintenance.md` — full lifecycle, heat decay formula, SM-2 spaced repetition, P2P mesh docs
-- **Executive Protocol R7**: Full repo sync — fetched both remotes, reconciled 298 task branches (all stale ancestors, zero loss), verified submodules removed, scripts validated
+- **Memory Maintenance API**: `POST /api/memory/maintenance` — manual trigger for all 5 lifecycle phases
+- **TormentNexus pi extension v4**: RBAC, 6 slash commands, subagent orchestration, keyboard shortcuts, live widget
+- **pi-intercom v0.6.0 + pi-subagents v0.33.1**: Cross-session message broker and subagent orchestration
+- **Memory Maintenance Documentation**: `docs/ai/deployment/memory-maintenance.md`
+- **Executive Protocol R7**: Full repo sync, 298 task branches reconciled
+- **Native memory tools via MCP**: `add_memory`, `search_memory`, `delete_memory`, `memory_stats` registered in `tools.Registry` and wired into both `/api/agent/tool` and `/api/mcp/tools/call` endpoints
+- **Per-project .memdb system**: Portable, git-tracked per-project memory files. `ProjectDB` type with `OpenProjectDB`, `Store`, `Search`, `List`, `Count`. Workspace scanner `FindProjectMemDBs` + `SyncAllProjectMemDBs` for auto-import on startup and hourly rescan
+- **`/api/memory/project/sync` endpoint**: Trigger workspace .memdb scan and import
+- **`/api/memory/project/split` endpoint**: Retroactively split global memories by `project:` tag into per-project .memdb files
+- **Config directory rename**: `~/.tormentnexus-go` → `~/.tormentnexus` with auto-migration on startup. New env var `TORMENTNEXUS_CONFIG_DIR` (backward compat with `TORMENTNEXUS_GO_CONFIG_DIR`)
+- **npm package `tormentnexus`**: Published at `packages/tormentnexus/` for `pi install npm:tormentnexus`
+- **codewhale Rust port**: Community Rust port of the pi extension at `github.com/robertpelloni/tormentnexus-rs` (contact: codewhale)
 
 ### Fixed
 
-- **Spaced repetition dream cycle**: Column name mismatch (`easiness_factor` → `ease_factor`, `interval_days` → `interval`, `last_reviewed_at` removed) — dream cycle now correctly creates SM-2 entries with heat boosts
-- **Orphan burial**: Graceful skip when `imported_session_memories` table doesn't exist in memory.db (table is in tormentnexus.db)
+- **Native tool disabled-by-default bug**: `loadNativeConfig()` returned empty map when `data/native-tools.json` missing, causing `m["tool"] == false` → `isNativeDisabled=true`. Changed to check `explicit && !val`
+- **Spaced repetition dream cycle**: Column name mismatch — dream cycle now correctly creates SM-2 entries
+- **MCP call handler**: Wired `toolsRegistry` into `handleMCPCallTool` so registered tools work via `/api/mcp/tools/call`
+- **Orphan burial**: Graceful skip when `imported_session_memories` table doesn't exist
 
 ## [1.0.0-alpha.238] - 2026-07-04
 
