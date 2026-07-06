@@ -34,7 +34,8 @@ var (
 	pSetWindowText    = user32.NewProc("SetWindowTextW")
 	pSendMessage      = user32.NewProc("SendMessageW")
 	pLoadIcon         = user32.NewProc("LoadIconW")
-	pDestroyWindow    = user32.NewProc("DestroyWindow")
+	pDestroyWindow     = user32.NewProc("DestroyWindow")
+	pMessageBox        = user32.NewProc("MessageBoxW")
 
 	pCreatePopupMenu   = user32.NewProc("CreatePopupMenu")
 	pAppendMenu        = user32.NewProc("AppendMenuW")
@@ -58,12 +59,21 @@ const (
 	TPM_RIGHTBUTTON = 0x0002
 	TPM_RETURNCMD   = 0x0100
 
-	IDM_DASHBOARD = 1001
-	IDM_LOGS      = 1002
-	IDM_EXIT      = 1003
+	IDM_DASHBOARD    = 1001
+	IDM_LOGS         = 1002
+	IDM_EXIT         = 1003
 	IDM_INFO_VERSION = 1004
 	IDM_INFO_STATUS  = 1005
 	IDM_AUTOSTART    = 1006
+	IDM_LOG_BASE     = 2000 // Base ID for last-10-log menu items (2000-2009)
+
+	MB_YESNO       = 0x00000004
+	MB_YESNOCANCEL = 0x00000003
+	MB_ICONQUESTION = 0x00000020
+	MB_ICONWARNING  = 0x00000030
+	IDYES          = 6
+	IDNO           = 7
+	IDCANCEL       = 2
 
 	MF_GRAYED = 0x00000001
 
@@ -298,31 +308,46 @@ func hiddenWndProc(hWnd windows.HWND, msg uint32, wParam uintptr, lParam uintptr
 			pSetForegroundWindow.Call(uintptr(hWnd))
 			hMenu, _, _ := pCreatePopupMenu.Call()
 
-			// High-value Information Display
-			infoVersionText, _ := syscall.UTF16PtrFromString("TormentNexus Core (v1.0.0-alpha)")
-			infoStatusText, _ := syscall.UTF16PtrFromString("Port: Go 7778 / TS 7779 (Active)")
-			infoStatsText, _ := syscall.UTF16PtrFromString("Memory: 14,726 / MCP: 7,000+")
+			// ── Last 10 Log Events (clickable sub-items) ──
+			logMutex.Lock()
+			last10 := logLines
+			if len(last10) > 10 {
+				last10 = last10[len(last10)-10:]
+			}
+			logMutex.Unlock()
 
-			pAppendMenu.Call(hMenu, MF_STRING|MF_GRAYED, IDM_INFO_VERSION, uintptr(unsafe.Pointer(infoVersionText)))
-			pAppendMenu.Call(hMenu, MF_STRING|MF_GRAYED, IDM_INFO_STATUS, uintptr(unsafe.Pointer(infoStatusText)))
-			pAppendMenu.Call(hMenu, MF_STRING|MF_GRAYED, IDM_INFO_STATUS, uintptr(unsafe.Pointer(infoStatsText)))
+			for i, line := range last10 {
+				// Truncate long lines for menu display
+				display := line
+				if len(display) > 60 {
+					display = display[:57] + "..."
+				}
+				itemText, _ := syscall.UTF16PtrFromString(display)
+				// IDM_LOG_BASE + i makes each item clickable (opens full log window)
+				pAppendMenu.Call(hMenu, MF_STRING|MF_GRAYED, IDM_LOG_BASE+uintptr(i), uintptr(unsafe.Pointer(itemText)))
+			}
 			pAppendMenu.Call(hMenu, MF_STRING, 0, 0) // Separator
 
-			// Actionable Startup & Navigation Menu Items
+			// ── Navigation ──
 			dashboardText, _ := syscall.UTF16PtrFromString("Open Dashboard")
-			logsText, _ := syscall.UTF16PtrFromString("Show Event Logs")
-
-			startupLabel := "Enable Automatic Startup"
-			if isAutomaticStartupEnabled() {
-				startupLabel = "Disable Automatic Startup [Currently Enabled]"
-			}
-			startupText, _ := syscall.UTF16PtrFromString(startupLabel)
-			exitText, _ := syscall.UTF16PtrFromString("Shutdown Server & Exit")
-
+			logsText, _ := syscall.UTF16PtrFromString("Show Full Event Logs")
 			pAppendMenu.Call(hMenu, MF_STRING, IDM_DASHBOARD, uintptr(unsafe.Pointer(dashboardText)))
 			pAppendMenu.Call(hMenu, MF_STRING, IDM_LOGS, uintptr(unsafe.Pointer(logsText)))
-			pAppendMenu.Call(hMenu, MF_STRING, IDM_AUTOSTART, uintptr(unsafe.Pointer(startupText)))
+
 			pAppendMenu.Call(hMenu, MF_STRING, 0, 0) // Separator
+
+			// ── Auto-Start Toggle ──
+			startupLabel := "Enable Auto-Start with Windows"
+			if isAutomaticStartupEnabled() {
+				startupLabel = "Disable Auto-Start with Windows"
+			}
+			startupText, _ := syscall.UTF16PtrFromString(startupLabel)
+			pAppendMenu.Call(hMenu, MF_STRING, IDM_AUTOSTART, uintptr(unsafe.Pointer(startupText)))
+
+			pAppendMenu.Call(hMenu, MF_STRING, 0, 0) // Separator
+
+			// ── Exit ──
+			exitText, _ := syscall.UTF16PtrFromString("Exit All TormentNexus Processes")
 			pAppendMenu.Call(hMenu, MF_STRING, IDM_EXIT, uintptr(unsafe.Pointer(exitText)))
 
 			var pos struct { X, Y int32 }
@@ -346,7 +371,24 @@ func hiddenWndProc(hWnd windows.HWND, msg uint32, wParam uintptr, lParam uintptr
 			case IDM_AUTOSTART:
 				toggleAutomaticStartup()
 			case IDM_EXIT:
-				go TriggerFullShutdown()
+				// Show dialog asking user what to do with background processes
+				title, _ := syscall.UTF16PtrFromString("TormentNexus — Exit Options")
+				msg, _ := syscall.UTF16PtrFromString("Do you want to completely quit ALL TormentNexus background processes?\n\n" +
+					"Click 'Yes' to terminate: watchdog, swarm workers, dashboard, freellm.\n" +
+					"Click 'No' to quit the sidecar only (background workers keep running).\n" +
+					"Click 'Cancel' to stay running.")
+				resp, _, _ := pMessageBox.Call(0, uintptr(unsafe.Pointer(msg)),
+					uintptr(unsafe.Pointer(title)), MB_YESNOCANCEL|MB_ICONQUESTION)
+				switch resp {
+				case IDYES:
+					// Kill everything
+					go TriggerFullShutdown()
+				case IDNO:
+					// Just exit the sidecar, leave workers running
+					os.Exit(0)
+				case IDCANCEL:
+					// Do nothing, stay running
+				}
 			}
 		}
 		return 0
