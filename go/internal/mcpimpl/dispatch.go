@@ -4341,6 +4341,46 @@ var dispatchMap = map[string]func(ctx context.Context, args map[string]interface
 	"handleListLogs":                                                      handleListLogs,                                                      // from bugfender_mcp.go
 	"handleListServices":                                                  handleListServices,                                                  // from skysql_mcp.go
 	"sendSMS":                                                             sendSMS,                                                             // from didlogic_mcp.go
+
+	// ── top_mcp_batch.go (25 high-value MCP servers) ──
+	"HandleGetConsoleLogs":        HandleGetConsoleLogs,        // from top_mcp_batch.go (browser-tools-mcp)
+	"HandleGetNetworkErrors":      HandleGetNetworkErrors,      // from top_mcp_batch.go (browser-tools-mcp)
+	"HandleGetNetworkLogs":        HandleGetNetworkLogs,        // from top_mcp_batch.go (browser-tools-mcp)
+	"HandleWipeLogs":              HandleWipeLogs,              // from top_mcp_batch.go (browser-tools-mcp)
+	"HandleRunNextJSAudit":        HandleRunNextJSAudit,        // from top_mcp_batch.go (browser-tools-mcp)
+	"HandleSearchFlights_mcp_gsc": HandleSearchFlights_mcp_gsc, // from top_mcp_batch.go (google-flights)
+	"HandleGetGSCInsights":        HandleGetGSCInsights,        // from top_mcp_batch.go (mcp-gsc)
+	"HandleSearchTrains":          HandleSearchTrains,          // from top_mcp_batch.go (12306-mcp)
+	"HandleSearchZotero_top":      HandleSearchZotero_top,      // from top_mcp_batch.go (zotero-mcp)
+	"HandleGetStockQuote":         HandleGetStockQuote,         // from top_mcp_batch.go (yahoo-finance2)
+	"HandleSearchYahooFinance":    HandleSearchYahooFinance,    // from top_mcp_batch.go (yahoo-finance2)
+	"HandleGetCNPJ":               HandleGetCNPJ,               // from top_mcp_batch.go (mcp-brasil)
+	"HandleGetCEP":                HandleGetCEP,                // from top_mcp_batch.go (mcp-brasil)
+	"HandleSearchPapers":          HandleSearchPapers,          // from top_mcp_batch.go (paper-search-mcp)
+	"HandleBuildXcodeProject":     HandleBuildXcodeProject,     // from top_mcp_batch.go (XcodeBuildMCP)
+	"HandleRunXcodeTests":         HandleRunXcodeTests,         // from top_mcp_batch.go (XcodeBuildMCP)
+	"HandleMiniMaxChat":           HandleMiniMaxChat,           // from top_mcp_batch.go (MiniMax-MCP)
+	"HandleIndexCodebase":         HandleIndexCodebase,         // from top_mcp_batch.go (codebase-memory-mcp)
+	"HandleQueryCodebase":         HandleQueryCodebase,         // from top_mcp_batch.go (codebase-memory-mcp)
+	"HandleArcadeExecute":         HandleArcadeExecute,         // from top_mcp_batch.go (arcade-mcp)
+	"HandleJetBrainsOpenFile":     HandleJetBrainsOpenFile,     // from top_mcp_batch.go (mcp-jetbrains)
+	"HandleJetBrainsSearch":       HandleJetBrainsSearch,       // from top_mcp_batch.go (mcp-jetbrains)
+	"HandleDABQuery":              HandleDABQuery,              // from top_mcp_batch.go (azure-dab)
+	"HandleBrowserMCPNavigate":    HandleBrowserMCPNavigate,    // from top_mcp_batch.go (BrowserMCP)
+	"HandleBrowserMCPClick":       HandleBrowserMCPClick,       // from top_mcp_batch.go (BrowserMCP)
+	"HandleBrowserMCPGetText":     HandleBrowserMCPGetText,     // from top_mcp_batch.go (BrowserMCP)
+	"HandleBetterChatbotSend":     HandleBetterChatbotSend,     // from top_mcp_batch.go (better-chatbot)
+	"HandleCompressContext":       HandleCompressContext,       // from top_mcp_batch.go (lean-ctx)
+	"HandleUnityExecute":          HandleUnityExecute,          // from top_mcp_batch.go (unity-mcp)
+	"HandleUnityGetScene":         HandleUnityGetScene,         // from top_mcp_batch.go (unity-mcp)
+	"HandleUnrealExecute":         HandleUnrealExecute,         // from top_mcp_batch.go (unreal-mcp)
+	"HandleNocturneMemoryStore":   HandleNocturneMemoryStore,   // from top_mcp_batch.go (nocturne-memory)
+	"HandleNocturneMemorySearch":  HandleNocturneMemorySearch,  // from top_mcp_batch.go (nocturne-memory)
+	"HandleAIGatewayRoute":        HandleAIGatewayRoute,        // from top_mcp_batch.go (azure-ai-gateway)
+	"HandleMCPBridgeCall":         HandleMCPBridgeCall,         // from top_mcp_batch.go (mcp-bridge)
+	"HandleWebclawExtract":        HandleWebclawExtract,        // from top_mcp_batch.go (webclaw)
+	"HandleSourceyGenerateDocs":   HandleSourceyGenerateDocs,   // from top_mcp_batch.go (sourcey)
+	"HandleRedNoteSearch":         HandleRedNoteSearch,         // from top_mcp_batch.go (RedNote-MCP)
 }
 
 func Dispatch(name string, ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
