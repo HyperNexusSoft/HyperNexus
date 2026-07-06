@@ -267,8 +267,8 @@ func (s *Server) handleProjectSync(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeJSON(w, http.StatusOK, map[string]any{
-		"success": true,
-		"files":   files,
+		"success":  true,
+		"files":    files,
 		"imported": memories,
 	})
 }
@@ -288,8 +288,8 @@ func (s *Server) handleProjectSplit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeJSON(w, http.StatusOK, map[string]any{
-		"success": true,
-		"files":   files,
+		"success":  true,
+		"files":    files,
 		"memories": memories,
 		"note":     "Retroactively split memories by project tag. New .memdb files created in project directories.",
 	})

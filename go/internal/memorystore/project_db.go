@@ -35,12 +35,12 @@ CREATE INDEX IF NOT EXISTS idx_memories_kind ON memories(kind);
 // ProjectDB manages a per-project .memdb SQLite file.
 // Each file is a portable, git-trackable collection of project-specific memories.
 type ProjectDB struct {
-	path   string
-	db     *sql.DB
-	mu     sync.RWMutex
-	stmtInsert  *sql.Stmt
-	stmtSearch  *sql.Stmt
-	stmtList    *sql.Stmt
+	path       string
+	db         *sql.DB
+	mu         sync.RWMutex
+	stmtInsert *sql.Stmt
+	stmtSearch *sql.Stmt
+	stmtList   *sql.Stmt
 }
 
 // OpenProjectDB opens or creates a .memdb file for a project.
@@ -88,8 +88,8 @@ func OpenProjectDB(projectPath string) (*ProjectDB, error) {
 	}
 
 	return &ProjectDB{
-		path: projectPath,
-		db:   db,
+		path:       projectPath,
+		db:         db,
 		stmtInsert: insertStmt,
 		stmtSearch: searchStmt,
 		stmtList:   listStmt,
@@ -97,9 +97,15 @@ func OpenProjectDB(projectPath string) (*ProjectDB, error) {
 }
 
 func (p *ProjectDB) Close() error {
-	if p.stmtInsert != nil { p.stmtInsert.Close() }
-	if p.stmtSearch != nil { p.stmtSearch.Close() }
-	if p.stmtList != nil { p.stmtList.Close() }
+	if p.stmtInsert != nil {
+		p.stmtInsert.Close()
+	}
+	if p.stmtSearch != nil {
+		p.stmtSearch.Close()
+	}
+	if p.stmtList != nil {
+		p.stmtList.Close()
+	}
 	return p.db.Close()
 }
 
