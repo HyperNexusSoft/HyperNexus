@@ -27,7 +27,7 @@ if not exist "%USERPROFILE%\.pi\agent\extensions" mkdir "%USERPROFILE%\.pi\agent
 if exist "%USERPROFILE%\.pi\agent\extensions\tormentnexus.ts" (
     echo ℹ️  Pi extension already exists at global path. Skipping copy.
 ) else (
-    copy /Y "C:\Users\hyper\workspace\tormentnexus\packages\tormentnexus\index.ts" "%USERPROFILE%\.pi\agent\extensions\tormentnexus.ts"
+    copy /Y "C:\Users\hyper\workspace\tormentnexus\.pi\extensions\tormentnexus.ts" "%USERPROFILE%\.pi\agent\extensions\tormentnexus.ts"
     if !errorlevel!==0 (echo ✅ Pi extension installed) else (echo ⚠️)
 )
 echo.
@@ -249,3 +249,4 @@ echo  The correct binary path is: tormentnexus.exe
 echo  (NOT bin/tormentnexus.exe)
 echo.
 pause
+

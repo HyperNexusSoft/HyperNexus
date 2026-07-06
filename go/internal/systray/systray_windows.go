@@ -34,13 +34,13 @@ var (
 	pSetWindowText    = user32.NewProc("SetWindowTextW")
 	pSendMessage      = user32.NewProc("SendMessageW")
 	pLoadIcon         = user32.NewProc("LoadIconW")
-	pDestroyWindow     = user32.NewProc("DestroyWindow")
-	pMessageBox        = user32.NewProc("MessageBoxW")
+	pDestroyWindow    = user32.NewProc("DestroyWindow")
+	pMessageBox       = user32.NewProc("MessageBoxW")
 
-	pCreatePopupMenu   = user32.NewProc("CreatePopupMenu")
-	pAppendMenu        = user32.NewProc("AppendMenuW")
-	pTrackPopupMenu     = user32.NewProc("TrackPopupMenu")
-	pGetCursorPos      = user32.NewProc("GetCursorPos")
+	pCreatePopupMenu     = user32.NewProc("CreatePopupMenu")
+	pAppendMenu          = user32.NewProc("AppendMenuW")
+	pTrackPopupMenu      = user32.NewProc("TrackPopupMenu")
+	pGetCursorPos        = user32.NewProc("GetCursorPos")
 	pSetForegroundWindow = user32.NewProc("SetForegroundWindow")
 
 	pShellNotifyIcon = shell32.NewProc("Shell_NotifyIconW")
@@ -67,13 +67,13 @@ const (
 	IDM_AUTOSTART    = 1006
 	IDM_LOG_BASE     = 2000 // Base ID for last-10-log menu items (2000-2009)
 
-	MB_YESNO       = 0x00000004
-	MB_YESNOCANCEL = 0x00000003
+	MB_YESNO        = 0x00000004
+	MB_YESNOCANCEL  = 0x00000003
 	MB_ICONQUESTION = 0x00000020
 	MB_ICONWARNING  = 0x00000030
-	IDYES          = 6
-	IDNO           = 7
-	IDCANCEL       = 2
+	IDYES           = 6
+	IDNO            = 7
+	IDCANCEL        = 2
 
 	MF_GRAYED = 0x00000001
 
@@ -350,7 +350,7 @@ func hiddenWndProc(hWnd windows.HWND, msg uint32, wParam uintptr, lParam uintptr
 			exitText, _ := syscall.UTF16PtrFromString("Exit All TormentNexus Processes")
 			pAppendMenu.Call(hMenu, MF_STRING, IDM_EXIT, uintptr(unsafe.Pointer(exitText)))
 
-			var pos struct { X, Y int32 }
+			var pos struct{ X, Y int32 }
 			pGetCursorPos.Call(uintptr(unsafe.Pointer(&pos)))
 
 			cmd, _, _ := pTrackPopupMenu.Call(
