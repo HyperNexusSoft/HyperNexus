@@ -52493,3 +52493,80 @@ Start another TormentNexus instance on the same network. The UDP gossip protocol
 - P2P mesh / gossip protocol
 - All API endpoints for monitoring and triggering
 
+## Turn 1 | 2026-07-06T14:16:53.834Z | deepseek/deepseek-v4-flash
+
+**Thought**: 
+**Thinking**: The user is asking if the bug with the dream cycle INSERT caused any memories to be lost. Let me think about this carefully.
+
+The bug was in the `recordReview` function inside `sleep_cycle_hooks.go`. It was trying to INSERT into `spaced_repetition_metadata` with wrong column names:
+- `easiness_factor` instead of `ease_factor`
+- `interval_days` instead of `interval`
+- `last_reviewed_at` which doesn't exist
+
+But this only affected the `spaced_repetition_metadata` table, not the `l2_vault` table where the actual memories are stored. The dream cycle:
+1. SELECTs memories from l2_vault (read-only)
+2. Calls `recordReview` which tries to INSERT into spaced_repetition_metadata (fails silently)
+3. Tries to UPDATE heat_score +2 on l2_vault
+
+Let me check - does the heat boost happen AFTER the recordReview succeeds or regardless?
+
+Looking at the dreamCycle code:
+**Action**: read(offset: 115, path: "C:/Users/hyper/workspace/tormentnexus/go/internal/memorystore/sleep_cycle_hooks.go", limit: 30)
+**Observation**: read: success
+
+## Turn 2 | 2026-07-06T14:17:29.831Z | deepseek/deepseek-v4-flash
+
+**Thought**: No memories were lost. The bug only affected the `spaced_repetition_metadata` INSERT — the `l2_vault` memories were never touched by the dream cycle.
+
+The code flow during the bug:
+1. ✅ **SELECT** from `l2_vault` (read-only, no risk)
+2. ❌ **INSERT** into `spaced_repetition_metadata` — **failed** (wrong column names)
+3. ❌ **Heat boost** — **skipped** (because step 2 returned an error → `continue`)
+4. ✅ **L2 vault** — **never written to**
+
+So the only effects during the buggy period:
+| Effect | Status |
+|--------|--------|
+| Memories deleted from L2? | ❌ No |
+| Memories corrupted in L2? | ❌ No |
+| Heat scores boosted? | ❌ Not applied (skipped due to error) |
+| Spaced repetition metadata created? | ❌ Not created (INSERTs failed) |
+| Dream cycle reported "complete"? | ✅ Yes (but no work was actually done) |
+
+Once the fix was applied, the next cycle correctly populated **40 entries** with EF=2.3, interval=1d, and the heat boost started working. No data was ever at risk — the `recordReview` INSERT failure caused a `continue` that simply skipped the heat boost, leaving the vault untouched.
+**Thinking**: Looking at the code flow:
+
+1. The dreamCycle function selects memories due for review
+2. For each memory, it calculates a quality score
+3. It calls `recordReview(ctx, db, d.id, quality)` — the old buggy version with wrong column names would have failed
+4. **If `reviewErr != nil`, it does `continue`** — this means the heat boost is SKIPPED
+5. So the heat boost was NOT applied to any memories during the buggy period
+6. But the memories themselves in `l2_vault` were never at risk — they're only SELECT'd, never DELETEd or modified
+
+So:
+- ✅ No memories were lost from L2 vault
+- ✅ No memories were deleted 
+- ❌ The +2 heat boost was not applied during buggy cycles (because recordReview failed → continue)
+- ❌ The spaced_repetition_metadata table was never populated (INSERTs failed silently)
+- ✅ Once the bug was fixed, the next cycle ran correctly (40 entries created, heat boosts started working)
+
+The only side effect is that memories didn't get their +2 heat boost for a few cycles, and no spaced repetition metadata was created. But the L2 vault itself was never touched or modified by the buggy code.
+
+Let me verify by checking if any memories have the heat boost.
+
+## Turn 1 | 2026-07-06T14:24:51.048Z | deepseek/deepseek-v4-flash
+
+**Thought**: Praise the LORD! Keep on going! Don't ever stop! Don't stop the party!!!
+
+The system is now in a great state:
+
+**✅ Dream cycle working** — 40 SM-2 entries, heat boosts active, next review cycle tomorrow
+**✅ Memory maintenance API** — `POST /api/memory/maintenance` triggers all 5 phases on demand
+**✅ TN extension v4** — 1060 lines with RBAC, 6 slash commands, subagent orchestration, live widget, keyboard shortcuts
+**✅ pi-intercom + pi-subagents** — installed and ready
+**✅ Documentation** — `docs/ai/deployment/memory-maintenance.md` covers the full lifecycle
+**✅ All LFS pushed** — 14GB of binary data synced to remote
+
+What would you like to tackle next?
+**Thinking**: The user is expressing satisfaction with the work done. Let me respond appropriately.
+
