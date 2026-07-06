@@ -39,8 +39,6 @@ Thumbs.db
 # === Taskplane working files ===
 .pi/
 **/.pi/
-!.pi/extensions/
-!.pi/extensions/**
 .pi-logs/
 
 # === pi-lens cache (auto-generated) ===
