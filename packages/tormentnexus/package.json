@@ -1,0 +1,31 @@
+{
+  "name": "tormentnexus",
+  "version": "1.0.0-alpha.239",
+  "description": "TormentNexus pi extension \u2014 L2 memory, tool search, session import, skill registry, code search, subagent orchestration, enterprise RBAC",
+  "keywords": [
+    "tormentnexus",
+    "pi",
+    "pi-extension",
+    "memory",
+    "mcp",
+    "ai-control-plane"
+  ],
+  "homepage": "https://github.com/MDMAtk/TormentNexus",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MDMAtk/TormentNexus.git",
+    "directory": "packages/tormentnexus"
+  },
+  "license": "MIT",
+  "author": "Robert Pelloni <robertpelloni@users.noreply.github.com>",
+  "type": "module",
+  "main": "index.ts",
+  "files": [
+    "index.ts",
+    "README.md",
+    "SKILL.md"
+  ],
+  "pi": {
+    "kind": "extension"
+  }
+}
