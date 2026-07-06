@@ -20,7 +20,7 @@ var realAPI = &http.Client{Timeout: 15 * time.Second}
 
 type arxivPaper struct {
 	Title, Summary, ID, Published, Updated, Link, Category string
-	Authors                                                  []string
+	Authors                                                []string
 }
 
 func HandleArxivDeepSearch(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
@@ -566,15 +566,15 @@ func HandleIPInfo(ctx context.Context, args map[string]interface{}) (ToolRespons
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		Country  string `json:"country"`
-		Region   string `json:"regionName"`
-		City     string `json:"city"`
-		ISP      string `json:"isp"`
-		Org      string `json:"org"`
+		Country  string  `json:"country"`
+		Region   string  `json:"regionName"`
+		City     string  `json:"city"`
+		ISP      string  `json:"isp"`
+		Org      string  `json:"org"`
 		Lat      float64 `json:"lat"`
 		Lon      float64 `json:"lon"`
-		Timezone string `json:"timezone"`
-		Query    string `json:"query"`
+		Timezone string  `json:"timezone"`
+		Query    string  `json:"query"`
 	}
 	json.Unmarshal(body, &data)
 	return ok(fmt.Sprintf("IP: %s\nLocation: %s, %s, %s\nISP: %s\nCoords: %.4f, %.4f\nTimezone: %s",

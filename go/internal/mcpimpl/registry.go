@@ -5500,5 +5500,20 @@ func AllHandlers() []RegistryEntry {
 		{Name: "HandleAPOD", Description: "Get NASA Astronomy Picture of the Day (real API)", File: "real_apis.go"},
 		{Name: "HandleWeatherCurrent", Description: "Get current weather (real API)", File: "real_apis.go"},
 		{Name: "HandleQuoteGet", Description: "Get random inspirational quote (real API)", File: "real_apis.go"},
+		{Name: "HandleHNSearch", Description: "Search Hacker News stories (real API)", File: "real_apis2.go"},
+		{Name: "HandleHNTopStories", Description: "Get top Hacker News stories (real API)", File: "real_apis2.go"},
+		{Name: "HandleCryptoPrice", Description: "Get cryptocurrency prices (real API)", File: "real_apis2.go"},
+		{Name: "HandleGitHubSearchRepos", Description: "Search GitHub repos (real API)", File: "real_apis2.go"},
+		{Name: "HandleGitHubRepoInfo", Description: "Get GitHub repo info (real API)", File: "real_apis2.go"},
+		{Name: "HandleJokeGet", Description: "Get random joke (real API)", File: "real_apis2.go"},
+		{Name: "HandleRecipeSearch", Description: "Search recipes by ingredient or name (real API)", File: "real_apis2.go"},
+		{Name: "HandleCountryInfo", Description: "Get country information (real API)", File: "real_apis2.go"},
+		{Name: "HandleCountryList", Description: "List countries by region (real API)", File: "real_apis2.go"},
+		{Name: "HandleAdviceGet", Description: "Get random advice (real API)", File: "real_apis2.go"},
+		{Name: "HandleNumberFact", Description: "Get interesting number fact (real API)", File: "real_apis2.go"},
+		{Name: "HandleDogPicture", Description: "Get random dog picture (real API)", File: "real_apis2.go"},
+		{Name: "HandleDogBreeds", Description: "List all dog breeds (real API)", File: "real_apis2.go"},
+		{Name: "HandleFoodProduct", Description: "Lookup food product by barcode (real API)", File: "real_apis2.go"},
+
 	}
 }
