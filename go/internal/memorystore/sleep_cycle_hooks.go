@@ -13,6 +13,13 @@ import (
 // buryOrphanedMemories finds memories whose session_id no longer has any
 // corresponding session records and buries them in L4 limbo as "lost".
 func BuryOrphanedMemories(ctx context.Context, db *sql.DB, limbo *L4LimboVault) error {
+	// Check if imported_session_memories table exists in this DB
+	var tblCount int
+	_ = db.QueryRowContext(ctx, "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='imported_session_memories'").Scan(&tblCount)
+	if tblCount == 0 {
+		// Table is in tormentnexus.db, not memory.db — skip orphan burial
+		return nil
+	}
 	rows, err := db.QueryContext(ctx, `
 		SELECT id, session_id, memory_type, memory_kind, category, tags,
 		       source_url, content, importance, heat_score, last_accessed_at, created_at
