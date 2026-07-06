@@ -148,7 +148,7 @@ func recordReview(ctx context.Context, db *sql.DB, memoryID string, quality int)
 	var prevInterval float64
 	var prevRepetitions int
 	err := db.QueryRowContext(ctx, `
-		SELECT easiness_factor, COALESCE(interval_days, 1.0), repetitions
+		SELECT ease_factor, COALESCE(interval, 1.0), repetitions
 		FROM spaced_repetition_metadata WHERE memory_id = ?
 	`, memoryID).Scan(&prevEF, &prevInterval, &prevRepetitions)
 	if err == nil {
@@ -179,13 +179,12 @@ func recordReview(ctx context.Context, db *sql.DB, memoryID string, quality int)
 	nextReview := time.Now().Add(time.Duration(interval*24) * time.Hour)
 
 	_, err = db.ExecContext(ctx, `
-		INSERT INTO spaced_repetition_metadata (memory_id, easiness_factor, interval_days, repetitions, last_reviewed_at, next_review_at)
-		VALUES (?, ?, ?, COALESCE((SELECT repetitions FROM spaced_repetition_metadata WHERE memory_id = ?) + 1, 1), datetime('now'), ?)
+		INSERT INTO spaced_repetition_metadata (memory_id, ease_factor, interval, repetitions, next_review_at)
+		VALUES (?, ?, ?, COALESCE((SELECT repetitions FROM spaced_repetition_metadata WHERE memory_id = ?) + 1, 1), ?)
 		ON CONFLICT(memory_id) DO UPDATE SET
-			easiness_factor = excluded.easiness_factor,
-			interval_days = excluded.interval_days,
+			ease_factor = excluded.ease_factor,
+			interval = excluded.interval,
 			repetitions = excluded.repetitions,
-			last_reviewed_at = datetime('now'),
 			next_review_at = excluded.next_review_at
 	`, memoryID, ef, interval, memoryID, nextReview.Format(time.RFC3339))
 	return err
