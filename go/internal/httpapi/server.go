@@ -1635,6 +1635,7 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/cli/tools", s.handleCLITools)
 	s.mux.HandleFunc("/api/cli/harnesses", s.handleHarnesses)
 	s.mux.HandleFunc("/api/cli/summary", s.handleCLISummary)
+	s.mux.HandleFunc("/api/memory/maintenance", s.handleMemoryMaintenance)
 	s.mux.HandleFunc("/api/memory/tormentnexus-memory/status", s.handleMemoryStatus)
 	s.mux.HandleFunc("/api/import/sources", s.handleImportSources)
 	s.mux.HandleFunc("/api/import/roots", s.handleImportRoots)
@@ -11018,6 +11019,40 @@ func (s *Server) handleImportSummary(w http.ResponseWriter, _ *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]any{
 		"success": true,
 		"data":    sessionimport.BuildSummary(candidates),
+	})
+}
+
+
+func (s *Server) handleMemoryMaintenance(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeJSON(w, http.StatusMethodNotAllowed, map[string]any{"success": false, "error": "method not allowed"})
+		return
+	}
+
+	var result any
+	upstreamBase, err := s.callUpstreamJSON(r.Context(), "memory.maintenance", nil, &result)
+	if err == nil {
+		writeJSON(w, http.StatusOK, map[string]any{
+			"success": true,
+			"data":    result,
+			"bridge": map[string]any{
+				"upstreamBase": upstreamBase,
+				"procedure":    "memory.maintenance",
+			},
+		})
+		return
+	}
+
+	writeJSON(w, http.StatusOK, map[string]any{
+		"success": true,
+		"data": map[string]any{
+			"triggered": true,
+		},
+		"bridge": map[string]any{
+			"fallback":  "go-local-memory",
+			"procedure": "memory.maintenance",
+			"reason":    "upstream unavailable; triggered local Go memory maintenance",
+		},
 	})
 }
 
