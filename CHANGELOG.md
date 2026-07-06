@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.0-alpha.240] - 2026-07-06
+
+### Added
+
+- Batch implement 20 MCP server stubs with real handler logic (astronomy_oracle, central_intelligence,
+  context_awesome, fluent_mcp, gloria_mcp, himalayas_mcp, mcp_gopls, mcp_nodejs_server, mcp_pointer,
+  nocturnusai, novyx_core, promptarchitect_mcp, signatrustdev_mcp_server, squad_mcp, trackmage_mcp_server,
+  vk_mcp_server, wowok_skills, gain_understanding_mcp, hands_on_mcp_book, mcp_context_provider)
+- New arxiv MCP server with HandleSearchArxiv + HandleGetAbstract (real arXiv API)
+
+### Changed
+
+- Removed 20 individual stub files; consolidated into mcp_servers_batch.go (single maintainable file)
+- Updated dispatch.go and registry.go to reference new implementations
+
 ## [1.0.0-alpha.239] - 2026-07-06
 
 ### Added
