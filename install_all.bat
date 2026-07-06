@@ -32,14 +32,7 @@ if exist "%USERPROFILE%\.pi\agent\extensions\tormentnexus.ts" (
 )
 echo.
 
-echo === Step 2b: Install pi-subagents and pi-intercom ===
-where pi >nul 2>nul
-if !errorlevel!==0 (
-    pi install npm:pi-intercom >nul 2>nul
-    pi install npm:pi-subagents >nul 2>nul
-    echo ✅ pi-intercom + pi-subagents
-) else (echo ⏭️ pi not found)
-echo.
+
 
 echo === Step 3: Ollama / vLLM (Tool Prediction Engine) ===
 echo.

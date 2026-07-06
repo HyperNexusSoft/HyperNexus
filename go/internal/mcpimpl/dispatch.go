@@ -398,7 +398,8 @@ var dispatchMap = map[string]func(ctx context.Context, args map[string]interface
 	"HandleConnect_unreal_ai_connection": HandleConnect_unreal_ai_connection, // from unreal_ai_connection.go
 	"HandleConsultarCNPJ": HandleConsultarCNPJ, // from mcp_brasil.go
 	"HandleContentGeneration": HandleContentGeneration, // from naia_mcp_server.go
-	"HandleContext": HandleContext, // from context7_mcp.go
+	"HandleSearchLibraries": HandleSearchLibraries, // from context7_mcp.go
+	"HandleFetchLibraryContext": HandleFetchLibraryContext, // from context7_mcp.go
 	"HandleContextAwesome": HandleContextAwesome, // from context_awesome.go
 	"HandleContextMode": HandleContextMode, // from context_mode.go
 	"HandleContinue": HandleContinue, // from jetbrains_debugger_mcp_plugin.go

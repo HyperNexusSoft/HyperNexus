@@ -125,16 +125,16 @@ type DecisionEvent struct {
 // ---------- Decision System ----------
 
 type DecisionSystem struct {
-	cfg       DecisionConfig
-	mu        sync.RWMutex
-	loaded    map[string]*LoadedTool // keyed by advertised name
-	known     []ToolEntry            // full catalog of known tools
-	events    []DecisionEvent        // circular buffer of observability events
-	agg       *Aggregator            // live MCP connections
-	catalog   []ToolEntry            // persisted catalog loaded from disk
-	skillTools []ToolEntry           // skills injected from SkillStore for prediction
-	eventIdx  int                    // circular buffer write position
-	maxEvents int
+	cfg        DecisionConfig
+	mu         sync.RWMutex
+	loaded     map[string]*LoadedTool // keyed by advertised name
+	known      []ToolEntry            // full catalog of known tools
+	events     []DecisionEvent        // circular buffer of observability events
+	agg        *Aggregator            // live MCP connections
+	catalog    []ToolEntry            // persisted catalog loaded from disk
+	skillTools []ToolEntry            // skills injected from SkillStore for prediction
+	eventIdx   int                    // circular buffer write position
+	maxEvents  int
 }
 
 func NewDecisionSystem(cfg DecisionConfig, agg *Aggregator) *DecisionSystem {
