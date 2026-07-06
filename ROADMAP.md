@@ -116,7 +116,7 @@ _Last updated: 2026-07-01, version 1.0.0-alpha.221_
 - [x] RBAC enforcement on dangerous tool calls. (Completed alpha.194)
 - [x] Per-project memory support (project parameter on tn_memory_store). (Completed alpha.239)
 - [x] npm package: pi install npm:tormentnexus. (Completed alpha.239)
-- [x] Rust port by codewhale: github.com/robertpelloni/tormentnexus-rs. (Completed)
+- [x] codewhale integration: .codewhale/skills/tormentnexus/SKILL.md. (Completed)
 
 ---
 _Outstanding! Magnificent! Insanely Great! The collective grows._

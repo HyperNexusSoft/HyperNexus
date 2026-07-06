@@ -680,9 +680,9 @@ pi install npm:tormentnexus
 
 Connects pi to the TormentNexus control plane — persistent L2 memory, tool search, session import, skill registry, code search, subagent orchestration, enterprise RBAC. Full source at `packages/tormentnexus/`.
 
-### Rust Port
+### CodeWhale Integration
 
-A community Rust port of the pi extension is maintained by **codewhale** at `github.com/robertpelloni/tormentnexus-rs`.
+**codewhale** integration: TormentNexus MCP server at `.codewhale/skills/tormentnexus/SKILL.md` (auto-installed when codewhale detected).
 
 ---
 

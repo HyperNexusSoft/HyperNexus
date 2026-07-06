@@ -69,8 +69,8 @@ On server startup, all `.memdb` files in the workspace are discovered and import
 - Override: `TORMENTNEXUS_CONFIG_DIR` env var
 - Workspace root: auto-detected, override with `TORMENTNEXUS_WORKSPACE_ROOT`
 
-## Rust Port
+## CodeWhale Integration
 
-A community Rust port is maintained by codewhale at `github.com/robertpelloni/tormentnexus-rs`.
+**codewhale** integration at `.codewhale/skills/tormentnexus/SKILL.md` (auto-installed when codewhale is detected).
 
 ## License MIT

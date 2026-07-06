@@ -13,7 +13,7 @@
 4. **MCP Memory Tools Wired**: `add_memory`, `search_memory`, `delete_memory`, `memory_stats` via both `/api/agent/tool` and `/api/mcp/tools/call`.
 5. **Native Tool Bug Fixed**: `loadNativeConfig()` empty map caused all tools disabled. Fixed with `explicit && !val`.
 6. **pi Extension Updated**: `tn_memory_store` accepts `project` parameter. `/tn-store` prompts for project.
-7. **Rust Port**: Community Rust port by codewhale at `github.com/robertpelloni/tormentnexus-rs`.
+7. **CodeWhale Integration**: codewhale integration at `.codewhale/skills/tormentnexus/SKILL.md`.
 8. **Documentation**: CHANGELOG, ROADMAP, README, memory-maintenance.md, npm README all updated.
 
 ### Key Files

@@ -15,7 +15,7 @@
 - **`/api/memory/project/split` endpoint**: Retroactively split global memories by `project:` tag into per-project .memdb files
 - **Config directory rename**: `~/.tormentnexus-go` → `~/.tormentnexus` with auto-migration on startup. New env var `TORMENTNEXUS_CONFIG_DIR` (backward compat with `TORMENTNEXUS_GO_CONFIG_DIR`)
 - **npm package `tormentnexus`**: Published at `packages/tormentnexus/` for `pi install npm:tormentnexus`
-- **codewhale Rust port**: Community Rust port of the pi extension at `github.com/robertpelloni/tormentnexus-rs` (contact: codewhale)
+- **codewhale integration**: TormentNexus MCP server via `.codewhale/skills/tormentnexus/SKILL.md` (contact: codewhale)
 
 ### Fixed
 
