@@ -7056,7 +7056,10 @@ func (s *Server) handleAgentRunTool(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 1. Try native Go tool handlers first (Total Autonomy)
-	isNativeDisabled := s.loadNativeConfig()[payload.Name] == false
+	// Only disable if the tool is EXPLICITLY set to false in native-tools.json
+	cfg := s.loadNativeConfig()
+	val, explicit := cfg[payload.Name]
+	isNativeDisabled := explicit && !val
 	if s.toolsRegistry != nil && s.toolsRegistry.HasTool(payload.Name) && !isNativeDisabled {
 		result, err := s.toolsRegistry.Execute(r.Context(), payload.Name, payload.Arguments)
 

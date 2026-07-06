@@ -54,6 +54,20 @@ func getInt(args map[string]interface{}, key string) (int, bool) {
 	return 0, false
 }
 
+func getFloat(args map[string]interface{}, key string) (float64, bool) {
+	v, ok := args[key]
+	if !ok {
+		return 0, false
+	}
+	switch n := v.(type) {
+	case float64:
+		return n, true
+	case int:
+		return float64(n), true
+	}
+	return 0, false
+}
+
 func getBool(args map[string]interface{}, key string) (bool, bool) {
 	if v, ok := args[key]; ok {
 		if b, ok := v.(bool); ok {
@@ -81,7 +95,11 @@ func NewRegistry() *Registry {
 	r.Register("hello_world", HandleHelloWorld)
 	r.Register("codebase_search", HandleCodebaseSearch)
 	r.Register("codebase_outline", HandleCodebaseOutline)
-	// Memory scratchpad tools — served via the Go sidecar HTTP API (/api/memory/*)
+	// TN-native memory tools — same backend as /api/memory/* HTTP API and tn_memory_store pi extension
+	r.Register("add_memory", HandleAddMemory)
+	r.Register("search_memory", HandleSearchMemory)
+	r.Register("delete_memory", HandleDeleteMemory)
+	r.Register("memory_stats", HandleMemoryStats)
 	return r
 }
 
