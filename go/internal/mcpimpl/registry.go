@@ -5484,5 +5484,21 @@ func AllHandlers() []RegistryEntry {
 		{Name: "HandleUnrealClaudeExecute", Description: "Execute in UE5 via Claude", File: "top_mcp_batch3.go"},
 		{Name: "HandleMCPCANListServers", Description: "List managed MCP servers", File: "top_mcp_batch3.go"},
 		{Name: "HandleMCPCANDeploy", Description: "Deploy MCP server via MCPCAN", File: "top_mcp_batch3.go"},
+
+		// ── real_apis.go (14 real API-backed implementations) ──
+		{Name: "HandleArxivDeepSearch", Description: "Search arXiv papers with filters (real API)", File: "real_apis.go"},
+		{Name: "HandleOpenAlexSearch", Description: "Search OpenAlex research catalog (real API)", File: "real_apis.go"},
+		{Name: "HandleCrossrefSearch", Description: "Search Crossref DOI metadata (real API)", File: "real_apis.go"},
+		{Name: "HandleBrasilAPIBanks", Description: "List Brazilian banks (real API)", File: "real_apis.go"},
+		{Name: "HandleBrasilAPIDDD", Description: "Look up Brazilian DDD area codes (real API)", File: "real_apis.go"},
+		{Name: "HandleBrasilAPIFIPE", Description: "Query Brazilian FIPE vehicle prices (real API)", File: "real_apis.go"},
+		{Name: "HandleYahooQuoteReal", Description: "Get real-time stock quote (Yahoo Finance)", File: "real_apis.go"},
+		{Name: "HandleOpenLibrarySearch", Description: "Search Open Library books (real API)", File: "real_apis.go"},
+		{Name: "HandleWikipediaSummary", Description: "Get Wikipedia article summary (real API)", File: "real_apis.go"},
+		{Name: "HandleWikipediaSearch", Description: "Search Wikipedia articles (real API)", File: "real_apis.go"},
+		{Name: "HandleIPInfo", Description: "Get IP geolocation info (real API)", File: "real_apis.go"},
+		{Name: "HandleAPOD", Description: "Get NASA Astronomy Picture of the Day (real API)", File: "real_apis.go"},
+		{Name: "HandleWeatherCurrent", Description: "Get current weather (real API)", File: "real_apis.go"},
+		{Name: "HandleQuoteGet", Description: "Get random inspirational quote (real API)", File: "real_apis.go"},
 	}
 }
