@@ -579,6 +579,8 @@ func New(cfg config.Config, detector controlplane.ToolProvider) *Server {
 	// Refresh from live inventory
 	if inv, err := mcp.LoadInventory(cfg.WorkspaceRoot, cfg.MainConfigDir); err == nil {
 		server.mcpDecision.RefreshFromInventory(inv)
+		// Inject skills from SkillStore into the decision system for unified prediction
+		server.mcpDecision.InjectSkills(server.skillStore)
 		// Initialize Go-native MCP Router
 		server.nativeRouter = mcp.NewNativeMCPRouter(server.mcpDecision, nil, mcp.DefaultRouterConfig())
 		if inv != nil {

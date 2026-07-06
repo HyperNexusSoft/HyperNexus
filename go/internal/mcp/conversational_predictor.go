@@ -213,7 +213,7 @@ func (p *ConversationalPredictor) callOllama(ctx context.Context, system, user s
 	}
 	model := os.Getenv("TORMENTNEXUS_LOCAL_PREDICT_MODEL")
 	if model == "" {
-		model = "gemma3:12b"
+		model = "gemma4"
 	}
 
 	reqBody, _ := json.Marshal(map[string]any{

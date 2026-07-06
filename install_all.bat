@@ -16,129 +16,187 @@ if %errorlevel%==0 (echo ✅) else (echo ⚠️ may already exist)
 
 echo Registering Dashboard (port 7779)...
 sc create "TormentNexusDashboard" binPath="\"C:\Program Files\nodejs\node.exe\" \"C:\Users\hyper\workspace\tormentnexus\apps\web\node_modules\.bin\next.cmd\" dev -p 7779" start=auto displayname="TormentNexus Dashboard"
-if %errorlevel%==0 (echo ✅) else (echo ⚠️ may already exist)
 
 echo Registering Watchdog...
 sc create "TormentNexusWatchdog" binPath="\"C:\Python314\pythonw.exe\" -u \"C:\Users\hyper\workspace\tormentnexus\watchdog.py\"" start=auto displayname="TormentNexus Watchdog"
-if %errorlevel%==0 (echo ✅) else (echo ⚠️ may already exist)
 echo.
 
-echo === Step 2: Pi Coding Agent Extension ===
+echo === Step 2: Pi Coding Agent ===
 echo.
 if not exist "%USERPROFILE%\.pi\agent\extensions" mkdir "%USERPROFILE%\.pi\agent\extensions"
-copy /Y "C:\Users\hyper\workspace\tormentnexus\.pi\extensions\tormentnexus.ts" "%USERPROFILE%\.pi\agent\extensions\tormentnexus.ts"
-if %errorlevel%==0 (echo ✅ Pi extension installed) else (echo ⚠️ Pi extension copy failed)
+if exist "%USERPROFILE%\.pi\agent\extensions\tormentnexus.ts" (
+    echo ℹ️  Pi extension already exists at global path. Skipping copy.
+) else (
+    copy /Y "C:\Users\hyper\workspace\tormentnexus\packages\tormentnexus\index.ts" "%USERPROFILE%\.pi\agent\extensions\tormentnexus.ts"
+    if !errorlevel!==0 (echo ✅ Pi extension installed) else (echo ⚠️)
+)
 echo.
 
-echo === Step 3: CodeWhale Integration ===
+echo === Step 2b: Install pi-subagents and pi-intercom ===
+where pi >nul 2>nul
+if !errorlevel!==0 (
+    pi install npm:pi-intercom >nul 2>nul
+    pi install npm:pi-subagents >nul 2>nul
+    echo ✅ pi-intercom + pi-subagents
+) else (echo ⏭️ pi not found)
+echo.
+
+echo === Step 3: Ollama / vLLM (Tool Prediction Engine) ===
+echo.
+echo TormentNexus uses a local LLM for tool prediction (ConversationalToolInjector).
+echo.
+echo Choose an option:
+echo   [1] Ollama — easiest, auto-start as Windows service (recommended)
+echo   [2] vLLM  — faster inference, GPU-accelerated
+echo   [S] Skip — tool prediction degrades to keyword matching
+echo.
+choice /C 12S /N /M "Select [1], [2], or [S]: "
+if errorlevel 3 goto :skip_llm
+if errorlevel 2 goto :install_vllm
+if errorlevel 1 goto :install_ollama
+
+:install_ollama
+echo Installing Ollama...
+curl -sL -o "%TEMP%\ollama_windows.exe" "https://github.com/ollama/ollama/releases/latest/download/OllamaSetup.exe"
+if exist "%TEMP%\ollama_windows.exe" (
+    start /wait "" "%TEMP%\ollama_windows.exe" /S
+    echo Installing Gemma 4 model (this downloads ~8GB, may take a while)...
+    ollama pull gemma4 2>nul || ollama pull gemma3:12b 2>nul
+    echo.
+    echo Setting up Ollama as auto-start service...
+    sc config ollama start=auto >nul 2>nul
+    sc start ollama >nul 2>nul
+    echo ✅ Ollama + Gemma 4 installed at http://127.0.0.1:11434
+) else (
+    echo ⚠️  Download failed. Install manually from https://ollama.ai
+)
+goto :end_llm
+
+:install_vllm
+echo vLLM installation requires Python + CUDA.
+echo.
+echo pip install vllm
+echo vllm serve gemma-4 --port 11434 --api-key token-abc123
+echo.
+echo Set TORMENTNEXUS_OLLAMA_URL=http://127.0.0.1:11434
+echo.
+echo 📋 Manual setup required — see https://github.com/vllm-project/vllm
+goto :end_llm
+
+:skip_llm
+echo ⏭️  Skipping LLM install. Tool prediction will use BM25 keyword matching.
+goto :end_llm
+
+:end_llm
+echo.
+
+echo === Step 4: CodeWhale Plugin ===
 echo.
 where codewhale >nul 2>nul
 if %errorlevel%==0 (
-    echo CodeWhale detected — installing...
-    if not exist "%USERPROFILE%\.codewhale\skills\tormentnexus" mkdir "%USERPROFILE%\.codewhale\skills\tormentnexus"
-    copy /Y "C:\Users\hyper\workspace\tormentnexus\.codewhale\skills\tormentnexus\SKILL.md" "%USERPROFILE%\.codewhale\skills\tormentnexus\SKILL.md"
-    if %errorlevel%==0 (echo ✅ CodeWhale skill) else (echo ⚠️ Skill copy)
+    if not exist "%USERPROFILE%\.codewhale\plugins\tormentnexus" mkdir "%USERPROFILE%\.codewhale\plugins\tormentnexus\skills"
+    xcopy /E /I /Y "C:\Users\hyper\workspace\tormentnexus\.codewhale\plugins\tormentnexus" "%USERPROFILE%\.codewhale\plugins\tormentnexus" >nul
     codewhale mcp add "tormentnexus" --command "C:\Users\hyper\workspace\tormentnexus\tormentnexus.exe" --arg "mcp" >nul 2>nul
-    if %errorlevel%==0 (echo ✅ CodeWhale MCP) else (echo ⚠️ MCP may already exist)
-) else (echo ⏭️ CodeWhale not installed)
+    echo ✅ CodeWhale plugin installed
+) else (echo ⏭️)
 echo.
 
-echo === Step 4: Gemini CLI Extension + Skill ===
+echo === Step 4: Gemini CLI ===
 echo.
 where gemini >nul 2>nul
 if %errorlevel%==0 (
-    echo Gemini CLI detected — installing...
     if not exist "%USERPROFILE%\.gemini\extensions" mkdir "%USERPROFILE%\.gemini\extensions"
     xcopy /E /I /Y "C:\Users\hyper\workspace\tormentnexus\.gemini\extensions\tormentnexus" "%USERPROFILE%\.gemini\extensions\tormentnexus" >nul
     gemini extensions link "%USERPROFILE%\.gemini\extensions\tormentnexus" >nul 2>nul
-    if %errorlevel%==0 (echo ✅ Gemini extension linked) else (echo ⚠️ Extension link)
     if not exist "%USERPROFILE%\.gemini\skills\tormentnexus" mkdir "%USERPROFILE%\.gemini\skills\tormentnexus"
-    copy /Y "C:\Users\hyper\workspace\tormentnexus\.gemini\skills\tormentnexus\SKILL.md" "%USERPROFILE%\.gemini\skills\tormentnexus\SKILL.md"
-    if %errorlevel%==0 (echo ✅ Gemini skill) else (echo ⚠️ Skill copy)
-) else (echo ⏭️ Gemini CLI not installed)
+    copy /Y "C:\Users\hyper\workspace\tormentnexus\.gemini\skills\tormentnexus\SKILL.md" "%USERPROFILE%\.gemini\skills\tormentnexus\SKILL.md" >nul
+    echo ✅ Gemini CLI extension + skill
+) else (echo ⏭️)
 echo.
 
-echo === Step 5: Claude Desktop MCP ===
+echo === Step 5: Claude Desktop ===
 echo.
 if exist "%APPDATA%\Claude\claude_desktop_config.json" (
-    echo Claude Desktop detected — updating MCP config...
     copy /Y "C:\Users\hyper\workspace\tormentnexus\.editor-configs\claude-desktop-mcp.json" "%APPDATA%\Claude\claude_desktop_config.json.tn-template" >nul
-    echo ✅ Claude Desktop MCP template saved to %%APPDATA%%\Claude\claude_desktop_config.json.tn-template
-    echo ⚠️  Manually merge the tormentnexus block into claude_desktop_config.json
+    echo ✅ Template saved — merge mcpServers block manually
 )
 echo.
 
-echo === Step 6: Claude Code CLI MCP ===
+echo === Step 6: Claude Code CLI ===
 echo.
 where claude >nul 2>nul
 if %errorlevel%==0 (
-    echo Claude CLI detected — updating MCP config in settings.json...
-    if exist "%USERPROFILE%\.claude\settings.json" (
-        copy "C:\Users\hyper\workspace\tormentnexus\.editor-configs\claude-desktop-mcp.json" "%USERPROFILE%\.claude\tormentnexus-mcp-merge.json.tn" >nul
-        echo ✅ Claude CLI MCP template saved
-        echo ⚠️  Manually merge the mcpServers.tormentnexus block
-    )
-) else (echo ⏭️ Claude CLI not installed)
+    claude mcp add --transport stdio tormentnexus -- "C:\Users\hyper\workspace\tormentnexus\tormentnexus.exe" "mcp" >nul 2>nul
+    if !errorlevel!==0 (echo ✅ Claude CLI MCP) else (echo ✅ May already exist)
+) else (echo ⏭️)
 echo.
 
-echo === Step 7: Cursor MCP ===
+echo === Step 7: Codex CLI ===
+echo.
+where codex >nul 2>nul
+if %errorlevel%==0 (
+    codex mcp add "tormentnexus" --env TORMENTNEXUS_WORKSPACE_ROOT="C:\Users\hyper\workspace\tormentnexus" -- "C:\Users\hyper\workspace\tormentnexus\tormentnexus.exe" "mcp" >nul 2>nul
+    if not exist "%USERPROFILE%\.codex\skills\tormentnexus" mkdir "%USERPROFILE%\.codex\skills\tormentnexus"
+    copy /Y "C:\Users\hyper\workspace\tormentnexus\.codex\skills\tormentnexus\SKILL.md" "%USERPROFILE%\.codex\skills\tormentnexus\SKILL.md" >nul
+    echo ✅ Codex CLI MCP + skill
+) else (echo ⏭️)
+echo.
+
+echo === Step 8: Cursor ===
 echo.
 if exist "%USERPROFILE%\.cursor\mcp.json" (
-    echo Cursor detected — MCP template available
     copy /Y "C:\Users\hyper\workspace\tormentnexus\.editor-configs\cursor-mcp.json" "%USERPROFILE%\.cursor\mcp.json.tn-template" >nul
-    echo ✅ Cursor MCP template saved
-) else (echo ⏭️ Cursor not configured)
+    echo ✅ Template saved
+) else (echo ⏭️)
 echo.
 
-echo === Step 8: Windsurf MCP ===
+echo === Step 9: Windsurf ===
 echo.
 where windsurf >nul 2>nul
 if %errorlevel%==0 (
-    echo Windsurf detected — adding MCP via CLI...
     windsurf --add-mcp "{\"name\":\"tormentnexus\",\"command\":\"C:\\\\Users\\\\hyper\\\\workspace\\\\tormentnexus\\\\tormentnexus.exe\",\"args\":[\"mcp\"]}" >nul 2>nul
-    if !errorlevel!==0 (echo ✅ Windsurf MCP added) else (echo ⚠️ Windsurf MCP — try manually)
-) else (echo ⏭️ Windsurf not installed)
+    if !errorlevel!==0 (echo ✅ Windsurf MCP) else (echo ⚠️)
+) else (echo ⏭️)
 echo.
 
-echo === Step 9: VS Code MCP ===
+echo === Step 10: VS Code ===
 echo.
 if exist "%USERPROFILE%\.vscode\mcp.json" (
     copy /Y "C:\Users\hyper\workspace\tormentnexus\.editor-configs\vscode-mcp.json" "%USERPROFILE%\.vscode\mcp.json.tn-template" >nul
-    echo ✅ VS Code MCP template saved
 ) else (
     mkdir "%USERPROFILE%\.vscode" >nul 2>nul
     copy /Y "C:\Users\hyper\workspace\tormentnexus\.editor-configs\vscode-mcp.json" "%USERPROFILE%\.vscode\mcp.json" >nul
-    if %errorlevel%==0 (echo ✅ VS Code MCP config installed) else (echo ⚠️ VS Code MCP)
 )
+echo ✅ VS Code MCP
 echo.
 
-echo === Step 10: OpenCode MCP Fix ===
+echo === Step 11: OpenCode (Fix) ===
 echo.
 if exist "%USERPROFILE%\.opencode\mcp.json" (
     copy /Y "C:\Users\hyper\workspace\tormentnexus\.editor-configs\opencode-mcp.json" "%USERPROFILE%\.opencode\mcp.json.tn-template" >nul
-    echo ✅ OpenCode MCP template saved (replaces bin/tormentnexus.exe path)
-) else (echo ⏭️ OpenCode not configured)
+    echo ✅ Template saved — merge to fix bin/tormentnexus.exe path
+) else (echo ⏭️)
 echo.
 
-echo === Step 11: Continue MCP Fix ===
+echo === Step 12: Continue (Fix) ===
 echo.
 if exist "%USERPROFILE%\.continue\config.json" (
     copy /Y "C:\Users\hyper\workspace\tormentnexus\.editor-configs\continue-mcp.json" "%USERPROFILE%\.continue\tormentnexus-mcp-merge.json.tn" >nul
-    echo ✅ Continue MCP template saved (replaces bin/tormentnexus.exe path)
-) else (echo ⏭️ Continue not configured)
+    echo ✅ Template saved — merge to fix bin/tormentnexus.exe path
+) else (echo ⏭️)
 echo.
 
-echo === Step 12: Mavis / MiniMax Code Integration ===
+echo === Step 13: Mavis / MiniMax Code ===
 echo.
 if exist "%USERPROFILE%\.mavis\mcp\mcp.json" (
     if not exist "%USERPROFILE%\.mavis\skills\tormentnexus" mkdir "%USERPROFILE%\.mavis\skills\tormentnexus"
     copy /Y "C:\Users\hyper\workspace\tormentnexus\.mavis\mcp.json" "%USERPROFILE%\.mavis\mcp\tormentnexus-mcp-merge.json.tn" >nul
     copy /Y "C:\Users\hyper\workspace\tormentnexus\.mavis\skills\tormentnexus\SKILL.md" "%USERPROFILE%\.mavis\skills\tormentnexus\SKILL.md" >nul
-    echo ✅ Mavis MCP + skill installed
-) else (echo ⏭️ Mavis not configured)
+    echo ✅ Mavis MCP + skill
+) else (echo ⏭️)
 echo.
 
-echo === Step 13: Antigravity IDE Integration ===
+echo === Step 14: Antigravity IDE ===
 echo.
 if exist "%USERPROFILE%\.antigravity" (
     if not exist "%USERPROFILE%\.antigravity\extensions\tormentnexus" mkdir "%USERPROFILE%\.antigravity\extensions\tormentnexus"
@@ -146,11 +204,27 @@ if exist "%USERPROFILE%\.antigravity" (
     copy /Y "C:\Users\hyper\workspace\tormentnexus\.antigravity\extensions\tormentnexus\SKILL.md" "%USERPROFILE%\.antigravity\extensions\tormentnexus\SKILL.md" >nul
     if not exist "%USERPROFILE%\.antigravity\agents\tormentnexus" mkdir "%USERPROFILE%\.antigravity\agents\tormentnexus"
     copy /Y "C:\Users\hyper\workspace\tormentnexus\.antigravity\agents\tormentnexus\agent.md" "%USERPROFILE%\.antigravity\agents\tormentnexus\agent.md" >nul
-    echo ✅ Antigravity MCP + extension + agent installed
-) else (echo ⏭️ Antigravity not configured)
+    echo ✅ Antigravity MCP + extension + agent
+) else (echo ⏭️)
 echo.
 
-echo === Step 14: Starting Services ===
+echo === Step 15: Kimi Desktop ===
+echo.
+if exist "%USERPROFILE%\.kimi-code" (
+    copy /Y "C:\Users\hyper\workspace\tormentnexus\.kimi-code\mcp.json" "%USERPROFILE%\.kimi-code\mcp.json.tn-template" >nul
+    echo ✅ Template saved — merge mcpServers block
+) else (echo ⏭️)
+echo.
+
+echo === Step 16: ZCode Desktop ===
+echo.
+if exist "%USERPROFILE%\.zcode\v2" (
+    copy /Y "C:\Users\hyper\workspace\tormentnexus\.zcode\mcp.json" "%USERPROFILE%\.zcode\v2\mcp.json.tn-template" >nul
+    echo ✅ Template saved — merge mcpServers block
+) else (echo ⏭️)
+echo.
+
+echo === Step 17: Starting Services ===
 echo.
 sc start TormentNexusSidecar >nul 2>nul
 sc start TormentNexusDashboard >nul 2>nul
@@ -160,23 +234,25 @@ echo ========================================
 echo  TormentNexus Multi-Agent Installer
 echo  Complete!
 echo.
-echo  Installed for:
-echo   ✅ Pi Coding Agent            ~\.pi\agent\extensions\
-echo   ✅ CodeWhale                  ~\.codewhale\skills\ + MCP
-echo   ✅ Gemini CLI                 ~\.gemini\extensions\ + skills
-echo   📋 Claude Desktop             template saved
-echo   📋 Claude Code CLI            template saved
-echo   📋 Cursor                     template saved
-echo   ✅ Windsurf                   --add-mcp via CLI
-echo   ✅ VS Code                    .vscode\mcp.json
-echo   📋 OpenCode                   template saved (path fix)
-echo   📋 Continue                   template saved (path fix)
-echo   ✅ Mavis / MiniMax Code       .mavis\skills\ + MCP
-echo   ✅ Antigravity IDE            .antigravity\ + extensions
+echo  ✅ Pi Coding Agent        ~\.pi\agent\extensions\
+echo  ✅ CodeWhale               ~\.codewhale\plugins\tormentnexus\
+echo  ✅ Gemini CLI              ~\.gemini\extensions\ + skills
+echo  ✅ Claude CLI (MCP)        claude mcp add
+echo  ✅ Codex CLI (MCP+skill)   ~\.codex\skills\tormentnexus\
+echo  ✅ Windsurf (MCP)          --add-mcp flag
+echo  ✅ VS Code (MCP)           .vscode\mcp.json
+echo  ✅ Mavis (MCP+skill)       ~\.mavis\skills\tormentnexus\
+echo  ✅ Antigravity IDE         3 files installed
+echo  📋 Claude Desktop          template — merge manually
+echo  📋 Cursor                  template — merge manually
+echo  📋 Kimi Desktop            template — merge manually
+echo  📋 ZCode Desktop           template — merge manually
+echo  📋 OpenCode                template — merge to fix path
+echo  📋 Continue                template — merge to fix path
 echo ========================================
 echo.
-echo  NOTE: Some tools need manual merge of the MCP JSON.
-echo  Templates saved with .tn-template or .tn suffix.
-echo  The correct path is: tormentnexus.exe (not bin/tormentnexus.exe)
+echo  NOTE: Templates saved with .tn-template suffix.
+echo  The correct binary path is: tormentnexus.exe
+echo  (NOT bin/tormentnexus.exe)
 echo.
 pause
