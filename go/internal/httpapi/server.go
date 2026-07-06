@@ -48,7 +48,6 @@ import (
 	"github.com/MDMAtk/TormentNexus/internal/tools"
 	"github.com/MDMAtk/TormentNexus/internal/workflow"
 
-	"github.com/google/uuid"
 	"github.com/MDMAtk/TormentNexus/internal/cache"
 	"github.com/MDMAtk/TormentNexus/internal/ctxharvester"
 	"github.com/MDMAtk/TormentNexus/internal/eventbus"
@@ -63,6 +62,7 @@ import (
 	"github.com/MDMAtk/TormentNexus/internal/systray"
 	"github.com/MDMAtk/TormentNexus/internal/toolregistry"
 	"github.com/MDMAtk/TormentNexus/internal/workspaces"
+	"github.com/google/uuid"
 	_ "modernc.org/sqlite"
 )
 
@@ -3109,6 +3109,47 @@ func (s *Server) handleMCPCallTool(w http.ResponseWriter, r *http.Request) {
 			},
 		})
 		return
+	}
+
+	// Try native Go tool handlers (tools.Registry) before falling back to meta-tools
+	name, _ := payload["name"].(string)
+	args, _ := payload["args"].(map[string]interface{})
+	if args == nil {
+		if a, ok := payload["arguments"].(map[string]interface{}); ok {
+			args = a
+		}
+	}
+	if name != "" && s.toolsRegistry != nil && s.toolsRegistry.HasTool(name) {
+		cfg := s.loadNativeConfig()
+		val, explicit := cfg[name]
+		isNativeDisabled := explicit && !val
+		if !isNativeDisabled {
+			nativeResult, nativeErr := s.toolsRegistry.Execute(r.Context(), name, args)
+			if s.auditor != nil {
+				status := "SUCCESS"
+				if nativeErr != nil {
+					status = "FAILURE: " + nativeErr.Error()
+				}
+				s.auditor.LogToolExecution("system", name, args, status)
+			}
+			if nativeErr == nil {
+				writeJSON(w, http.StatusOK, map[string]any{
+					"success": true,
+					"data":    nativeResult,
+					"bridge": map[string]any{
+						"source": "go-native-tool",
+						"tool":   name,
+					},
+				})
+				return
+			}
+			writeJSON(w, http.StatusInternalServerError, map[string]any{
+				"success": false,
+				"error":   nativeErr.Error(),
+				"source":  "go-native-tool",
+			})
+			return
+		}
 	}
 
 	fallbackResult, fallbackErr := s.localCallMCPMetaTool(r, payload)
@@ -9553,9 +9594,9 @@ func (s *Server) handleSessionImport(w http.ResponseWriter, r *http.Request) {
 		"success": true,
 		"data": map[string]any{
 			"imported": imported,
-			"merged":    merged,
-			"skipped":   skipped,
-			"errors":    errorsList,
+			"merged":   merged,
+			"skipped":  skipped,
+			"errors":   errorsList,
 		},
 		"bridge": map[string]any{
 			"fallback":  "go-local-session-export",

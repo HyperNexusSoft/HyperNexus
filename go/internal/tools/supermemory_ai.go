@@ -52,17 +52,17 @@ func HandleAddMemory(ctx context.Context, args map[string]interface{}) (ToolResp
 	wrappedJSON, _ := json.Marshal(wrapped)
 
 	record := controlplane.L2VaultRecord{
-		ID:        fmt.Sprintf("mem-%s-%d", strings.ReplaceAll(category, " ", "_"), time.Now().UnixNano()),
-		SessionID: sessionID,
-		Type:      controlplane.MemoryLongTerm,
-		Kind:      "fact",
-		Category:  category,
-		Tags:      tags,
-		Content:   string(wrappedJSON),
-		Importance: importance,
-		HeatScore: 50.0,
+		ID:             fmt.Sprintf("mem-%s-%d", strings.ReplaceAll(category, " ", "_"), time.Now().UnixNano()),
+		SessionID:      sessionID,
+		Type:           controlplane.MemoryLongTerm,
+		Kind:           "fact",
+		Category:       category,
+		Tags:           tags,
+		Content:        string(wrappedJSON),
+		Importance:     importance,
+		HeatScore:      50.0,
 		LastAccessedAt: time.Now(),
-		CreatedAt: time.Now(),
+		CreatedAt:      time.Now(),
 	}
 
 	if storeErr := GlobalVectorStore.Commit(ctx, record); storeErr != nil {
