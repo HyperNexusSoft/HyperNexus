@@ -1,36 +1,58 @@
 # Changelog
 
+## [1.0.0-alpha.239] - 2026-07-06
+
+### Added
+
+- **Memory Maintenance API**: `POST /api/memory/maintenance` — manual trigger for all 5 lifecycle phases (forgetting-curve decay, consolidation, orphan burial, dream cycle)
+- **TormentNexus pi extension v4**: RBAC tool-call enforcement, 6 slash commands (`/tn-store`, `/tn-search`, `/tn-status`, `/tn-plan`, `/tn-purge`, `/tn-summary`), subagent orchestration via `tn_subagent` tool, live editor widget with memory/mesh stats, custom footer, keyboard shortcuts (`Ctrl+Shift+M/T/P`), `@memory:key` inline context expansion, inter-extension event bus
+- **pi-intercom v0.6.0 + pi-subagents v0.33.1**: Cross-session message broker and subagent orchestration packages installed
+- **Memory Maintenance Documentation**: `docs/ai/deployment/memory-maintenance.md` — full lifecycle, heat decay formula, SM-2 spaced repetition, P2P mesh docs
+- **Executive Protocol R7**: Full repo sync — fetched both remotes, reconciled 298 task branches (all stale ancestors, zero loss), verified submodules removed, scripts validated
+
+### Fixed
+
+- **Spaced repetition dream cycle**: Column name mismatch (`easiness_factor` → `ease_factor`, `interval_days` → `interval`, `last_reviewed_at` removed) — dream cycle now correctly creates SM-2 entries with heat boosts
+- **Orphan burial**: Graceful skip when `imported_session_memories` table doesn't exist in memory.db (table is in tormentnexus.db)
+
 ## [1.0.0-alpha.238] - 2026-07-04
 
 ### Added
+
 - **Codebase Analysis Native Tools**: Implemented `codebase_search` and `codebase_outline` native Go tools mapping the in-memory repository structure built on startup.
 
 ## [1.0.0-alpha.237] - 2026-07-04
 
 ### Added
+
 - **Session Supervisor Restoration UI**: Integrated a "Restore in Supervisor" action button on candidate imported sessions inside the dashboard to trigger active supervised session restoration via the sidecar `/api/sessions/supervisor/restore-imported` endpoint.
 
 ### Fixed
+
 - **Go Sidecar Server Compilation**: Fixed an unused import warning (`"path/filepath"`) blocking the compilation of the Go daemon on newer Go compilers.
 
 ## [1.0.0-alpha.236] - 2026-07-03
 
 ### Added
+
 - **Default Native & Always-On Tool Selection**: Exposed active toggles in the dashboard settings panel allowing configuration of default Go-native tool execution and always-on registry settings dynamically synchronized to the local daemon workspace data.
 
 ## [1.0.0-alpha.235] - 2026-07-02
 
 ### Changed
+
 - **E2E Integration Verification**: Configured the E2E verification script to dynamically resolve and test against the active Go sidecar port `7778` instead of the legacy decommissioned `4300` port.
 
 ## [1.0.0-alpha.234] - 2026-07-02
 
 ### Fixed
+
 - **Go Unit Test Hanging on Windows**: Wrapped the blocking system tray message loop `systray.Start` call inside `httpapi.New` to prevent it from executing during `go test` runs (utilizing lightweight package-less `flag.Lookup("test.v")` check).
 
 ## [1.0.0-alpha.233] - 2026-07-02
 
 ### Fixed
+
 - **Next.js tRPC Proxy Stability**: Added abort timeouts to proxy requests to prevent hanging when TS core is down, and integrated Go-native tRPC redirect fallback path for `startupStatus`.
 - **Development Server Stability**: Switched Next.js dev server from Turbopack to Webpack to fix persistent cache corruption and filesystem errors on Windows.
 - **Dependency Compatibility**: Rebuilt `better-sqlite3` native bindings for Node 24 runtime to resolve native database loading errors.
@@ -38,12 +60,14 @@
 ## [1.0.0-alpha.221] - 2026-07-02
 
 ### Fixed
+
 - **Go Sidecar Build**: Fixed undefined compilation error `GetLowPerformingSkills` inside `go/internal/skillregistry/evolution_prompt.go` by introducing a database-safe fallback definition.
 - **Backend Service Restart**: Successfully terminated stale and locked backend processes and launched the new `tormentnexus.exe` serving daemon to spin up the system tray notification icon.
 
 ## [1.0.0-alpha.220] - 2026-07-02
 
 ### Added
+
 - **AI Agent Competitor Parity & Evidence Lock Gate Dashboard Card**:
   - Displays the first-party verification queue status (L0-L3) for competitor platforms (OpenCode, Cursor, Windsurf, Codex, Claude Code, Gemini CLI, etc.).
   - Added checkboxes representing the tormentnexus Readiness Gate rules.
@@ -51,6 +75,7 @@
 ## [1.0.0-alpha.219] - 2026-07-02
 
 ### Added
+
 - **Single-Page Dashboard Consolidation Phase 3**:
   - **Live Immune Self-Healing Radar**: Embedded the pathogen diagnosis streams and live heal history list.
   - **Persistent SQLite L2 Vault**: Connected L2 long-term memory records with importance weights.
@@ -60,12 +85,14 @@
 ## [1.0.0-alpha.218] - 2026-07-02
 
 ### Added
+
 - **Noise Cancellation for Console Logs**: Added a synchronous HTML-head interceptor to filter framework warning noise (like DevTools warnings and Fast Refresh rebuild logs).
 - **Graceful Search Safety**: Skipped cold archive API queries on blank search terms to prevent bad request server errors in the console.
 
 ## [1.0.0-alpha.217] - 2026-07-02
 
 ### Added
+
 - **Single-Page Dashboard Consolidation Phase 2**:
   - **Public MCP Server Registry & Discovery**: Connected the public Glama/Smithery server snapshots directly to the execution layer.
   - **Git Repository Chronicle**: Integrated live working tree modification lists and commit history streams.
@@ -75,6 +102,7 @@
 ## [1.0.0-alpha.216] - 2026-07-02
 
 ### Added
+
 - **Complete Dashboard Integration & Subpage Decommission**: Combined all subpages and features into the single, unified dashboard page (`dashboard-home-view.tsx`). This adds:
   - **L3 Cold Archive Explorer**: Fully interactive view to query the long-term memory tier and promote low-heat memories back to L2 Episodic Vault.
   - **Session Ingestion Panel**: Interactive scanner and importer to ingest transcript files and conversations from external engines.
@@ -84,17 +112,20 @@
 ## [1.0.0-alpha.215] - 2026-07-01
 
 ### Fixed
+
 - **BobbyBookmarks Sync Crash**: Resolved a Win32 console print crash caused by `UnicodeEncodeError` when outputting summary reports containing non-ASCII symbols (such as non-breaking space characters like `\u202f`), adding a robust standard encoding fallback to `bobbybookmarks_sync.py` logger.
 
 ## [1.0.0-alpha.214] - 2026-07-01
 
 ### Added
+
 - **Singular Page Unified Dashboard**: Consolidated all features and tools from Page A, B, C, and D into a single, high-density dashboard view, grouped logically into visual sections.
 - **Native Unicode System Tray Emoji Icons**: Refactored the Win32 system tray `robot_icon.go` to programmatically render vector Unicode emojis (`🤖` for normal, `🚨` for activity warnings) via GDI drawing context and the Segoe UI Emoji system font, ensuring consistent, high-DPI scaling system icons.
 
 ## [1.0.0-alpha.213] - 2026-07-01
 
 ### Changed
+
 - **High-Value Card Prominence Layout**: Re-aligned feature cards within the dashboard tabs:
   - Made L1-L4 Memory Distillation full-width (`md:col-span-2`) at the top of Memory & Skills (Page C) with a horizontal grid of memory metrics.
   - Made Swarm Code Generation Queue full-width at the top of Go MCP & Tools (Page B).
@@ -103,39 +134,47 @@
 ## [1.0.0-alpha.212] - 2026-07-01
 
 ### Added
+
 - **High-Value Dashboard Reorganization**: Rearranged the home client tabs to put the highest value features first (Memory & Skills, followed by Go MCP & Tools) and defaulted active loading to Memory & Skills. Reordered sidebar sections in `nav-config.ts` to highlight Agent Core above MCP Control.
 
 ## [1.0.0-alpha.211] - 2026-07-01
 
 ### Added
+
 - **Unified Dashboard Middleware Redirects**: Created `middleware.ts` in `apps/web/src` to intercept legacy dashboard subpage paths (e.g., `/dashboard/brain`, `/dashboard/tool-console`, `/dashboard/billing`) and automatically redirect operators to their respective tab targets on the main consolidated high-density `/dashboard` view (`page-a`, `page-b`, `page-c`, or `page-d`).
 
 ## [1.0.0-alpha.210] - 2026-07-01
 
 ### Fixed
+
 - **React Key Warnings**: Resolved React duplicate key errors in Memory Hydration view (`view.tsx`) by constructing unique composite keys (`${entry.section}-${entry.key}-${entry.id}`) for queried memory rows and (`${tag}-${idx}`) for mapped memory tags.
 
 ## [1.0.0-alpha.209] - 2026-07-01
 
 ### Added
+
 - **Native Go Session Import Fallback**: Implemented a local fallback in `handleSessionImport` inside the Go sidecar (`server.go`), enabling direct native imports of external session payloads into `tormentnexus.db` when the TypeScript control plane is unavailable.
 - **Unique Hash & Schema Constraint Guard**: Added automatic SHA256 `transcript_hash` calculation and default `normalized_session` metadata initialization inside `ImportSession` (`import.go`) to prevent unique and non-null SQLite constraint exceptions during session insertion.
 
 ### Fixed
+
 - **Networking Port Binding**: Fixed `import_sessions.py` to route requests to loopback address `127.0.0.1:7778` instead of `localhost:4300`, resolving IPv6 `[::1]` resolution conflicts on Windows.
 
 ## [1.0.0-alpha.208] - 2026-07-01
 
 ### Added
+
 - **TormentNexus Unified Dashboard Layout**: Implemented the high-density conditional dashboard tabs (`page-a`, `page-b`, `page-c`, `page-d`) in `DashboardHomeClient` and `DashboardHomeView` to reduce operator route friction.
 - **Consolidated Sidebar Config**: Remapped all sidebar navigation link paths in `nav-config.ts` to route directly to their corresponding tab targets in the unified dashboard layout.
 
 ### Fixed
+
 - **Dashboard Home View Syntax**: Repaired unclosed setTimeout logic boundaries and helper function syntax braces inside `dashboard-home-view.tsx` to resolve Next.js JSX Element return type errors and compile successfully.
 
 ## [1.0.0-alpha.207] - 2026-07-01
 
 ### Fixed
+
 - **tRPC Bridge Batching and Unwrapping**: Fixed connection termination (`net::ERR_EMPTY_RESPONSE`) in the Go sidecar's tRPC handler.
 - **BobbyBookmarks Sync Path Fix**: Corrected the database path in `scripts/bobbybookmarks_sync.py` to point to `go/bobbybookmarks/bookmarks.db`.
 - **Monorepo Version Sync**: Synchronized all monorepo version numbers to `1.0.0-alpha.207`.
@@ -143,6 +182,7 @@
 ## [1.0.0-alpha.206] - 2026-07-01
 
 ### Fixed
+
 - **tRPC Bridge Batching and Unwrapping**: Fixed connection termination (`net::ERR_EMPTY_RESPONSE`) in Go sidecar's tRPC handler by correctly detecting batch queries when `batch=1` is specified, unwrapping the `"json"` serialization layer, and forwarding unwrapped flat parameters directly to target HTTP routes.
 - **Proxy Route Prefixing**: Automatically prepended `api/` to request paths inside `/api/go/[...path]` route that do not start with `api/` or other system prefixes, resolving `404 Not Found` for memory hydration state endpoint requests.
 - **Go Test Suite Assertions**: Fixed test assertions in `discovery_test.go` and `tool_advertisements.go` to match the default configuration settings.
@@ -150,11 +190,13 @@
 ## [1.0.0-alpha.205] - 2026-07-01
 
 ### Fixed
+
 - **Proxy Route Remapping**: Introduced a path translation map in `/api/go/[...path]/route.ts` that redirects legacy endpoints (e.g. `/api/go/api/imports`, `/api/go/api/healer`) to corrected Go backend targets (e.g. `/api/import/summary`, `/api/healer/history`), resolving all console 404 proxy errors.
 - **Unique DOM Keys**: Resolved React unique-key console warnings in mapped lists across `/dashboard/swarm` and `/dashboard/tool-karma` by ensuring resilient ID fallbacks.
 - **Detail Sections Metadata Types**: Fixed compilation type errors in `memory-dashboard-frontend-utils.tsx` by explicitly defining `MemoryDetailSection` structures and expanding `MemoryRecord` metadata formats.
 
 ### Added
+
 - **Subpage Consolidation**: Redirected all nested route directories (`/dashboard/mcp/*`, `/dashboard/memory/*`, `/dashboard/code/*`, `/dashboard/health/*`) to use centralized single-page controllers via tab navigation components.
 - **Session Importer Tab**: Consolidated the `/dashboard/sessions/import` subpage directly as a tab (`Session Importer`) inside the Swarm Control panel.
 
