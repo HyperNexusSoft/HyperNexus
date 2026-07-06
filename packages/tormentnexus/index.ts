@@ -430,31 +430,45 @@ export default function (pi: ExtensionAPI) {
   pi.registerTool({
     name: "tn_memory_store",
     label: "TN Memory Store",
-    description: "Store a memory in TormentNexus L2 vault. Use for persistent cross-session knowledge.",
+    description: "Store a memory in TormentNexus L2 vault and optionally in a project .memdb for git-tracked per-project portable memories.",
     promptSnippet: "Store knowledge in persistent L2 memory",
     promptGuidelines: [
       "Use tn_memory_store to save important patterns, decisions, and facts across sessions.",
       "Use tags like 'project:name', 'failure:', 'pattern:', or 'convention:' for scope filtering.",
+      "Set 'project' to the project directory name to also write to the project's .memdb file (git-tracked, portable).",
       "Good candidates: architectural decisions, bug fixes, build procedures, tool quirks.",
     ],
     parameters: Type.Object({
       content: Type.String({ description: "The memory content to store" }),
       tags: Type.Optional(Type.Array(Type.String(), { description: "Tags like ['project:bg', 'pattern:build']" })),
       category: Type.Optional(Type.String({ description: "Category: pattern, decision, convention, insight, failure, correction, preference" })),
+      project: Type.Optional(Type.String({ description: "Project directory name. If set, also writes to project/.memdb for git tracking" })),
     }),
     async execute(_toolCallId, params, signal, _onUpdate, ctx) {
       const sessionFile = ctx.sessionManager.getSessionFile();
+      const tags = params.tags ?? [];
+      if (params.project) {
+        // Ensure project tag is present
+        const projectTag = "project:" + params.project;
+        if (!tags.includes(projectTag)) tags.push(projectTag);
+      }
       const enriched = JSON.stringify({
-        content: params.content, tags: params.tags ?? [], category: params.category ?? "general",
+        content: params.content, tags, category: params.category ?? "general",
         timestamp: now(), session: sessionFile,
       });
+      // Store to global L2 vault
       const res = await tnFetch("/api/memory/add", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: enriched }),
       }, signal);
       if (!res.ok) return { content: [{ type: "text", text: `Failed: ${res.status}` }], isError: true };
-      pi.events.emit("tn:memory_stored", { content: params.content, tags: params.tags });
-      return { content: [{ type: "text", text: "✅ Memory stored in L2 vault." }], details: { tags: params.tags } };
+      // If project specified, trigger a project memdb sync so the new memory is written to the .memdb
+      if (params.project) {
+        tnFetch("/api/memory/project/sync", { method: "POST" }).catch(() => {});
+      }
+      pi.events.emit("tn:memory_stored", { content: params.content, tags });
+      const projectNote = params.project ? ` and project .memdb (${params.project})` : "";
+      return { content: [{ type: "text", text: `✅ Memory stored in L2 vault${projectNote}.` }], details: { tags } };
     },
   });
 
@@ -709,7 +723,7 @@ export default function (pi: ExtensionAPI) {
 
   // 1. /tn-store — interactive memory store
   pi.registerCommand("tn-store", {
-    description: "Store a memory in TN L2 vault with structured form",
+    description: "Store a memory in TN L2 vault with structured form (optional per-project .memdb)",
     handler: async (args, ctx) => {
       const content = await ctx.ui.editor("Memory content:", args || "");
       if (!content) { ctx.ui.notify("Cancelled", "warning"); return; }
@@ -717,8 +731,13 @@ export default function (pi: ExtensionAPI) {
       const category = await ctx.ui.select("Category:", ["general", "pattern", "decision", "convention", "insight", "failure", "correction", "preference"]);
       if (!category) return;
 
-      const tagsStr = await ctx.ui.input("Tags (comma-separated, e.g. project:bg, pattern:build):", "optional");
+      const project = await ctx.ui.input("Project name (optional — writes to project/.memdb for git tracking):", "");
+
+      const tagsStr = await ctx.ui.input("Tags (comma-separated, e.g. project:name, pattern:build):", "optional");
       const tags = tagsStr ? tagsStr.split(",").map((t: string) => t.trim()).filter(Boolean) : [];
+      if (project && !tags.some(t => t.startsWith("project:"))) {
+        tags.push("project:" + project);
+      }
 
       const ok = await tnOk("/api/memory/add", {
         method: "POST", headers: { "Content-Type": "application/json" },
@@ -727,8 +746,11 @@ export default function (pi: ExtensionAPI) {
         }),
       });
 
-      if (ok) ctx.ui.notify(`✅ Memory stored (${category})`, "info");
-      else ctx.ui.notify("Failed to store memory", "error");
+      if (ok) {
+        // Trigger project memdb sync
+        if (project) tnFetch("/api/memory/project/sync", { method: "POST" }).catch(() => {});
+        ctx.ui.notify(project ? `✅ Memory stored (${category}, project: ${project})` : `✅ Memory stored (${category})`, "info");
+      } else ctx.ui.notify("Failed to store memory", "error");
     },
   });
 

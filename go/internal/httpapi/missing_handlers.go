@@ -252,6 +252,49 @@ func (s *Server) handleMemoryMaintenance(w http.ResponseWriter, r *http.Request)
 	})
 }
 
+func (s *Server) handleProjectSync(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeJSON(w, http.StatusMethodNotAllowed, map[string]any{"success": false, "error": "use POST"})
+		return
+	}
+	if tools.GlobalVectorStore == nil {
+		writeJSON(w, http.StatusServiceUnavailable, map[string]any{"success": false, "error": "vector store not initialized"})
+		return
+	}
+	files, memories, err := memorystore.SyncAllProjectMemDBs(r.Context(), s.cfg.WorkspaceRoot, tools.GlobalVectorStore)
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]any{
+		"success": true,
+		"files":   files,
+		"imported": memories,
+	})
+}
+
+func (s *Server) handleProjectSplit(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeJSON(w, http.StatusMethodNotAllowed, map[string]any{"success": false, "error": "use POST"})
+		return
+	}
+	if tools.GlobalVectorStore == nil {
+		writeJSON(w, http.StatusServiceUnavailable, map[string]any{"success": false, "error": "vector store not initialized"})
+		return
+	}
+	files, memories, err := memorystore.RetroactivelySplitMemoriesById(r.Context(), tools.GlobalVectorStore, s.cfg.WorkspaceRoot)
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]any{
+		"success": true,
+		"files":   files,
+		"memories": memories,
+		"note":     "Retroactively split memories by project tag. New .memdb files created in project directories.",
+	})
+}
+
 func (s *Server) handleColdArchiveSearch(w http.ResponseWriter, r *http.Request) {
 	query := strings.TrimSpace(r.URL.Query().Get("q"))
 	if query == "" {

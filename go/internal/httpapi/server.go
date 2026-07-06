@@ -930,6 +930,37 @@ func (s *Server) PreWarmCaches() {
 			fmt.Printf("[MemoryMaintenance] Cycle complete in %v\n", time.Since(start))
 		}
 	}()
+
+	// Project .memdb sync: scan workspace and import all project memories into global index
+	go func() {
+		time.Sleep(10 * time.Second) // Wait for server to fully initialize
+		vs := tools.GlobalVectorStore
+		if vs == nil {
+			return
+		}
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		files, memories, err := memorystore.SyncAllProjectMemDBs(ctx, s.cfg.WorkspaceRoot, vs)
+		cancel()
+		if err != nil {
+			fmt.Printf("[ProjectDB] Initial sync error: %v\n", err)
+		} else {
+			fmt.Printf("[ProjectDB] Initial sync complete: %d files, %d memories imported\n", files, memories)
+		}
+
+		// Rescan periodically (every hour) to pick up new .memdb files from git pulls, clones, etc.
+		ticker := time.NewTicker(1 * time.Hour)
+		defer ticker.Stop()
+		for range ticker.C {
+			ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+			files, memories, err := memorystore.SyncAllProjectMemDBs(ctx, s.cfg.WorkspaceRoot, vs)
+			cancel()
+			if err != nil {
+				fmt.Printf("[ProjectDB] Periodic sync error: %v\n", err)
+			} else if memories > 0 {
+				fmt.Printf("[ProjectDB] Periodic sync: %d files, %d new memories\n", files, memories)
+			}
+		}
+	}()
 }
 
 func (s *Server) ListenAndServe(ctx context.Context) error {
@@ -1439,6 +1470,8 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/memory/archive-session", s.handleMemoryArchiveSession)
 	s.mux.HandleFunc("/api/memory/fts-search", s.handleMemoryFTSearch)
 	s.mux.HandleFunc("/api/memory/maintenance", s.handleMemoryMaintenance)
+	s.mux.HandleFunc("/api/memory/project/sync", s.handleProjectSync)
+	s.mux.HandleFunc("/api/memory/project/split", s.handleProjectSplit)
 	s.mux.HandleFunc("/api/memory/cold-archive", s.handleColdArchiveCount)
 	s.mux.HandleFunc("/api/memory/cold-archive/search", s.handleColdArchiveSearch)
 	s.mux.HandleFunc("/api/memory/cold-archive/count", s.handleColdArchiveCount)
