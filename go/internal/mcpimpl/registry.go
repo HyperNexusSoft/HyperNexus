@@ -5664,5 +5664,13 @@ func AllHandlers() []RegistryEntry {
 		{Name: "HandlePokemonItem", Description: "Pokemon item details (real API)", File: "real_apis16.go"},
 		{Name: "HandleSolarRadiation", Description: "Solar radiation forecast (real API)", File: "real_apis16.go"},
 		{Name: "HandleEvapotranspiration", Description: "Reference evapotranspiration (real API)", File: "real_apis16.go"},
+
+		{Name: "HandleTVShowAKAs", Description: "TV show alternative names (real API)", File: "real_apis17.go"},
+		{Name: "HandleTMMachine", Description: "Pokemon TM/HM machine (real API)", File: "real_apis17.go"},
+		{Name: "HandleEggGroup", Description: "Pokemon egg groups (real API)", File: "real_apis17.go"},
+		{Name: "HandlePokemonNature", Description: "Pokemon nature stat changes (real API)", File: "real_apis17.go"},
+		{Name: "HandlePokemonGender", Description: "Pokemon gender ratios (real API)", File: "real_apis17.go"},
+		{Name: "HandlePokemonStat", Description: "Pokemon stat details (real API)", File: "real_apis17.go"},
+		{Name: "HandleNASATechport", Description: "NASA technology projects (real API)", File: "real_apis17.go"},
 	}
 }
