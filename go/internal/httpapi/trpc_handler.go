@@ -189,6 +189,14 @@ func getCompatRoute(procedurePath string, input map[string]any) string {
 			}
 		}
 		return fmt.Sprintf("/api/memory/session-summaries/recent?limit=%d", limit)
+	case "billing.stripe.plans":
+		return "/api/billing/stripe/plans"
+	case "billing.stripe.checkout":
+		return "/api/billing/stripe/checkout"
+	case "billing.stripe.portal":
+		return "/api/billing/stripe/portal"
+	case "billing.stripe.subscription":
+		return "/api/billing/stripe/subscription"
 	case "health":
 		return "/api/health"
 	case "git.getLog":

@@ -1092,6 +1092,11 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/config/corporate-settings", s.handleGetCorporateSettings)
 	s.mux.HandleFunc("/api/config/corporate-settings/set", s.handleSetCorporateSettings)
 	s.mux.HandleFunc("/api/billing/stripe/subscribe", s.handleStripeSubscribe)
+	s.mux.HandleFunc("/api/billing/stripe/plans", s.handleStripePlans)
+	s.mux.HandleFunc("/api/billing/stripe/checkout", s.handleStripeCreateCheckout)
+	s.mux.HandleFunc("/api/billing/stripe/portal", s.handleStripeCustomerPortal)
+	s.mux.HandleFunc("/api/billing/stripe/webhook", s.handleStripeWebhook)
+	s.mux.HandleFunc("/api/billing/stripe/subscription", s.handleStripeGetSubscription)
 	s.mux.HandleFunc("/api/mcp/status", s.handleMCPStatus)
 	s.mux.HandleFunc("/api/system/overview", s.handleSystemOverview)
 	s.mux.HandleFunc("/api/mcp/servers/runtime", s.handleMCPRuntimeServers)
@@ -1808,6 +1813,12 @@ func (s *Server) handleAPIIndex(w http.ResponseWriter, _ *http.Request) {
 				{Path: "/api/billing/depleted-models", Category: "providers", Description: "Read depleted model state, with a local Go empty-state preview when the TypeScript billing router is unavailable."},
 				{Path: "/api/billing/fallback-history", Category: "providers", Description: "Read provider fallback history, with a local Go empty-state preview when the TypeScript billing router is unavailable."},
 				{Path: "/api/billing/fallback-history/clear", Category: "providers", Description: "Clear provider fallback history, with a local Go no-op when the TypeScript billing router is unavailable."},
+				{Path: "/api/billing/stripe/plans", Category: "providers", Description: "List available Stripe subscription plans."},
+				{Path: "/api/billing/stripe/checkout", Category: "providers", Description: "Create a Stripe Checkout session for subscription."},
+				{Path: "/api/billing/stripe/portal", Category: "providers", Description: "Generate a Stripe Customer Portal session URL."},
+				{Path: "/api/billing/stripe/webhook", Category: "providers", Description: "Receive Stripe webhook events (checkout, subscription, invoice)."},
+				{Path: "/api/billing/stripe/subscription", Category: "providers", Description: "Get current subscription status from Stripe."},
+				{Path: "/api/billing/stripe/subscribe", Category: "providers", Description: "Manually set subscription details (legacy/local)."},
 				{Path: "/api/mcp/status", Category: "mcp", Description: "Bridge to TypeScript MCP runtime status and pool state."},
 				{Path: "/api/mcp/servers/runtime", Category: "mcp", Description: "Bridge to TypeScript runtime MCP server visibility."},
 				{Path: "/api/mcp/servers/configured", Category: "mcp", Description: "Bridge to configured MCP server records managed by the TypeScript control plane."},
