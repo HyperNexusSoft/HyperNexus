@@ -4573,6 +4573,17 @@ var dispatchMap = map[string]func(ctx context.Context, args map[string]interface
 	"HandlePokemonAbility":     HandlePokemonAbility,     // from real_apis8.go (PokeAPI Ability)
 	"HandleStarWarsSearch":     HandleStarWarsSearch,     // from real_apis8.go (SWAPI Search)
 	"HandleSWAPILookup":        HandleSWAPILookup,        // from real_apis8.go (SWAPI by ID)
+
+	"HandleMealRandom":          HandleMealRandom,          // from real_apis9.go (MealDB Random)
+	"HandleMealCategories":      HandleMealCategories,      // from real_apis9.go (MealDB Categories)
+	"HandleMealAreas":           HandleMealAreas,           // from real_apis9.go (MealDB Areas)
+	"HandleCocktailSearch":      HandleCocktailSearch,      // from real_apis9.go (CocktailDB)
+	"HandleTopAnime":            HandleTopAnime,            // from real_apis9.go (Jikan Top Anime)
+	"HandleLanguageList":        HandleLanguageList,        // from real_apis9.go (LanguageTool)
+	"HandleIP2Location":         HandleIP2Location,         // from real_apis9.go (IP2Location.io)
+	"HandleMealByArea":          HandleMealByArea,          // from real_apis9.go (MealDB by Area)
+	"HandleCocktailByIngredient": HandleCocktailByIngredient, // from real_apis9.go (CocktailDB by Ing)
+	"HandleOpenLibrarySubjectsList": HandleOpenLibrarySubjectsList, // from real_apis9.go (Subjects List)
 }
 
 func Dispatch(name string, ctx context.Context, args map[string]interface{}) (ToolResponse, error) {

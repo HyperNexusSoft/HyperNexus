@@ -5574,6 +5574,17 @@ func AllHandlers() []RegistryEntry {
 		{Name: "HandlePokemonAbility", Description: "Pokémon ability detail (real API)", File: "real_apis8.go"},
 		{Name: "HandleStarWarsSearch", Description: "Search SWAPI by category (real API)", File: "real_apis8.go"},
 		{Name: "HandleSWAPILookup", Description: "Lookup SWAPI resource by ID (real API)", File: "real_apis8.go"},
+		{Name: "HandleMealRandom", Description: "Random meal recipe (real API)", File: "real_apis9.go"},
+		{Name: "HandleMealCategories", Description: "Meal categories list (real API)", File: "real_apis9.go"},
+		{Name: "HandleMealAreas", Description: "Cuisine areas/countries (real API)", File: "real_apis9.go"},
+		{Name: "HandleCocktailSearch", Description: "Search cocktail recipes (real API)", File: "real_apis9.go"},
+		{Name: "HandleTopAnime", Description: "Top anime rankings (real API)", File: "real_apis9.go"},
+		{Name: "HandleLanguageList", Description: "Supported languages (real API)", File: "real_apis9.go"},
+		{Name: "HandleIP2Location", Description: "IP geolocation alt service (real API)", File: "real_apis9.go"},
+		{Name: "HandleMealByArea", Description: "Recipes by cuisine area (real API)", File: "real_apis9.go"},
+		{Name: "HandleCocktailByIngredient", Description: "Cocktails by ingredient (real API)", File: "real_apis9.go"},
+		{Name: "HandleOpenLibrarySubjectsList", Description: "Open Library subjects list (real API)", File: "real_apis9.go"},
+
 
 
 
