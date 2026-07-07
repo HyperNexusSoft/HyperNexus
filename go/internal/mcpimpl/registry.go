@@ -5545,6 +5545,15 @@ func AllHandlers() []RegistryEntry {
 		{Name: "HandleFakerData", Description: "Generate fake companies/persons (real API)", File: "real_apis5.go"},
 		{Name: "HandleBookEdition", Description: "Book edition by ISBN (real API)", File: "real_apis5.go"},
 		{Name: "HandleWordDefinition", Description: "English word definition (real API)", File: "real_apis5.go"},
+		{Name: "HandleTrendingBooks", Description: "Trending books from Open Library", File: "real_apis6.go"},
+		{Name: "HandleISSLocation", Description: "Current ISS position", File: "real_apis6.go"},
+		{Name: "HandleYesNo", Description: "Random yes/no/maybe with GIF", File: "real_apis6.go"},
+		{Name: "HandleGenderPredict", Description: "Predict gender from name", File: "real_apis6.go"},
+		{Name: "HandleActivitySuggest", Description: "Suggest a random activity", File: "real_apis6.go"},
+		{Name: "HandleExchangeRate", Description: "Currency exchange rate", File: "real_apis6.go"},
+		{Name: "HandleMarsPhotos", Description: "Mars Rover photos by sol", File: "real_apis6.go"},
+		{Name: "HandleQuoteOfTheDay", Description: "Quote of the day from FavQs", File: "real_apis6.go"},
+
 
 		{Name: "HandlePokemonLookup", Description: "Lookup Pokémon by name/id (real API)", File: "real_apis3.go"},
 		{Name: "HandleStarWarsLookup", Description: "Lookup Star Wars characters/planets (real API)", File: "real_apis3.go"},

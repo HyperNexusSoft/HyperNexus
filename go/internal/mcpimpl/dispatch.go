@@ -4541,6 +4541,15 @@ var dispatchMap = map[string]func(ctx context.Context, args map[string]interface
 	"HandleFakerData":          HandleFakerData,          // from real_apis5.go (Faker API)
 	"HandleBookEdition":        HandleBookEdition,        // from real_apis5.go (Open Library Edition)
 	"HandleWordDefinition":     HandleWordDefinition,     // from real_apis5.go (Dictionary API)
+
+	"HandleTrendingBooks":      HandleTrendingBooks,      // from real_apis6.go
+	"HandleISSLocation":        HandleISSLocation,        // from real_apis6.go
+	"HandleYesNo":              HandleYesNo,              // from real_apis6.go
+	"HandleGenderPredict":      HandleGenderPredict,      // from real_apis6.go
+	"HandleActivitySuggest":    HandleActivitySuggest,    // from real_apis6.go
+	"HandleExchangeRate":       HandleExchangeRate,       // from real_apis6.go
+	"HandleMarsPhotos":         HandleMarsPhotos,         // from real_apis6.go
+	"HandleQuoteOfTheDay":      HandleQuoteOfTheDay,      // from real_apis6.go
 }
 
 func Dispatch(name string, ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
