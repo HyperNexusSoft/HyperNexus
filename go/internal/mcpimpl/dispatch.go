@@ -4584,6 +4584,17 @@ var dispatchMap = map[string]func(ctx context.Context, args map[string]interface
 	"HandleMealByArea":          HandleMealByArea,          // from real_apis9.go (MealDB by Area)
 	"HandleCocktailByIngredient": HandleCocktailByIngredient, // from real_apis9.go (CocktailDB by Ing)
 	"HandleOpenLibrarySubjectsList": HandleOpenLibrarySubjectsList, // from real_apis9.go (Subjects List)
+
+	"HandleEarthquakes":        HandleEarthquakes,        // from real_apis10.go
+	"HandleSunTimes":           HandleSunTimes,           // from real_apis10.go
+	"HandleAirQuality":         HandleAirQuality,         // from real_apis10.go
+	"HandleMusicSearch":        HandleMusicSearch,        // from real_apis10.go
+	"HandleTVShowByID":         HandleTVShowByID,         // from real_apis10.go
+	"HandleNASANotifications":  HandleNASANotifications,  // from real_apis10.go
+	"HandleOpenLibraryWork":    HandleOpenLibraryWork,    // from real_apis10.go
+	"HandleBeerSearch":         HandleBeerSearch,         // from real_apis10.go
+	"HandleCoinCapPrices":      HandleCoinCapPrices,      // from real_apis10.go
+	"HandleCoinCapSingle":      HandleCoinCapSingle,      // from real_apis10.go
 }
 
 func Dispatch(name string, ctx context.Context, args map[string]interface{}) (ToolResponse, error) {

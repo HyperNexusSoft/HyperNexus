@@ -5583,6 +5583,17 @@ func AllHandlers() []RegistryEntry {
 		{Name: "HandleIP2Location", Description: "IP geolocation alt service (real API)", File: "real_apis9.go"},
 		{Name: "HandleMealByArea", Description: "Recipes by cuisine area (real API)", File: "real_apis9.go"},
 		{Name: "HandleCocktailByIngredient", Description: "Cocktails by ingredient (real API)", File: "real_apis9.go"},
+		{Name: "HandleEarthquakes", Description: "Earthquakes by magnitude and period (real API)", File: "real_apis10.go"},
+		{Name: "HandleSunTimes", Description: "Sunrise/sunset times for coordinates (real API)", File: "real_apis10.go"},
+		{Name: "HandleAirQuality", Description: "Air quality index and pollutants (real API)", File: "real_apis10.go"},
+		{Name: "HandleMusicSearch", Description: "Search MusicBrainz artists (real API)", File: "real_apis10.go"},
+		{Name: "HandleTVShowByID", Description: "TV show details by ID (real API)", File: "real_apis10.go"},
+		{Name: "HandleNASANotifications", Description: "Space weather notifications (real API)", File: "real_apis10.go"},
+		{Name: "HandleOpenLibraryWork", Description: "Open Library work details by OLID (real API)", File: "real_apis10.go"},
+		{Name: "HandleBeerSearch", Description: "Search Brewdog beers by name/ABV (real API)", File: "real_apis10.go"},
+		{Name: "HandleCoinCapPrices", Description: "Top crypto prices from CoinCap (real API)", File: "real_apis10.go"},
+		{Name: "HandleCoinCapSingle", Description: "Single crypto asset price (real API)", File: "real_apis10.go"},
+
 		{Name: "HandleOpenLibrarySubjectsList", Description: "Open Library subjects list (real API)", File: "real_apis9.go"},
 
 
