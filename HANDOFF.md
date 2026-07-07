@@ -1,116 +1,58 @@
-# Session Handoff & Architecture Summary
+# Session Summary — July 6-7, 2026
 
-**Date:** July 6, 2026 (Local Time)
-**Version:** v1.0.0-alpha.241
+## What Was Accomplished
 
-## R20 — Full Stripe Billing + Executive Protocol R9
+### 1. Stripe Billing Integration (marketing_agent/)
 
-### Completed
+- Created `go/internal/httpapi/stripe_billing.go` (16KB) — full Stripe integration
+- **6 API endpoints**: plans, checkout, portal, webhook, subscription, subscribe
+- **5 webhook events**: checkout.session.completed, subscription.updated/deleted, invoice.payment_succeeded/failed
+- **Webhook signature verification**: HMAC-SHA256
+- **3 pricing plans**: Basic ($29), Pro ($99), Enterprise ($499)
+- **tRPC routes** added for all stripe procedures
+- `marketing_agent/README.md` with hypernexus.site billing config docs
 
-- **Stripe billing integration**: 6 new API endpoints for checkout, webhooks, portal, plans, subscription
-- **5 webhook events** handled: checkout.session.completed, customer.subscription.updated/deleted, invoice.payment_succeeded/failed
-- **Local dev fallback**: all endpoints simulate without STRIPE_SECRET_KEY
-- **marketing_agent/**: Stripe configuration docs for hypernexus.site
-- **192 real API handlers** across 20 files (batches 1-20)
-- **Executive Protocol R9**: fetch all, no upstream, 297 task branches (all dead), 0 feature branches merged, version bump alpha.241, CHANGELOG sync, build clean
+### 2. Real API-Backed Handlers (Batches 1-20)
 
-### Files Changed
+- **192 real API-backed handlers** across **20 batch files** (~160 unique free APIs)
+- Every handler makes real HTTP calls with no auth required
+- Coverage: academic, weather, finance, gaming, entertainment, food, space, fun, geography, demographics, data, music, dev tools, creative, quotes, reference, planets, berries, items, moves, TV, etc.
 
-- `go/internal/httpapi/stripe_billing.go` (new, 16KB — full Stripe integration)
-- `go/internal/httpapi/server.go` — 6 new routes + API docs
-- `go/internal/httpapi/trpc_handler.go` — 4 new tRPC routes
-- `marketing_agent/README.md` (new — billing config guide)
-- `VERSION`: alpha.240 → alpha.241
-- `CHANGELOG.md`: updated
-- `go/internal/mcpimpl/real_apis15-20.go`: batches of real API handlers
+### 3. Remaining Stubs Completed (batches 21-22)
 
-### Build Status
+- **39 more stub handlers** completed in `stubs_completed.go` + `stubs_completed2.go`
+- Categories: time, calculator, network/SSH, LLM routing, email, chat, search, DevOps, media, medical, business, places, database, security, infrastructure
+- **30 old stub files** deleted and replaced
 
-- Go: CLEAN — `go build ./cmd/tormentnexus`
+### 4. Executive Protocols R9-R11
 
-## R19 — Batch MCP Server Implementation (20 stubs + arxiv)
+- **3 protocol runs**: branch reconciliation, version bumps, build verification, push to both remotes
+- 297 task branches verified (all dead/merged)
+- No upstream remote, no submodules
 
-### Completed
+### 5. System Tray Enhancements
 
-- **20 pure stubs** replaced with real Go implementations in `mcp_servers_batch.go`:
-  astronomy_oracle, central_intelligence, context_awesome, fluent_mcp, gloria_mcp, himalayas_mcp (jobs API),
-  mcp_gopls, mcp_nodejs_server, mcp_pointer, nocturnusai, novyx_core, promptarchitect_mcp,
-  signatrustdev_mcp_server, squad_mcp, trackmage_mcp_server, vk_mcp_server, wowok_skills,
-  gain_understanding_mcp, hands_on_mcp_book, mcp_context_provider
-- **New arxiv_mcp_server.go** with HandleSearchArxiv + HandleGetAbstract (real arXiv API queries)
-- **context7_mcp.go** — previously completed, now with proper dispatch/registry wiring
+- Right-click menu with last 10 log events
+- Exit dialog (Yes = kill all processes, No = sidecar only, Cancel = stay)
+- Clean auto-start toggle
 
-### Files Changed
+### 6. Workspace Cleanup
 
-- `go/internal/mcpimpl/mcp_servers_batch.go` (new, 8689 bytes — 20 handlers in one file)
-- `go/internal/mcpimpl/arxiv_mcp_server.go` (new, 3074 bytes — arXiv search + abstract)
-- `go/internal/mcpimpl/dispatch.go` — updated comments
-- `go/internal/mcpimpl/registry.go` — added HandleSearchArxiv, HandleGetAbstract
-- Deleted 20 old stub files (replaced by batch file)
+- `.pi/extensions/tormentnexus.ts` removed from git tracking
+- Added `.pi/extensions/` to `.gitignore`
+- Workspace copy (53,967 bytes, newer) copied to global `~/.pi/agent/extensions/`
+- `tormentnexus.db` and `.db-shm`/`.db-wal` gitignored to fix LFS push issues
 
-### Build Status
+### 7. Service Restart
 
-- Go: CLEAN — `go build ./cmd/tormentnexus` succeeds
-- Dashboard: N/A (no dashboard directory in workspace)
+- TormentNexus Go sidecar restarted on port **7778**
+- Dashboard Next.js dev server started on port **3000**
 
-### Next Steps
+## Version Progression
 
-- Implement remaining high-value servers: anything with >10 tools (alpaca, desktop-commander, deepcontext)
-- Continue the top-100 pattern: find real repos → download source → create Go handler
+- 1.0.0-alpha.239 → .240 → .241 → .242 → .243
 
-## R18 — Per-Project .memdb System, Config Dir Rename, npm Package, MCP Memory Tools
+## Build Status
 
-### Completed
-
-1. **Per-Project .memdb System**: Portable git-tracked memory files. `ProjectDB` type, workspace scanner (`FindProjectMemDBs`, `SyncAllProjectMemDBs`), auto-import on startup + hourly rescan. `POST /api/memory/project/sync` and `/api/memory/project/split` endpoints.
-2. **Config Directory Rename**: `~/.tormentnexus-go` → `~/.tormentnexus` with auto-migration. New env var `TORMENTNEXUS_CONFIG_DIR` (backward compat with `TORMENTNEXUS_GO_CONFIG_DIR`).
-3. **npm Package**: `tormentnexus` at `packages/tormentnexus/` — `pi install npm:tormentnexus`.
-4. **MCP Memory Tools Wired**: `add_memory`, `search_memory`, `delete_memory`, `memory_stats` via both `/api/agent/tool` and `/api/mcp/tools/call`.
-5. **Native Tool Bug Fixed**: `loadNativeConfig()` empty map caused all tools disabled. Fixed with `explicit && !val`.
-6. **pi Extension Updated**: `tn_memory_store` accepts `project` parameter. `/tn-store` prompts for project.
-7. **CodeWhale Integration**: codewhale integration at `.codewhale/skills/tormentnexus/SKILL.md`.
-8. **Documentation**: CHANGELOG, ROADMAP, README, memory-maintenance.md, npm README all updated.
-
-### Key Files
-
-| File | Change |
-|------|--------|
-| `go/internal/memorystore/project_db.go` | New — ProjectDB, scanner, .memdb import/split |
-| `go/internal/config/config.go` | ConfigDir → `~/.tormentnexus`, auto-migration |
-| `go/internal/httpapi/server.go` | MCP native tool dispatch + project sync + startup scan |
-| `packages/tormentnexus/` | New npm package |
-| `.pi/agent/extensions/tormentnexus.ts` | project param on tn_memory_store |
-
-### Running
-
-| Port | Service |
-|------|---------|
-| 7778 | Go sidecar ✅ |
-| 7779 | Dashboard ✅ |
-
----
-
-# Session Handoff & Architecture Summary
-
-**Date:** July 4, 2026 (Local Time)
-**Version:** v1.0.0-alpha.238
-**Model:** Antigravity (Google DeepMind pair programmer)
-
-## Key Achievements & Modifications
-
-1. **Unified PowerShell Setup & Restart**:
-   - Implemented [install_all.ps1](file:///c:/Users/hyper/workspace/tormentnexus/install_all.ps1) to compile workspaces, package extensions (VS Code & Browser), synchronize MCP config files to client AppData directories, clean stale processes, and launch supervisors.
-   - All ports are verified listening: Go Sidecar (`7778`), Next.js Dashboard (`7779`), LLM proxy (`4000`), and Watchdog.
-
-2. **Codebase Analysis Native Tools**:
-   - Querying the `bobbybookmarks/atlas` database revealed comparative techniques including Chunkhound, Probe, and CodeGraphContext.
-   - Implemented [codebase_analysis.go](file:///c:/Users/hyper/workspace/tormentnexus/go/internal/tools/codebase_analysis.go) containing two native tool handlers: `codebase_search` (with modes `symbols`, `definitions`, `references`) and `codebase_outline` (outlining a file or querying specific symbols).
-   - Registered the handlers in [registry.go](file:///c:/Users/hyper/workspace/tormentnexus/go/internal/tools/registry.go) and successfully compiled/verified the Go sidecar.
-
-3. **Remote Push Verification**:
-   - Pushed LFS binaries successfully to `origin` and `origin-backup` remotes.
-
-## Next Steps for Successor Models
-
-- **Test at Runtime**: Verify tool outputs via `/api/tools` or execution paths inside the CLI interface.
-- **Frontend Dashboard Integration**: Expose `codebase_search` results inside the Dashboard UI.
+- Go: **CLEAN** — `go build ./cmd/tormentnexus`
+- Dashboard: **Running on port 3000** via `pnpm dev`
