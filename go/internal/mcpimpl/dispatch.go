@@ -4620,6 +4620,13 @@ var dispatchMap = map[string]func(ctx context.Context, args map[string]interface
 	"HandleBookCover":          HandleBookCover,          // from real_apis12.go
 	"HandleOpenLibraryUser":    HandleOpenLibraryUser,    // from real_apis12.go
 
+	"HandleNASASearch":        HandleNASASearch,        // from real_apis13.go
+	"HandleFloodWarnings":      HandleFloodWarnings,      // from real_apis13.go
+	"HandleAirQualityForecast": HandleAirQualityForecast, // from real_apis13.go
+	"HandleNobelPrizes":        HandleNobelPrizes,        // from real_apis13.go
+	"HandleTVShowsByPage":      HandleTVShowsByPage,      // from real_apis13.go
+	"HandleBookShelves":        HandleBookShelves,        // from real_apis13.go
+
 }
 
 func Dispatch(name string, ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
@@ -4628,6 +4635,7 @@ func Dispatch(name string, ctx context.Context, args map[string]interface{}) (To
 		return ToolResponse{}, fmt.Errorf("unknown handler: %s", name)
 	}
 	return h(ctx, args)
+
 
 
 }

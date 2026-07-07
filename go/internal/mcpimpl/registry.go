@@ -5596,10 +5596,6 @@ func AllHandlers() []RegistryEntry {
 
 		{Name: "HandleOpenLibrarySubjectsList", Description: "Open Library subjects list (real API)", File: "real_apis9.go"},
 
-
-
-
-
 		{Name: "HandlePokemonLookup", Description: "Lookup Pokémon by name/id (real API)", File: "real_apis3.go"},
 		{Name: "HandleStarWarsLookup", Description: "Lookup Star Wars characters/planets (real API)", File: "real_apis3.go"},
 		{Name: "HandleRickAndMorty", Description: "Lookup Rick & Morty characters (real API)", File: "real_apis3.go"},
@@ -5613,8 +5609,6 @@ func AllHandlers() []RegistryEntry {
 		{Name: "HandleGameDeals", Description: "Find game deals (real API)", File: "real_apis3.go"},
 		{Name: "HandleJSONPlaceholder", Description: "Get sample JSON data (real API)", File: "real_apis3.go"},
 		{Name: "HandleTriviaQuestion", Description: "Get trivia quiz questions (real API)", File: "real_apis3.go"},
-
-
 
 		{Name: "HandleNobelLaureates", Description: "List Nobel laureates (real API)", File: "real_apis11.go"},
 		{Name: "HandleNobelSearch", Description: "Search Nobel laureates (real API)", File: "real_apis11.go"},
@@ -5641,5 +5635,11 @@ func AllHandlers() []RegistryEntry {
 		{Name: "HandleAuthorBio", Description: "Open Library author biography (real API)", File: "real_apis12.go"},
 		{Name: "HandleBookCover", Description: "Open Library book cover URL (real API)", File: "real_apis12.go"},
 		{Name: "HandleOpenLibraryUser", Description: "Open Library user profile (real API)", File: "real_apis12.go"},
+		{Name: "HandleNASASearch", Description: "Search NASA image library (real API)", File: "real_apis13.go"},
+		{Name: "HandleFloodWarnings", Description: "River discharge/flood warnings (real API)", File: "real_apis13.go"},
+		{Name: "HandleAirQualityForecast", Description: "Hourly air quality forecast (real API)", File: "real_apis13.go"},
+		{Name: "HandleNobelPrizes", Description: "Nobel prizes by year/category (real API)", File: "real_apis13.go"},
+		{Name: "HandleTVShowsByPage", Description: "TV shows list by page (real API)", File: "real_apis13.go"},
+		{Name: "HandleBookShelves", Description: "Open Library bookshelves (real API)", File: "real_apis13.go"},
 	}
 }
