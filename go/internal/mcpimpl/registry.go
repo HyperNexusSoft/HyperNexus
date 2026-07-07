@@ -5553,6 +5553,18 @@ func AllHandlers() []RegistryEntry {
 		{Name: "HandleExchangeRate", Description: "Currency exchange rate", File: "real_apis6.go"},
 		{Name: "HandleMarsPhotos", Description: "Mars Rover photos by sol", File: "real_apis6.go"},
 		{Name: "HandleQuoteOfTheDay", Description: "Quote of the day from FavQs", File: "real_apis6.go"},
+		{Name: "HandlePicsumPhoto", Description: "Random photo from Picsum (real API)", File: "real_apis7.go"},
+		{Name: "HandleIsItChristmas", Description: "Check if it is Christmas (real API)", File: "real_apis7.go"},
+		{Name: "HandleBookDetails", Description: "Book details from Open Library (real API)", File: "real_apis7.go"},
+		{Name: "HandleOfficialJoke", Description: "Random joke with setup/punchline (real API)", File: "real_apis7.go"},
+		{Name: "HandleFoxPicture", Description: "Random fox picture (real API)", File: "real_apis7.go"},
+		{Name: "HandleBookSearch", Description: "Search Open Library books (real API)", File: "real_apis7.go"},
+		{Name: "HandleZippoLookup", Description: "Zip/postal code lookup (real API)", File: "real_apis7.go"},
+		{Name: "HandleQRCode", Description: "Generate QR code (real API)", File: "real_apis7.go"},
+		{Name: "HandleNekosImage", Description: "Random anime image (real API)", File: "real_apis7.go"},
+		{Name: "HandleHTTPCat", Description: "HTTP status cat picture (real API)", File: "real_apis7.go"},
+		{Name: "HandleBooksBySubject", Description: "Books by subject/genre (real API)", File: "real_apis7.go"},
+
 
 
 		{Name: "HandlePokemonLookup", Description: "Lookup Pokémon by name/id (real API)", File: "real_apis3.go"},

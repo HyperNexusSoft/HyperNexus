@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 )
+
 // ═══════════════════════════════════════════════════════════════════
 // Additional utility handlers (batch6 extras)
 // ═══════════════════════════════════════════════════════════════════
@@ -112,8 +113,8 @@ func HandleActivitySuggest(ctx context.Context, args map[string]interface{}) (To
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		Activity string `json:"activity"`
-		Type     string `json:"type"`
+		Activity string  `json:"activity"`
+		Type     string  `json:"type"`
 		Price    float64 `json:"price"`
 	}
 	json.Unmarshal(body, &data)

@@ -35,11 +35,11 @@ func HandlePublicHolidays(ctx context.Context, args map[string]interface{}) (Too
 	body, _ := io.ReadAll(resp.Body)
 
 	var holidays []struct {
-		Date        string `json:"date"`
-		LocalName   string `json:"localName"`
-		Name        string `json:"name"`
-		CountryCode string `json:"countryCode"`
-		Global      bool   `json:"global"`
+		Date        string   `json:"date"`
+		LocalName   string   `json:"localName"`
+		Name        string   `json:"name"`
+		CountryCode string   `json:"countryCode"`
+		Global      bool     `json:"global"`
 		Types       []string `json:"types"`
 	}
 	json.Unmarshal(body, &holidays)
@@ -215,8 +215,8 @@ func HandleThesaurus(ctx context.Context, args map[string]interface{}) (ToolResp
 	body, _ := io.ReadAll(resp.Body)
 
 	var words []struct {
-		Word string `json:"word"`
-		Score int   `json:"score"`
+		Word  string `json:"word"`
+		Score int    `json:"score"`
 	}
 	json.Unmarshal(body, &words)
 	if len(words) == 0 {
@@ -371,17 +371,17 @@ func HandleDnDMonster(ctx context.Context, args map[string]interface{}) (ToolRes
 	body, _ := io.ReadAll(resp.Body)
 
 	var data struct {
-		Name     string `json:"name"`
-		Size     string `json:"size"`
-		Type     string `json:"type"`
+		Name      string `json:"name"`
+		Size      string `json:"size"`
+		Type      string `json:"type"`
 		Alignment string `json:"alignment"`
-		AC       []struct {
+		AC        []struct {
 			Value int `json:"value"`
 		} `json:"armor_class"`
-		HP          int `json:"hit_points"`
-		Speed       map[string]string `json:"speed"`
-		ChallengeRating float64 `json:"challenge_rating"`
-		XP          int    `json:"xp"`
+		HP              int               `json:"hit_points"`
+		Speed           map[string]string `json:"speed"`
+		ChallengeRating float64           `json:"challenge_rating"`
+		XP              int               `json:"xp"`
 	}
 	json.Unmarshal(body, &data)
 	ac := 0
@@ -430,9 +430,9 @@ func HandlePokemonTCG(ctx context.Context, args map[string]interface{}) (ToolRes
 
 	var data struct {
 		Data []struct {
-			Name   string `json:"name"`
-			ID     string `json:"id"`
-			Set    struct {
+			Name string `json:"name"`
+			ID   string `json:"id"`
+			Set  struct {
 				Name string `json:"name"`
 			} `json:"set"`
 			Images struct {
@@ -504,11 +504,11 @@ func HandleBookEdition(ctx context.Context, args map[string]interface{}) (ToolRe
 	body, _ := io.ReadAll(resp.Body)
 
 	var data struct {
-		Title       string `json:"title"`
-		Publishers  []string `json:"publishers"`
-		PublishDate string `json:"publish_date"`
-		NumberOfPages int  `json:"number_of_pages"`
-		Authors     []struct {
+		Title         string   `json:"title"`
+		Publishers    []string `json:"publishers"`
+		PublishDate   string   `json:"publish_date"`
+		NumberOfPages int      `json:"number_of_pages"`
+		Authors       []struct {
 			Key string `json:"key"`
 		} `json:"authors"`
 		Covers []int `json:"covers"`
@@ -551,9 +551,9 @@ func HandleWordDefinition(ctx context.Context, args map[string]interface{}) (Too
 	body, _ := io.ReadAll(resp.Body)
 
 	var entries []struct {
-		Word      string `json:"word"`
-		Phonetic  string `json:"phonetic"`
-		Meanings  []struct {
+		Word     string `json:"word"`
+		Phonetic string `json:"phonetic"`
+		Meanings []struct {
 			PartOfSpeech string `json:"partOfSpeech"`
 			Definitions  []struct {
 				Definition string   `json:"definition"`

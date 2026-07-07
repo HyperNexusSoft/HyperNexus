@@ -4550,6 +4550,18 @@ var dispatchMap = map[string]func(ctx context.Context, args map[string]interface
 	"HandleExchangeRate":       HandleExchangeRate,       // from real_apis6.go
 	"HandleMarsPhotos":         HandleMarsPhotos,         // from real_apis6.go
 	"HandleQuoteOfTheDay":      HandleQuoteOfTheDay,      // from real_apis6.go
+
+	"HandlePicsumPhoto":        HandlePicsumPhoto,        // from real_apis7.go (Picsum)
+	"HandleIsItChristmas":      HandleIsItChristmas,      // from real_apis7.go (IsItChristmas)
+	"HandleBookDetails":        HandleBookDetails,        // from real_apis7.go (Open Library Book)
+	"HandleOfficialJoke":       HandleOfficialJoke,       // from real_apis7.go (Official Jokes)
+	"HandleFoxPicture":         HandleFoxPicture,         // from real_apis7.go (Random Fox)
+	"HandleBookSearch":         HandleBookSearch,         // from real_apis7.go (Open Library Search)
+	"HandleZippoLookup":        HandleZippoLookup,        // from real_apis7.go (Zippopotamus)
+	"HandleQRCode":             HandleQRCode,             // from real_apis7.go (QR Server)
+	"HandleNekosImage":         HandleNekosImage,         // from real_apis7.go (Nekos.best)
+	"HandleHTTPCat":            HandleHTTPCat,            // from real_apis7.go (HTTP Cats)
+	"HandleBooksBySubject":     HandleBooksBySubject,     // from real_apis7.go (Open Library Subject)
 }
 
 func Dispatch(name string, ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
