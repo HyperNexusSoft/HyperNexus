@@ -73,7 +73,59 @@ This file serves as the primary coordination point for multi-agent workflows and
 
 ---
 
-## 5. Safe Rebranding & Cleanup Heuristics
+## 5. CodeWhale Fork & External Resource Maintenance
+
+When modifying `crates/tn-extension/` in the CodeWhale fork or any CodeWhale integration files, the following external resources must be updated:
+
+### CodeWhale Fork (`~/codewhale-source`)
+- **Git remotes**: `origin` = `Hmbown/CodeWhale` (upstream), `fork` = `robertpelloni/CodeWhale-Extensions` (PR source)
+- **Branch**: `feat/extension-api` — the canonical branch for tn-extension PRs
+- **PR**: `https://github.com/Hmbown/CodeWhale/pull/4086`
+
+After any change to `crates/tn-extension/`:
+```bash
+cd ~/codewhale-source
+git add crates/tn-extension/ crates/tui/Cargo.toml crates/tui/src/core/engine.rs Cargo.toml Cargo.lock
+git commit -m "feat: update tn-extension"
+git push fork feat/extension-api       # auto-updates the existing PR
+```
+
+### NPM Package (`npm/codewhale/`)
+- Published as `codewhale` on npmjs.com
+- README must reflect tn-extension features
+- Package version must match binary release
+
+To update and publish:
+```bash
+cd ~/codewhale-source/npm/codewhale
+# Edit README.md if tn-extension features changed
+npm version patch   # bumps 0.8.66 -> 0.8.67
+npm publish         # requires npm login as package owner
+```
+
+### Pi Coding Agent Extension
+- Source: `.pi/extensions/tormentnexus.ts`
+- Installed to `~/.pi/agent/extensions/tormentnexus.ts`
+- Must be kept in sync with the CodeWhale extension feature set
+
+### .codewhale Skill & Plugin
+- SKILL.md: `.codewhale/plugins/tormentnexus/skills/SKILL.md`
+- Plugin config: `.codewhale/plugins/tormentnexus/plugin.toml`
+- Install script: `scripts/install_codewhale.bat`
+- All must be kept current when tn-extension hook behavior changes
+
+### AI Agent Instruction Files
+- `CLAUDE.md` — CodeWhale/DeepSeek section at §6
+- `AGENTS.md` — DeepSeek row in Model Specializations table (§2)
+- `docs/UNIVERSAL_LLM_INSTRUCTIONS.md` — CodeWhale Integration section at §6
+
+### Claude/Cursor Command Definitions
+- `.claude/commands/tn-search.md`, `tn-status.md`, `tn-store.md`
+- `.cursor/commands/tn-search.md`, `tn-status.md`, `tn-store.md`
+
+Review these when any TN API endpoint or slash command changes.
+
+## 6. Safe Rebranding & Cleanup Heuristics
 
 - **Binary Exclusions during Renaming**: When executing global text replacements, you must explicitly exclude:
   - Database directories: `.tormentnexus/`, `lancedb/`, `data/`
