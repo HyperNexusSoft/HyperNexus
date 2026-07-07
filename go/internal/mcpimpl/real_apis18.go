@@ -30,13 +30,23 @@ func HandlePokemonGeneration(ctx context.Context, args map[string]interface{}) (
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		ID        int    `json:"id"`
-		Name      string `json:"name"`
-		MainRegion struct { Name string `json:"name"` } `json:"main_region"`
-		Pokemon   []struct { Name string `json:"name"` } `json:"pokemon_species"`
-		Moves     []struct { Name string `json:"name"` } `json:"moves"`
-		Abilities []struct { Name string `json:"name"` } `json:"abilities"`
-		Types     []struct { Name string `json:"name"` } `json:"types"`
+		ID         int    `json:"id"`
+		Name       string `json:"name"`
+		MainRegion struct {
+			Name string `json:"name"`
+		} `json:"main_region"`
+		Pokemon []struct {
+			Name string `json:"name"`
+		} `json:"pokemon_species"`
+		Moves []struct {
+			Name string `json:"name"`
+		} `json:"moves"`
+		Abilities []struct {
+			Name string `json:"name"`
+		} `json:"abilities"`
+		Types []struct {
+			Name string `json:"name"`
+		} `json:"types"`
 	}
 	json.Unmarshal(body, &data)
 	return ok(fmt.Sprintf("Generation %d: %s\nRegion: %s\nPokemon: %d | Moves: %d | Abilities: %d | Types: %d",
@@ -61,11 +71,13 @@ func HandlePokedex(ctx context.Context, args map[string]interface{}) (ToolRespon
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		Name      string `json:"name"`
-		IsMain    bool   `json:"is_main_series"`
-		Entries   []struct {
+		Name    string `json:"name"`
+		IsMain  bool   `json:"is_main_series"`
+		Entries []struct {
 			EntryNumber int `json:"entry_number"`
-			Species     struct { Name string `json:"name"` } `json:"pokemon_species"`
+			Species     struct {
+				Name string `json:"name"`
+			} `json:"pokemon_species"`
 		} `json:"pokemon_entries"`
 		Descriptions []struct {
 			Text string `json:"text"`
@@ -106,7 +118,9 @@ func HandlePokemonVersion(ctx context.Context, args map[string]interface{}) (Too
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
 		Name  string `json:"name"`
-		Group struct { Name string `json:"name"` } `json:"version_group"`
+		Group struct {
+			Name string `json:"name"`
+		} `json:"version_group"`
 	}
 	json.Unmarshal(body, &data)
 	return ok(fmt.Sprintf("Version: %s (%s)", data.Name, data.Group.Name))
@@ -130,16 +144,26 @@ func HandleVersionGroup(ctx context.Context, args map[string]interface{}) (ToolR
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		Name      string `json:"name"`
-		Gen       struct { Name string `json:"name"` } `json:"generation"`
-		Moves     []struct { Name string `json:"name"` } `json:"move_learn_methods"`
-		Versions  []struct { Name string `json:"name"` } `json:"versions"`
+		Name string `json:"name"`
+		Gen  struct {
+			Name string `json:"name"`
+		} `json:"generation"`
+		Moves []struct {
+			Name string `json:"name"`
+		} `json:"move_learn_methods"`
+		Versions []struct {
+			Name string `json:"name"`
+		} `json:"versions"`
 	}
 	json.Unmarshal(body, &data)
 	var versions []string
-	for _, v := range data.Versions { versions = append(versions, v.Name) }
+	for _, v := range data.Versions {
+		versions = append(versions, v.Name)
+	}
 	var methods []string
-	for _, m := range data.Moves { methods = append(methods, m.Name) }
+	for _, m := range data.Moves {
+		methods = append(methods, m.Name)
+	}
 	return ok(fmt.Sprintf("Version Group: %s\nGeneration: %s\nGames: %s\nLearn Methods: %s",
 		data.Name, data.Gen.Name, strings.Join(versions, ", "), strings.Join(methods, ", ")))
 }

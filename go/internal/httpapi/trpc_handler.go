@@ -407,11 +407,11 @@ func (s *Server) handleTRPC(w http.ResponseWriter, r *http.Request) {
 					singleInputStr = inputStr
 				}
 				cacheKey = fmt.Sprintf("%s:%s", proc, singleInputStr)
-				
+
 				trpcCacheMu.RLock()
 				entry, ok := trpcCache[cacheKey]
 				trpcCacheMu.RUnlock()
-				
+
 				if ok && time.Since(entry.createdAt) < entry.ttl {
 					batchResults = append(batchResults, entry.data)
 					hasCache = true

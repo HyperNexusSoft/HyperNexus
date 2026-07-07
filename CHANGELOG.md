@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.0-alpha.241] - 2026-07-06
+
+### Added
+
+- Full Stripe billing integration: checkout, webhooks (5 event types), customer portal, plans (Basic $29, Pro $99, Enterprise $499)
+- 192 real API-backed MCP handlers across 20 files (~160 unique free APIs)
+- marketing_agent/ directory with Stripe billing configuration docs
+
+### Changed
+
+- Stripe webhook signature verification via HMAC-SHA256
+- tRPC routes for stripe billing procedures
+- README.md updated with Stripe env var configuration
+
 ## [1.0.0-alpha.240] - 2026-07-06
 
 ### Added

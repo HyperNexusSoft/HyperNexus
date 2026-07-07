@@ -21,7 +21,7 @@ import (
 //   STRIPE_SECRET_KEY         — sk_live_xxx or sk_test_xxx
 //   STRIPE_WEBHOOK_SECRET     — whsec_xxx
 //   STRIPE_PRICE_ID_BASIC     — price_xxx for $29/mo plan
-//   STRIPE_PRICE_ID_PRO       — price_xxx for $99/mo plan  
+//   STRIPE_PRICE_ID_PRO       — price_xxx for $99/mo plan
 //   STRIPE_PRICE_ID_ENTERPRISE — price_xxx for $499/mo plan
 //   TORMENTNEXUS_DASHBOARD_URL — https://hypernexus.site
 //   TORMENTNEXUS_API_URL      — https://api.hypernexus.site
@@ -66,12 +66,12 @@ func apiBaseURL() string {
 // ── Plan Definitions ─────────────────────────────────────────────
 
 type StripePlan struct {
-	ID          string  `json:"id"`
-	Name        string  `json:"name"`
-	Description string  `json:"description"`
-	Price       float64 `json:"price"`
-	Interval    string  `json:"interval"`
-	PriceID     string  `json:"priceId"`
+	ID          string   `json:"id"`
+	Name        string   `json:"name"`
+	Description string   `json:"description"`
+	Price       float64  `json:"price"`
+	Interval    string   `json:"interval"`
+	PriceID     string   `json:"priceId"`
 	Features    []string `json:"features"`
 }
 
@@ -212,11 +212,11 @@ func (s *Server) handleStripeCreateCheckout(w http.ResponseWriter, r *http.Reque
 	writeJSON(w, http.StatusOK, map[string]any{
 		"success": true,
 		"data": map[string]any{
-			"sessionId":   stripeResp["id"],
-			"sessionUrl":  stripeResp["url"],
-			"customerID":  stripeResp["customer"],
-			"plan":        payload.Plan,
-			"priceID":     priceID,
+			"sessionId":  stripeResp["id"],
+			"sessionUrl": stripeResp["url"],
+			"customerID": stripeResp["customer"],
+			"plan":       payload.Plan,
+			"priceID":    priceID,
 		},
 	})
 }
@@ -251,12 +251,12 @@ func (s *Server) handleLocalCheckoutSimulation(w http.ResponseWriter, r *http.Re
 	writeJSON(w, http.StatusOK, map[string]any{
 		"success": true,
 		"data": map[string]any{
-			"sessionId":      sessionID,
-			"sessionUrl":     dashboardURL() + "/billing?checkout=simulated&plan=" + plan,
-			"customerID":     customerID,
-			"plan":           plan,
-			"simulated":      true,
-			"message":        "Local dev mode — no Stripe API key configured. Subscription simulated.",
+			"sessionId":  sessionID,
+			"sessionUrl": dashboardURL() + "/billing?checkout=simulated&plan=" + plan,
+			"customerID": customerID,
+			"plan":       plan,
+			"simulated":  true,
+			"message":    "Local dev mode — no Stripe API key configured. Subscription simulated.",
 		},
 	})
 }
@@ -305,7 +305,7 @@ func (s *Server) handleStripeCustomerPortal(w http.ResponseWriter, r *http.Reque
 	writeJSON(w, http.StatusOK, map[string]any{
 		"success": true,
 		"data": map[string]any{
-			"url":  portalResp["url"],
+			"url":        portalResp["url"],
 			"customerID": custID,
 		},
 	})
@@ -340,21 +340,21 @@ func (s *Server) handleStripeWebhook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var event struct {
-		ID     string `json:"id"`
-		Type   string `json:"type"`
-		Data   struct {
+		ID   string `json:"id"`
+		Type string `json:"type"`
+		Data struct {
 			Object struct {
-				ID              string `json:"id"`
-				Customer        string `json:"customer"`
-				Status          string `json:"status"`
-				Subscription    string `json:"subscription"`
-				PaymentIntent   string `json:"payment_intent"`
-				BillingReason   string `json:"billing_reason"`
-				Items           struct {
+				ID            string `json:"id"`
+				Customer      string `json:"customer"`
+				Status        string `json:"status"`
+				Subscription  string `json:"subscription"`
+				PaymentIntent string `json:"payment_intent"`
+				BillingReason string `json:"billing_reason"`
+				Items         struct {
 					Data []struct {
 						Price struct {
-							ID       string  `json:"id"`
-							Nickname string  `json:"nickname"`
+							ID         string  `json:"id"`
+							Nickname   string  `json:"nickname"`
 							UnitAmount float64 `json:"unit_amount"`
 						} `json:"price"`
 					} `json:"data"`
@@ -440,13 +440,13 @@ func (s *Server) handleStripeGetSubscription(w http.ResponseWriter, r *http.Requ
 	subscriptionID, _ := s.localConfigValue("stripe.subscriptionID")
 
 	d := map[string]any{
-		"plan":           plan,
-		"status":         status,
-		"price":          price,
-		"nextInvoice":    invoice,
-		"paymentSource":  source,
-		"customerID":     customerID,
-		"subscriptionID": subscriptionID,
+		"plan":                  plan,
+		"status":                status,
+		"price":                 price,
+		"nextInvoice":           invoice,
+		"paymentSource":         source,
+		"customerID":            customerID,
+		"subscriptionID":        subscriptionID,
 		"hasActiveSubscription": status != nil && (status.(string) == "ACTIVE (PAID)" || status.(string) == "TRIALING"),
 	}
 

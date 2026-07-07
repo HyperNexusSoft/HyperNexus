@@ -101,14 +101,24 @@ func HandlePokemonSpecies(ctx context.Context, args map[string]interface{}) (Too
 	var data struct {
 		Name        string `json:"name"`
 		CaptureRate int    `json:"capture_rate"`
-		Color       struct { Name string `json:"name"` } `json:"color"`
-		EggGroups   []struct { Name string `json:"name"` } `json:"egg_groups"`
-		Habitat     struct { Name string `json:"name"` } `json:"habitat"`
-		BaseHappiness int  `json:"base_happiness"`
-		GrowthRate    struct { Name string `json:"name"` } `json:"growth_rate"`
-		Shape       struct { Name string `json:"name"` } `json:"shape"`
-		IsLegendary bool   `json:"is_legendary"`
-		IsMythical  bool   `json:"is_mythical"`
+		Color       struct {
+			Name string `json:"name"`
+		} `json:"color"`
+		EggGroups []struct {
+			Name string `json:"name"`
+		} `json:"egg_groups"`
+		Habitat struct {
+			Name string `json:"name"`
+		} `json:"habitat"`
+		BaseHappiness int `json:"base_happiness"`
+		GrowthRate    struct {
+			Name string `json:"name"`
+		} `json:"growth_rate"`
+		Shape struct {
+			Name string `json:"name"`
+		} `json:"shape"`
+		IsLegendary bool `json:"is_legendary"`
+		IsMythical  bool `json:"is_mythical"`
 	}
 	json.Unmarshal(body, &data)
 	var eggs []string
@@ -116,8 +126,12 @@ func HandlePokemonSpecies(ctx context.Context, args map[string]interface{}) (Too
 		eggs = append(eggs, g.Name)
 	}
 	legendary := ""
-	if data.IsLegendary { legendary = " ⭐ LEGENDARY" }
-	if data.IsMythical { legendary = " 🌟 MYTHICAL" }
+	if data.IsLegendary {
+		legendary = " ⭐ LEGENDARY"
+	}
+	if data.IsMythical {
+		legendary = " 🌟 MYTHICAL"
+	}
 	return ok(fmt.Sprintf("Species: %s%s\nColor: %s | Shape: %s\nCapture Rate: %d/%d | Happiness: %d\nGrowth Rate: %s\nHabitat: %s\nEgg Groups: %s",
 		data.Name, legendary, data.Color.Name, data.Shape.Name, data.CaptureRate, 255, data.BaseHappiness,
 		data.GrowthRate.Name, data.Habitat.Name, strings.Join(eggs, ", ")))
@@ -146,7 +160,9 @@ func HandleWorldBankCountries(ctx context.Context, args map[string]interface{}) 
 	sb.WriteString(fmt.Sprintf("World Bank Countries (%d):\n\n", len(entries)))
 	for _, e := range entries {
 		entry, _ := e.(map[string]interface{})
-		if entry == nil { continue }
+		if entry == nil {
+			continue
+		}
 		name, _ := entry["name"].(string)
 		code, _ := entry["iso2Code"].(string)
 		region, _ := entry["region"].(map[string]interface{})
@@ -175,7 +191,9 @@ func HandleWorldBankIndicators(ctx context.Context, args map[string]interface{})
 	sb.WriteString(fmt.Sprintf("World Bank Indicators (%d):\n\n", len(entries)))
 	for _, e := range entries {
 		entry, _ := e.(map[string]interface{})
-		if entry == nil { continue }
+		if entry == nil {
+			continue
+		}
 		id, _ := entry["id"].(string)
 		name, _ := entry["name"].(string)
 		sb.WriteString(fmt.Sprintf("%s — %s\n", id, name))
@@ -240,9 +258,9 @@ func HandlePokemonGrowth(ctx context.Context, args map[string]interface{}) (Tool
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		Name   string `json:"name"`
+		Name    string `json:"name"`
 		Formula string `json:"formula"`
-		Levels []struct {
+		Levels  []struct {
 			Level      int `json:"level"`
 			Experience int `json:"experience"`
 		} `json:"levels"`

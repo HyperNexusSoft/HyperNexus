@@ -85,6 +85,7 @@ TormentNexus is a **decision system and universal bridge** — not just an aggre
 | **Autonomous Healer** | Stable | `Diagnose → Fix → Verify → Retry` loop with native code execution (tsc, vitest, go test) and L2 vault persistence |
 | **Browser Automation** | Beta | Native chromedp handlers: navigate, screenshot, evaluate, click, fill, get HTML |
 | **Skill Registry** | Stable | 3,229+ assimilated skills from 7 harness ecosystems (Aider, Agent, CCS, Hermes, Pi, etc.) with Jaccard deduplication |
+| **CodeWhale Extension** | Stable | Native Rust extension with full Pi extension parity — 49 MCP tools, 9 custom tools, 6 slash commands, 3 shortcuts, L2 memory hooks, RBAC, @memory:key expansion, per-turn context harvesting, session compaction |
 | **Dashboard** | Stable | Next.js 16 + React 19 + Tailwind CSS 4 with real-time telemetry, knowledge graph, healer view, swarm visualizer |
 | **tRPC Bridge** | Stable | Type-safe API layer (port 7778) connecting UI to Go sidecar |
 | **Session Import** | Beta | Automatic ingestion of Claude, Aider, and other harness session artifacts |

@@ -100,9 +100,13 @@ func HandlePokemonMove(ctx context.Context, args map[string]interface{}) (ToolRe
 		PP       int    `json:"pp"`
 		Accuracy int    `json:"accuracy"`
 		Priority int    `json:"priority"`
-		Type     struct { Name string `json:"name"` } `json:"type"`
-		Damage   struct { Name string `json:"name"` } `json:"damage_class"`
-		Effect   string `json:"effect"`
+		Type     struct {
+			Name string `json:"name"`
+		} `json:"type"`
+		Damage struct {
+			Name string `json:"name"`
+		} `json:"damage_class"`
+		Effect string `json:"effect"`
 	}
 	json.Unmarshal(body, &data)
 	return ok(fmt.Sprintf("Move: %s (%s)\nType: %s | Power: %d | PP: %d | Accuracy: %d%% | Priority: %d",
@@ -129,11 +133,13 @@ func HandlePokemonItem(ctx context.Context, args map[string]interface{}) (ToolRe
 	var data struct {
 		Name     string `json:"name"`
 		Cost     int    `json:"cost"`
-		Category struct { Name string `json:"name"` } `json:"category"`
-		Effect   []struct {
+		Category struct {
+			Name string `json:"name"`
+		} `json:"category"`
+		Effect []struct {
 			Text string `json:"text"`
 		} `json:"effect_entries"`
-		Flavor   []struct {
+		Flavor []struct {
 			Text string `json:"text"`
 		} `json:"flavor_text_entries"`
 	}
@@ -152,8 +158,14 @@ func HandlePokemonItem(ctx context.Context, args map[string]interface{}) (ToolRe
 }
 
 func HandleSolarRadiation(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	lat := getFloat(args, "latitude"); if lat == 0 { lat = 40.0 }
-	lon := getFloat(args, "longitude"); if lon == 0 { lon = -105.0 }
+	lat := getFloat(args, "latitude")
+	if lat == 0 {
+		lat = 40.0
+	}
+	lon := getFloat(args, "longitude")
+	if lon == 0 {
+		lon = -105.0
+	}
 	u := fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%.2f&longitude=%.2f&daily=shortwave_radiation_sum,direct_radiation_sum&timezone=auto&forecast_days=3", lat, lon)
 	resp, apiErr := batch16.Get(u)
 	if apiErr != nil {
@@ -177,8 +189,14 @@ func HandleSolarRadiation(ctx context.Context, args map[string]interface{}) (Too
 }
 
 func HandleEvapotranspiration(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	lat := getFloat(args, "latitude"); if lat == 0 { lat = 40.0 }
-	lon := getFloat(args, "longitude"); if lon == 0 { lon = -105.0 }
+	lat := getFloat(args, "latitude")
+	if lat == 0 {
+		lat = 40.0
+	}
+	lon := getFloat(args, "longitude")
+	if lon == 0 {
+		lon = -105.0
+	}
 	u := fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%.2f&longitude=%.2f&daily=et0_fao_evapotranspiration&timezone=auto&forecast_days=3", lat, lon)
 	resp, apiErr := batch16.Get(u)
 	if apiErr != nil {

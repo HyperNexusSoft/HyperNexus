@@ -270,3 +270,7 @@ watchdog.py
 # Swarm build artifacts
 go/internal/tools/_staging/
 go/internal/tools/_broken/
+# Large local databases — excluded from push
+/tormentnexus.db
+/tormentnexus.db-shm
+/tormentnexus.db-wal

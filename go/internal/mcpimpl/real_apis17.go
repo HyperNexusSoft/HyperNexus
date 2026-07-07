@@ -22,7 +22,7 @@ func HandleTVShowAKAs(ctx context.Context, args map[string]interface{}) (ToolRes
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var akas []struct {
-		Name  string `json:"name"`
+		Name    string `json:"name"`
 		Country struct {
 			Name string `json:"name"`
 		} `json:"country"`
@@ -53,10 +53,16 @@ func HandleTMMachine(ctx context.Context, args map[string]interface{}) (ToolResp
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		ID    int `json:"id"`
-		Item  struct { Name string `json:"name"` } `json:"item"`
-		Move  struct { Name string `json:"name"` } `json:"move"`
-		Group struct { Name string `json:"name"` } `json:"version_group"`
+		ID   int `json:"id"`
+		Item struct {
+			Name string `json:"name"`
+		} `json:"item"`
+		Move struct {
+			Name string `json:"name"`
+		} `json:"move"`
+		Group struct {
+			Name string `json:"name"`
+		} `json:"version_group"`
 	}
 	json.Unmarshal(body, &data)
 	return ok(fmt.Sprintf("TM/HM #%d: %s — teaches %s (Gen: %s)", data.ID, data.Item.Name, data.Move.Name, data.Group.Name))
@@ -80,8 +86,10 @@ func HandleEggGroup(ctx context.Context, args map[string]interface{}) (ToolRespo
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		Name  string `json:"name"`
-		Species []struct { Name string `json:"name"` } `json:"pokemon_species"`
+		Name    string `json:"name"`
+		Species []struct {
+			Name string `json:"name"`
+		} `json:"pokemon_species"`
 	}
 	json.Unmarshal(body, &data)
 	var species []string
@@ -109,11 +117,19 @@ func HandlePokemonNature(ctx context.Context, args map[string]interface{}) (Tool
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		Name     string `json:"name"`
-		Increased struct { Name string `json:"name"` } `json:"increased_stat"`
-		Decreased struct { Name string `json:"name"` } `json:"decreased_stat"`
-		Likes    struct { Name string `json:"name"` } `json:"likes_flavor"`
-		Hates    struct { Name string `json:"name"` } `json:"hates_flavor"`
+		Name      string `json:"name"`
+		Increased struct {
+			Name string `json:"name"`
+		} `json:"increased_stat"`
+		Decreased struct {
+			Name string `json:"name"`
+		} `json:"decreased_stat"`
+		Likes struct {
+			Name string `json:"name"`
+		} `json:"likes_flavor"`
+		Hates struct {
+			Name string `json:"name"`
+		} `json:"hates_flavor"`
 	}
 	json.Unmarshal(body, &data)
 	return ok(fmt.Sprintf("Nature: %s\n↑ %s | ↓ %s\nLikes: %s | Hates: %s", data.Name, data.Increased.Name, data.Decreased.Name, data.Likes.Name, data.Hates.Name))
@@ -139,8 +155,10 @@ func HandlePokemonGender(ctx context.Context, args map[string]interface{}) (Tool
 	var data struct {
 		Name    string `json:"name"`
 		Species []struct {
-			Species struct { Name string `json:"name"` } `json:"pokemon_species"`
-			Rate   int `json:"rate"`
+			Species struct {
+				Name string `json:"name"`
+			} `json:"pokemon_species"`
+			Rate int `json:"rate"`
 		} `json:"pokemon_species_details"`
 	}
 	json.Unmarshal(body, &data)
@@ -165,10 +183,18 @@ func HandlePokemonStat(ctx context.Context, args map[string]interface{}) (ToolRe
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		Name        string `json:"name"`
-		IsBattleOnly bool  `json:"is_battle_only"`
-		Moves       []struct { Move struct { Name string `json:"name"` } `json:"move"` } `json:"affecting_moves"`
-		Items       []struct { Item struct { Name string `json:"name"` } `json:"item"` } `json:"affecting_items"`
+		Name         string `json:"name"`
+		IsBattleOnly bool   `json:"is_battle_only"`
+		Moves        []struct {
+			Move struct {
+				Name string `json:"name"`
+			} `json:"move"`
+		} `json:"affecting_moves"`
+		Items []struct {
+			Item struct {
+				Name string `json:"name"`
+			} `json:"item"`
+		} `json:"affecting_items"`
 	}
 	json.Unmarshal(body, &data)
 	var moves []string
@@ -189,9 +215,9 @@ func HandleNASATechport(ctx context.Context, args map[string]interface{}) (ToolR
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
 		Projects []struct {
-			ID      int    `json:"id"`
-			Title   string `json:"title"`
-			Status  string `json:"status"`
+			ID     int    `json:"id"`
+			Title  string `json:"title"`
+			Status string `json:"status"`
 		} `json:"projects"`
 		Total int `json:"totalCount"`
 	}

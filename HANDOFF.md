@@ -1,7 +1,32 @@
 # Session Handoff & Architecture Summary
 
 **Date:** July 6, 2026 (Local Time)
-**Version:** v1.0.0-alpha.240
+**Version:** v1.0.0-alpha.241
+
+## R20 — Full Stripe Billing + Executive Protocol R9
+
+### Completed
+
+- **Stripe billing integration**: 6 new API endpoints for checkout, webhooks, portal, plans, subscription
+- **5 webhook events** handled: checkout.session.completed, customer.subscription.updated/deleted, invoice.payment_succeeded/failed
+- **Local dev fallback**: all endpoints simulate without STRIPE_SECRET_KEY
+- **marketing_agent/**: Stripe configuration docs for hypernexus.site
+- **192 real API handlers** across 20 files (batches 1-20)
+- **Executive Protocol R9**: fetch all, no upstream, 297 task branches (all dead), 0 feature branches merged, version bump alpha.241, CHANGELOG sync, build clean
+
+### Files Changed
+
+- `go/internal/httpapi/stripe_billing.go` (new, 16KB — full Stripe integration)
+- `go/internal/httpapi/server.go` — 6 new routes + API docs
+- `go/internal/httpapi/trpc_handler.go` — 4 new tRPC routes
+- `marketing_agent/README.md` (new — billing config guide)
+- `VERSION`: alpha.240 → alpha.241
+- `CHANGELOG.md`: updated
+- `go/internal/mcpimpl/real_apis15-20.go`: batches of real API handlers
+
+### Build Status
+
+- Go: CLEAN — `go build ./cmd/tormentnexus`
 
 ## R19 — Batch MCP Server Implementation (20 stubs + arxiv)
 

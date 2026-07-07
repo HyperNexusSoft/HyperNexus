@@ -26,12 +26,14 @@ func HandleTVLookup(ctx context.Context, args map[string]interface{}) (ToolRespo
 		defer resp.Body.Close()
 		body, _ := io.ReadAll(resp.Body)
 		var show struct {
-			Name   string  `json:"name"`
-			Type   string  `json:"type"`
-			Status string  `json:"status"`
-			Rating struct { Average float64 `json:"average"` } `json:"rating"`
+			Name   string `json:"name"`
+			Type   string `json:"type"`
+			Status string `json:"status"`
+			Rating struct {
+				Average float64 `json:"average"`
+			} `json:"rating"`
 			Genres []string `json:"genres"`
-			URL    string  `json:"url"`
+			URL    string   `json:"url"`
 		}
 		json.Unmarshal(body, &show)
 		return ok(fmt.Sprintf("Show: %s\nType: %s | Status: %s\nRating: %.1f | Genres: %s\n%s",
@@ -65,7 +67,7 @@ func HandleContestEffect(ctx context.Context, args map[string]interface{}) (Tool
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		ID    int `json:"id"`
+		ID     int `json:"id"`
 		Appeal int `json:"appeal"`
 		Jam    int `json:"jam"`
 	}
@@ -83,22 +85,30 @@ func HandleSuperContest(ctx context.Context, args map[string]interface{}) (ToolR
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		ID    int `json:"id"`
+		ID     int `json:"id"`
 		Appeal int `json:"appeal"`
-		Moves []struct{ Name string `json:"name"` } `json:"moves"`
+		Moves  []struct {
+			Name string `json:"name"`
+		} `json:"moves"`
 	}
 	json.Unmarshal(body, &data)
 	var moves []string
-	for _, m := range data.Moves { moves = append(moves, m.Name) }
+	for _, m := range data.Moves {
+		moves = append(moves, m.Name)
+	}
 	return ok(fmt.Sprintf("Super Contest #%d: Appeal %d\nMoves (%d): %s", data.ID, data.Appeal, len(moves), strings.Join(moves, ", ")))
 }
 
 func HandleEncounterCondition(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
 	name, _ := getString(args, "name")
 	id, _ := getInt(args, "id", 0)
-	if name == "" && id == 0 { return err("name or id required") }
+	if name == "" && id == 0 {
+		return err("name or id required")
+	}
 	q := name
-	if q == "" { q = fmt.Sprintf("%d", id) }
+	if q == "" {
+		q = fmt.Sprintf("%d", id)
+	}
 	u := fmt.Sprintf("https://pokeapi.co/api/v2/encounter-condition/%s", strings.ToLower(q))
 	resp, apiErr := batch19.Get(u)
 	if apiErr != nil {
@@ -108,20 +118,28 @@ func HandleEncounterCondition(ctx context.Context, args map[string]interface{}) 
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
 		Name   string `json:"name"`
-		Values []struct{ Name string `json:"name"` } `json:"values"`
+		Values []struct {
+			Name string `json:"name"`
+		} `json:"values"`
 	}
 	json.Unmarshal(body, &data)
 	var vals []string
-	for _, v := range data.Values { vals = append(vals, v.Name) }
+	for _, v := range data.Values {
+		vals = append(vals, v.Name)
+	}
 	return ok(fmt.Sprintf("Encounter Condition: %s\nValues: %s", data.Name, strings.Join(vals, ", ")))
 }
 
 func HandlePalPark(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
 	name, _ := getString(args, "name")
 	id, _ := getInt(args, "id", 0)
-	if name == "" && id == 0 { return err("name or id required") }
+	if name == "" && id == 0 {
+		return err("name or id required")
+	}
 	q := name
-	if q == "" { q = fmt.Sprintf("%d", id) }
+	if q == "" {
+		q = fmt.Sprintf("%d", id)
+	}
 	u := fmt.Sprintf("https://pokeapi.co/api/v2/pal-park-area/%s", strings.ToLower(q))
 	resp, apiErr := batch19.Get(u)
 	if apiErr != nil {
@@ -130,10 +148,12 @@ func HandlePalPark(ctx context.Context, args map[string]interface{}) (ToolRespon
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		Name      string `json:"name"`
+		Name       string `json:"name"`
 		Encounters []struct {
-			Species struct{ Name string `json:"name"` } `json:"pokemon_species"`
-			Rate    int `json:"rate"`
+			Species struct {
+				Name string `json:"name"`
+			} `json:"pokemon_species"`
+			Rate int `json:"rate"`
 		} `json:"pokemon_encounters"`
 	}
 	json.Unmarshal(body, &data)
@@ -149,11 +169,17 @@ func HandleOpenLibrarySearchSort(ctx context.Context, args map[string]interface{
 	q, _ := getString(args, "query")
 	limit, _ := getInt(args, "limit", 5)
 	sort, _ := getString(args, "sort")
-	if q == "" { return err("query is required") }
+	if q == "" {
+		return err("query is required")
+	}
 	u := fmt.Sprintf("https://openlibrary.org/search.json?q=%s&limit=%d", url.QueryEscape(q), limit)
-	if sort != "" { u += "&sort=" + sort }
+	if sort != "" {
+		u += "&sort=" + sort
+	}
 	resp, apiErr := batch19.Get(u)
-	if apiErr != nil { return err("Open Library: " + apiErr.Error()) }
+	if apiErr != nil {
+		return err("Open Library: " + apiErr.Error())
+	}
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
@@ -165,7 +191,9 @@ func HandleOpenLibrarySearchSort(ctx context.Context, args map[string]interface{
 		} `json:"docs"`
 	}
 	json.Unmarshal(body, &data)
-	if len(data.Docs) == 0 { return ok(fmt.Sprintf("No results for %q", q)) }
+	if len(data.Docs) == 0 {
+		return ok(fmt.Sprintf("No results for %q", q))
+	}
 	var sb strings.Builder
 	sb.WriteString(fmt.Sprintf("Open Library — %d results for %q (sort: %s):\n\n", len(data.Docs), q, sort))
 	for _, d := range data.Docs {
