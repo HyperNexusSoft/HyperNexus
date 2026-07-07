@@ -73,11 +73,11 @@ func HandleBookDetails(ctx context.Context, args map[string]interface{}) (ToolRe
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		Title     string `json:"title"`
+		Title      string   `json:"title"`
 		Publishers []string `json:"publishers"`
-		PubDate   string `json:"publish_date"`
-		Pages     int    `json:"number_of_pages"`
-		Subjects  []string `json:"subjects"`
+		PubDate    string   `json:"publish_date"`
+		Pages      int      `json:"number_of_pages"`
+		Subjects   []string `json:"subjects"`
 	}
 	json.Unmarshal(body, &data)
 	var sb strings.Builder
@@ -253,7 +253,7 @@ func HandleNekosImage(ctx context.Context, args map[string]interface{}) (ToolRes
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
 		Results []struct {
-			URL   string `json:"url"`
+			URL    string `json:"url"`
 			Artist string `json:"artist_name"`
 		} `json:"results"`
 	}

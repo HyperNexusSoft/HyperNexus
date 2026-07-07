@@ -5564,6 +5564,17 @@ func AllHandlers() []RegistryEntry {
 		{Name: "HandleNekosImage", Description: "Random anime image (real API)", File: "real_apis7.go"},
 		{Name: "HandleHTTPCat", Description: "HTTP status cat picture (real API)", File: "real_apis7.go"},
 		{Name: "HandleBooksBySubject", Description: "Books by subject/genre (real API)", File: "real_apis7.go"},
+		{Name: "HandleDadJoke", Description: "Random dad joke (real API)", File: "real_apis8.go"},
+		{Name: "HandleCatPicture", Description: "Random cat picture (real API)", File: "real_apis8.go"},
+		{Name: "HandleHTTPBinDebug", Description: "HTTP debug tools (real API)", File: "real_apis8.go"},
+		{Name: "HandleUniversitySearch", Description: "Search universities (real API)", File: "real_apis8.go"},
+		{Name: "HandleAuthorWorks", Description: "List works by author (real API)", File: "real_apis8.go"},
+		{Name: "HandleBerryDetail", Description: "Pokémon berry detail (real API)", File: "real_apis8.go"},
+		{Name: "HandleBookRating", Description: "Book ratings from Open Library (real API)", File: "real_apis8.go"},
+		{Name: "HandlePokemonAbility", Description: "Pokémon ability detail (real API)", File: "real_apis8.go"},
+		{Name: "HandleStarWarsSearch", Description: "Search SWAPI by category (real API)", File: "real_apis8.go"},
+		{Name: "HandleSWAPILookup", Description: "Lookup SWAPI resource by ID (real API)", File: "real_apis8.go"},
+
 
 
 

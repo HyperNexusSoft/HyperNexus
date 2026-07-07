@@ -4562,6 +4562,17 @@ var dispatchMap = map[string]func(ctx context.Context, args map[string]interface
 	"HandleNekosImage":         HandleNekosImage,         // from real_apis7.go (Nekos.best)
 	"HandleHTTPCat":            HandleHTTPCat,            // from real_apis7.go (HTTP Cats)
 	"HandleBooksBySubject":     HandleBooksBySubject,     // from real_apis7.go (Open Library Subject)
+
+	"HandleDadJoke":            HandleDadJoke,            // from real_apis8.go (Dad Jokes)
+	"HandleCatPicture":         HandleCatPicture,         // from real_apis8.go (Cataas)
+	"HandleHTTPBinDebug":       HandleHTTPBinDebug,       // from real_apis8.go (HTTPBin)
+	"HandleUniversitySearch":   HandleUniversitySearch,   // from real_apis8.go (Universities)
+	"HandleAuthorWorks":        HandleAuthorWorks,        // from real_apis8.go (Open Library Works)
+	"HandleBerryDetail":        HandleBerryDetail,        // from real_apis8.go (PokeAPI Berry)
+	"HandleBookRating":         HandleBookRating,         // from real_apis8.go (Open Library Rating)
+	"HandlePokemonAbility":     HandlePokemonAbility,     // from real_apis8.go (PokeAPI Ability)
+	"HandleStarWarsSearch":     HandleStarWarsSearch,     // from real_apis8.go (SWAPI Search)
+	"HandleSWAPILookup":        HandleSWAPILookup,        // from real_apis8.go (SWAPI by ID)
 }
 
 func Dispatch(name string, ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
