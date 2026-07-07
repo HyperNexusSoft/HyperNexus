@@ -274,3 +274,6 @@ go/internal/tools/_broken/
 /tormentnexus.db
 /tormentnexus.db-shm
 /tormentnexus.db-wal
+
+# Workspace pi extensions — global copy lives in ~/.pi/agent/
+.pi/extensions/
