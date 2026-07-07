@@ -5686,5 +5686,14 @@ func AllHandlers() []RegistryEntry {
 		{Name: "HandleEncounterCondition", Description: "Pokemon encounter conditions (real API)", File: "real_apis19.go"},
 		{Name: "HandlePalPark", Description: "Pokemon Pal Park encounters (real API)", File: "real_apis19.go"},
 		{Name: "HandleOpenLibrarySearchSort", Description: "Open Library sorted search (real API)", File: "real_apis19.go"},
+
+		{Name: "HandleBerryFirmness", Description: "Pokemon berry firmness (real API)", File: "real_apis20.go"},
+		{Name: "HandleBerryFlavor", Description: "Pokemon berry flavor/contest (real API)", File: "real_apis20.go"},
+		{Name: "HandlePokemonCharacteristic", Description: "Pokemon characteristic/gene (real API)", File: "real_apis20.go"},
+		{Name: "HandlePokemonColor", Description: "Pokemon by body color (real API)", File: "real_apis20.go"},
+		{Name: "HandlePokemonHabitat", Description: "Pokemon by habitat (real API)", File: "real_apis20.go"},
+		{Name: "HandlePokemonShape", Description: "Pokemon by body shape (real API)", File: "real_apis20.go"},
+		{Name: "HandleTVUpdates", Description: "Recently updated TV shows (real API)", File: "real_apis20.go"},
+		{Name: "HandleOpenLibraryAvailability", Description: "Open Library book availability (real API)", File: "real_apis20.go"},
 	}
 }
