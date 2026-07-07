@@ -4666,6 +4666,13 @@ var dispatchMap = map[string]func(ctx context.Context, args map[string]interface
 	"HandlePokeResourceList":                HandlePokeResourceList,                // from real_apis18.go
 	"HandleNASAAsteroids":                HandleNASAAsteroids,                // from real_apis18.go
 
+	"HandleTVLookup":           HandleTVLookup,           // from real_apis19.go
+	"HandleContestEffect":      HandleContestEffect,      // from real_apis19.go
+	"HandleSuperContest":        HandleSuperContest,        // from real_apis19.go
+	"HandleEncounterCondition":  HandleEncounterCondition,  // from real_apis19.go
+	"HandlePalPark":             HandlePalPark,             // from real_apis19.go
+	"HandleOpenLibrarySearchSort": HandleOpenLibrarySearchSort, // from real_apis19.go
+
 }
 
 func Dispatch(name string, ctx context.Context, args map[string]interface{}) (ToolResponse, error) {

@@ -5679,5 +5679,12 @@ func AllHandlers() []RegistryEntry {
 		{Name: "HandleVersionGroup", Description: "Pokemon rsionGroup (real API)", File: "real_apis18.go"},
 		{Name: "HandlePokeResourceList", Description: "Pokemon keResourceList (real API)", File: "real_apis18.go"},
 		{Name: "HandleNASAAsteroids", Description: "Pokemon SAAsteroids (real API)", File: "real_apis18.go"},
+
+		{Name: "HandleTVLookup", Description: "TVMaze lookup by name or external ID (real API)", File: "real_apis19.go"},
+		{Name: "HandleContestEffect", Description: "Pokemon contest effects (real API)", File: "real_apis19.go"},
+		{Name: "HandleSuperContest", Description: "Pokemon super contest effects (real API)", File: "real_apis19.go"},
+		{Name: "HandleEncounterCondition", Description: "Pokemon encounter conditions (real API)", File: "real_apis19.go"},
+		{Name: "HandlePalPark", Description: "Pokemon Pal Park encounters (real API)", File: "real_apis19.go"},
+		{Name: "HandleOpenLibrarySearchSort", Description: "Open Library sorted search (real API)", File: "real_apis19.go"},
 	}
 }
