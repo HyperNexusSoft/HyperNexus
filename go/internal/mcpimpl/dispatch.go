@@ -3356,7 +3356,7 @@ var dispatchMap = map[string]func(ctx context.Context, args map[string]interface
 	"HandleRagieSearch":                                           HandleRagieSearch,                                           // from ragie_mcp_server.go
 	"HandleRampListTransactions":                                  HandleRampListTransactions,                                  // from ramp_mcp.go
 	"HandleRandomCard":                                            HandleRandomCard,                                            // from mtg_mcp_server.go
-	"HandleUselessFact":                                            HandleUselessFact,                                            // from dfinity_caffeine_mcp_server.go
+	"HandleUselessFact":                                           HandleUselessFact,                                           // from dfinity_caffeine_mcp_server.go
 	"HandleRandomJoke_tools":                                      HandleRandomJoke_tools,                                      // from tools.go
 	"HandleRandomNumber":                                          HandleRandomNumber,                                          // from brandomica_mcp_server.go
 	"HandleRandomString":                                          HandleRandomString,                                          // from brandomica_mcp_server.go
@@ -4496,105 +4496,130 @@ var dispatchMap = map[string]func(ctx context.Context, args map[string]interface
 	"HandleDogBreeds":         HandleDogBreeds,         // from real_apis2.go (Dog CEO)
 	"HandleFoodProduct":       HandleFoodProduct,       // from real_apis2.go (OpenFoodFacts)
 
-	"HandlePokemonLookup":       HandlePokemonLookup,       // from real_apis3.go (PokéAPI)
-	"HandleStarWarsLookup":      HandleStarWarsLookup,      // from real_apis3.go (SWAPI)
-	"HandleRickAndMorty":        HandleRickAndMorty,        // from real_apis3.go (Rick&Morty)
-	"HandleTVShowSearch":        HandleTVShowSearch,        // from real_apis3.go (TVMaze)
-	"HandleAgePredict":          HandleAgePredict,          // from real_apis3.go (Agify)
-	"HandleNationalityPredict":  HandleNationalityPredict,  // from real_apis3.go (Nationalize)
-	"HandleForecast":            HandleForecast,            // from real_apis3.go (Open-Meteo)
-	"HandleRandomUser":          HandleRandomUser,          // from real_apis3.go (RandomUser)
-	"HandleZipLookup":           HandleZipLookup,           // from real_apis3.go (Zippopotamus)
-	"HandleFruitInfo":           HandleFruitInfo,           // from real_apis3.go (Fruityvice)
-	"HandleGameDeals":           HandleGameDeals,           // from real_apis3.go (CheapShark)
-	"HandleJSONPlaceholder":     HandleJSONPlaceholder,     // from real_apis3.go (JSONPlaceholder)
-	"HandleTriviaQuestion":      HandleTriviaQuestion,      // from real_apis3.go (Open Trivia)
+	"HandlePokemonLookup":      HandlePokemonLookup,      // from real_apis3.go (PokéAPI)
+	"HandleStarWarsLookup":     HandleStarWarsLookup,     // from real_apis3.go (SWAPI)
+	"HandleRickAndMorty":       HandleRickAndMorty,       // from real_apis3.go (Rick&Morty)
+	"HandleTVShowSearch":       HandleTVShowSearch,       // from real_apis3.go (TVMaze)
+	"HandleAgePredict":         HandleAgePredict,         // from real_apis3.go (Agify)
+	"HandleNationalityPredict": HandleNationalityPredict, // from real_apis3.go (Nationalize)
+	"HandleForecast":           HandleForecast,           // from real_apis3.go (Open-Meteo)
+	"HandleRandomUser":         HandleRandomUser,         // from real_apis3.go (RandomUser)
+	"HandleZipLookup":          HandleZipLookup,          // from real_apis3.go (Zippopotamus)
+	"HandleFruitInfo":          HandleFruitInfo,          // from real_apis3.go (Fruityvice)
+	"HandleGameDeals":          HandleGameDeals,          // from real_apis3.go (CheapShark)
+	"HandleJSONPlaceholder":    HandleJSONPlaceholder,    // from real_apis3.go (JSONPlaceholder)
+	"HandleTriviaQuestion":     HandleTriviaQuestion,     // from real_apis3.go (Open Trivia)
 
-	"HandleiTunesSearch":       HandleiTunesSearch,       // from real_apis4.go (iTunes)
-	"HandleMyIP":               HandleMyIP,               // from real_apis4.go (IPify)
-	"HandleChuckNorrisJoke":    HandleChuckNorrisJoke,    // from real_apis4.go (Chuck Norris)
-	"HandleChuckCategories":    HandleChuckCategories,    // from real_apis4.go (Chuck Norris)
-	"HandleKanyeQuote":         HandleKanyeQuote,         // from real_apis4.go (Kanye.rest)
-	"HandleLoremIpsum":         HandleLoremIpsum,         // from real_apis4.go (Bacon Ipsum)
-	"HandleCorporateBS":        HandleCorporateBS,        // from real_apis4.go (Corporate BS)
-	"HandleZenQuote":           HandleZenQuote,           // from real_apis4.go (ZenQuotes)
-	"HandleGitHubTrending":     HandleGitHubTrending,     // from real_apis4.go (GitHub Trending)
-	"HandleAuthorLookup":       HandleAuthorLookup,       // from real_apis4.go (Open Library Author)
-	"HandleSpaceXLaunch":       HandleSpaceXLaunch,       // from real_apis4.go (SpaceX API)
-	"HandleDevQuote":           HandleDevQuote,           // from real_apis4.go (Dev Quotes)
-	"HandleWorkDetails":        HandleWorkDetails,        // from real_apis4.go (Open Library Work)
-	"HandleIPData":             HandleIPData,             // from real_apis4.go (IP API)
-	"HandleColorInfo":          HandleColorInfo,          // from real_apis4.go (Color API)
-	"HandleNameday":            HandleNameday,            // from real_apis4.go (Nameday)
+	"HandleiTunesSearch":    HandleiTunesSearch,    // from real_apis4.go (iTunes)
+	"HandleMyIP":            HandleMyIP,            // from real_apis4.go (IPify)
+	"HandleChuckNorrisJoke": HandleChuckNorrisJoke, // from real_apis4.go (Chuck Norris)
+	"HandleChuckCategories": HandleChuckCategories, // from real_apis4.go (Chuck Norris)
+	"HandleKanyeQuote":      HandleKanyeQuote,      // from real_apis4.go (Kanye.rest)
+	"HandleLoremIpsum":      HandleLoremIpsum,      // from real_apis4.go (Bacon Ipsum)
+	"HandleCorporateBS":     HandleCorporateBS,     // from real_apis4.go (Corporate BS)
+	"HandleZenQuote":        HandleZenQuote,        // from real_apis4.go (ZenQuotes)
+	"HandleGitHubTrending":  HandleGitHubTrending,  // from real_apis4.go (GitHub Trending)
+	"HandleAuthorLookup":    HandleAuthorLookup,    // from real_apis4.go (Open Library Author)
+	"HandleSpaceXLaunch":    HandleSpaceXLaunch,    // from real_apis4.go (SpaceX API)
+	"HandleDevQuote":        HandleDevQuote,        // from real_apis4.go (Dev Quotes)
+	"HandleWorkDetails":     HandleWorkDetails,     // from real_apis4.go (Open Library Work)
+	"HandleIPData":          HandleIPData,          // from real_apis4.go (IP API)
+	"HandleColorInfo":       HandleColorInfo,       // from real_apis4.go (Color API)
+	"HandleNameday":         HandleNameday,         // from real_apis4.go (Nameday)
 
-	"HandlePublicHolidays":     HandlePublicHolidays,     // from real_apis5.go (Nager.Date)
-	"HandleCatFact":            HandleCatFact,            // from real_apis5.go (Cat Facts)
-	"HandleSpaceNews":          HandleSpaceNews,          // from real_apis5.go (Spaceflight News)
-	"HandlePeopleInSpace":      HandlePeopleInSpace,      // from real_apis5.go (Open Notify)
-	"HandleBibleVerse":         HandleBibleVerse,         // from real_apis5.go (Bible API)
-	"HandleThesaurus":          HandleThesaurus,          // from real_apis5.go (Datamuse)
-	"HandleRandomEmoji":        HandleRandomEmoji,        // from real_apis5.go (Emoji Hub)
-	"HandleGeekJoke":           HandleGeekJoke,           // from real_apis5.go (Geek Jokes)
-	"HandleBrewerySearch":      HandleBrewerySearch,      // from real_apis5.go (Open Brewery DB)
-	"HandleDnDMonster":         HandleDnDMonster,         // from real_apis5.go (D&D 5e)
-	"HandlePokemonTCG":         HandlePokemonTCG,         // from real_apis5.go (Pokémon TCG)
-	"HandleFakerData":          HandleFakerData,          // from real_apis5.go (Faker API)
-	"HandleBookEdition":        HandleBookEdition,        // from real_apis5.go (Open Library Edition)
-	"HandleWordDefinition":     HandleWordDefinition,     // from real_apis5.go (Dictionary API)
+	"HandlePublicHolidays": HandlePublicHolidays, // from real_apis5.go (Nager.Date)
+	"HandleCatFact":        HandleCatFact,        // from real_apis5.go (Cat Facts)
+	"HandleSpaceNews":      HandleSpaceNews,      // from real_apis5.go (Spaceflight News)
+	"HandlePeopleInSpace":  HandlePeopleInSpace,  // from real_apis5.go (Open Notify)
+	"HandleBibleVerse":     HandleBibleVerse,     // from real_apis5.go (Bible API)
+	"HandleThesaurus":      HandleThesaurus,      // from real_apis5.go (Datamuse)
+	"HandleRandomEmoji":    HandleRandomEmoji,    // from real_apis5.go (Emoji Hub)
+	"HandleGeekJoke":       HandleGeekJoke,       // from real_apis5.go (Geek Jokes)
+	"HandleBrewerySearch":  HandleBrewerySearch,  // from real_apis5.go (Open Brewery DB)
+	"HandleDnDMonster":     HandleDnDMonster,     // from real_apis5.go (D&D 5e)
+	"HandlePokemonTCG":     HandlePokemonTCG,     // from real_apis5.go (Pokémon TCG)
+	"HandleFakerData":      HandleFakerData,      // from real_apis5.go (Faker API)
+	"HandleBookEdition":    HandleBookEdition,    // from real_apis5.go (Open Library Edition)
+	"HandleWordDefinition": HandleWordDefinition, // from real_apis5.go (Dictionary API)
 
-	"HandleTrendingBooks":      HandleTrendingBooks,      // from real_apis6.go
-	"HandleISSLocation":        HandleISSLocation,        // from real_apis6.go
-	"HandleYesNo":              HandleYesNo,              // from real_apis6.go
-	"HandleGenderPredict":      HandleGenderPredict,      // from real_apis6.go
-	"HandleActivitySuggest":    HandleActivitySuggest,    // from real_apis6.go
-	"HandleExchangeRate":       HandleExchangeRate,       // from real_apis6.go
-	"HandleMarsPhotos":         HandleMarsPhotos,         // from real_apis6.go
-	"HandleQuoteOfTheDay":      HandleQuoteOfTheDay,      // from real_apis6.go
+	"HandleTrendingBooks":   HandleTrendingBooks,   // from real_apis6.go
+	"HandleISSLocation":     HandleISSLocation,     // from real_apis6.go
+	"HandleYesNo":           HandleYesNo,           // from real_apis6.go
+	"HandleGenderPredict":   HandleGenderPredict,   // from real_apis6.go
+	"HandleActivitySuggest": HandleActivitySuggest, // from real_apis6.go
+	"HandleExchangeRate":    HandleExchangeRate,    // from real_apis6.go
+	"HandleMarsPhotos":      HandleMarsPhotos,      // from real_apis6.go
+	"HandleQuoteOfTheDay":   HandleQuoteOfTheDay,   // from real_apis6.go
 
-	"HandlePicsumPhoto":        HandlePicsumPhoto,        // from real_apis7.go (Picsum)
-	"HandleIsItChristmas":      HandleIsItChristmas,      // from real_apis7.go (IsItChristmas)
-	"HandleBookDetails":        HandleBookDetails,        // from real_apis7.go (Open Library Book)
-	"HandleOfficialJoke":       HandleOfficialJoke,       // from real_apis7.go (Official Jokes)
-	"HandleFoxPicture":         HandleFoxPicture,         // from real_apis7.go (Random Fox)
-	"HandleBookSearch":         HandleBookSearch,         // from real_apis7.go (Open Library Search)
-	"HandleZippoLookup":        HandleZippoLookup,        // from real_apis7.go (Zippopotamus)
-	"HandleQRCode":             HandleQRCode,             // from real_apis7.go (QR Server)
-	"HandleNekosImage":         HandleNekosImage,         // from real_apis7.go (Nekos.best)
-	"HandleHTTPCat":            HandleHTTPCat,            // from real_apis7.go (HTTP Cats)
-	"HandleBooksBySubject":     HandleBooksBySubject,     // from real_apis7.go (Open Library Subject)
+	"HandlePicsumPhoto":    HandlePicsumPhoto,    // from real_apis7.go (Picsum)
+	"HandleIsItChristmas":  HandleIsItChristmas,  // from real_apis7.go (IsItChristmas)
+	"HandleBookDetails":    HandleBookDetails,    // from real_apis7.go (Open Library Book)
+	"HandleOfficialJoke":   HandleOfficialJoke,   // from real_apis7.go (Official Jokes)
+	"HandleFoxPicture":     HandleFoxPicture,     // from real_apis7.go (Random Fox)
+	"HandleBookSearch":     HandleBookSearch,     // from real_apis7.go (Open Library Search)
+	"HandleZippoLookup":    HandleZippoLookup,    // from real_apis7.go (Zippopotamus)
+	"HandleQRCode":         HandleQRCode,         // from real_apis7.go (QR Server)
+	"HandleNekosImage":     HandleNekosImage,     // from real_apis7.go (Nekos.best)
+	"HandleHTTPCat":        HandleHTTPCat,        // from real_apis7.go (HTTP Cats)
+	"HandleBooksBySubject": HandleBooksBySubject, // from real_apis7.go (Open Library Subject)
 
-	"HandleDadJoke":            HandleDadJoke,            // from real_apis8.go (Dad Jokes)
-	"HandleCatPicture":         HandleCatPicture,         // from real_apis8.go (Cataas)
-	"HandleHTTPBinDebug":       HandleHTTPBinDebug,       // from real_apis8.go (HTTPBin)
-	"HandleUniversitySearch":   HandleUniversitySearch,   // from real_apis8.go (Universities)
-	"HandleAuthorWorks":        HandleAuthorWorks,        // from real_apis8.go (Open Library Works)
-	"HandleBerryDetail":        HandleBerryDetail,        // from real_apis8.go (PokeAPI Berry)
-	"HandleBookRating":         HandleBookRating,         // from real_apis8.go (Open Library Rating)
-	"HandlePokemonAbility":     HandlePokemonAbility,     // from real_apis8.go (PokeAPI Ability)
-	"HandleStarWarsSearch":     HandleStarWarsSearch,     // from real_apis8.go (SWAPI Search)
-	"HandleSWAPILookup":        HandleSWAPILookup,        // from real_apis8.go (SWAPI by ID)
+	"HandleDadJoke":          HandleDadJoke,          // from real_apis8.go (Dad Jokes)
+	"HandleCatPicture":       HandleCatPicture,       // from real_apis8.go (Cataas)
+	"HandleHTTPBinDebug":     HandleHTTPBinDebug,     // from real_apis8.go (HTTPBin)
+	"HandleUniversitySearch": HandleUniversitySearch, // from real_apis8.go (Universities)
+	"HandleAuthorWorks":      HandleAuthorWorks,      // from real_apis8.go (Open Library Works)
+	"HandleBerryDetail":      HandleBerryDetail,      // from real_apis8.go (PokeAPI Berry)
+	"HandleBookRating":       HandleBookRating,       // from real_apis8.go (Open Library Rating)
+	"HandlePokemonAbility":   HandlePokemonAbility,   // from real_apis8.go (PokeAPI Ability)
+	"HandleStarWarsSearch":   HandleStarWarsSearch,   // from real_apis8.go (SWAPI Search)
+	"HandleSWAPILookup":      HandleSWAPILookup,      // from real_apis8.go (SWAPI by ID)
 
-	"HandleMealRandom":          HandleMealRandom,          // from real_apis9.go (MealDB Random)
-	"HandleMealCategories":      HandleMealCategories,      // from real_apis9.go (MealDB Categories)
-	"HandleMealAreas":           HandleMealAreas,           // from real_apis9.go (MealDB Areas)
-	"HandleCocktailSearch":      HandleCocktailSearch,      // from real_apis9.go (CocktailDB)
-	"HandleTopAnime":            HandleTopAnime,            // from real_apis9.go (Jikan Top Anime)
-	"HandleLanguageList":        HandleLanguageList,        // from real_apis9.go (LanguageTool)
-	"HandleIP2Location":         HandleIP2Location,         // from real_apis9.go (IP2Location.io)
-	"HandleMealByArea":          HandleMealByArea,          // from real_apis9.go (MealDB by Area)
-	"HandleCocktailByIngredient": HandleCocktailByIngredient, // from real_apis9.go (CocktailDB by Ing)
+	"HandleMealRandom":              HandleMealRandom,              // from real_apis9.go (MealDB Random)
+	"HandleMealCategories":          HandleMealCategories,          // from real_apis9.go (MealDB Categories)
+	"HandleMealAreas":               HandleMealAreas,               // from real_apis9.go (MealDB Areas)
+	"HandleCocktailSearch":          HandleCocktailSearch,          // from real_apis9.go (CocktailDB)
+	"HandleTopAnime":                HandleTopAnime,                // from real_apis9.go (Jikan Top Anime)
+	"HandleLanguageList":            HandleLanguageList,            // from real_apis9.go (LanguageTool)
+	"HandleIP2Location":             HandleIP2Location,             // from real_apis9.go (IP2Location.io)
+	"HandleMealByArea":              HandleMealByArea,              // from real_apis9.go (MealDB by Area)
+	"HandleCocktailByIngredient":    HandleCocktailByIngredient,    // from real_apis9.go (CocktailDB by Ing)
 	"HandleOpenLibrarySubjectsList": HandleOpenLibrarySubjectsList, // from real_apis9.go (Subjects List)
 
-	"HandleEarthquakes":        HandleEarthquakes,        // from real_apis10.go
-	"HandleSunTimes":           HandleSunTimes,           // from real_apis10.go
-	"HandleAirQuality":         HandleAirQuality,         // from real_apis10.go
-	"HandleMusicSearch":        HandleMusicSearch,        // from real_apis10.go
-	"HandleTVShowByID":         HandleTVShowByID,         // from real_apis10.go
-	"HandleNASANotifications":  HandleNASANotifications,  // from real_apis10.go
-	"HandleOpenLibraryWork":    HandleOpenLibraryWork,    // from real_apis10.go
-	"HandleBeerSearch":         HandleBeerSearch,         // from real_apis10.go
-	"HandleCoinCapPrices":      HandleCoinCapPrices,      // from real_apis10.go
-	"HandleCoinCapSingle":      HandleCoinCapSingle,      // from real_apis10.go
+	"HandleEarthquakes":       HandleEarthquakes,       // from real_apis10.go
+	"HandleSunTimes":          HandleSunTimes,          // from real_apis10.go
+	"HandleAirQuality":        HandleAirQuality,        // from real_apis10.go
+	"HandleMusicSearch":       HandleMusicSearch,       // from real_apis10.go
+	"HandleTVShowByID":        HandleTVShowByID,        // from real_apis10.go
+	"HandleNASANotifications": HandleNASANotifications, // from real_apis10.go
+	"HandleOpenLibraryWork":   HandleOpenLibraryWork,   // from real_apis10.go
+	"HandleBeerSearch":        HandleBeerSearch,        // from real_apis10.go
+	"HandleCoinCapPrices":     HandleCoinCapPrices,     // from real_apis10.go
+	"HandleCoinCapSingle":     HandleCoinCapSingle,     // from real_apis10.go	"HandleNobelLaureates":     HandleNobelLaureates,     // from real_apis11.go
+	"HandleNobelSearch":        HandleNobelSearch,        // from real_apis11.go
+	"HandleGeocode":            HandleGeocode,            // from real_apis11.go
+	"HandleMarineWeather":      HandleMarineWeather,      // from real_apis11.go
+	"HandleElevation":          HandleElevation,          // from real_apis11.go
+	"HandleWorldBankData":      HandleWorldBankData,      // from real_apis11.go
+	"HandleTVSchedule":         HandleTVSchedule,         // from real_apis11.go
+	"HandleTVEpisodes":         HandleTVEpisodes,         // from real_apis11.go
+	"HandleRecentChanges":      HandleRecentChanges,      // from real_apis11.go
+	"HandleJokeCategories":     HandleJokeCategories,     // from real_apis11.go
+	"HandleOpenLibraryByISBN":  HandleOpenLibraryByISBN,  // from real_apis11.go
+	"HandleUVIndex":            HandleUVIndex,            // from real_apis12.go
+	"HandleClimateData":        HandleClimateData,        // from real_apis12.go
+	"HandleHistoricalWeather":  HandleHistoricalWeather,  // from real_apis12.go
+	"HandleForecastExtended":   HandleForecastExtended,   // from real_apis12.go
+	"HandleUserTodos":          HandleUserTodos,          // from real_apis12.go
+	"HandleUserAlbums":         HandleUserAlbums,         // from real_apis12.go
+	"HandlePostComments":       HandlePostComments,       // from real_apis12.go
+	"HandleJSONUser":           HandleJSONUser,           // from real_apis12.go
+	"HandleTVPerson":           HandleTVPerson,           // from real_apis12.go
+	"HandleShowCast":           HandleShowCast,           // from real_apis12.go
+	"HandleWorldBankCountry":   HandleWorldBankCountry,   // from real_apis12.go
+	"HandleAuthorBio":          HandleAuthorBio,          // from real_apis12.go
+	"HandleBookCover":          HandleBookCover,          // from real_apis12.go
+	"HandleOpenLibraryUser":    HandleOpenLibraryUser,    // from real_apis12.go
+
 }
 
 func Dispatch(name string, ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
@@ -4603,4 +4628,6 @@ func Dispatch(name string, ctx context.Context, args map[string]interface{}) (To
 		return ToolResponse{}, fmt.Errorf("unknown handler: %s", name)
 	}
 	return h(ctx, args)
+
+
 }

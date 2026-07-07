@@ -5615,5 +5615,31 @@ func AllHandlers() []RegistryEntry {
 		{Name: "HandleTriviaQuestion", Description: "Get trivia quiz questions (real API)", File: "real_apis3.go"},
 
 
+
+		{Name: "HandleNobelLaureates", Description: "List Nobel laureates (real API)", File: "real_apis11.go"},
+		{Name: "HandleNobelSearch", Description: "Search Nobel laureates (real API)", File: "real_apis11.go"},
+		{Name: "HandleGeocode", Description: "Forward geocoding city to coords (real API)", File: "real_apis11.go"},
+		{Name: "HandleMarineWeather", Description: "Marine weather/swell forecast (real API)", File: "real_apis11.go"},
+		{Name: "HandleElevation", Description: "Elevation for coordinates (real API)", File: "real_apis11.go"},
+		{Name: "HandleWorldBankData", Description: "World Bank economic indicators (real API)", File: "real_apis11.go"},
+		{Name: "HandleTVSchedule", Description: "TV schedule by country/date (real API)", File: "real_apis11.go"},
+		{Name: "HandleTVEpisodes", Description: "TV show episode list (real API)", File: "real_apis11.go"},
+		{Name: "HandleRecentChanges", Description: "Open Library recent changes (real API)", File: "real_apis11.go"},
+		{Name: "HandleJokeCategories", Description: "JokeAPI available categories (real API)", File: "real_apis11.go"},
+		{Name: "HandleOpenLibraryByISBN", Description: "Book lookup by ISBN (real API)", File: "real_apis11.go"},
+		{Name: "HandleUVIndex", Description: "UV index forecast (real API)", File: "real_apis12.go"},
+		{Name: "HandleClimateData", Description: "Climate data for coordinates (real API)", File: "real_apis12.go"},
+		{Name: "HandleHistoricalWeather", Description: "Historical weather data (real API)", File: "real_apis12.go"},
+		{Name: "HandleForecastExtended", Description: "Extended weather forecast (real API)", File: "real_apis12.go"},
+		{Name: "HandleUserTodos", Description: "JSONPlaceholder user todos (real API)", File: "real_apis12.go"},
+		{Name: "HandleUserAlbums", Description: "JSONPlaceholder user albums (real API)", File: "real_apis12.go"},
+		{Name: "HandlePostComments", Description: "JSONPlaceholder post comments (real API)", File: "real_apis12.go"},
+		{Name: "HandleJSONUser", Description: "JSONPlaceholder user profile (real API)", File: "real_apis12.go"},
+		{Name: "HandleTVPerson", Description: "TVMaze actor/person lookup (real API)", File: "real_apis12.go"},
+		{Name: "HandleShowCast", Description: "TVMaze show cast list (real API)", File: "real_apis12.go"},
+		{Name: "HandleWorldBankCountry", Description: "World Bank country info (real API)", File: "real_apis12.go"},
+		{Name: "HandleAuthorBio", Description: "Open Library author biography (real API)", File: "real_apis12.go"},
+		{Name: "HandleBookCover", Description: "Open Library book cover URL (real API)", File: "real_apis12.go"},
+		{Name: "HandleOpenLibraryUser", Description: "Open Library user profile (real API)", File: "real_apis12.go"},
 	}
 }
