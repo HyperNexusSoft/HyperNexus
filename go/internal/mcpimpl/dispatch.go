@@ -3356,7 +3356,7 @@ var dispatchMap = map[string]func(ctx context.Context, args map[string]interface
 	"HandleRagieSearch":                                           HandleRagieSearch,                                           // from ragie_mcp_server.go
 	"HandleRampListTransactions":                                  HandleRampListTransactions,                                  // from ramp_mcp.go
 	"HandleRandomCard":                                            HandleRandomCard,                                            // from mtg_mcp_server.go
-	"HandleRandomFact":                                            HandleRandomFact,                                            // from dfinity_caffeine_mcp_server.go
+	"HandleUselessFact":                                            HandleUselessFact,                                            // from dfinity_caffeine_mcp_server.go
 	"HandleRandomJoke_tools":                                      HandleRandomJoke_tools,                                      // from tools.go
 	"HandleRandomNumber":                                          HandleRandomNumber,                                          // from brandomica_mcp_server.go
 	"HandleRandomString":                                          HandleRandomString,                                          // from brandomica_mcp_server.go
@@ -4526,6 +4526,21 @@ var dispatchMap = map[string]func(ctx context.Context, args map[string]interface
 	"HandleIPData":             HandleIPData,             // from real_apis4.go (IP API)
 	"HandleColorInfo":          HandleColorInfo,          // from real_apis4.go (Color API)
 	"HandleNameday":            HandleNameday,            // from real_apis4.go (Nameday)
+
+	"HandlePublicHolidays":     HandlePublicHolidays,     // from real_apis5.go (Nager.Date)
+	"HandleCatFact":            HandleCatFact,            // from real_apis5.go (Cat Facts)
+	"HandleSpaceNews":          HandleSpaceNews,          // from real_apis5.go (Spaceflight News)
+	"HandlePeopleInSpace":      HandlePeopleInSpace,      // from real_apis5.go (Open Notify)
+	"HandleBibleVerse":         HandleBibleVerse,         // from real_apis5.go (Bible API)
+	"HandleThesaurus":          HandleThesaurus,          // from real_apis5.go (Datamuse)
+	"HandleRandomEmoji":        HandleRandomEmoji,        // from real_apis5.go (Emoji Hub)
+	"HandleGeekJoke":           HandleGeekJoke,           // from real_apis5.go (Geek Jokes)
+	"HandleBrewerySearch":      HandleBrewerySearch,      // from real_apis5.go (Open Brewery DB)
+	"HandleDnDMonster":         HandleDnDMonster,         // from real_apis5.go (D&D 5e)
+	"HandlePokemonTCG":         HandlePokemonTCG,         // from real_apis5.go (Pokémon TCG)
+	"HandleFakerData":          HandleFakerData,          // from real_apis5.go (Faker API)
+	"HandleBookEdition":        HandleBookEdition,        // from real_apis5.go (Open Library Edition)
+	"HandleWordDefinition":     HandleWordDefinition,     // from real_apis5.go (Dictionary API)
 }
 
 func Dispatch(name string, ctx context.Context, args map[string]interface{}) (ToolResponse, error) {

@@ -36,7 +36,7 @@ func HandleiTunesSearch(ctx context.Context, args map[string]interface{}) (ToolR
 	body, _ := io.ReadAll(resp.Body)
 
 	var data struct {
-		ResultCount int `json:"resultCount"`
+		ResultCount int                      `json:"resultCount"`
 		Results     []map[string]interface{} `json:"results"`
 	}
 	json.Unmarshal(body, &data)
@@ -204,8 +204,8 @@ func HandleZenQuote(ctx context.Context, args map[string]interface{}) (ToolRespo
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data []struct {
-		Q  string `json:"q"`
-		A  string `json:"a"`
+		Q string `json:"q"`
+		A string `json:"a"`
 	}
 	json.Unmarshal(body, &data)
 	if len(data) == 0 || data[0].Q == "" {
@@ -325,13 +325,13 @@ func HandleAuthorLookup(ctx context.Context, args map[string]interface{}) (ToolR
 	}
 
 	var data struct {
-		Name       string `json:"name"`
-		BirthDate  string `json:"birth_date"`
-		DeathDate  string `json:"death_date"`
-		Bio        string `json:"bio"`
+		Name         string `json:"name"`
+		BirthDate    string `json:"birth_date"`
+		DeathDate    string `json:"death_date"`
+		Bio          string `json:"bio"`
 		PersonalName string `json:"personal_name"`
-		FullerName string `json:"fuller_name"`
-		Photos     []int  `json:"photos"`
+		FullerName   string `json:"fuller_name"`
+		Photos       []int  `json:"photos"`
 	}
 	json.Unmarshal(body, &data)
 	bio := data.Bio
@@ -368,12 +368,12 @@ func HandleSpaceXLaunch(ctx context.Context, args map[string]interface{}) (ToolR
 	body, _ := io.ReadAll(resp.Body)
 
 	var data struct {
-		Name        string `json:"name"`
-		FlightNumber int   `json:"flight_number"`
-		DateUTC     string `json:"date_utc"`
-		Success     *bool  `json:"success"`
-		Details     string `json:"details"`
-		Links       struct {
+		Name         string `json:"name"`
+		FlightNumber int    `json:"flight_number"`
+		DateUTC      string `json:"date_utc"`
+		Success      *bool  `json:"success"`
+		Details      string `json:"details"`
+		Links        struct {
 			Webcast string `json:"webcast"`
 			Article string `json:"article"`
 		} `json:"links"`
@@ -423,7 +423,7 @@ func HandleDevQuote(ctx context.Context, args map[string]interface{}) (ToolRespo
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		Quote string `json:"quote"`
+		Quote  string `json:"quote"`
 		Author string `json:"author"`
 	}
 	json.Unmarshal(body, &data)
@@ -448,13 +448,13 @@ func HandleWorkDetails(ctx context.Context, args map[string]interface{}) (ToolRe
 	body, _ := io.ReadAll(resp.Body)
 
 	var data struct {
-		Title   string `json:"title"`
-		Author  struct {
+		Title  string `json:"title"`
+		Author struct {
 			Key string `json:"key"`
 		} `json:"author"`
-		FirstPublishYear int `json:"first_publish_year"`
+		FirstPublishYear int         `json:"first_publish_year"`
 		Description      interface{} `json:"description"`
-		Subjects         []string `json:"subjects"`
+		Subjects         []string    `json:"subjects"`
 		Excerpts         []struct {
 			Text string `json:"text"`
 		} `json:"excerpts"`
@@ -592,7 +592,7 @@ func HandleNameday(ctx context.Context, args map[string]interface{}) (ToolRespon
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
 		Nameday map[string]string `json:"nameday"`
-		Date    string `json:"date"`
+		Date    string            `json:"date"`
 	}
 	json.Unmarshal(body, &data)
 	if name, exists := data.Nameday[country]; exists {
@@ -606,4 +606,3 @@ func HandleNameday(ctx context.Context, args map[string]interface{}) (ToolRespon
 }
 
 // ── HELPERS ───────────────────────────────────────────────────────
-
