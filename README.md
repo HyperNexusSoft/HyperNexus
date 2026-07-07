@@ -681,9 +681,53 @@ pi install npm:tormentnexus
 
 Connects pi to the TormentNexus control plane — persistent L2 memory, tool search, session import, skill registry, code search, subagent orchestration, enterprise RBAC. Full source at `packages/tormentnexus/`.
 
+**CodeWhale now has equivalent functionality through a native Rust extension** — see below.
+
 ### CodeWhale Integration
 
-**codewhale** integration: TormentNexus MCP server at `.codewhale/skills/tormentnexus/SKILL.md` (auto-installed when codewhale detected).
+CodeWhale has **full Pi extension parity** through two integration layers:
+
+#### Layer 1: Native Rust Extension (tn-extension)
+
+A native Rust crate at `crates/tn-extension` compiled into the CodeWhale binary. Hooks fire automatically on every lifecycle event:
+
+| Hook | What it does |
+|------|-------------|
+| **SessionStart** | Logs session to TN L2 memory |
+| **BeforeAgentStart** | Injects TN system prompt + searches L2 for relevant context per turn |
+| **ToolCall** | Logs tool + args; checks 6 dangerous patterns against RBAC |
+| **ToolResult** | Auto-stores substantial results from key tools to L2 |
+| **TurnEnd** | Logs tool usage summary per turn |
+| **Input** | Expands `@memory:key` inline with L2 content |
+| **UserBash** | Audit-logs shell commands to TN enterprise audit |
+| **ModelSelect** | Tracks model changes to L2 |
+| **SessionCompact** | Preserves memory across compaction |
+
+Also registers: 9 custom tools, 6 slash commands, 3 keyboard shortcuts, auto-registers the MCP server.
+
+#### Layer 2: CodeWhale Skill (SKILL.md)
+
+Tracked at `.codewhale/plugins/tormentnexus/skills/SKILL.md`, auto-installed to `~/.codewhale/skills/tormentnexus/`. Contains 49 MCP tools, REST API reference, slash command handling, best practices, security notes.
+
+#### Installation
+
+```bash
+scripts\install_codewhale.bat
+```
+
+Verify:
+
+```bash
+codewhale mcp connect tormentnexus
+codewhale mcp tools | findstr mcp_tormentnexus | find /c /v ""
+curl http://127.0.0.1:7778/api/health
+```
+
+Build from `~/codewhale-source`:
+
+```bash
+cargo build --release -p codewhale-cli
+```
 
 ---
 

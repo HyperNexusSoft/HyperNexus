@@ -29,8 +29,10 @@ func HandleGoodNews(ctx context.Context, args map[string]interface{}) (ToolRespo
 	var data struct {
 		Articles []struct {
 			Title  string `json:"title"`
-			Source struct { Name string `json:"name"` } `json:"source"`
-			URL    string `json:"url"`
+			Source struct {
+				Name string `json:"name"`
+			} `json:"source"`
+			URL string `json:"url"`
 		} `json:"articles"`
 	}
 	json.Unmarshal(body, &data)
@@ -61,8 +63,10 @@ func HandleGetTopNews(ctx context.Context, args map[string]interface{}) (ToolRes
 	var data struct {
 		Articles []struct {
 			Title  string `json:"title"`
-			Source struct { Name string `json:"name"` } `json:"source"`
-			URL    string `json:"url"`
+			Source struct {
+				Name string `json:"name"`
+			} `json:"source"`
+			URL string `json:"url"`
 		} `json:"articles"`
 	}
 	json.Unmarshal(body, &data)
@@ -256,7 +260,10 @@ func HandleSearchNews_newsmcp(ctx context.Context, args map[string]interface{}) 
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		Articles []struct { Title string `json:"title"`; URL string `json:"url"` } `json:"articles"`
+		Articles []struct {
+			Title string `json:"title"`
+			URL   string `json:"url"`
+		} `json:"articles"`
 	}
 	json.Unmarshal(body, &data)
 	if len(data.Articles) == 0 {
