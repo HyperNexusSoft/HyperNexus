@@ -5657,5 +5657,12 @@ func AllHandlers() []RegistryEntry {
 		{Name: "HandleWorldBankIndicators", Description: "World Bank indicators list (real API)", File: "real_apis15.go"},
 		{Name: "HandleNASAAstronomy", Description: "NASA APOD by date or count (real API)", File: "real_apis15.go"},
 		{Name: "HandlePokemonGrowth", Description: "Pokemon growth rates (real API)", File: "real_apis15.go"},
+
+		{Name: "HandleNASADailyEarth", Description: "NASA EPIC daily Earth images (real API)", File: "real_apis16.go"},
+		{Name: "HandleMarsWeather", Description: "Mars InSight weather data (real API)", File: "real_apis16.go"},
+		{Name: "HandlePokemonMove", Description: "Pokemon move details (real API)", File: "real_apis16.go"},
+		{Name: "HandlePokemonItem", Description: "Pokemon item details (real API)", File: "real_apis16.go"},
+		{Name: "HandleSolarRadiation", Description: "Solar radiation forecast (real API)", File: "real_apis16.go"},
+		{Name: "HandleEvapotranspiration", Description: "Reference evapotranspiration (real API)", File: "real_apis16.go"},
 	}
 }
