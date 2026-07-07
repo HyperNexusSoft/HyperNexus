@@ -5514,6 +5514,20 @@ func AllHandlers() []RegistryEntry {
 		{Name: "HandleDogPicture", Description: "Get random dog picture (real API)", File: "real_apis2.go"},
 		{Name: "HandleDogBreeds", Description: "List all dog breeds (real API)", File: "real_apis2.go"},
 		{Name: "HandleFoodProduct", Description: "Lookup food product by barcode (real API)", File: "real_apis2.go"},
+		{Name: "HandlePokemonLookup", Description: "Lookup Pokémon by name/id (real API)", File: "real_apis3.go"},
+		{Name: "HandleStarWarsLookup", Description: "Lookup Star Wars characters/planets (real API)", File: "real_apis3.go"},
+		{Name: "HandleRickAndMorty", Description: "Lookup Rick & Morty characters (real API)", File: "real_apis3.go"},
+		{Name: "HandleTVShowSearch", Description: "Search TV shows (real API)", File: "real_apis3.go"},
+		{Name: "HandleAgePredict", Description: "Predict age from name (real API)", File: "real_apis3.go"},
+		{Name: "HandleNationalityPredict", Description: "Predict nationality from name (real API)", File: "real_apis3.go"},
+		{Name: "HandleForecast", Description: "Get weather forecast (real API)", File: "real_apis3.go"},
+		{Name: "HandleRandomUser", Description: "Generate random user profile (real API)", File: "real_apis3.go"},
+		{Name: "HandleZipLookup", Description: "Lookup zip/postal code (real API)", File: "real_apis3.go"},
+		{Name: "HandleFruitInfo", Description: "Get fruit nutrition info (real API)", File: "real_apis3.go"},
+		{Name: "HandleGameDeals", Description: "Find game deals (real API)", File: "real_apis3.go"},
+		{Name: "HandleJSONPlaceholder", Description: "Get sample JSON data (real API)", File: "real_apis3.go"},
+		{Name: "HandleTriviaQuestion", Description: "Get trivia quiz questions (real API)", File: "real_apis3.go"},
+
 
 	}
 }

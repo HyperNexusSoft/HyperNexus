@@ -217,7 +217,22 @@ if exist "%USERPROFILE%\.zcode\v2" (
 ) else (echo ⏭️)
 echo.
 
-echo === Step 17: Starting Services ===
+
+echo === Step 17: Hermes Agent ===
+echo.
+if exist "%USERPROFILE%\.hermes\config.yaml" (
+    echo Hermes detected — installing MCP manifest + skill...
+    if not exist "%USERPROFILE%\.hermes\optional-mcps\tormentnexus" mkdir "%USERPROFILE%\.hermes\optional-mcps\tormentnexus"
+    copy /Y "C:\Users\hyper\workspace\tormentnexus\.hermes\optional-mcps\tormentnexus\manifest.yaml" "%USERPROFILE%\.hermes\optional-mcps\tormentnexus\manifest.yaml" >nul
+    if %errorlevel%==0 (echo ✅ Hermes MCP manifest) else (echo ⚠️ MCP manifest copy)
+    if not exist "%USERPROFILE%\.hermes\skills\tormentnexus" mkdir "%USERPROFILE%\.hermes\skills\tormentnexus"
+    copy /Y "C:\Users\hyper\workspace\tormentnexus\.hermes\skills\tormentnexus\DESCRIPTION.md" "%USERPROFILE%\.hermes\skills\tormentnexus\DESCRIPTION.md" >nul
+    if %errorlevel%==0 (echo ✅ Hermes skill) else (echo ⚠️ Skill copy)
+    echo ✅ Hermes agent configured
+) else (echo ⏭️ Hermes not configured)
+echo.
+
+echo === Step 18: Starting Services
 echo.
 sc start TormentNexusSidecar >nul 2>nul
 sc start TormentNexusDashboard >nul 2>nul
@@ -249,6 +264,8 @@ echo  The correct binary path is: tormentnexus.exe
 echo  (NOT bin/tormentnexus.exe)
 echo.
 pause
+
+
 
 
 

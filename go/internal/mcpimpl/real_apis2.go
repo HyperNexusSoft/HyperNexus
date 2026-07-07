@@ -138,16 +138,16 @@ func HandleCryptoPrice(ctx context.Context, args map[string]interface{}) (ToolRe
 
 func formatCryptoName(id string) string {
 	names := map[string]string{
-		"bitcoin":       "Bitcoin",
-		"ethereum":      "Ethereum",
-		"solana":        "Solana",
-		"cardano":       "Cardano",
-		"polkadot":      "Polkadot",
-		"chainlink":     "Chainlink",
-		"avalanche-2":   "Avalanche",
-		"dogecoin":      "Dogecoin",
-		"ripple":        "XRP",
-		"litecoin":      "Litecoin",
+		"bitcoin":     "Bitcoin",
+		"ethereum":    "Ethereum",
+		"solana":      "Solana",
+		"cardano":     "Cardano",
+		"polkadot":    "Polkadot",
+		"chainlink":   "Chainlink",
+		"avalanche-2": "Avalanche",
+		"dogecoin":    "Dogecoin",
+		"ripple":      "XRP",
+		"litecoin":    "Litecoin",
 	}
 	if n, exists := names[id]; exists {
 		return n
@@ -185,12 +185,12 @@ func HandleGitHubSearchRepos(ctx context.Context, args map[string]interface{}) (
 	var data struct {
 		TotalCount int `json:"total_count"`
 		Items      []struct {
-			FullName    string `json:"full_name"`
-			Description string `json:"description"`
-			Stars       int    `json:"stargazers_count"`
-			Forks       int    `json:"forks_count"`
-			Language    string `json:"language"`
-			HTMLURL     string `json:"html_url"`
+			FullName    string   `json:"full_name"`
+			Description string   `json:"description"`
+			Stars       int      `json:"stargazers_count"`
+			Forks       int      `json:"forks_count"`
+			Language    string   `json:"language"`
+			HTMLURL     string   `json:"html_url"`
 			Topics      []string `json:"topics"`
 		} `json:"items"`
 	}
@@ -241,12 +241,12 @@ func HandleGitHubRepoInfo(ctx context.Context, args map[string]interface{}) (Too
 	body, _ := io.ReadAll(resp.Body)
 
 	var data struct {
-		FullName    string `json:"full_name"`
-		Description string `json:"description"`
-		Stars       int    `json:"stargazers_count"`
-		Forks       int    `json:"forks_count"`
-		Language    string `json:"language"`
-		HTMLURL     string `json:"html_url"`
+		FullName    string   `json:"full_name"`
+		Description string   `json:"description"`
+		Stars       int      `json:"stargazers_count"`
+		Forks       int      `json:"forks_count"`
+		Language    string   `json:"language"`
+		HTMLURL     string   `json:"html_url"`
 		Topics      []string `json:"topics"`
 		License     struct {
 			Name string `json:"name"`
@@ -280,9 +280,9 @@ func HandleJokeGet(ctx context.Context, args map[string]interface{}) (ToolRespon
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		Type  string `json:"type"`
-		Joke  string `json:"joke"`
-		Setup string `json:"setup"`
+		Type     string `json:"type"`
+		Joke     string `json:"joke"`
+		Setup    string `json:"setup"`
 		Delivery string `json:"delivery"`
 		Category string `json:"category"`
 	}
@@ -588,11 +588,11 @@ func HandleFoodProduct(ctx context.Context, args map[string]interface{}) (ToolRe
 				Brand     string `json:"brands"`
 				Quantity  string `json:"quantity"`
 				Nutrients struct {
-					EnergyKJ   float64 `json:"energy-kj_100g"`
-					Fat        float64 `json:"fat_100g"`
-					Carbs      float64 `json:"carbohydrates_100g"`
-					Proteins   float64 `json:"proteins_100g"`
-					Salt       float64 `json:"salt_100g"`
+					EnergyKJ float64 `json:"energy-kj_100g"`
+					Fat      float64 `json:"fat_100g"`
+					Carbs    float64 `json:"carbohydrates_100g"`
+					Proteins float64 `json:"proteins_100g"`
+					Salt     float64 `json:"salt_100g"`
 				} `json:"nutriments"`
 			} `json:"product"`
 		}
@@ -604,9 +604,9 @@ func HandleFoodProduct(ctx context.Context, args map[string]interface{}) (ToolRe
 	}
 	var data struct {
 		Products []struct {
-			Name     string `json:"product_name"`
-			Brand    string `json:"brands"`
-			Barcode  string `json:"code"`
+			Name    string `json:"product_name"`
+			Brand   string `json:"brands"`
+			Barcode string `json:"code"`
 		} `json:"products"`
 	}
 	json.Unmarshal(body, &data)
