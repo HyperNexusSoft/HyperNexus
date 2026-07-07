@@ -88,7 +88,15 @@ Claude should bias toward:
 
 ---
 
-## 6. Build Verification
+## 6. CodeWhale (DeepSeek) Integration
+
+CodeWhale runs a native Rust tn-extension with full Pi extension parity:
+- **Lifecycle hooks**: session logging, tool RBAC, @memory:key expansion, L2 context harvesting
+- **49 MCP tools** via `tormentnexus.exe mcp`
+- **SKILL.md** at `.codewhale/plugins/tormentnexus/skills/SKILL.md`
+- Build from `~/codewhale-source` with `cargo build --release -p codewhale-cli`
+
+## 7. Build Verification
 Before finishing your session, always verify:
 ```bash
 pnpm -C packages/core exec tsc --noEmit

@@ -32,6 +32,7 @@ This file serves as the primary coordination point for multi-agent workflows and
 | **Gemini** | Speed, massive context processing, repo maintenance | Bulk refactoring, recursive scripts, context analysis |
 | **Claude** | UI/UX perfection, documentation, deep feature execution | Responsive layouts, type safety, precise documentation |
 | **GPT** | Systemic architecture, distributed debugging, race conditions | Go/TS bridge contracts, DB migration, concurrency safety |
+| **DeepSeek (CodeWhale)** | Terminal-native execution, Rust extension API, L2 memory hooks | CodeWhale tn-extension, MCP tool routing, agent lifecycle hooks |
 
 ---
 
