@@ -116,10 +116,10 @@ func HandleUniversitySearch(ctx context.Context, args map[string]interface{}) (T
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var unis []struct {
-		Name         string   `json:"name"`
-		Country      string   `json:"country"`
-		WebPages     []string `json:"web_pages"`
-		Domains      []string `json:"domains"`
+		Name     string   `json:"name"`
+		Country  string   `json:"country"`
+		WebPages []string `json:"web_pages"`
+		Domains  []string `json:"domains"`
 	}
 	json.Unmarshal(body, &unis)
 	if len(unis) == 0 {
@@ -205,11 +205,11 @@ func HandleBerryDetail(ctx context.Context, args map[string]interface{}) (ToolRe
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		Name          string `json:"name"`
-		Size          int    `json:"size"`
-		GrowthTime    int    `json:"growth_time"`
-		Smoothness    int    `json:"smoothness"`
-		Firmness      struct {
+		Name       string `json:"name"`
+		Size       int    `json:"size"`
+		GrowthTime int    `json:"growth_time"`
+		Smoothness int    `json:"smoothness"`
+		Firmness   struct {
 			Name string `json:"name"`
 		} `json:"firmness"`
 		Item struct {
@@ -261,8 +261,8 @@ func HandlePokemonAbility(ctx context.Context, args map[string]interface{}) (Too
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		Name  string `json:"name"`
-		Gen   string `json:"generation"`
+		Name   string `json:"name"`
+		Gen    string `json:"generation"`
 		Flavor []struct {
 			Text string `json:"flavor_text"`
 		} `json:"flavor_text_entries"`

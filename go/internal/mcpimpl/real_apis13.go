@@ -34,9 +34,9 @@ func HandleNASASearch(ctx context.Context, args map[string]interface{}) (ToolRes
 		Collection struct {
 			Items []struct {
 				Data []struct {
-					Title       string `json:"title"`
-					Description string `json:"description"`
-					DateCreated string `json:"date_created"`
+					Title        string `json:"title"`
+					Description  string `json:"description"`
+					DateCreated  string `json:"date_created"`
 					Photographer string `json:"photographer"`
 				} `json:"data"`
 				Links []struct {
@@ -72,8 +72,14 @@ func HandleNASASearch(ctx context.Context, args map[string]interface{}) (ToolRes
 }
 
 func HandleFloodWarnings(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	lat := getFloat(args, "latitude"); if lat == 0 { lat = 48.85 }
-	lon := getFloat(args, "longitude"); if lon == 0 { lon = 2.35 }
+	lat := getFloat(args, "latitude")
+	if lat == 0 {
+		lat = 48.85
+	}
+	lon := getFloat(args, "longitude")
+	if lon == 0 {
+		lon = 2.35
+	}
 	u := fmt.Sprintf("https://flood-api.open-meteo.com/v1/flood?latitude=%.2f&longitude=%.2f&daily=river_discharge&forecast_days=3", lat, lon)
 	resp, apiErr := batch13.Get(u)
 	if apiErr != nil {
@@ -83,7 +89,7 @@ func HandleFloodWarnings(ctx context.Context, args map[string]interface{}) (Tool
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
 		Daily struct {
-			Time     []string  `json:"time"`
+			Time      []string  `json:"time"`
 			Discharge []float64 `json:"river_discharge"`
 		} `json:"daily"`
 	}
@@ -107,8 +113,14 @@ func HandleFloodWarnings(ctx context.Context, args map[string]interface{}) (Tool
 }
 
 func HandleAirQualityForecast(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	lat := getFloat(args, "latitude"); if lat == 0 { lat = 52.52 }
-	lon := getFloat(args, "longitude"); if lon == 0 { lon = 13.41 }
+	lat := getFloat(args, "latitude")
+	if lat == 0 {
+		lat = 52.52
+	}
+	lon := getFloat(args, "longitude")
+	if lon == 0 {
+		lon = 13.41
+	}
 	u := fmt.Sprintf("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=%.2f&longitude=%.2f&hourly=european_aqi,us_aqi,pm2_5,pm10&forecast_days=2", lat, lon)
 	resp, apiErr := batch13.Get(u)
 	if apiErr != nil {
@@ -118,9 +130,9 @@ func HandleAirQualityForecast(ctx context.Context, args map[string]interface{}) 
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
 		Hourly struct {
-			Time []string  `json:"time"`
+			Time  []string  `json:"time"`
 			EUAQI []float64 `json:"european_aqi"`
-			USAQI  []float64 `json:"us_aqi"`
+			USAQI []float64 `json:"us_aqi"`
 		} `json:"hourly"`
 	}
 	json.Unmarshal(body, &data)
@@ -183,8 +195,8 @@ func HandleTVShowsByPage(ctx context.Context, args map[string]interface{}) (Tool
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var shows []struct {
-		Name   string  `json:"name"`
-		Type   string  `json:"type"`
+		Name   string   `json:"name"`
+		Type   string   `json:"type"`
 		Genres []string `json:"genres"`
 		Rating struct {
 			Average float64 `json:"average"`

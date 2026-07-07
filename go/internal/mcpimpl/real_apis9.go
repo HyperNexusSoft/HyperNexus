@@ -156,12 +156,12 @@ func HandleTopAnime(ctx context.Context, args map[string]interface{}) (ToolRespo
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
 		Data []struct {
-			Title   string  `json:"title"`
-			Score   float64 `json:"score"`
-			Type    string  `json:"type"`
-			Episodes int    `json:"episodes"`
-			Status  string  `json:"status"`
-			URL     string  `json:"url"`
+			Title    string  `json:"title"`
+			Score    float64 `json:"score"`
+			Type     string  `json:"type"`
+			Episodes int     `json:"episodes"`
+			Status   string  `json:"status"`
+			URL      string  `json:"url"`
 		} `json:"data"`
 	}
 	json.Unmarshal(body, &data)

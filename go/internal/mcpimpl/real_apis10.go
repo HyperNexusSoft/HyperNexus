@@ -14,7 +14,10 @@ import (
 var batch10 = &http.Client{Timeout: 15 * time.Second}
 
 func HandleEarthquakes(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	minMag := getFloat(args, "minMagnitude"); if minMag == 0 { minMag = 2.5 }
+	minMag := getFloat(args, "minMagnitude")
+	if minMag == 0 {
+		minMag = 2.5
+	}
 	period, _ := getString(args, "period")
 	if period == "" {
 		period = "day"
@@ -78,8 +81,14 @@ func minMagStr(mag float64) string {
 }
 
 func HandleSunTimes(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	lat := getFloat(args, "latitude"); if lat == 0 { lat = 38.9072 }
-	lon := getFloat(args, "longitude"); if lon == 0 { lon = -77.0369 }
+	lat := getFloat(args, "latitude")
+	if lat == 0 {
+		lat = 38.9072
+	}
+	lon := getFloat(args, "longitude")
+	if lon == 0 {
+		lon = -77.0369
+	}
 	u := fmt.Sprintf("https://api.sunrisesunset.io/json?lat=%.4f&lng=%.4f", lat, lon)
 	resp, apiErr := batch10.Get(u)
 	if apiErr != nil {
@@ -89,13 +98,13 @@ func HandleSunTimes(ctx context.Context, args map[string]interface{}) (ToolRespo
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
 		Results struct {
-			Sunrise      string `json:"sunrise"`
-			Sunset       string `json:"sunset"`
-			Dawn         string `json:"dawn"`
-			Dusk         string `json:"dusk"`
-			DayLength    string `json:"day_length"`
-			SolarNoon    string `json:"solar_noon"`
-			TimeZone     string `json:"timezone"`
+			Sunrise   string `json:"sunrise"`
+			Sunset    string `json:"sunset"`
+			Dawn      string `json:"dawn"`
+			Dusk      string `json:"dusk"`
+			DayLength string `json:"day_length"`
+			SolarNoon string `json:"solar_noon"`
+			TimeZone  string `json:"timezone"`
 		} `json:"results"`
 	}
 	json.Unmarshal(body, &data)
@@ -105,8 +114,14 @@ func HandleSunTimes(ctx context.Context, args map[string]interface{}) (ToolRespo
 }
 
 func HandleAirQuality(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	lat := getFloat(args, "latitude"); if lat == 0 { lat = 52.52 }
-	lon := getFloat(args, "longitude"); if lon == 0 { lon = 13.41 }
+	lat := getFloat(args, "latitude")
+	if lat == 0 {
+		lat = 52.52
+	}
+	lon := getFloat(args, "longitude")
+	if lon == 0 {
+		lon = 13.41
+	}
 	u := fmt.Sprintf("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=%.2f&longitude=%.2f&current=european_aqi,us_aqi,pm2_5,pm10,nitrogen_dioxide,ozone,sulphur_dioxide",
 		lat, lon)
 	resp, apiErr := batch10.Get(u)
@@ -117,22 +132,30 @@ func HandleAirQuality(ctx context.Context, args map[string]interface{}) (ToolRes
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
 		Current struct {
-			EuropeanAQI   float64 `json:"european_aqi"`
-			USAQI         float64 `json:"us_aqi"`
-			PM25          float64 `json:"pm2_5"`
-			PM10          float64 `json:"pm10"`
+			EuropeanAQI     float64 `json:"european_aqi"`
+			USAQI           float64 `json:"us_aqi"`
+			PM25            float64 `json:"pm2_5"`
+			PM10            float64 `json:"pm10"`
 			NitrogenDioxide float64 `json:"nitrogen_dioxide"`
-			Ozone         float64 `json:"ozone"`
-			SulphurDioxide float64 `json:"sulphur_dioxide"`
+			Ozone           float64 `json:"ozone"`
+			SulphurDioxide  float64 `json:"sulphur_dioxide"`
 		} `json:"current"`
 	}
 	json.Unmarshal(body, &data)
 	c := data.Current
 	aqiDesc := func(v float64) string {
-		if v <= 20 { return "Good"}
-		if v <= 40 { return "Fair"}
-		if v <= 60 { return "Moderate"}
-		if v <= 80 { return "Poor"}
+		if v <= 20 {
+			return "Good"
+		}
+		if v <= 40 {
+			return "Fair"
+		}
+		if v <= 60 {
+			return "Moderate"
+		}
+		if v <= 80 {
+			return "Poor"
+		}
 		return "Very Poor"
 	}
 	return ok(fmt.Sprintf("Air Quality at %.2f, %.2f:\n\nEU AQI: %.0f (%s)\nUS AQI: %.0f\nPM2.5: %.1f µg/m³\nPM10: %.1f µg/m³\nNO₂: %.1f µg/m³\nO₃: %.1f µg/m³\nSO₂: %.1f µg/m³",
@@ -162,10 +185,12 @@ func HandleMusicSearch(ctx context.Context, args map[string]interface{}) (ToolRe
 	body, _ := io.ReadAll(resp.Body)
 	if id != "" {
 		var data struct {
-			Name    string   `json:"name"`
-			Type    string   `json:"type"`
-			Country string   `json:"country"`
-			Tags    []struct{ Name string `json:"name"` } `json:"tags"`
+			Name    string `json:"name"`
+			Type    string `json:"type"`
+			Country string `json:"country"`
+			Tags    []struct {
+				Name string `json:"name"`
+			} `json:"tags"`
 		}
 		json.Unmarshal(body, &data)
 		var tags []string
@@ -205,12 +230,12 @@ func HandleTVShowByID(ctx context.Context, args map[string]interface{}) (ToolRes
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		Name    string   `json:"name"`
-		Type    string   `json:"type"`
-		Language string  `json:"language"`
-		Genres  []string `json:"genres"`
-		Status  string   `json:"status"`
-		Rating  struct {
+		Name     string   `json:"name"`
+		Type     string   `json:"type"`
+		Language string   `json:"language"`
+		Genres   []string `json:"genres"`
+		Status   string   `json:"status"`
+		Rating   struct {
 			Average float64 `json:"average"`
 		} `json:"rating"`
 		Summary string `json:"summary"`
@@ -271,7 +296,7 @@ func HandleOpenLibraryWork(ctx context.Context, args map[string]interface{}) (To
 			} `json:"author"`
 		} `json:"authors"`
 		Description interface{} `json:"description"`
-		Subjects    []string   `json:"subjects"`
+		Subjects    []string    `json:"subjects"`
 	}
 	json.Unmarshal(body, &data)
 	desc := ""
@@ -308,12 +333,12 @@ func HandleBeerSearch(ctx context.Context, args map[string]interface{}) (ToolRes
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var beers []struct {
-		Name        string  `json:"name"`
-		Tagline     string  `json:"tagline"`
-		ABV         float64 `json:"abv"`
-		IBU         float64 `json:"ibu"`
-		EBC         float64 `json:"ebc"`
-		Description string  `json:"description"`
+		Name        string   `json:"name"`
+		Tagline     string   `json:"tagline"`
+		ABV         float64  `json:"abv"`
+		IBU         float64  `json:"ibu"`
+		EBC         float64  `json:"ebc"`
+		Description string   `json:"description"`
 		FoodPairing []string `json:"food_pairing"`
 	}
 	json.Unmarshal(body, &beers)
@@ -348,10 +373,10 @@ func HandleCoinCapPrices(ctx context.Context, args map[string]interface{}) (Tool
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
 		Data []struct {
-			Symbol   string `json:"symbol"`
-			Name     string `json:"name"`
-			PriceUSD string `json:"priceUsd"`
-			Change24 string `json:"changePercent24Hr"`
+			Symbol    string `json:"symbol"`
+			Name      string `json:"name"`
+			PriceUSD  string `json:"priceUsd"`
+			Change24  string `json:"changePercent24Hr"`
 			MarketCap string `json:"marketCapUsd"`
 		} `json:"data"`
 	}

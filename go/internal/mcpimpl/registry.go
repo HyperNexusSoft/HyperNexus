@@ -5649,5 +5649,13 @@ func AllHandlers() []RegistryEntry {
 		{Name: "HandleOpenLibraryLanguages", Description: "Open Library languages list (real API)", File: "real_apis14.go"},
 		{Name: "HandleExoplanets", Description: "Exoplanet archive query (real API)", File: "real_apis14.go"},
 		{Name: "HandleOpenLibraryBookFormats", Description: "Book edition formats/details (real API)", File: "real_apis14.go"},
+
+		{Name: "HandleTVMazeCrew", Description: "TV show crew members (real API)", File: "real_apis15.go"},
+		{Name: "HandleEvolutionChain", Description: "Pokemon evolution chain (real API)", File: "real_apis15.go"},
+		{Name: "HandlePokemonSpecies", Description: "Pokemon species details (real API)", File: "real_apis15.go"},
+		{Name: "HandleWorldBankCountries", Description: "World Bank countries list (real API)", File: "real_apis15.go"},
+		{Name: "HandleWorldBankIndicators", Description: "World Bank indicators list (real API)", File: "real_apis15.go"},
+		{Name: "HandleNASAAstronomy", Description: "NASA APOD by date or count (real API)", File: "real_apis15.go"},
+		{Name: "HandlePokemonGrowth", Description: "Pokemon growth rates (real API)", File: "real_apis15.go"},
 	}
 }
