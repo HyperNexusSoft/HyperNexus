@@ -5672,5 +5672,12 @@ func AllHandlers() []RegistryEntry {
 		{Name: "HandlePokemonGender", Description: "Pokemon gender ratios (real API)", File: "real_apis17.go"},
 		{Name: "HandlePokemonStat", Description: "Pokemon stat details (real API)", File: "real_apis17.go"},
 		{Name: "HandleNASATechport", Description: "NASA technology projects (real API)", File: "real_apis17.go"},
+
+		{Name: "HandlePokemonGeneration", Description: "Pokemon kemonGeneration (real API)", File: "real_apis18.go"},
+		{Name: "HandlePokedex", Description: "Pokemon kedex (real API)", File: "real_apis18.go"},
+		{Name: "HandlePokemonVersion", Description: "Pokemon kemonVersion (real API)", File: "real_apis18.go"},
+		{Name: "HandleVersionGroup", Description: "Pokemon rsionGroup (real API)", File: "real_apis18.go"},
+		{Name: "HandlePokeResourceList", Description: "Pokemon keResourceList (real API)", File: "real_apis18.go"},
+		{Name: "HandleNASAAsteroids", Description: "Pokemon SAAsteroids (real API)", File: "real_apis18.go"},
 	}
 }
