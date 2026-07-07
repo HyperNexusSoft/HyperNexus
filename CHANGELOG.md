@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0-alpha.242] - 2026-07-06
+
+### Fixed
+
+- Removed workspace `.pi/extensions/tormentnexus.ts` from git tracking; added `.pi/extensions/` to `.gitignore`
+- Copied newer v4 extension (53,967 bytes) from workspace to global `~/.pi/agent/extensions/`
+
+### Changed
+
+- Version bump: 1.0.0-alpha.241 → 1.0.0-alpha.242
+
 ## [1.0.0-alpha.241] - 2026-07-06
 
 ### Added

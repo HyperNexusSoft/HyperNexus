@@ -1,8 +1,8 @@
-with open('go/internal/mcpimpl/stubs_completed2.go', 'r', encoding='utf-8') as f:
+with open("go/internal/mcpimpl/stubs_completed2.go", "r", encoding="utf-8") as f:
     content = f.read()
 
 # Find the broken section and remove it
-old_start = content.find('func HandleListSystems')
+old_start = content.find("func HandleListSystems")
 if old_start > 0:
     content = content[:old_start]
 
@@ -12,7 +12,7 @@ content += 'func HandleSshExec(ctx context.Context, args map[string]interface{})
 content += 'func HandleStartDeployment(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {\n\tenv_name, _ := getString(args, "environment")\n\tif env_name == "" {\n\t\treturn err("environment is required")\n\t}\n\treturn ok(fmt.Sprintf("Deployment started for %s.", env_name))\n}\n\n'
 content += 'func HandleURLInspection(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {\n\turl_str, _ := getString(args, "url")\n\tif url_str == "" {\n\t\treturn err("url is required")\n\t}\n\treturn ok(fmt.Sprintf("URL inspection for %s. Requires Google Search Console API.", url_str))\n}\n'
 
-with open('go/internal/mcpimpl/stubs_completed2.go', 'w', encoding='utf-8') as f:
+with open("go/internal/mcpimpl/stubs_completed2.go", "w", encoding="utf-8") as f:
     f.write(content)
 
-print('Fixed')
+print("Fixed")

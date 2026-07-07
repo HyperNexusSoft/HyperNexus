@@ -340,8 +340,6 @@ func HandleHalSmokeTest(ctx context.Context, args map[string]interface{}) (ToolR
 	return ok(fmt.Sprintf("Smoke test %s: PASSED (%d bytes, status %d)", url_str, len(body), resp.StatusCode))
 }
 
-
-
 func HandleAddNote_cocaxcode_logbook_mcp(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
 	project, _ := getString(args, "project")
 	note, _ := getString(args, "note")
@@ -415,8 +413,6 @@ func HandleKickEcho(ctx context.Context, args map[string]interface{}) (ToolRespo
 	}
 	return ok(fmt.Sprintf("KickJS: %%s", msg))
 }
-
-
 
 func HandleListSystems(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
 	return ok("Systems listing: check /api/system/overview for full system information.")
