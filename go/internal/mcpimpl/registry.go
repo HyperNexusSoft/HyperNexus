@@ -5641,5 +5641,13 @@ func AllHandlers() []RegistryEntry {
 		{Name: "HandleNobelPrizes", Description: "Nobel prizes by year/category (real API)", File: "real_apis13.go"},
 		{Name: "HandleTVShowsByPage", Description: "TV shows list by page (real API)", File: "real_apis13.go"},
 		{Name: "HandleBookShelves", Description: "Open Library bookshelves (real API)", File: "real_apis13.go"},
+		{Name: "HandleNEOFeed", Description: "Near Earth Objects asteroid feed (real API)", File: "real_apis14.go"},
+		{Name: "HandleTVSeasons", Description: "TV show seasons list (real API)", File: "real_apis14.go"},
+		{Name: "HandleSeasonEpisodes", Description: "Episodes by season ID (real API)", File: "real_apis14.go"},
+		{Name: "HandlePokeLocation", Description: "Pokemon location/region data (real API)", File: "real_apis14.go"},
+		{Name: "HandlePokeType", Description: "Pokemon type damage relations (real API)", File: "real_apis14.go"},
+		{Name: "HandleOpenLibraryLanguages", Description: "Open Library languages list (real API)", File: "real_apis14.go"},
+		{Name: "HandleExoplanets", Description: "Exoplanet archive query (real API)", File: "real_apis14.go"},
+		{Name: "HandleOpenLibraryBookFormats", Description: "Book edition formats/details (real API)", File: "real_apis14.go"},
 	}
 }
