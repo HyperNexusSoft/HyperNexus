@@ -4509,6 +4509,23 @@ var dispatchMap = map[string]func(ctx context.Context, args map[string]interface
 	"HandleGameDeals":           HandleGameDeals,           // from real_apis3.go (CheapShark)
 	"HandleJSONPlaceholder":     HandleJSONPlaceholder,     // from real_apis3.go (JSONPlaceholder)
 	"HandleTriviaQuestion":      HandleTriviaQuestion,      // from real_apis3.go (Open Trivia)
+
+	"HandleiTunesSearch":       HandleiTunesSearch,       // from real_apis4.go (iTunes)
+	"HandleMyIP":               HandleMyIP,               // from real_apis4.go (IPify)
+	"HandleChuckNorrisJoke":    HandleChuckNorrisJoke,    // from real_apis4.go (Chuck Norris)
+	"HandleChuckCategories":    HandleChuckCategories,    // from real_apis4.go (Chuck Norris)
+	"HandleKanyeQuote":         HandleKanyeQuote,         // from real_apis4.go (Kanye.rest)
+	"HandleLoremIpsum":         HandleLoremIpsum,         // from real_apis4.go (Bacon Ipsum)
+	"HandleCorporateBS":        HandleCorporateBS,        // from real_apis4.go (Corporate BS)
+	"HandleZenQuote":           HandleZenQuote,           // from real_apis4.go (ZenQuotes)
+	"HandleGitHubTrending":     HandleGitHubTrending,     // from real_apis4.go (GitHub Trending)
+	"HandleAuthorLookup":       HandleAuthorLookup,       // from real_apis4.go (Open Library Author)
+	"HandleSpaceXLaunch":       HandleSpaceXLaunch,       // from real_apis4.go (SpaceX API)
+	"HandleDevQuote":           HandleDevQuote,           // from real_apis4.go (Dev Quotes)
+	"HandleWorkDetails":        HandleWorkDetails,        // from real_apis4.go (Open Library Work)
+	"HandleIPData":             HandleIPData,             // from real_apis4.go (IP API)
+	"HandleColorInfo":          HandleColorInfo,          // from real_apis4.go (Color API)
+	"HandleNameday":            HandleNameday,            // from real_apis4.go (Nameday)
 }
 
 func Dispatch(name string, ctx context.Context, args map[string]interface{}) (ToolResponse, error) {

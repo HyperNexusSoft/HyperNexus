@@ -248,12 +248,12 @@ func HandleTVShowSearch(ctx context.Context, args map[string]interface{}) (ToolR
 	var results []struct {
 		Score float64 `json:"score"`
 		Show  struct {
-			ID       int    `json:"id"`
-			Name     string `json:"name"`
-			Type     string `json:"type"`
-			Language string `json:"language"`
+			ID       int      `json:"id"`
+			Name     string   `json:"name"`
+			Type     string   `json:"type"`
+			Language string   `json:"language"`
 			Genres   []string `json:"genres"`
-			Status   string `json:"status"`
+			Status   string   `json:"status"`
 			Rating   struct {
 				Average float64 `json:"average"`
 			} `json:"rating"`
@@ -332,7 +332,7 @@ func HandleNationalityPredict(ctx context.Context, args map[string]interface{}) 
 	var data struct {
 		Name    string `json:"name"`
 		Country []struct {
-			CountryID  string  `json:"country_id"`
+			CountryID   string  `json:"country_id"`
 			Probability float64 `json:"probability"`
 		} `json:"country"`
 	}
@@ -351,8 +351,14 @@ func HandleNationalityPredict(ctx context.Context, args map[string]interface{}) 
 // ═══════════════════════════════════════════════════════════════════
 
 func HandleForecast(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
-	lat := getFloat(args, "latitude"); if lat == 0 { lat = 52.52 }
-	lon := getFloat(args, "longitude"); if lon == 0 { lon = 13.41 }
+	lat := getFloat(args, "latitude")
+	if lat == 0 {
+		lat = 52.52
+	}
+	lon := getFloat(args, "longitude")
+	if lon == 0 {
+		lon = 13.41
+	}
 	days, _ := getInt(args, "days", 3)
 	u := fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%.2f&longitude=%.2f&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&current_weather=true&forecast_days=%d",
 		lat, lon, days)
@@ -369,11 +375,11 @@ func HandleForecast(ctx context.Context, args map[string]interface{}) (ToolRespo
 			Weathercode int     `json:"weathercode"`
 		} `json:"current_weather"`
 		Daily struct {
-			Time              []string  `json:"time"`
-			TempMax           []float64 `json:"temperature_2m_max"`
-			TempMin           []float64 `json:"temperature_2m_min"`
-			Precipitation     []float64 `json:"precipitation_sum"`
-			WeatherCode       []int     `json:"weathercode"`
+			Time          []string  `json:"time"`
+			TempMax       []float64 `json:"temperature_2m_max"`
+			TempMin       []float64 `json:"temperature_2m_min"`
+			Precipitation []float64 `json:"precipitation_sum"`
+			WeatherCode   []int     `json:"weathercode"`
 		} `json:"daily"`
 	}
 	json.Unmarshal(body, &data)
@@ -432,10 +438,10 @@ func HandleRandomUser(ctx context.Context, args map[string]interface{}) (ToolRes
 				First string `json:"first"`
 				Last  string `json:"last"`
 			} `json:"name"`
-			Gender  string `json:"gender"`
-			Email   string `json:"email"`
-			Phone   string `json:"phone"`
-			Nat     string `json:"nat"`
+			Gender   string `json:"gender"`
+			Email    string `json:"email"`
+			Phone    string `json:"phone"`
+			Nat      string `json:"nat"`
 			Location struct {
 				Street struct {
 					Name   string `json:"name"`
@@ -520,16 +526,16 @@ func HandleFruitInfo(ctx context.Context, args map[string]interface{}) (ToolResp
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var data struct {
-		Name     string `json:"name"`
-		Family   string `json:"family"`
-		Order    string `json:"order"`
-		Genus    string `json:"genus"`
+		Name       string `json:"name"`
+		Family     string `json:"family"`
+		Order      string `json:"order"`
+		Genus      string `json:"genus"`
 		Nutritions struct {
-			Calories   float64 `json:"calories"`
-			Fat       float64 `json:"fat"`
-			Sugar     float64 `json:"sugar"`
+			Calories      float64 `json:"calories"`
+			Fat           float64 `json:"fat"`
+			Sugar         float64 `json:"sugar"`
 			Carbohydrates float64 `json:"carbohydrates"`
-			Protein   float64 `json:"protein"`
+			Protein       float64 `json:"protein"`
 		} `json:"nutritions"`
 	}
 	json.Unmarshal(body, &data)
@@ -564,13 +570,13 @@ func HandleGameDeals(ctx context.Context, args map[string]interface{}) (ToolResp
 	defer resp.Body.Close()
 	body, _ := io.ReadAll(resp.Body)
 	var deals []struct {
-		Title          string  `json:"title"`
-		SalePrice     string  `json:"salePrice"`
-		NormalPrice   string  `json:"normalPrice"`
-		Savings       string  `json:"savings"`
+		Title           string `json:"title"`
+		SalePrice       string `json:"salePrice"`
+		NormalPrice     string `json:"normalPrice"`
+		Savings         string `json:"savings"`
 		MetacriticScore string `json:"metacriticScore"`
-		StoreID       int     `json:"storeID"`
-		Thumb         string  `json:"thumb"`
+		StoreID         int    `json:"storeID"`
+		Thumb           string `json:"thumb"`
 	}
 	json.Unmarshal(body, &deals)
 	if len(deals) == 0 {
@@ -639,11 +645,11 @@ func HandleTriviaQuestion(ctx context.Context, args map[string]interface{}) (Too
 	var data struct {
 		ResponseCode int `json:"response_code"`
 		Results      []struct {
-			Category    string   `json:"category"`
-			Difficulty  string   `json:"difficulty"`
-			Question    string   `json:"question"`
-			Correct     string   `json:"correct_answer"`
-			Incorrect   []string `json:"incorrect_answers"`
+			Category   string   `json:"category"`
+			Difficulty string   `json:"difficulty"`
+			Question   string   `json:"question"`
+			Correct    string   `json:"correct_answer"`
+			Incorrect  []string `json:"incorrect_answers"`
 		} `json:"results"`
 	}
 	json.Unmarshal(body, &data)
@@ -668,4 +674,3 @@ func decodeHTML(s string) string {
 }
 
 // ── HELPERS ───────────────────────────────────────────────────────
-
