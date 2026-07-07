@@ -1,6 +1,7 @@
 package httpapi
 
 import (
+	memorypkg "github.com/MDMAtk/TormentNexus/internal/memory"
 	"bytes"
 	"compress/gzip"
 	"context"
@@ -1635,6 +1636,7 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/cli/tools", s.handleCLITools)
 	s.mux.HandleFunc("/api/cli/harnesses", s.handleHarnesses)
 	s.mux.HandleFunc("/api/cli/summary", s.handleCLISummary)
+	s.mux.HandleFunc("/api/memory/project/sync", s.handleMemoryProjectSync)
 	s.mux.HandleFunc("/api/memory/maintenance", s.handleMemoryMaintenance)
 	s.mux.HandleFunc("/api/memory/tormentnexus-memory/status", s.handleMemoryStatus)
 	s.mux.HandleFunc("/api/import/sources", s.handleImportSources)
@@ -11022,6 +11024,31 @@ func (s *Server) handleImportSummary(w http.ResponseWriter, _ *http.Request) {
 	})
 }
 
+
+
+func (s *Server) handleMemoryProjectSync(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeJSON(w, http.StatusMethodNotAllowed, map[string]any{"success": false, "error": "method not allowed"})
+		return
+	}
+
+	pdb := memorypkg.NewProjectDB(s.cfg.WorkspaceRoot)
+	data, err := pdb.SyncMemDB()
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]any{"success": false, "error": err.Error()})
+		return
+	}
+
+	writeJSON(w, http.StatusOK, map[string]any{
+		"success": true,
+		"data":    data,
+		"bridge": map[string]any{
+			"fallback":  "go-local-memory",
+			"procedure": "memory.project.sync",
+			"reason":    "synced .memdb directly via Go sidecar",
+		},
+	})
+}
 
 func (s *Server) handleMemoryMaintenance(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {

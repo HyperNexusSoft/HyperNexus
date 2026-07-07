@@ -42,6 +42,11 @@ func DefaultMainConfigDir() string {
 		return configured
 	}
 
+	// Fallback to legacy env var for backward compatibility
+	if legacy := os.Getenv("TORMENTNEXUS_CONFIG_DIR"); legacy != "" {
+		return legacy
+	}
+
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return ".tormentnexus"
