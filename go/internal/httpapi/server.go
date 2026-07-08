@@ -63,7 +63,7 @@ import (
 	"github.com/MDMAtk/TormentNexus/internal/toolregistry"
 	"github.com/MDMAtk/TormentNexus/internal/workspaces"
 	"github.com/google/uuid"
-	_ "modernc.org/sqlite"
+	_ "github.com/glebarez/go-sqlite"
 
 	"github.com/MDMAtk/TormentNexus/internal/database")
 

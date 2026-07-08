@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	"github.com/lib/pq"
-	_ "modernc.org/sqlite"
+	_ "github.com/glebarez/go-sqlite"
 )
 
 func init() {

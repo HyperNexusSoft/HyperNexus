@@ -346,7 +346,7 @@ func HandleAddNote_cocaxcode_logbook_mcp(ctx context.Context, args map[string]in
 	if project == "" || note == "" {
 		return err("project and note are required")
 	}
-	return ok(fmt.Sprintf("Note added to %%s: %%s", project, truncateStr(note, 100)))
+	return ok(fmt.Sprintf("Note added to %s: %s", project, truncateStr(note, 100)))
 }
 
 func HandleAnalyzeContainer(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
@@ -354,7 +354,7 @@ func HandleAnalyzeContainer(ctx context.Context, args map[string]interface{}) (T
 	if image == "" {
 		return err("image is required")
 	}
-	return ok(fmt.Sprintf("Container analysis for %%s. Use: docker inspect %%s", image, image))
+	return ok(fmt.Sprintf("Container analysis for %s. Use: docker inspect %s", image, image))
 }
 
 func HandleChatpipeEcho(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
@@ -362,7 +362,7 @@ func HandleChatpipeEcho(ctx context.Context, args map[string]interface{}) (ToolR
 	if msg == "" {
 		return ok("ChatPipe echo: ready")
 	}
-	return ok(fmt.Sprintf("ChatPipe echo: %%s", msg))
+	return ok(fmt.Sprintf("ChatPipe echo: %s", msg))
 }
 
 func HandleCreateDidaTask(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
@@ -370,7 +370,7 @@ func HandleCreateDidaTask(ctx context.Context, args map[string]interface{}) (Too
 	if title == "" {
 		return err("title is required")
 	}
-	return ok(fmt.Sprintf("Dida task created: %%s. Requires DIDA_TOKEN env var", title))
+	return ok(fmt.Sprintf("Dida task created: %s. Requires DIDA_TOKEN env var", title))
 }
 
 func HandleEcho_botbell_mcp(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
@@ -378,7 +378,7 @@ func HandleEcho_botbell_mcp(ctx context.Context, args map[string]interface{}) (T
 	if msg == "" {
 		return ok("BotBell echo: ready")
 	}
-	return ok(fmt.Sprintf("BotBell: %%s", msg))
+	return ok(fmt.Sprintf("BotBell: %s", msg))
 }
 
 func HandleEcho_cicada(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
@@ -386,7 +386,7 @@ func HandleEcho_cicada(ctx context.Context, args map[string]interface{}) (ToolRe
 	if msg == "" {
 		return ok("Cicada echo: ready")
 	}
-	return ok(fmt.Sprintf("Cicada: %%s", msg))
+	return ok(fmt.Sprintf("Cicada: %s", msg))
 }
 
 func HandleEcho_coremcp(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
@@ -394,7 +394,7 @@ func HandleEcho_coremcp(ctx context.Context, args map[string]interface{}) (ToolR
 	if msg == "" {
 		return ok("CoreMCP echo: ready")
 	}
-	return ok(fmt.Sprintf("CoreMCP: %%s", msg))
+	return ok(fmt.Sprintf("CoreMCP: %s", msg))
 }
 
 func HandleGetStudy(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
@@ -403,7 +403,7 @@ func HandleGetStudy(ctx context.Context, args map[string]interface{}) (ToolRespo
 	if studyID == "" && patientID == "" {
 		return err("studyId or patientId is required")
 	}
-	return ok(fmt.Sprintf("DICOM study %%s for patient %%s. Requires DICOM server.", studyID, patientID))
+	return ok(fmt.Sprintf("DICOM study %s for patient %s. Requires DICOM server.", studyID, patientID))
 }
 
 func HandleKickEcho(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
@@ -411,7 +411,7 @@ func HandleKickEcho(ctx context.Context, args map[string]interface{}) (ToolRespo
 	if msg == "" {
 		return ok("KickJS echo: ready")
 	}
-	return ok(fmt.Sprintf("KickJS: %%s", msg))
+	return ok(fmt.Sprintf("KickJS: %s", msg))
 }
 
 func HandleListSystems(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {

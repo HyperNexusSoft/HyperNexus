@@ -84,7 +84,7 @@ func HandleGetGSCInsights(ctx context.Context, args map[string]interface{}) (Too
 	if site == "" {
 		site = "default"
 	}
-	return ok(fmt.Sprintf("📈 Google Search Console — %s\nLast 7 days:\n• Clicks: 1,234 (+12%)\n• Impressions: 45,678 (+8%)\n• Avg CTR: 2.7%\n• Avg Position: 14.2", site))
+	return ok(fmt.Sprintf("📈 Google Search Console — %s\nLast 7 days:\n• Clicks: 1,234 (+12%%)\n• Impressions: 45,678 (+8%%)\n• Avg CTR: 2.7%%\n• Avg Position: 14.2", site))
 }
 
 // ═══════════════════════════════════════════════════════════════════

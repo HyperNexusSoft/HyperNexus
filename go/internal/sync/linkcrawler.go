@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/MDMAtk/TormentNexus/internal/ai"
-	_ "modernc.org/sqlite"
+	_ "github.com/glebarez/go-sqlite"
 
 	"github.com/MDMAtk/TormentNexus/internal/database")
 

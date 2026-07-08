@@ -26,7 +26,7 @@ import (
 	"github.com/MDMAtk/TormentNexus/internal/memorystore"
 	"github.com/MDMAtk/TormentNexus/internal/providers"
 	"github.com/MDMAtk/TormentNexus/internal/sessionimport"
-	_ "modernc.org/sqlite"
+	_ "github.com/glebarez/go-sqlite"
 
 	"github.com/MDMAtk/TormentNexus/internal/database")
 

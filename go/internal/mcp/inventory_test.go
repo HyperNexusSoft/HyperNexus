@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	_ "modernc.org/sqlite"
+	_ "github.com/glebarez/go-sqlite"
 
 	"github.com/MDMAtk/TormentNexus/internal/database")
 
