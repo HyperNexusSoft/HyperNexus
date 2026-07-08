@@ -8,6 +8,12 @@
 ### SQLite Driver Semicolon Gotcha
 - **Multi-query Execution**: SQLite driver implementations (like `modernc.org/sqlite`) typically execute only the first query inside a semicolon-separated SQL string passed to `db.Exec()`. Splitting table creations (`published_mcp_servers` and `links_backlog`) into individual `Exec` calls guarantees both tables are successfully created on startup.
 
+### Catalog Database Mismatch Fix
+- **Table vs Database Alignment**: When scraper tasks attempt to query the `links_backlog` table, they must target `catalog.db` directly rather than `tormentnexus.db`. Routing queries via `localTormentNexusDBPath()` causes sqlite errors due to missing tables. 
+
+### Nondestructive Script Clean-up
+- **Pruning Dev Workspace**: Keeping script files organized (e.g. archiving unused scrapers/pipelines to `scripts/archive/` and keeping task runners in the root of `scripts/`) ensures developer workspaces stay maintainable and uncluttered.
+
 ### Win32 GUI Notification Isolation
 - **Non-Interactive GUI Limits (Session 0)**: Spawning Win32 notification icons via `Shell_NotifyIconW` from headless background tasks/runners fails silently on Windows due to session isolation. To display the taskbar system tray icon, the sidecar binary `tormentnexus.exe` must be run interactively directly from the user's desktop command prompt.
 
