@@ -2,7 +2,7 @@ import { getCacheTTL, getCached, setCached } from "../cache";
 
 export const runtime = "nodejs";
 
-const DEFAULT_UPSTREAM_TRPC_URL = "http://127.0.0.1:7787/trpc";
+const DEFAULT_UPSTREAM_TRPC_URL = "http://127.0.0.1:7778/trpc";
 const DEFAULT_GO_API_BASE = "http://127.0.0.1:7778";
 
 function resolveUpstreamBase(): string {

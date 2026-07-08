@@ -526,7 +526,7 @@ func New(cfg config.Config, detector controlplane.ToolProvider) *Server {
 
 	// Initialize catalog.db tables if they are missing
 	if catalogDB, err := database.Open("sqlite", filepath.Join(cfg.WorkspaceRoot, "catalog.db")); err == nil {
-		_, _ = catalogDB.Exec(`
+		if _, err := catalogDB.Exec(`
 			CREATE TABLE IF NOT EXISTS published_mcp_servers (
 				uuid TEXT PRIMARY KEY,
 				canonical_id TEXT UNIQUE NOT NULL,
@@ -538,7 +538,11 @@ func New(cfg config.Config, detector controlplane.ToolProvider) *Server {
 				status TEXT,
 				created_at TEXT,
 				updated_at TEXT
-			);
+			)
+		`); err != nil {
+			fmt.Printf("[Server] Failed to create published_mcp_servers table: %v\n", err)
+		}
+		if _, err := catalogDB.Exec(`
 			CREATE TABLE IF NOT EXISTS links_backlog (
 				uuid TEXT PRIMARY KEY,
 				url TEXT NOT NULL,
@@ -560,8 +564,10 @@ func New(cfg config.Config, detector controlplane.ToolProvider) *Server {
 				synced_at TEXT,
 				created_at TEXT,
 				updated_at TEXT
-			);
-		`)
+			)
+		`); err != nil {
+			fmt.Printf("[Server] Failed to create links_backlog table: %v\n", err)
+		}
 		_ = catalogDB.Close()
 	}
 

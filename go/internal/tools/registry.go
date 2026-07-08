@@ -134,6 +134,17 @@ func (r *Registry) List() []string {
 		names = append(names, name)
 	}
 	return names
+
+
+
+
+
+
+
+
+
+
+
 }
 
 var _ = json.Marshal

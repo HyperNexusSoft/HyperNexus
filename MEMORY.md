@@ -1,10 +1,18 @@
 # MEMORY.md — Multi-Agent Observations
 
-## Session 2026-07-08 (JSX Balancing & High-Fidelity Layout Consolidation)
+## Session 2026-07-08 (JSX Balancing, Port Consolidation, SQLite Gotchas & Swarm Refinement)
 
-### JSX Balancing & Tag Counting
-- **Precise JSX Mismatch Identification**: Redesigning large React layouts (e.g., `dashboard-home-view.tsx`) with nested layout wrapper structures can easily introduce unclosed `div` tags. Utilizing simple Python counting scripts (`text.count("<div")` and `text.count("</div>")` accounting for self-closing `<div ... />` tags) resolves layout issues much faster than standard compiler logs when nested scopes are broken.
-- **Consolidated Tab & Accordion UX**: Standardizing subpages into collapsible detail blocks (`<details className="group">`) preserves functional capabilities inside a single-page home console deck without adding page rendering overhead.
+### Port Consolidation & Upstream tRPC routing
+- **Upstream Port Alignment**: Corrected the default upstream tRPC proxy port from the decommissioned `7787` to the active Go sidecar port `7778` inside [route.ts](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/src/app/api/trpc/[trpc]/route.ts) and [start.mjs](file:///c:/Users/hyper/workspace/tormentnexus/apps/web/scripts/start.mjs). This resolved the HTTP 500 page rendering errors on the dashboard console.
+
+### SQLite Driver Semicolon Gotcha
+- **Multi-query Execution**: SQLite driver implementations (like `modernc.org/sqlite`) typically execute only the first query inside a semicolon-separated SQL string passed to `db.Exec()`. Splitting table creations (`published_mcp_servers` and `links_backlog`) into individual `Exec` calls guarantees both tables are successfully created on startup.
+
+### Win32 GUI Notification Isolation
+- **Non-Interactive GUI Limits (Session 0)**: Spawning Win32 notification icons via `Shell_NotifyIconW` from headless background tasks/runners fails silently on Windows due to session isolation. To display the taskbar system tray icon, the sidecar binary `tormentnexus.exe` must be run interactively directly from the user's desktop command prompt.
+
+### Swarm Database Schema Correction
+- **Missing Columns Triage**: Restructured `swarm_v6.py` query fields to select `classification` (mapped as `category`) and `description` to align with the actual SQLite columns in `assimilation_state.db`, resolving schema crash errors.
 
 ## Session 2026-07-04 (Go Unit Tests & Database Contention)
 
