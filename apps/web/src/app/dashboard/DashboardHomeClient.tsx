@@ -20,17 +20,7 @@ import { VibeCheckWidget } from "../../components/VibeCheckWidget";
 
 import { motion, AnimatePresence } from "framer-motion";
 
-// Import sub-pages to consolidate
-import ResearchPage from "./research/view";
-import CommandDashboard from "./command/view";
-import ChronicleDashboard from "./chronicle/view";
-import ManualPage from "./manual/view";
-import WorkflowsPage from "./workflows/view";
-import SecurityPage from "./security/view";
-import IntegrationsDashboard from "./integrations/view";
-import CloudOrchestratorDashboardPage from "./cloud-orchestrator/view";
-import ProviderAuthBillingMatrix from "./billing/view";
-import SettingsDashboard from "./settings/view";
+// Consolidated all dashboard views directly into dashboard-home-view.tsx
 
 const SESSION_STATUS_PRIORITY: Record<
 	DashboardSessionSummary["status"],

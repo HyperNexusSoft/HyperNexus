@@ -3,6 +3,11 @@ import { useHealerStream, WorkflowVisualizer } from '@tormentnexus/ui';
 import { trpc } from '../../utils/trpc';
 import { useState, useEffect, useCallback } from 'react';
 import ProviderAuthBillingMatrix from "./billing/view";
+import ResearchPage from "./research/view";
+import CommandDashboard from "./command/view";
+import ManualPage from "./manual/view";
+import CloudOrchestratorDashboardPage from "./cloud-orchestrator/view";
+import SettingsDashboard from "./settings/view";
 
 export interface DashboardStatusSummary {
     initialized: boolean;
@@ -1046,6 +1051,7 @@ export function DashboardHomeView({
     children,
 }: DashboardHomeViewProps) {
     const [dbLock, setDbLock] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(true);
     // --- NATIVE GIT CHRONICLE ---
     const { data: gitLog } = trpc.git.getLog.useQuery({ limit: 10 });
     const { data: gitStatus } = trpc.git.getStatus.useQuery();
@@ -1559,11 +1565,46 @@ export function DashboardHomeView({
         ? 'border-cyan-500/30 bg-cyan-500/10 text-cyan-200'
         : (mcpStatus.initialized ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-200' : 'border-rose-500/30 bg-rose-500/10 text-rose-200');
     return (
-        <div className="min-h-screen bg-slate-950 text-slate-100">
-            <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-6 py-8 lg:px-8">
-                
-                {/* OMNI-CONSOLE CONTROL PANEL HEADER */}
-                <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-4">
+        <div className="min-h-screen bg-slate-950 text-slate-100 flex">
+            {/* STICKY LEFT SIDEBAR */}
+            <aside className={`fixed inset-y-0 left-0 z-20 flex w-72 flex-col border-r border-slate-800 bg-slate-900/60 backdrop-blur-xl transition-all duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:sticky md:translate-x-0`}>
+                <div className="flex h-16 items-center justify-between px-6 border-b border-slate-800/60">
+                    <span className="text-sm font-bold tracking-wider text-cyan-400 font-mono">NAVIGATIONAL DECK</span>
+                    <button onClick={() => setSidebarOpen(false)} className="md:hidden text-slate-400 hover:text-white">✕</button>
+                </div>
+                <nav className="flex-1 space-y-1.5 px-4 py-6 overflow-y-auto">
+                    {[
+                        { href: "#mission-control", label: "🌌 Mission Control", desc: "Core commands, supervisor & swarm" },
+                        { href: "#research-workflows", label: "🔬 Research & Workflows", desc: "Topic conducting & agent steps" },
+                        { href: "#memory-graphrag", label: "🧠 Memory & GraphRAG", desc: "Tiers, semantic graph & cold cache" },
+                        { href: "#mcp-registry", label: "🔌 MCP & Tool Registry", desc: "Smithery & always-on accessory" },
+                        { href: "#integrations", label: "☁️ Integrations Hub", desc: "Extension bridges & Jules" },
+                        { href: "#governance-billing", label: "💼 Governance & Billing", desc: "Stripe, settings, RBAC & docs" },
+                    ].map((item) => (
+                        <a
+                            key={item.href}
+                            href={item.href}
+                            className="block p-3 rounded-lg border border-transparent hover:border-slate-800 hover:bg-slate-950/40 transition-all group"
+                        >
+                            <div className="text-xs font-bold text-slate-200 group-hover:text-cyan-400 transition-colors">{item.label}</div>
+                            <div className="text-[10px] text-slate-500 mt-0.5">{item.desc}</div>
+                        </a>
+                    ))}
+                </nav>
+            </aside>
+
+            {/* MAIN CONTENT AREA */}
+            <div className="flex-1 flex flex-col min-w-0">
+                {/* Mobile sidebar toggle */}
+                <div className="md:hidden flex h-14 items-center px-4 border-b border-slate-800 bg-slate-900/60 backdrop-blur-xl">
+                    <button onClick={() => setSidebarOpen(true)} className="text-slate-200 p-2 font-black text-sm">
+                        ☰ Navigation Menu
+                    </button>
+                </div>
+
+                <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-8 md:px-8">
+                    {/* OMNI-CONSOLE CONTROL PANEL HEADER */}
+                    <div id="mission-control" className="scroll-mt-6 rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-4">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
                             <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-2">
@@ -1662,8 +1703,25 @@ export function DashboardHomeView({
                     )}
                 </div>
 
+                {/* INTERACTIVE COMMAND CENTER */}
+                <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-4">
+                    <details className="group" open>
+                        <summary className="list-none flex items-center justify-between cursor-pointer select-none">
+                            <div className="flex items-center gap-2">
+                                <h2 className="text-base font-semibold text-white">🎮 Interactive Command Center</h2>
+                                <span className="text-cyan-400 cursor-help text-xs" title="Execute slash commands and inspect available command handlers registered with TormentNexus Core.">💡</span>
+                            </div>
+                            <span className="text-xs font-mono text-cyan-400 border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold uppercase group-open:hidden">Expand</span>
+                            <span className="text-xs font-mono text-slate-500 border border-slate-800 bg-slate-950 px-2 py-0.5 rounded font-semibold uppercase hidden group-open:inline">Collapse</span>
+                        </summary>
+                        <div className="mt-4 pt-4 border-t border-slate-800/60">
+                            <CommandDashboard />
+                        </div>
+                    </details>
+                </div>
+
                 {/* SECTION 1: COGNITIVE MEMORY ENGINES & SKILL REGISTRIES */}
-                <div className="space-y-4">
+                <div id="memory-graphrag" className="scroll-mt-6 space-y-4">
                         <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                             <h2 className="text-lg font-bold text-white tracking-wide">Cognitive Memory Engines &amp; Skill Registries</h2>
                             <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">Active Core</span>
@@ -1921,7 +1979,7 @@ export function DashboardHomeView({
                 </div>
 
                 {/* SECTION 2: NATIVE GO MCP ORCHESTRATION & TOOL CONTROL */}
-                <div className="space-y-4 pt-8 border-t border-slate-800">
+                <div id="mcp-registry" className="scroll-mt-6 space-y-4 pt-8 border-t border-slate-800">
                         <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                             <h2 className="text-lg font-bold text-white tracking-wide">Native Go MCP Orchestration &amp; Tool Control</h2>
                             <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">Execution Layer</span>
@@ -2165,10 +2223,27 @@ export function DashboardHomeView({
                 </div>
 
                 {/* SECTION: SWARM & WORKFLOWS PIPELINES */}
-                <div className="space-y-4 pt-8 border-t border-slate-800">
+                <div id="research-workflows" className="scroll-mt-6 space-y-4 pt-8 border-t border-slate-800">
                         <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                             <h2 className="text-lg font-bold text-white tracking-wide">Autonomous Swarm Workflows &amp; Pipelines</h2>
                             <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">Simulation Control</span>
+                        </div>
+
+                        {/* TOPIC RESEARCH CENTER */}
+                        <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-4">
+                            <details className="group">
+                                <summary className="list-none flex items-center justify-between cursor-pointer select-none">
+                                    <div className="flex items-center gap-2">
+                                        <h2 className="text-base font-semibold text-white">🔬 Autonomous Research Center</h2>
+                                        <span className="text-cyan-400 cursor-help text-xs" title="Conduct deep multi-hop background topic research and inspect ingestion queue items.">💡</span>
+                                    </div>
+                                    <span className="text-xs font-mono text-cyan-400 border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold uppercase group-open:hidden">Expand</span>
+                                    <span className="text-xs font-mono text-slate-500 border border-slate-800 bg-slate-950 px-2 py-0.5 rounded font-semibold uppercase hidden group-open:inline">Collapse</span>
+                                </summary>
+                                <div className="mt-4 pt-4 border-t border-slate-800/60">
+                                    <ResearchPage />
+                                </div>
+                            </details>
                         </div>
                         <div className="grid gap-6 md:grid-cols-3">
                             {/* Swarm Trigger Card */}
@@ -2589,44 +2664,7 @@ export function DashboardHomeView({
 
                         {/* Global Configuration Register */}
                         <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4 md:col-span-2">
-                            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                                <div className="flex items-center gap-2">
-                                    <h2 className="text-base font-semibold text-white">Global Configuration Register</h2>
-                                    <span className="text-cyan-400 cursor-help text-xs" title="Edit the core .tormentnexus/config.json settings registry directly from this unified view.">💾</span>
-                                </div>
-                                <button
-                                    onClick={saveSettingsConfig}
-                                    disabled={updateSettingsMutation.isPending}
-                                    className="px-3.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-white rounded text-xs font-semibold transition-colors disabled:opacity-50"
-                                    title="Commit configuration changes to local settings file"
-                                >
-                                    {updateSettingsMutation.isPending ? "Saving..." : "Save Configuration"}
-                                </button>
-                            </div>
-
-                            {settingsLog && (
-                                <div className={`p-2 rounded text-xs font-mono text-center border ${
-                                    settingsLog.includes("successfully") 
-                                        ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400" 
-                                        : "border-rose-500/20 bg-rose-500/10 text-rose-455"
-                                }`}>
-                                    {settingsLog}
-                                </div>
-                            )}
-
-                            {settingsQuery.isPending ? (
-                                <div className="text-slate-500 font-mono text-xs text-center py-4">
-                                    ⏳ Fetching core configuration matrix...
-                                </div>
-                            ) : (
-                                <textarea
-                                    value={configJson}
-                                    onChange={(e) => { setConfigJson(e.target.value); setSettingsLog(""); }}
-                                    className="w-full h-48 font-mono text-[11px] bg-zinc-950 border border-slate-800 text-green-400 leading-normal resize-none p-3 rounded focus:outline-none focus:border-cyan-500 transition-colors"
-                                    spellCheck={false}
-                                    title="Config JSON text area register"
-                                />
-                            )}
+                            <SettingsDashboard />
                         </div>
 
                         {/* Live Immune Self-Healing Radar */}
@@ -2843,7 +2881,7 @@ export function DashboardHomeView({
                 </div>
 
                 {/* SECTION: BILLING & PROVIDER AUTH MATRIX */}
-                <div className="pt-8 border-t border-slate-800">
+                <div id="governance-billing" className="scroll-mt-6 pt-8 border-t border-slate-800 space-y-8">
                     <ProviderAuthBillingMatrix />
                 </div>
 
@@ -3177,10 +3215,27 @@ export function DashboardHomeView({
                 </div>
 
                 {/* SECTION 7: INTEGRATION HUB & TARGET SURFACES */}
-                <div className="space-y-4 pt-8 pb-8 border-t border-slate-800">
+                <div id="integrations" className="scroll-mt-6 space-y-4 pt-8 pb-8 border-t border-slate-800">
                     <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                         <h2 className="text-lg font-bold text-white tracking-wide font-mono">Integration Hub &amp; Target Surfaces</h2>
                         <span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">Integrations</span>
+                    </div>
+
+                    {/* CLOUD ORCHESTRATOR & AUTOPILOT */}
+                    <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-4">
+                        <details className="group">
+                            <summary className="list-none flex items-center justify-between cursor-pointer select-none">
+                                <div className="flex items-center gap-2">
+                                    <h2 className="text-base font-semibold text-white">☁️ Cloud Orchestrator &amp; Autopilot</h2>
+                                    <span className="text-cyan-400 cursor-help text-xs" title="Manage Jules Autopilot connection, sync status, and third-party cloud LLM credentials.">💡</span>
+                                </div>
+                                <span className="text-xs font-mono text-cyan-400 border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold uppercase group-open:hidden">Expand</span>
+                                <span className="text-xs font-mono text-slate-500 border border-slate-800 bg-slate-950 px-2 py-0.5 rounded font-semibold uppercase hidden group-open:inline">Collapse</span>
+                            </summary>
+                            <div className="mt-4 pt-4 border-t border-slate-800/60">
+                                <CloudOrchestratorDashboardPage />
+                            </div>
+                        </details>
                     </div>
 
                     <div className="grid gap-6 md:grid-cols-3">
@@ -3253,7 +3308,23 @@ export function DashboardHomeView({
                                 </div>
                             </div>
                         </div>
+                    {/* USER MANUAL & HELP ACCORDION */}
+                    <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 space-y-4">
+                        <details className="group">
+                            <summary className="list-none flex items-center justify-between cursor-pointer select-none">
+                                <div className="flex items-center gap-2">
+                                    <h2 className="text-base font-semibold text-white">📖 System User Manual &amp; Knowledge Base</h2>
+                                    <span className="text-cyan-400 cursor-help text-xs" title="Access deep documentation on Getting Started, Core Agents, Swarm Workflows, and Advanced CLI ops.">💡</span>
+                                </div>
+                                <span className="text-xs font-mono text-cyan-400 border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold uppercase group-open:hidden">Expand</span>
+                                <span className="text-xs font-mono text-slate-500 border border-slate-800 bg-slate-950 px-2 py-0.5 rounded font-semibold uppercase hidden group-open:inline">Collapse</span>
+                            </summary>
+                            <div className="mt-4 pt-4 border-t border-slate-800/60">
+                                <ManualPage />
+                            </div>
+                        </details>
                     </div>
+
                 </div>
                 {/* Telemetry fallback children widgets */}
                 {children && (
@@ -3261,8 +3332,10 @@ export function DashboardHomeView({
                         {children}
                     </div>
                 )}
+                </div>
             </div>
         </div>
+    </div>
     );
 }
 export function getStartupBlockingReasons(startupStatus: DashboardStartupStatus): StartupBlockingReasonView[] {
