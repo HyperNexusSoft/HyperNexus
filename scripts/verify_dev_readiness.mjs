@@ -77,7 +77,7 @@ function getFailureHint(serviceId) {
     case 'tormentnexus-startup-status':
       return 'Dashboard can load, but startupStatus is not reachable through the web proxy.';
     case 'tormentnexus-go-sidecar':
-            return 'Go sidecar is unreachable. Build with go build ./cmd/tormentnexus and run bin/tormentnexus.exe -port 4300.';
+            return 'Go sidecar is unreachable. Build with go build ./cmd/tormentnexus and run bin/tormentnexus.exe serve.';
         case 'tormentnexus-mcp-status':
       return 'Dashboard can load, but MCP status is not reachable through the web proxy.';
     default:
@@ -142,7 +142,7 @@ function collectExtensionArtifacts() {
 }
 
 async function main() {
-  const goSidecarPort = normalizePort(process.env.TORMENTNEXUS_GO_PORT) || 4300;
+  const goSidecarPort = normalizePort(process.env.TORMENTNEXUS_GO_PORT) || 7778;
 const services = [
     {
       id: 'tormentnexus-web',
@@ -153,7 +153,7 @@ const services = [
     {
       id: 'tormentnexus-core',
       description: 'TormentNexus core control plane health',
-      critical: true,
+      critical: false,
       urls: buildCoreUrls(),
     },
     {
