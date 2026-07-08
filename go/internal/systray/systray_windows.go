@@ -147,11 +147,7 @@ var (
 	maxLogLines     = 200
 )
 
-func init() {
-	// Preload programmatically generated robot icons
-	hNormalIcon = getNormalIcon()
-	hActivityIcon = getAlertIcon()
-}
+// Icons are preloaded lazily inside runMessageLoop on the actual UI message thread.
 
 // Start launches the system tray helper and message loops
 func Start(eb *eventbus.EventBus) {
@@ -227,6 +223,20 @@ func updateTrayIcon(hIcon windows.Handle, tooltip string) {
 }
 
 func runMessageLoop() {
+	// Initialize icons lazily on the UI thread
+	hNormalIcon = getNormalIcon()
+	hActivityIcon = getAlertIcon()
+
+	if hNormalIcon == 0 {
+		// Fallback to standard system application icon if GDI draw failed or returned null
+		hNormalIconRaw, _, _ := pLoadIcon.Call(0, uintptr(IDI_APPLICATION))
+		hNormalIcon = windows.Handle(hNormalIconRaw)
+	}
+	if hActivityIcon == 0 {
+		hActivityIconRaw, _, _ := pLoadIcon.Call(0, uintptr(IDI_WARNING))
+		hActivityIcon = windows.Handle(hActivityIconRaw)
+	}
+
 	hInstance, _, _ := kernel32.NewProc("GetModuleHandleW").Call(0)
 
 	// 1. Register hidden message window class

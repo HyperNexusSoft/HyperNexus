@@ -524,6 +524,47 @@ func New(cfg config.Config, detector controlplane.ToolProvider) *Server {
 	server.directorNotes = orchestration.NewDirectorNotesManager()
 	server.expertManager = hsync.NewExpertManager(server.goDirector, server.mcpPredictor)
 
+	// Initialize catalog.db tables if they are missing
+	if catalogDB, err := database.Open("sqlite", filepath.Join(cfg.WorkspaceRoot, "catalog.db")); err == nil {
+		_, _ = catalogDB.Exec(`
+			CREATE TABLE IF NOT EXISTS published_mcp_servers (
+				uuid TEXT PRIMARY KEY,
+				canonical_id TEXT UNIQUE NOT NULL,
+				display_name TEXT NOT NULL,
+				description TEXT,
+				tags TEXT,
+				categories TEXT,
+				transport TEXT,
+				status TEXT,
+				created_at TEXT,
+				updated_at TEXT
+			);
+			CREATE TABLE IF NOT EXISTS links_backlog (
+				uuid TEXT PRIMARY KEY,
+				url TEXT NOT NULL,
+				normalized_url TEXT UNIQUE NOT NULL,
+				title TEXT,
+				description TEXT,
+				tags TEXT,
+				source TEXT,
+				is_duplicate BOOLEAN DEFAULT 0,
+				duplicate_of TEXT,
+				research_status TEXT DEFAULT 'pending',
+				http_status INTEGER,
+				page_title TEXT,
+				page_description TEXT,
+				favicon_url TEXT,
+				cluster_id TEXT,
+				bobbybookmarks_bookmark_id INTEGER,
+				import_session_id TEXT,
+				synced_at TEXT,
+				created_at TEXT,
+				updated_at TEXT
+			);
+		`)
+		_ = catalogDB.Close()
+	}
+
 	// Populate skill registry from store
 	if skillIDs, err := server.skillStore.ListSkills(); err == nil {
 		for _, id := range skillIDs {
