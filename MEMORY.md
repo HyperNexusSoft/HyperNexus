@@ -1,5 +1,11 @@
 # MEMORY.md — Multi-Agent Observations
 
+## Session 2026-07-08 (JSX Balancing & High-Fidelity Layout Consolidation)
+
+### JSX Balancing & Tag Counting
+- **Precise JSX Mismatch Identification**: Redesigning large React layouts (e.g., `dashboard-home-view.tsx`) with nested layout wrapper structures can easily introduce unclosed `div` tags. Utilizing simple Python counting scripts (`text.count("<div")` and `text.count("</div>")` accounting for self-closing `<div ... />` tags) resolves layout issues much faster than standard compiler logs when nested scopes are broken.
+- **Consolidated Tab & Accordion UX**: Standardizing subpages into collapsible detail blocks (`<details className="group">`) preserves functional capabilities inside a single-page home console deck without adding page rendering overhead.
+
 ## Session 2026-07-04 (Go Unit Tests & Database Contention)
 
 ### Session Restoration UI integration
