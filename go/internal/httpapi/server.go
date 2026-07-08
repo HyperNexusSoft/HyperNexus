@@ -64,7 +64,8 @@ import (
 	"github.com/MDMAtk/TormentNexus/internal/workspaces"
 	"github.com/google/uuid"
 	_ "modernc.org/sqlite"
-)
+
+	"github.com/MDMAtk/TormentNexus/internal/database")
 
 var sessionExportKnownFormats = []map[string]any{
 	{"id": "claude-code", "type": "claude-code", "paths": []string{".claude", ".claude/sessions"}},
@@ -6147,7 +6148,7 @@ type localObservabilityLog struct {
 }
 
 func (s *Server) localObservabilityLogs(filter localLogsFilter) ([]map[string]any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -6265,7 +6266,7 @@ func (s *Server) localObservabilitySummary(filter localLogsFilter) (map[string]a
 }
 
 func (s *Server) clearLocalObservabilityLogs() error {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return err
 	}
@@ -8482,7 +8483,7 @@ func (s *Server) handleLinksBacklogSync(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		writeJSON(w, http.StatusInternalServerError, map[string]any{"success": false, "error": err.Error()})
 		return
@@ -11679,7 +11680,7 @@ func (s *Server) localTormentNexusDBPath() string {
 }
 
 func (s *Server) localPolicy(uuid string) (any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -11723,7 +11724,7 @@ func (s *Server) localPolicy(uuid string) (any, error) {
 }
 
 func (s *Server) localPolicies() ([]map[string]any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -11775,7 +11776,7 @@ func (s *Server) localPolicies() ([]map[string]any, error) {
 }
 
 func (s *Server) localSecrets() ([]map[string]any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -11814,7 +11815,7 @@ func (s *Server) localSecrets() ([]map[string]any, error) {
 }
 
 func (s *Server) localAPIKeys() ([]map[string]any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -11865,7 +11866,7 @@ func (s *Server) localAPIKeys() ([]map[string]any, error) {
 }
 
 func (s *Server) localAPIKey(uuid string) (any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -11904,7 +11905,7 @@ func (s *Server) localAPIKey(uuid string) (any, error) {
 }
 
 func (s *Server) localLinksBacklogItem(uuid string) (any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -11929,7 +11930,7 @@ func (s *Server) localLinksBacklogItem(uuid string) (any, error) {
 }
 
 func (s *Server) localLinksBacklogStats() (any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -11982,7 +11983,7 @@ func (s *Server) localLinksBacklogList(limit, offset int, search, source, resear
 		offset = 0
 	}
 
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -12004,7 +12005,7 @@ func (s *Server) localLinksBacklogList(limit, offset int, search, source, resear
 }
 
 func (s *Server) localOAuthClient(clientID string) (any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -12080,7 +12081,7 @@ func (s *Server) localOAuthClient(clientID string) (any, error) {
 }
 
 func (s *Server) localOAuthSessionByServer(serverUUID string) (any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -12130,7 +12131,7 @@ func (s *Server) localOAuthSessionByServer(serverUUID string) (any, error) {
 }
 
 func (s *Server) localCatalogGet(uuid string) (any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -12366,7 +12367,7 @@ func (s *Server) localCatalogRuns(serverUUID string, limit int) ([]map[string]an
 		limit = 10
 	}
 
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -12401,7 +12402,7 @@ func (s *Server) localCatalogRuns(serverUUID string, limit int) ([]map[string]an
 }
 
 func (s *Server) localCatalogStats() (any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -12447,7 +12448,7 @@ func (s *Server) localCatalogStats() (any, error) {
 }
 
 func (s *Server) localCatalogLinkedServers(publishedServerUUID string) ([]map[string]any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -12487,7 +12488,7 @@ func (s *Server) localCatalogList(limit, offset int, search, status, transport, 
 		offset = 0
 	}
 
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -12665,7 +12666,7 @@ func (s *Server) localBrowserHistoryQuery(query string, limit int, since int64, 
 		limit = 50
 	}
 
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -12733,7 +12734,7 @@ func (s *Server) localBrowserConsoleLogsQuery(level, search string, limit int) (
 		limit = 100
 	}
 
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -12799,7 +12800,7 @@ func (s *Server) localBrowserConsoleLogsQuery(level, search string, limit int) (
 }
 
 func (s *Server) localBrowserControlsStats() (any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -12863,7 +12864,7 @@ func (s *Server) localBrowserExtensionMemories(search, tag string, limit, offset
 		offset = 0
 	}
 
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -12956,7 +12957,7 @@ func (s *Server) localBrowserExtensionMemories(search, tag string, limit, offset
 }
 
 func (s *Server) localBrowserExtensionStats() (any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -13149,7 +13150,7 @@ func (s *Server) localUnifiedDirectoryStats() (any, error) {
 }
 
 func (s *Server) localWorkflowCanvases() ([]map[string]any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -13180,7 +13181,7 @@ func (s *Server) localWorkflowCanvases() ([]map[string]any, error) {
 }
 
 func (s *Server) localWorkflowCanvas(id string) (any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -14315,7 +14316,7 @@ func (s *Server) localExecuteSavedScript(targetUUID string) (any, error) {
 }
 
 func (s *Server) localToolSets() ([]map[string]any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -14381,7 +14382,7 @@ func (s *Server) localToolSets() ([]map[string]any, error) {
 }
 
 func (s *Server) localToolChains() ([]map[string]any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -14436,7 +14437,7 @@ func (s *Server) localToolChains() ([]map[string]any, error) {
 }
 
 func (s *Server) localToolChain(id string) (any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -14526,7 +14527,7 @@ func localToolChainSteps(db *sql.DB, chainID string) ([]map[string]any, error) {
 }
 
 func (s *Server) localToolAliases() ([]map[string]any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -14573,7 +14574,7 @@ func (s *Server) localToolAliases() ([]map[string]any, error) {
 }
 
 func (s *Server) localToolAlias(name string) (any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -14657,7 +14658,7 @@ func scanLocalDBTool(scanner localDBToolScanner) (map[string]any, error) {
 }
 
 func (s *Server) localDBTools() ([]map[string]any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -17235,7 +17236,7 @@ func (s *Server) localConfiguredMCPServers() ([]map[string]any, error) {
 }
 
 func (s *Server) localConfiguredMCPServersFromDB() ([]map[string]any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -17287,7 +17288,7 @@ func (s *Server) localConfiguredMCPServersFromDB() ([]map[string]any, error) {
 }
 
 func (s *Server) localConfiguredMCPServerFromDB(uuid string) (map[string]any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -17350,7 +17351,7 @@ func (s *Server) localConfiguredMCPServerMetaByName() (map[string]any, error) {
 }
 
 func (s *Server) localWorkspaceSecretEnv() (map[string]string, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}

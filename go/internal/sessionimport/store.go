@@ -18,7 +18,8 @@ import (
 
 	"github.com/google/uuid"
 	_ "modernc.org/sqlite"
-)
+
+	"github.com/MDMAtk/TormentNexus/internal/database")
 
 type ImportedSessionMemoryKind string
 
@@ -523,7 +524,7 @@ func (s *ImportedSessionStore) writeTranscriptArchive(sessionID string, input Im
 }
 
 func (s *ImportedSessionStore) open(ctx context.Context) (*sql.DB, error) {
-	db, err := sql.Open("sqlite", s.dbPath)
+	db, err := database.Open("sqlite", s.dbPath)
 	if err != nil {
 		return nil, err
 	}

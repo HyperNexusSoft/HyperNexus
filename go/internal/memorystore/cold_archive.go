@@ -9,7 +9,8 @@ import (
 	"time"
 
 	"github.com/MDMAtk/TormentNexus/internal/controlplane"
-)
+
+	"github.com/MDMAtk/TormentNexus/internal/database")
 
 // L3ColdArchive implements the L3 cold storage tier for long-term compressed
 // memory.  Memories that have decayed below a heat threshold are moved here
@@ -63,7 +64,7 @@ END;
 
 // NewColdArchive opens (or creates) the L3 cold archive DB.
 func NewColdArchive(dbPath string) (*L3ColdArchive, error) {
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		return nil, fmt.Errorf("cold archive open: %w", err)
 	}

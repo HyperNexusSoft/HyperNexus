@@ -16,7 +16,8 @@ import (
 
 	"github.com/google/uuid"
 	_ "modernc.org/sqlite"
-)
+
+	"github.com/MDMAtk/TormentNexus/internal/database")
 
 type Bookmark struct {
 	ID              int         `json:"id"`
@@ -269,7 +270,7 @@ func SyncBobbyBookmarks(ctx context.Context, dbPath string, baseURL string, perP
 		Errors:  []string{},
 	}
 
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open database: %w", err)
 	}
@@ -412,7 +413,7 @@ func SyncBobbyBookmarksFromText(ctx context.Context, destDbPath string, textFile
 
 	report.Fetched = len(bookmarks)
 
-	db, err := sql.Open("sqlite", destDbPath)
+	db, err := database.Open("sqlite", destDbPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open destination database: %w", err)
 	}
@@ -450,7 +451,7 @@ func SyncBobbyBookmarksLocal(ctx context.Context, destDbPath string, sourceDbPat
 		return nil, fmt.Errorf("source database not found: %s", sourceDbPath)
 	}
 
-	sourceDb, err := sql.Open("sqlite", sourceDbPath)
+	sourceDb, err := database.Open("sqlite", sourceDbPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open source database: %w", err)
 	}
@@ -458,7 +459,7 @@ func SyncBobbyBookmarksLocal(ctx context.Context, destDbPath string, sourceDbPat
 	sourceDb.Exec("PRAGMA busy_timeout=5000")
 	defer sourceDb.Close()
 
-	destDb, err := sql.Open("sqlite", destDbPath)
+	destDb, err := database.Open("sqlite", destDbPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open destination database: %w", err)
 	}

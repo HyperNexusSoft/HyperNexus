@@ -11,7 +11,8 @@ import (
 	"time"
 
 	"github.com/MDMAtk/TormentNexus/internal/controlplane"
-)
+
+	"github.com/MDMAtk/TormentNexus/internal/database")
 
 // ─── Project .memdb Schema ────────────────────────────────────────────
 
@@ -49,7 +50,7 @@ func OpenProjectDB(projectPath string) (*ProjectDB, error) {
 		return nil, fmt.Errorf("project db mkdir: %w", err)
 	}
 
-	db, err := sql.Open("sqlite", projectPath)
+	db, err := database.Open("sqlite", projectPath)
 	if err != nil {
 		return nil, fmt.Errorf("project db open: %w", err)
 	}

@@ -2,14 +2,14 @@ package sessionimport
 
 import (
 	"crypto/sha256"
-	"database/sql"
 	"encoding/hex"
 	"fmt"
 	"time"
 
 	"github.com/google/uuid"
 	_ "modernc.org/sqlite"
-)
+
+	"github.com/MDMAtk/TormentNexus/internal/database")
 
 type ImportedSession struct {
 	ID                string `json:"id"`
@@ -22,7 +22,7 @@ type ImportedSession struct {
 }
 
 func ImportSession(dbPath string, session ImportedSession) error {
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		return fmt.Errorf("failed to open tormentnexus.db: %w", err)
 	}

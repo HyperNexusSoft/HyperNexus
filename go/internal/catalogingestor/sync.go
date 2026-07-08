@@ -1,18 +1,18 @@
 package catalogingestor
 
 import (
-	"database/sql"
 	"fmt"
 	"path/filepath"
 	"time"
 
 	"github.com/google/uuid"
 	_ "modernc.org/sqlite"
-)
+
+	"github.com/MDMAtk/TormentNexus/internal/database")
 
 func SyncRegisteredToolsToCatalog(workspaceRoot string, toolNames []string) error {
 	dbPath := filepath.Join(workspaceRoot, "catalog.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		return fmt.Errorf("failed to open catalog.db: %w", err)
 	}

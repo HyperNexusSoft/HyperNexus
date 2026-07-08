@@ -2,7 +2,6 @@ package sync
 
 import (
 	"context"
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -13,7 +12,8 @@ import (
 
 	"github.com/google/uuid"
 	_ "modernc.org/sqlite"
-)
+
+	"github.com/MDMAtk/TormentNexus/internal/database")
 
 type Bookmark struct {
 	ID              int         `json:"id"`
@@ -74,7 +74,7 @@ func SyncBobbyBookmarks(ctx context.Context, dbPath string, baseURL string, perP
 		Errors:  []string{},
 	}
 
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open database: %w", err)
 	}

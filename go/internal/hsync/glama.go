@@ -9,7 +9,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-)
+
+	"github.com/MDMAtk/TormentNexus/internal/database")
 
 type RegistryServer struct {
 	Name        string `json:"name"`
@@ -30,7 +31,7 @@ func SyncGlamaMCP(ctx context.Context, dbPath string) (*SyncReport, error) {
 		Pages:    1,
 	}
 
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open database: %w", err)
 	}

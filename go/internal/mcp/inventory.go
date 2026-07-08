@@ -10,7 +10,8 @@ import (
 	"time"
 
 	_ "modernc.org/sqlite"
-)
+
+	"github.com/MDMAtk/TormentNexus/internal/database")
 
 type ServerEntry struct {
 	UUID               string            `json:"uuid"`
@@ -230,7 +231,7 @@ func loadLiveInventory(workspaceRoot, mainConfigDir string) (*Inventory, error) 
 	}
 
 	dbPath := filepath.Join(workspaceRoot, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err == nil {
 		db.Exec("PRAGMA journal_mode=WAL")
 		db.Exec("PRAGMA busy_timeout=5000")

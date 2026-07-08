@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"compress/gzip"
 	"context"
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -28,7 +27,8 @@ import (
 	"github.com/MDMAtk/TormentNexus/internal/providers"
 	"github.com/MDMAtk/TormentNexus/internal/sessionimport"
 	_ "modernc.org/sqlite"
-)
+
+	"github.com/MDMAtk/TormentNexus/internal/database")
 
 type stubDetector struct {
 	tools []controlplane.Tool
@@ -208,7 +208,7 @@ func TestBridgeRouteReportsProcedureFailure(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -270,7 +270,7 @@ func TestToolChainsListFallsBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -4149,7 +4149,7 @@ func TestObservabilityReadEndpointsFallBackToLocalPreview(t *testing.T) {
 
 	workspaceRoot := t.TempDir()
 	dbPath := filepath.Join(workspaceRoot, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -5927,7 +5927,7 @@ var AutoCallTool = struct{
 func TestToolsReadEndpointsFallBackToLocalDB(t *testing.T) {
 	workspaceRoot := t.TempDir()
 	dbPath := filepath.Join(workspaceRoot, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -6237,7 +6237,7 @@ func TestOperatorListEndpointsFallBackToEmptyState(t *testing.T) {
 		t.Fatalf("failed to write local config: %v", err)
 	}
 	dbPath := filepath.Join(workspaceRoot, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -6600,7 +6600,7 @@ func TestPoliciesGetFallsBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -6655,7 +6655,7 @@ func TestSecretsListFallsBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -6711,7 +6711,7 @@ func TestAPIKeysGetFallsBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -6770,7 +6770,7 @@ func TestLinksBacklogGetFallsBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -6848,7 +6848,7 @@ func TestLinksBacklogStatsFallsBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -6925,7 +6925,7 @@ func TestLinksBacklogListFallsBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -7004,7 +7004,7 @@ func TestOAuthClientGetFallsBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -7078,7 +7078,7 @@ func TestOAuthSessionGetByServerFallsBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -7139,7 +7139,7 @@ func TestCatalogGetFallsBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -7270,7 +7270,7 @@ func TestSpecificFallbackGetRoutesReturnUnavailableWhenRecordMissing(t *testing.
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -7458,7 +7458,7 @@ func TestCatalogRunsFallsBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -7524,7 +7524,7 @@ func TestCatalogStatsFallsBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -7606,7 +7606,7 @@ func TestCatalogLinkedServersFallsBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -7675,7 +7675,7 @@ func TestCatalogListFallsBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -7751,7 +7751,7 @@ func TestBrowserControlsReadRoutesFallBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -7846,7 +7846,7 @@ func TestConfigReadRoutesFallBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -7937,7 +7937,7 @@ func TestOperatorFallbackGetRoutesReturnUnavailableWhenRecordMissing(t *testing.
 	}
 
 	dbPath := filepath.Join(workspaceRoot, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -8029,7 +8029,7 @@ func TestUnifiedDirectoryRoutesFallBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -8147,7 +8147,7 @@ func TestWorkflowCanvasRoutesFallBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -8309,7 +8309,7 @@ func TestPoliciesListFallsBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -8414,7 +8414,7 @@ func TestPulseEventsAndBrowserMemoriesFallBackToEmptyState(t *testing.T) {
 
 	workspaceRoot := t.TempDir()
 	dbPath := filepath.Join(workspaceRoot, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -8929,7 +8929,7 @@ func TestToolAliasesListFallsBackToLocalDB(t *testing.T) {
 
 	workspace := t.TempDir()
 	dbPath := filepath.Join(workspace, "tormentnexus.db")
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}
@@ -9977,7 +9977,7 @@ func TestMCPConfiguredServersFallBackToLocalJsonc(t *testing.T) {
 	cfg.WorkspaceRoot = workspaceRoot
 	cfg.MainConfigDir = mainConfigDir
 
-	db, err := sql.Open("sqlite", filepath.Join(workspaceRoot, "tormentnexus.db"))
+	db, err := database.Open("sqlite", filepath.Join(workspaceRoot, "tormentnexus.db"))
 	if err != nil {
 		t.Fatalf("failed to open sqlite db: %v", err)
 	}

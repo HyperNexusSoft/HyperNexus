@@ -16,7 +16,8 @@ import (
 	"github.com/MDMAtk/TormentNexus/internal/ai"
 	"github.com/MDMAtk/TormentNexus/internal/controlplane"
 	_ "modernc.org/sqlite"
-)
+
+	"github.com/MDMAtk/TormentNexus/internal/database")
 
 type l1Entry struct {
 	value      controlplane.L2VaultRecord
@@ -42,7 +43,7 @@ type VectorStore struct {
 }
 
 func NewVectorStore(dbPath string) (*VectorStore, error) {
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		return nil, err
 	}

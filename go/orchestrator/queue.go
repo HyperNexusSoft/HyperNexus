@@ -6,7 +6,8 @@ import (
 	"log"
 	"sync"
 	"time"
-)
+
+	"github.com/MDMAtk/TormentNexus/internal/database")
 
 // TaskQueue replaces Redis/BullMQ by natively acting on SQLite locally.
 // Implements the specific "Jules Autopilot" global rule:
@@ -18,7 +19,7 @@ type TaskQueue struct {
 }
 
 func NewTaskQueue(dbPath string) (*TaskQueue, error) {
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed binding sqlite: %w", err)
 	}

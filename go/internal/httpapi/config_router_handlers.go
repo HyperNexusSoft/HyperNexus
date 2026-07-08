@@ -8,7 +8,8 @@ import (
 	"strings"
 
 	_ "modernc.org/sqlite"
-)
+
+	"github.com/MDMAtk/TormentNexus/internal/database")
 
 func (s *Server) handleConfigList(w http.ResponseWriter, r *http.Request) {
 	var result any
@@ -351,7 +352,7 @@ func (s *Server) handleConfigScalarFallback(w http.ResponseWriter, r *http.Reque
 }
 
 func (s *Server) localConfigList() ([]map[string]any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -380,7 +381,7 @@ func (s *Server) localConfigList() ([]map[string]any, error) {
 }
 
 func (s *Server) localConfigValue(key string) (any, error) {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return nil, err
 	}
@@ -420,7 +421,7 @@ func (s *Server) localConfigInt(key string, defaultValue int) (int, error) {
 }
 
 func (s *Server) setLocalConfigValue(key string, value string) error {
-	db, err := sql.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
 	if err != nil {
 		return err
 	}

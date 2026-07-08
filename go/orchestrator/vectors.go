@@ -8,7 +8,8 @@ import (
 	"sort"
 
 	"github.com/NexusSoftMDMA/TormentNexus/agents"
-)
+
+	"github.com/MDMAtk/TormentNexus/internal/database")
 
 // VectorDB handles the "Jules Autopilot" requirement directly over SQLite natively
 type VectorDB struct {
@@ -16,7 +17,7 @@ type VectorDB struct {
 }
 
 func NewVectorDB(dbPath string) (*VectorDB, error) {
-	db, err := sql.Open("sqlite", dbPath)
+	db, err := database.Open("sqlite", dbPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed binding sqlite for RAG: %w", err)
 	}

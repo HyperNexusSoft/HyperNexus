@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node ./scripts/dev.mjs",
     "dev:auto": "node ./scripts/dev-auto.mjs",
-    "build": "node ./scripts/clean-build.mjs && next build",
+    "build": "node ./scripts/clean-build.mjs && next build && node ./scripts/copy-standalone-static.mjs",
     "build:wails": "pnpm build && node copy-assets.mjs",
     "start": "next start",
     "lint": "echo \"Linting skipped\""

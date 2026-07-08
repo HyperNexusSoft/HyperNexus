@@ -10,10 +10,11 @@ import (
 	"time"
 
 	_ "modernc.org/sqlite"
-)
+
+	"github.com/MDMAtk/TormentNexus/internal/database")
 
 func buildImportedSessionRecordInputsFromDatabase(ctx context.Context, candidate Candidate) ([]ImportedSessionRecordInput, error) {
-	db, err := sql.Open("sqlite", candidate.SourcePath)
+	db, err := database.Open("sqlite", candidate.SourcePath)
 	if err != nil {
 		return nil, err
 	}
