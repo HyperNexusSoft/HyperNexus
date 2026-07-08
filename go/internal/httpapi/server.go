@@ -830,7 +830,7 @@ func (s *Server) PreWarmCaches() {
 	go func() {
 		// Glama/Smithery registry auto-sync: initial sync after startup delay, then periodic re-syncs
 		time.Sleep(bobbyBookmarksSyncDelay)
-		dbPath := s.localTormentNexusDBPath()
+		dbPath := filepath.Join(s.cfg.WorkspaceRoot, "catalog.db")
 
 		// Initial sync on startup
 		fmt.Println("[CatalogSync] Starting initial registry auto-sync from Glama.ai...")
@@ -8530,14 +8530,14 @@ func (s *Server) handleLinksBacklogSync(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", filepath.Join(s.cfg.WorkspaceRoot, "catalog.db"))
 	if err != nil {
 		writeJSON(w, http.StatusInternalServerError, map[string]any{"success": false, "error": err.Error()})
 		return
 	}
 	defer db.Close()
 
-	res, fallbackErr := hsync.SyncGlamaMCP(r.Context(), s.localTormentNexusDBPath())
+	res, fallbackErr := hsync.SyncGlamaMCP(r.Context(), filepath.Join(s.cfg.WorkspaceRoot, "catalog.db"))
 	if fallbackErr != nil {
 		writeJSON(w, http.StatusServiceUnavailable, map[string]any{
 			"success": false,
@@ -11952,7 +11952,7 @@ func (s *Server) localAPIKey(uuid string) (any, error) {
 }
 
 func (s *Server) localLinksBacklogItem(uuid string) (any, error) {
-	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", filepath.Join(s.cfg.WorkspaceRoot, "catalog.db"))
 	if err != nil {
 		return nil, err
 	}
@@ -11977,7 +11977,7 @@ func (s *Server) localLinksBacklogItem(uuid string) (any, error) {
 }
 
 func (s *Server) localLinksBacklogStats() (any, error) {
-	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", filepath.Join(s.cfg.WorkspaceRoot, "catalog.db"))
 	if err != nil {
 		return nil, err
 	}
@@ -12030,7 +12030,7 @@ func (s *Server) localLinksBacklogList(limit, offset int, search, source, resear
 		offset = 0
 	}
 
-	db, err := database.Open("sqlite", s.localTormentNexusDBPath())
+	db, err := database.Open("sqlite", filepath.Join(s.cfg.WorkspaceRoot, "catalog.db"))
 	if err != nil {
 		return nil, err
 	}
