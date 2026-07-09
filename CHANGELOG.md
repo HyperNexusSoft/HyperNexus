@@ -1,12 +1,34 @@
 # Changelog
 
+## [1.0.0-alpha.252] - 2026-07-10
+
+### Added
+
+- HyperNexus production deployment on Hetzner (5.161.250.43): Go sidecar via PM2 on port 8090.
+- Wildcard SSL cert issued for `*.hypernexus.site` via Let's Encrypt DNS challenge.
+- Multi-tenant provisioning scripts: `deploy/tenant-provision.sh`, `tenant-deprovision.sh`, `stripe-webhook-provisioner.sh`.
+- Auto-cert provisioning script per tenant subdomain: `deploy/provision-cert.sh`.
+- Landing page at <https://hypernexus.site> with TN API reverse proxy.
+- Nginx wildcard routing: `*.hypernexus.site` -> TN sidecar with `X-Tenant-ID` header.
+- Docker 29.6.1 installed with `tenant-network` on Hetzner server.
+- PM2 ecosystem with `tn-primary` auto-restart via systemd.
+- Cron job for weekly wildcard cert renewal checks.
+
+### Changed
+
+- Version bumped to 1.0.0-alpha.252.
+- Repository cleanup: pruned 297 stale linked worktrees (task/* branches).
+- Go sidecar cross-compiled for linux/amd64 and deployed.
+
 ## [1.0.0-alpha.251] - 2026-07-09
 
 ### Added
+
 - Pre-warming queries to Next.js routes inside verification scripts to eliminate cold-start latencies.
 - Version synchronization routines across 34 monorepo manifests.
 
 ### Fixed
+
 - Decommissioned all legacy core control plane (`tormentnexus-core`) references and ports (`4100`).
 - Aligned browser extension background websocket/SSE endpoints to point to port `7778` (Go Sidecar).
 - Resolved duplicate sqlite driver registration panics in tests by unifying imports under `go-sqlite`.
@@ -15,6 +37,7 @@
 ## [1.0.0-alpha.243] - [1.0.0-alpha.250] - 2026-07-08
 
 ### Changed
+
 - Dashboard redesign & consolidation: sidebar navigation and single-page diagnostic panel.
 - Ported 20 MCP server stubs to Go-native implementation modules.
 - Virtualized database access layers and catalog db sync mappings.
