@@ -1,8 +1,10 @@
 # TODO
 
-_Last updated: 2026-07-04, version 1.0.0-alpha.237_
+_Last updated: 2026-07-09, version 1.0.0-alpha.251_
 
 ## P0 — Must do now (Stability, Testing & Validation)
+- [x] **Chrome Extension Integration**: Point Chrome extension event-stream and websocket URLs to port `7778` (Go Sidecar). (Completed alpha.250)
+- [x] **Legacy Core Decommissioning**: Remove all references, port mappings, and services for the decommissioned TS core. (Completed alpha.251)
 - [x] **Track A: MCP Discovery**: Execute discovery script to rank top 500 MCP servers and seed state DB. (14,250 rows in assimilation_state.db)
 - [x] **Track B: Skill Registry**: Verify 3-tier loading with comprehensive unit tests. (Completed alpha.128)
 - [x] **Track B: Bulk Skill Assimilation**: Assimilated 3,229 unique skills from 7 harness ecosystems. (Completed alpha.128)

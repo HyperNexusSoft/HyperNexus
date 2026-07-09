@@ -1,6 +1,23 @@
 # Changelog
 
-## [1.0.0-alpha.242] - 2026-07-06
+## [1.0.0-alpha.251] - 2026-07-09
+
+### Added
+- Pre-warming queries to Next.js routes inside verification scripts to eliminate cold-start latencies.
+- Version synchronization routines across 34 monorepo manifests.
+
+### Fixed
+- Decommissioned all legacy core control plane (`tormentnexus-core`) references and ports (`4100`).
+- Aligned browser extension background websocket/SSE endpoints to point to port `7778` (Go Sidecar).
+- Resolved duplicate sqlite driver registration panics in tests by unifying imports under `go-sqlite`.
+- Fixed format specifier bugs (`%%s` -> `%s`) in generated MCP stub functions.
+
+## [1.0.0-alpha.243] - [1.0.0-alpha.250] - 2026-07-08
+
+### Changed
+- Dashboard redesign & consolidation: sidebar navigation and single-page diagnostic panel.
+- Ported 20 MCP server stubs to Go-native implementation modules.
+- Virtualized database access layers and catalog db sync mappings.
 
 ### Fixed
 

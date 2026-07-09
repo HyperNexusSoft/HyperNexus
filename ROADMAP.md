@@ -1,6 +1,6 @@
 # ROADMAP: TormentNexus Kernel & TormentNexus Dashboard
 
-_Last updated: 2026-07-01, version 1.0.0-alpha.221_
+_Last updated: 2026-07-09, version 1.0.0-alpha.251_
 
 ## Status Legend
 
@@ -8,6 +8,17 @@ _Last updated: 2026-07-01, version 1.0.0-alpha.221_
 - **Beta** — Usable, still evolving
 - **Experimental** — Active R&D, not dependable
 - **Vision** — Directional only
+
+## Completed (v1.0.0-alpha.251)
+
+### 1. Legacy Core Decommissioning
+- Removed all active health checks, service descriptions, and port (`4100`) references in scripts (`verify_dev_readiness.mjs`, `dev_tabby_ready.mjs`), CLI status code, Docker compose files, and dashboard components.
+
+### 2. Browser Extension SSE/WS Re-Targeting
+- Re-aligned Chrome extension background connection URLs to point directly to the native Go Sidecar (`7778`) SSE/WS transport.
+
+### 3. Readiness Suite Optimizations
+- Implemented tRPC route pre-warming checks to prevent Next.js cold start timeouts during service evaluation.
 
 ## Completed (v1.0.0-alpha.132)
 
