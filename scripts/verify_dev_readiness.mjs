@@ -9,9 +9,9 @@ import {
 
 const REPO_ROOT = process.cwd();
 const WEB_PORT_CANDIDATES = [3000, 3010, 3020, 3030, 3040];
-const REQUEST_TIMEOUT_MS = Number(process.env.READINESS_TIMEOUT_MS || 2000);
-const REQUEST_RETRIES = Number(process.env.READINESS_RETRIES || 1);
-const RETRY_DELAY_MS = Number(process.env.READINESS_RETRY_DELAY_MS || 500);
+const REQUEST_TIMEOUT_MS = Number(process.env.READINESS_TIMEOUT_MS || 5000);
+const REQUEST_RETRIES = Number(process.env.READINESS_RETRIES || 3);
+const RETRY_DELAY_MS = Number(process.env.READINESS_RETRY_DELAY_MS || 1000);
 const strictJsonMode = process.argv.includes('--strict-json');
 const softMode = process.argv.includes('--soft');
 const jsonMode = process.argv.includes('--json') || strictJsonMode;
@@ -143,7 +143,20 @@ function collectExtensionArtifacts() {
 
 async function main() {
   const goSidecarPort = normalizePort(process.env.TORMENTNEXUS_GO_PORT) || 7778;
-const services = [
+
+  // Pre-warm the web server to handle cold start module loading/database latency
+  const webUrls = buildWebUrls();
+  if (webUrls.length > 0) {
+    if (!jsonMode) {
+      console.log('Pre-warming Next.js dashboard server routes...');
+    }
+    const apiBase = webUrls[0].replace('/dashboard', '');
+    await fetchWithTimeout(webUrls[0], 15000).catch(() => {});
+    await fetchWithTimeout(`${apiBase}/api/trpc/startupStatus?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%7D%7D`, 15000).catch(() => {});
+    await fetchWithTimeout(`${apiBase}/api/trpc/mcp.getStatus?batch=1&input=%7B%7D`, 15000).catch(() => {});
+  }
+
+  const services = [
     {
       id: 'tormentnexus-web',
       description: 'TormentNexus Next.js dashboard',
