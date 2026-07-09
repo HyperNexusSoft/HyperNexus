@@ -496,28 +496,7 @@ function spawnTurboDev() {
 }
 
 function spawnCliDev() {
-	const env = {
-		...process.env,
-		CI: "true",
-		TORMENTNEXUS_DISABLE_DASHBOARD_AUTOSTART: "1",
-	};
-
-	const { command, args, cwd } = getPnpmSpawnSpec([
-		"-C",
-		"packages/cli",
-		"exec",
-		"tsx",
-		"src/index.ts",
-		"start",
-		"--port",
-		"4100",
-	]);
-
-	return spawn(command, args, {
-		cwd,
-		stdio: "inherit",
-		env,
-	});
+	return null;
 }
 
 async function detectExistingCoreBridge() {

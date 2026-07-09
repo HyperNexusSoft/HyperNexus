@@ -9,7 +9,7 @@ import {
 
 const REPO_ROOT = process.cwd();
 const WEB_PORT_CANDIDATES = [3000, 3010, 3020, 3030, 3040];
-const REQUEST_TIMEOUT_MS = Number(process.env.READINESS_TIMEOUT_MS || 5000);
+const REQUEST_TIMEOUT_MS = Number(process.env.READINESS_TIMEOUT_MS || 10000);
 const REQUEST_RETRIES = Number(process.env.READINESS_RETRIES || 3);
 const RETRY_DELAY_MS = Number(process.env.READINESS_RETRY_DELAY_MS || 1000);
 const strictJsonMode = process.argv.includes('--strict-json');
@@ -72,8 +72,6 @@ function getFailureHint(serviceId) {
   switch (serviceId) {
     case 'tormentnexus-web':
       return 'Dashboard is unreachable. Start the web runtime with `tormentnexus dashboard` or `pnpm -C apps/web dev`.';
-    case 'tormentnexus-core':
-      return 'Core control plane is unreachable. Start it with `tormentnexus start --port 4100`.';
     case 'tormentnexus-startup-status':
       return 'Dashboard can load, but startupStatus is not reachable through the web proxy.';
     case 'tormentnexus-go-sidecar':
@@ -87,15 +85,6 @@ function getFailureHint(serviceId) {
 
 function buildWebUrls() {
   return getPreferredWebPorts(REPO_ROOT, WEB_PORT_CANDIDATES).map((port) => `http://127.0.0.1:${port}/dashboard`);
-}
-
-function buildCoreUrls() {
-  const lockRecord = readTormentNexusStartLockRecord();
-  return uniquePorts([
-    lockRecord?.port,
-    normalizePort(process.env.TORMENTNEXUS_PORT),
-    4100,
-  ]).map((port) => `http://127.0.0.1:${port}/health`);
 }
 
 async function detectRunningEndpoint(service) {
@@ -162,12 +151,6 @@ async function main() {
       description: 'TormentNexus Next.js dashboard',
       critical: !softMode,
       urls: buildWebUrls(),
-    },
-    {
-      id: 'tormentnexus-core',
-      description: 'TormentNexus core control plane health',
-      critical: false,
-      urls: buildCoreUrls(),
     },
     {
         id: 'tormentnexus-go-sidecar',

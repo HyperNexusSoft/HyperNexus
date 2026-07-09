@@ -148,7 +148,6 @@ func cmdStatus(args []string) int {
 		{"Dashboard", "http://127.0.0.1:3000/dashboard"},
 		{"Dashboard (dev)", "http://127.0.0.1:7779/"},
 		{"Dashboard (7779)", "http://127.0.0.1:7779/"},
-		{"TS control plane", "http://127.0.0.1:4100/health"},
 	}
 
 	fmt.Println("[CLI] TormentNexus Status")
