@@ -143,16 +143,15 @@ pnpm run check:release-gate:ci:strict-visuals
 
 | Service | Default Port | Override | Health Check Endpoint |
 |---------|-------------|----------|-----------------------|
-| Core API (TS Control Plane) | 4000 | `tormentnexus start --port <n>` | `http://localhost:4000/api/config/status` |
-| Web Dashboard (Next.js) | 3000 | `PORT` | `http://localhost:3000` |
-| Go Kernel sidecar | 4300 | — | `http://localhost:4300` |
+| Go Kernel Sidecar | 7778 | `tormentnexus serve --port <n>` | `http://localhost:7778/health` |
+| Web Dashboard (Next.js) | 7779 | `PORT` | `http://localhost:7779/dashboard` |
 | Socket.io Swarm Server | 3001 | — | — |
-| tRPC Bridge Control | 4100 | — | — |
 | Orchestrator tRPC | 3847 | `TORMENTNEXUS_ORCHESTRATOR_PORT` | `http://localhost:3847` |
 
 ## Health Checks
-- `http://localhost:4000/api/config/status` - Main control plane health
-- `http://localhost:3000` - Dashboard
+- `http://localhost:7778/health` - Go Kernel Sidecar Health
+- `http://localhost:7779/dashboard` - Web Dashboard
+
 
 ---
 
