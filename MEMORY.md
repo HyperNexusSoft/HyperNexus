@@ -314,3 +314,12 @@
 
 - **Port 4300 Legacy Cleanup**: Components checking Go Sidecar status (such as `StreamStatus.tsx` in `@tormentnexus/ui`) must point to the active Go sidecar port `7778`, not the legacy `4300` port, to avoid browser-level connection refused errors.
 - **RSC Dynamic Route compilation**: Next.js redirect pages (like squads, director, and council pages) must be compiled and served successfully to handle App Router `_rsc` dynamic pre-fetches during client-side tab navigation.
+
+## Session 2026-07-09 (Legacy Core Decommissioning & Extension URL Alignment)
+
+### Legacy Core Decommissioning
+- **Core Decommission**: Completely decommissioned and removed all references to the legacy TypeScript control plane (`tormentnexus-core`) which ran on port `4100`. This includes removing checks from `verify_dev_readiness.mjs`, making `spawnCliDev()` a no-op in `dev_tabby_ready.mjs`, removing CLI status checks in `cli.go`, removing the container service from `docker-compose.isolated.yml` and `tenant-provision.sh`, and updating `ConnectionStatus.tsx` to fallback to `tormentnexus-go`.
+- **Pre-warming & Readiness Checks**: Added pre-warming routes inside `verify_dev_readiness.mjs` for both `startupStatus` and `mcp.getStatus` proxy endpoints, and increased the default check timeout to `10000ms`. This prevents Next.js runtime compilation cold start delays from triggering false timeout negatives.
+
+### Chrome Extension Integration
+- **Default Connection Port**: Configured Chrome extension websocket/SSE background connection endpoints to point to the active Go sidecar on `127.0.0.1:7778` rather than the decommissioned Node/TS server.
