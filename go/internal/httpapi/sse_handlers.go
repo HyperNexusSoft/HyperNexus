@@ -82,10 +82,17 @@ type JSONRPCResponse struct {
 // This establishes the native Go control plane as a valid primary endpoint, achieving
 // 100% protocol parity with the TypeScript core.
 func (s *Server) handleSSE(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
 	w.Header().Set("Content-Type", "text/event-stream")
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Connection", "keep-alive")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	if !validateSSEToken(r) {
 		http.Error(w, "Unauthorized: Invalid SSE token", http.StatusUnauthorized)
