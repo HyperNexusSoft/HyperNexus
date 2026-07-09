@@ -2,19 +2,21 @@
 
 ## What Was Accomplished
 
-### 1. Browser Extension Integration & Warm-up Optimizations
-- **SSE/WS Endpoint Re-alignment**: Pointed extension websocket and event-stream URLs to `http://localhost:7778` (Go Sidecar). Resolving configuration CRLF file line endings allowed the extension workspace to build successfully.
-- **Readiness check pre-warming**: Added pre-warm requests to the dashboard and tRPC endpoints inside `verify_dev_readiness.mjs` to eliminate Next.js compilation/cold start delays, improving test execution stability.
-- **Increased Check Timeout**: Bumped default timeout in `verify_dev_readiness.mjs` to 10s to ensure lazy-loading compilation inside Next.js doesn't trigger false positives.
+### 1. Version Governance & Synchronization
+- **Centralized Version Bump**: Bumped version string to `1.0.0-alpha.251` inside `VERSION` and `VERSION.md`.
+- **Manifest Synchronization**: Propagated the version updates recursively across all **34 monorepo packages** and the Go buildinfo parameters using `sync-versions.mjs`.
 
-### 2. Legacy Core Decommissioning
-- **Check Removal**: Completely removed `tormentnexus-core` from the readiness verification checklist and from the `verify_dev_readiness.mjs` URL and failure configurations.
-- **CLI Status Cleanup**: Removed the `"TS control plane"` health check from the `go/cmd/tormentnexus/cli.go` status command list.
-- **Dev Script Cleanup**: Updated `scripts/dev_tabby_ready.mjs` to make the `spawnCliDev()` launcher a no-op, preventing any attempts to launch the legacy Node/TS core server.
-- **Deployment & Fallback Cleanup**: Removed the `core-isolated` service and container definitions from `docker-compose.isolated.yml` and `deploy/tenant-provision.sh`. Updated fallback labels in `ConnectionStatus.tsx` to read `tormentnexus-go` instead of `tormentnexus-core`.
+### 2. Core Documentation Governance
+- **Created VISION.md**: Outlined the product's ultimate architecture, core pillars, and tiered cognitive memory hierarchy.
+- **Created IDEAS.md**: Documented innovative ideas for dynamic cost-latency model routing, self-healing compiler loops, CRDT-based UDP vector sync, and WebAssembly tool sandboxing.
+- **Roadmap & Todo Alignment**: Refined `ROADMAP.md` and `TODO.md` to track completed milestones.
+
+### 3. Decommissioning & Extension Re-alignment
+- Completely removed legacy `tormentnexus-core` and port `4100` references across configurations, tests, and script launchers.
+- Re-aligned Chrome extension connection handlers to point directly to the native Go Sidecar (`7778`).
 
 ## Version Progression
-- 1.0.0-alpha.250 (Stabilized)
+- 1.0.0-alpha.250 → 1.0.0-alpha.251
 
 ## Build Status
 - **Go Sidecar Backend**: Built cleanly (`go build ./cmd/tormentnexus`).
