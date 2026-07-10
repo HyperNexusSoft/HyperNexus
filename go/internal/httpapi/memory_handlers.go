@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
+
+	"github.com/MDMAtk/TormentNexus/internal/gossip"
 )
 
 func (s *Server) handleMemoryList(w http.ResponseWriter, r *http.Request) {
@@ -22,6 +25,22 @@ func (s *Server) handleMemoryAdd(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	s.memoryManager.AddMemory(req.Content)
+
+	// If P2P gossip protocol is active, propagate the newly ingested memory to peer nodes
+	if s.gossipProtocol != nil {
+		nodeID := s.mesh.LocalNodeID()
+		version, _ := s.gossipProtocol.GetStore().IncrementClock(r.Context())
+		entry := gossip.StateEntry{
+			ID:        fmt.Sprintf("mem-%d", time.Now().UnixNano()),
+			Type:      "memory",
+			Version:   version,
+			Origin:    nodeID,
+			Timestamp: time.Now().UnixMilli(),
+			Content:   req.Content,
+		}
+		_ = s.gossipProtocol.BroadcastUpdate(r.Context(), []gossip.StateEntry{entry})
+	}
+
 	w.WriteHeader(http.StatusCreated)
 }
 

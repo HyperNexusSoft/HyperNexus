@@ -43,6 +43,7 @@ var (
 	pTrackPopupMenu      = user32.NewProc("TrackPopupMenu")
 	pGetCursorPos        = user32.NewProc("GetCursorPos")
 	pSetForegroundWindow = user32.NewProc("SetForegroundWindow")
+	pDestroyMenu         = user32.NewProc("DestroyMenu")
 
 	pShellNotifyIcon = shell32.NewProc("Shell_NotifyIconW")
 )
@@ -85,7 +86,7 @@ const (
 	WM_USER          = 0x0400
 	WM_TRAY          = WM_USER + 100
 	WM_LBUTTONUP     = 0x0202
-	WM_RBUTTONUP     = 0x0208
+	WM_RBUTTONUP     = 0x0205
 	WM_LBUTTONDBLCLK = 0x0203
 
 	IDI_APPLICATION = 32512
@@ -409,6 +410,7 @@ func hiddenWndProc(hWnd windows.HWND, msg uint32, wParam uintptr, lParam uintptr
 					// Do nothing, stay running
 				}
 			}
+			pDestroyMenu.Call(hMenu)
 		}
 		return 0
 	case WM_DESTROY:
