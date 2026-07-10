@@ -20,6 +20,13 @@
 - **Go Sidecar Actions**: Implemented `focus`, `search-memory`, and `trigger-tool` deep link dispatchers in `protocol_handlers.go` emitting real-time event alerts to EventBus.
 - **Next.js Testing Links**: Wired custom HTML anchors into the dashboard `dashboard-home-view.tsx` enabling operators to debug the protocol scheme.
 
+### Configurable Gossip P2P Encryption Key Override
+- **Go Sidecar Actions**: Added setup hook in `encryption.go` to monitor `TORMENTNEXUS_GOSSIP_SHARED_KEY` env var.
+- **Unit Testing**: Validated `internal/mesh` tests continue to run successfully.
+
+### Multi-Tenant Container Topology
+- **Isolated Compose**: Updated `docker-compose.isolated.yml` and `tenant-provision.sh` to include the `sidecar-isolated` container spec, map local port allocations to Next.js dashboard port `7779`, and configure health checks to poll the `/dashboard` route.
+- **Cleanup Automation**: Configured `tenant-deprovision.sh` to cleanly tear down the isolated companion sidecar container (`tn-sidecar-${TENANT_ID}`).
+
 ## Pending & Next Steps
-1. **Encrypted Gossip Mesh Sync**: Implement AES-GCM encrypted UDP gossiping for fleet-wide shared context.
-2. **Autoscaling Deployments**: Finalize multi-tenant Isolated Docker and Nginx automation scripts on cloud VMs.
+1. **SSO & RBAC Settings Console Integration**: Complete configuration binds for multi-tenant users on VM platforms.
