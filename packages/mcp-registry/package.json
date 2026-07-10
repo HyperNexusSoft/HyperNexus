@@ -1,6 +1,6 @@
 {
   "name": "@tormentnexus/mcp-registry",
-  "version": "1.0.0-alpha.251",
+  "version": "1.0.0-alpha.252",
   "private": true,
   "main": "dist/index.js",
   "types": "src/index.ts",
