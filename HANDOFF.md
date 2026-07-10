@@ -28,5 +28,10 @@
 - **Isolated Compose**: Updated `docker-compose.isolated.yml` and `tenant-provision.sh` to include the `sidecar-isolated` container spec, map local port allocations to Next.js dashboard port `7779`, and configure health checks to poll the `/dashboard` route.
 - **Cleanup Automation**: Configured `tenant-deprovision.sh` to cleanly tear down the isolated companion sidecar container (`tn-sidecar-${TENANT_ID}`).
 
+### System Tray Menu & Log Window Close Refinements
+- **Log Event Filtering**: Ignored verbose `a2a` and heartbeat signals inside `systray_windows.go` to keep logs clear of spam.
+- **Log Menu Click Actions**: Removed disabled state (`MF_GRAYED`) from tray menu log entries and routed clicks to open the log window.
+- **Window Close Handling**: Added `WM_CLOSE` case routing in `logWndProc` callback to cleanly destroy window handles.
+
 ## Pending & Next Steps
 1. **SSO & RBAC Settings Console Integration**: Complete configuration binds for multi-tenant users on VM platforms.
