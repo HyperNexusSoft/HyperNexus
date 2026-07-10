@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -155,6 +156,10 @@ func Start(eb *eventbus.EventBus) {
 
 	// Subscribe to eventbus to display logs in real-time
 	eb.OnGlobal(func(ev eventbus.SystemEvent) {
+		evtStr := strings.ToLower(string(ev.Type))
+		if strings.Contains(evtStr, "a2a") || strings.Contains(evtStr, "heartbeat") || strings.Contains(evtStr, "ping") || strings.Contains(evtStr, "status") {
+			return
+		}
 		addLogLine(fmt.Sprintf("[%s] %s (Source: %s)", time.Now().Format("15:04:05"), ev.Type, ev.Source))
 		// Treat any eventbus activity as I/O flow
 		NotifyActivity("in")
@@ -334,7 +339,7 @@ func hiddenWndProc(hWnd windows.HWND, msg uint32, wParam uintptr, lParam uintptr
 				}
 				itemText, _ := syscall.UTF16PtrFromString(display)
 				// IDM_LOG_BASE + i makes each item clickable (opens full log window)
-				pAppendMenu.Call(hMenu, MF_STRING|MF_GRAYED, IDM_LOG_BASE+uintptr(i), uintptr(unsafe.Pointer(itemText)))
+				pAppendMenu.Call(hMenu, MF_STRING, IDM_LOG_BASE+uintptr(i), uintptr(unsafe.Pointer(itemText)))
 			}
 			pAppendMenu.Call(hMenu, MF_STRING, 0, 0) // Separator
 
@@ -372,6 +377,10 @@ func hiddenWndProc(hWnd windows.HWND, msg uint32, wParam uintptr, lParam uintptr
 				uintptr(hWnd),
 				0,
 			)
+
+			if cmd >= IDM_LOG_BASE && cmd < IDM_LOG_BASE+10 {
+				showLogWindow()
+			}
 
 			switch cmd {
 			case IDM_DASHBOARD:
@@ -498,6 +507,10 @@ func logWndProc(hWnd windows.HWND, msg uint32, wParam uintptr, lParam uintptr) u
 			pMoveWindow := user32.NewProc("MoveWindow")
 			pMoveWindow.Call(uintptr(hEditWnd), 0, 0, uintptr(width), uintptr(height), 1)
 		}
+		return 0
+
+	case 0x0010: // WM_CLOSE
+		pDestroyWindow.Call(uintptr(hWnd))
 		return 0
 
 	case WM_DESTROY:
