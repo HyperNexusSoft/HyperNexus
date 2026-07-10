@@ -4,15 +4,25 @@
 
 ### Added
 
+- Advanced deep link protocol scheme handlers (`focus`, `search-memory`, `trigger-tool`) inside the Go sidecar daemon.
+- Interactive deep-link verification anchors and controls inside the Next.js dashboard UI.
+- Configurable P2P Gossip encryption override via `TORMENTNEXUS_GOSSIP_SHARED_KEY` env var.
+- Multi-tenant isolated sidecar and dashboard deployment containers in `docker-compose.isolated.yml` and `tenant-provision.sh`.
 - HyperNexus production deployment on Hetzner (5.161.250.43): Go sidecar via PM2 on port 8090.
 - Wildcard SSL cert issued for `*.hypernexus.site` via Let's Encrypt DNS challenge.
-- Multi-tenant provisioning scripts: `deploy/tenant-provision.sh`, `tenant-deprovision.sh`, `stripe-webhook-provisioner.sh`.
 - Auto-cert provisioning script per tenant subdomain: `deploy/provision-cert.sh`.
 - Landing page at <https://hypernexus.site> with TN API reverse proxy.
 - Nginx wildcard routing: `*.hypernexus.site` -> TN sidecar with `X-Tenant-ID` header.
 - Docker 29.6.1 installed with `tenant-network` on Hetzner server.
 - PM2 ecosystem with `tn-primary` auto-restart via systemd.
 - Cron job for weekly wildcard cert renewal checks.
+
+### Fixed
+
+- Chrome Extension manifest version validation error by implementing dot-separated conversion.
+- Bundled missing `icon-16.png` and `icon-34.png` assets in Chrome extension folder.
+- CORS preflight OPTIONS request handshake blocks on Go Sidecar SSE endpoints.
+- Streamlined `watchdog.py` background daemon, removing obsolete python scrapers.
 
 ### Changed
 
