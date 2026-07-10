@@ -1,6 +1,6 @@
 # TODO
 
-_Last updated: 2026-07-09, version 1.0.0-alpha.251_
+_Last updated: 2026-07-10, version 1.0.0-alpha.252_
 
 ## P0 — Must do now (Stability, Testing & Validation)
 - [x] **Chrome Extension Integration**: Point Chrome extension event-stream and websocket URLs to port `7778` (Go Sidecar). (Completed alpha.250)

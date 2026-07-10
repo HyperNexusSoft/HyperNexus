@@ -1,6 +1,6 @@
 # ROADMAP: TormentNexus Kernel & TormentNexus Dashboard
 
-_Last updated: 2026-07-09, version 1.0.0-alpha.251_
+_Last updated: 2026-07-10, version 1.0.0-alpha.252_
 
 ## Status Legend
 
@@ -8,6 +8,19 @@ _Last updated: 2026-07-09, version 1.0.0-alpha.251_
 - **Beta** — Usable, still evolving
 - **Experimental** — Active R&D, not dependable
 - **Vision** — Directional only
+
+## Completed (v1.0.0-alpha.252)
+
+### 1. Advanced OS Deep Link Schemes
+- Implemented `focus`, `search-memory`, and `trigger-tool` protocol routing inside the Go sidecar.
+- Wired interactive testing button anchors to the Next.js dashboard UI.
+
+### 2. Configurable Gossip P2P Encryption Override
+- Enabled custom shared key configuration via `TORMENTNEXUS_GOSSIP_SHARED_KEY` env overrides.
+- Verified all Gossip mesh unit tests pass successfully.
+
+### 3. Multi-Tenant Isolated Compose Realignment
+- Configured docker compose and tenant provisioning scripts to deploy isolated companion sidecars and Next.js dashboards on port `7779`.
 
 ## Completed (v1.0.0-alpha.251)
 
