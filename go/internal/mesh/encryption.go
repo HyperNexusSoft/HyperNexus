@@ -6,9 +6,19 @@ import (
 	"crypto/rand"
 	"errors"
 	"io"
+	"os"
 )
 
 var defaultKey = []byte("tormentnexus-mesh-encryption-key") // 32 bytes
+
+func init() {
+	if envKey := os.Getenv("TORMENTNEXUS_GOSSIP_SHARED_KEY"); envKey != "" {
+		keyBytes := []byte(envKey)
+		if len(keyBytes) > 0 {
+			defaultKey = keyBytes
+		}
+	}
+}
 
 func encryptAESGCM(plaintext []byte, key []byte) ([]byte, error) {
 	if len(key) != 32 {
