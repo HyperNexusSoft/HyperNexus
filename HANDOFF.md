@@ -1,4 +1,4 @@
-# Handoff — Executive Protocol R16
+# Handoff — Executive Protocol R17
 
 ## Completed
 
@@ -32,6 +32,12 @@
 - **Log Event Filtering**: Ignored verbose `a2a` and heartbeat signals inside `systray_windows.go` to keep logs clear of spam.
 - **Log Menu Click Actions**: Removed disabled state (`MF_GRAYED`) from tray menu log entries and routed clicks to open the log window.
 - **Window Close Handling**: Added `WM_CLOSE` case routing in `logWndProc` callback to cleanly destroy window handles.
+- **Right-Click Constants**: Corrected `WM_RBUTTONUP` definition from `0x0208` (which is middle-button click) to the correct Win32 constant `0x0205`, enabling the menu to show up instantly on mouse right-clicks.
+- **Menu resource cleanup**: Called `DestroyMenu` to clean up resource handles on shortcut popup dismissal.
+
+### Fleet-Wide Gossip Memory Ingestion Sync
+- **StateStore Accessor**: Added a public `GetStore()` getter to `gossip.go` exposing the Gossip protocol's state store interface.
+- **Ingestion Propagation**: Updated `handleMemoryAdd` inside `memory_handlers.go` to automatically fetch node ID, increment the local vector clock, construct a `gossip.StateEntry` and broadcast the new fact across mesh nodes.
 
 ## Pending & Next Steps
 1. **SSO & RBAC Settings Console Integration**: Complete configuration binds for multi-tenant users on VM platforms.
