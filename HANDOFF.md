@@ -16,7 +16,10 @@
 - **Submodule Initialization**: Initialized all modules recursively.
 - **Ports & Documentation Sync**: Updated `DEPLOY.md` to reflect active port allocations (7778 for Go sidecar, 7779 for Next.js dashboard).
 
+### Advanced OS Deep Link Controls
+- **Go Sidecar Actions**: Implemented `focus`, `search-memory`, and `trigger-tool` deep link dispatchers in `protocol_handlers.go` emitting real-time event alerts to EventBus.
+- **Next.js Testing Links**: Wired custom HTML anchors into the dashboard `dashboard-home-view.tsx` enabling operators to debug the protocol scheme.
+
 ## Pending & Next Steps
-1. **Extend Deep Link UI Controls**: Wire custom browser-to-kernel actions from the dashboard interface.
-2. **Encrypted Gossip Mesh Sync**: Implement AES-GCM encrypted UDP gossiping for fleet-wide shared context.
-3. **Autoscaling Deployments**: Finalize multi-tenant Isolated Docker and Nginx automation scripts on cloud VMs.
+1. **Encrypted Gossip Mesh Sync**: Implement AES-GCM encrypted UDP gossiping for fleet-wide shared context.
+2. **Autoscaling Deployments**: Finalize multi-tenant Isolated Docker and Nginx automation scripts on cloud VMs.
