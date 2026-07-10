@@ -174,3 +174,14 @@ func (g *GossipProtocol) sendUDP(addr string, data []byte) {
 		g.conn.WriteToUDP(data, uaddr)
 	}
 }
+
+func (g *GossipProtocol) AddPeer(peer string) {
+	g.mu.Lock()
+	defer g.mu.Unlock()
+	for _, p := range g.peers {
+		if p == peer {
+			return
+		}
+	}
+	g.peers = append(g.peers, peer)
+}

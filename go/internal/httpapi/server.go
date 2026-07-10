@@ -19,6 +19,7 @@ import (
 	"io"
 	"io/fs"
 	"math"
+	"net"
 	"net/http"
 	"net/url"
 	"os"
@@ -182,6 +183,7 @@ type Server struct {
 
 	// Phase 113 — conversational tool injection
 	conversationalPredictor *mcp.ConversationalPredictor
+	udpGossip               *mesh.GossipProtocol
 
 	// --- Enterprise Security (alpha.129+) ---
 	enterpriseWrapper *enterprise.EnterpriseWrapper
@@ -663,15 +665,32 @@ func New(cfg config.Config, detector controlplane.ToolProvider) *Server {
 			_ = proto.Start(context.Background())
 			fmt.Printf("[Gossip] Started P2P memory sync as node %s\n", nodeID)
 
-			// Start periodic peer registration from discovery
-			go func() {
-				ticker := time.NewTicker(10 * time.Second)
-				for range ticker.C {
-					for _, p := range discovery.Peers() {
-						proto.AddPeer(p.NodeID)
-					}
+		// Initialize UDP-based Gossip memory sync
+		udpPort := cfg.Port + 100
+		server.udpGossip = mesh.NewGossipProtocol(nodeID, udpPort, nil)
+		if errUdp := server.udpGossip.Start(context.Background()); errUdp == nil {
+			fmt.Printf("[Gossip] Started UDP P2P memory sync on port %d\n", udpPort)
+			server.udpGossip.OnMessage(func(msg mesh.GossipMessage) {
+				if content, ok := msg.Payload["content"]; ok {
+					server.memoryManager.AddMemory(content)
 				}
-			}()
+			})
+		} else {
+			fmt.Printf("[Gossip] Failed to start UDP protocol: %v\n", errUdp)
+		}
+
+		// Start periodic peer registration from discovery
+		go func() {
+			ticker := time.NewTicker(10 * time.Second)
+			for range ticker.C {
+				for _, p := range discovery.Peers() {
+					proto.AddPeer(p.NodeID)
+					// Register peer in UDP Gossip protocol
+					udpPeerAddr := net.JoinHostPort(p.Addr, strconv.Itoa(p.Port+100))
+					server.udpGossip.AddPeer(udpPeerAddr)
+				}
+			}
+		}()
 		} else {
 			fmt.Printf("[Gossip] Failed to start protocol: %v\n", errProto)
 		}
