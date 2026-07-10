@@ -2875,6 +2875,29 @@ export function DashboardHomeView({
                                         {registeringProtocol ? "Registering..." : protocolRegistered ? "Registered Successfully ✓" : "Register tormentnexus:// Protocol"}
                                     </button>
                                 </div>
+                                <div className="pt-4 border-t border-slate-800 space-y-2">
+                                    <p className="text-[10px] uppercase font-bold tracking-wider text-slate-500">Test Deep Link Schemes</p>
+                                    <div className="grid grid-cols-1 gap-2">
+                                        <a
+                                            href="tormentnexus://focus?tab=settings"
+                                            className="text-center bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-xs px-3 py-2 rounded transition-colors"
+                                        >
+                                            Focus Settings Tab
+                                        </a>
+                                        <a
+                                            href="tormentnexus://search-memory?query=read"
+                                            className="text-center bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-xs px-3 py-2 rounded transition-colors"
+                                        >
+                                            Search Memories for "read"
+                                        </a>
+                                        <a
+                                            href="tormentnexus://trigger-tool?tool=view_file&path=VERSION"
+                                            className="text-center bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-xs px-3 py-2 rounded transition-colors"
+                                        >
+                                            View VERSION File
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
