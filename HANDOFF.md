@@ -1,4 +1,4 @@
-# Handoff — Executive Protocol R17
+# Handoff — Executive Protocol R18
 
 ## Completed
 
@@ -38,6 +38,11 @@
 ### Fleet-Wide Gossip Memory Ingestion Sync
 - **StateStore Accessor**: Added a public `GetStore()` getter to `gossip.go` exposing the Gossip protocol's state store interface.
 - **Ingestion Propagation**: Updated `handleMemoryAdd` inside `memory_handlers.go` to automatically fetch node ID, increment the local vector clock, construct a `gossip.StateEntry` and broadcast the new fact across mesh nodes.
+- **UDP Gossip Protocol Integration**: Enabled the UDP Gossip Protocol (`mesh.GossipProtocol`) in `server.go` to listen on `Port + 100` and sync peers dynamically, syncing memory updates across UDP.
+
+### Swarm Generator Restoration & Encoding Fixes
+- **Root Script Recovery**: Restored `swarm_v7.py` to the workspace root.
+- **Windows UTF-8 Encoding**: Reconfigured stdout/stderr streams to UTF-8 inside `swarm_v7.py` to prevent Windows `charmap` crashes when processing unicode database schemas.
 
 ## Pending & Next Steps
 1. **SSO & RBAC Settings Console Integration**: Complete configuration binds for multi-tenant users on VM platforms.
