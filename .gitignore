@@ -277,3 +277,7 @@ go/internal/tools/_broken/
 
 # Workspace pi extensions — global copy lives in ~/.pi/agent/
 .pi/extensions/
+*.exe
+tormentnexus-linux
+go/catalog.db
+go/tormentnexus.db
