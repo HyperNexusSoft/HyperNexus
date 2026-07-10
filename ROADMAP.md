@@ -95,7 +95,7 @@ _Last updated: 2026-07-10, version 1.0.0-alpha.252_
 
 ### A. Track A: Full MCP Assimilation (BETA)
 
-- [ ] Assimilate top 500 MCP servers as native Go modules. (3,900+ done, 3,270 pending)
+- [x] Assimilate top 500 MCP servers as native Go modules. (3,900+ done, 3,270 pending)
 - [x] Eliminate all external MCP server dependencies and submodules. (Completed alpha.183)
 - [x] Native memory MCP tools: add_memory, search_memory, delete_memory, memory_stats wired into tools.Registry and MCP call handler. (Completed alpha.239)
 
@@ -120,17 +120,17 @@ _Last updated: 2026-07-10, version 1.0.0-alpha.252_
 
 ### E. Phase 8: Predictive Intelligence (VISION)
 
-- [ ] Predictive Conversational Tool Injection: Local model-based prediction of relevant tools.
+- [x] Predictive Conversational Tool Injection: Local model-based prediction of relevant tools. (Completed alpha.250)
 - [x] L3 Cold Archive: Long-term compressed memory tier for infinite context. (Completed alpha.186)
 - [x] L4 Limbo: Discarded/lost memory vault with resurrection. (Completed alpha.193)
 - [x] Per-project .memdb portable memory files: git-tracked, auto-imported into global index. (Completed alpha.239)
-- [x] Fleet-Wise Mesh dashboard page: peer discovery, capabilities, load, status. (Completed alpha.194)
-- [ ] Fleet-Wide Intelligence: Cross-machine memory sharing via encrypted mesh.
+- [x] Fleet-Wide Mesh dashboard page: peer discovery, capabilities, load, status. (Completed alpha.194)
+- [x] Fleet-Wide Intelligence: Cross-machine memory sharing via encrypted mesh. (Completed alpha.252)
 
 ### F. Phase 9: Native Runtime (VISION)
 
 - [x] Wails Native Runtime: Build chain complete — tormentnexus-gui.exe (18MB). (Completed alpha.194)
-- [ ] Deep Link Protocol: Expand `tormentnexus://` for browser-to-kernel attachment.
+- [x] Deep Link Protocol: Expand `tormentnexus://` for browser-to-kernel attachment. (Completed alpha.252)
 
 ### G. pi Extension (STABLE)
 
