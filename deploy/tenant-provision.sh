@@ -37,7 +37,25 @@ services:
       - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=http://sidecar-${TENANT_ID}:7778
     ports:
-      - "127.0.0.1:${TENANT_PORT}:3000"
+      - "127.0.0.1:${TENANT_PORT}:7779"
+    depends_on:
+      - sidecar-${TENANT_ID}
+    networks:
+      - tenant-network
+    restart: on-failure:5
+
+  sidecar-${TENANT_ID}:
+    image: tormentnexus-sidecar:latest
+    container_name: tn-sidecar-${TENANT_ID}
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+    environment:
+      - TORMENTNEXUS_GOSSIP_SHARED_KEY=${AUTH_TOKEN}
+    volumes:
+      - ${DATA_ROOT}/${TENANT_ID}/data:/root/.tormentnexus
     networks:
       - tenant-network
     restart: on-failure:5
@@ -80,7 +98,7 @@ server {
 
     # Health
     location /health {
-        proxy_pass http://127.0.0.1:${TENANT_PORT}/api/health;
+        proxy_pass http://127.0.0.1:${TENANT_PORT}/dashboard;
         access_log off;
     }
 }
@@ -92,12 +110,12 @@ nginx -t && systemctl reload nginx
 # 7. Wait for containers to be healthy
 echo "Waiting for $TENANT_ID to be healthy..."
 sleep 5
-if curl -sf "http://127.0.0.1:${TENANT_PORT}/api/health" >/dev/null 2>&1; then
+if curl -sf "http://127.0.0.1:${TENANT_PORT}/dashboard" >/dev/null 2>&1; then
 	echo "✅ Tenant $TENANT_ID is healthy!"
 	echo "   URL: https://${TENANT_ID}.hypernexus.site"
 	echo "   Auth Token: ${AUTH_TOKEN:0:16}..."
 else
-	echo "⚠️  Tenant $TENANT_ID may still be starting. Check: docker logs tn-core-${TENANT_ID}"
+	echo "⚠️  Tenant $TENANT_ID may still be starting. Check: docker logs tn-web-${TENANT_ID}"
 fi
 
 echo "=== Provisioning complete for $TENANT_ID ==="

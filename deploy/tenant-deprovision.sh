@@ -13,7 +13,7 @@ echo "=== Deprovisioning tenant: $TENANT_ID ==="
 # 1. Stop and remove containers
 echo "Stopping containers..."
 docker compose -f "/tmp/docker-compose.$TENANT_ID.yml" down -v 2>/dev/null || true
-docker rm -f tn-core-${TENANT_ID} tn-web-${TENANT_ID} 2>/dev/null || true
+docker rm -f tn-core-${TENANT_ID} tn-web-${TENANT_ID} tn-sidecar-${TENANT_ID} 2>/dev/null || true
 
 # 2. Remove Nginx config
 rm -f "/etc/nginx/sites-enabled/hypernexus.${TENANT_ID}.conf"
