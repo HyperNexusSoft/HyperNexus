@@ -1,4 +1,5 @@
 const isDev = process.env.NODE_ENV === "development";
+const isWin = typeof process !== 'undefined' && process.platform === 'win32';
 const isExport = process.env.NEXT_EXPORT === "true";
 
 /** @type {import('next').NextConfig} */

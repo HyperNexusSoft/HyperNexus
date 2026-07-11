@@ -1,3 +1,9 @@
+## [1.0.0-alpha.235] - 2026-07-02
+### Fixed
+- Fixed Next.js Turbopack cache corruption on Windows hosts by injecting the `--webpack` flag in dev scripts and config.
+- Improved tRPC proxy resilience by implementing `AbortController` timeouts to detect offline TS core proxies and return `504 TRPC_UPSTREAM_TIMEOUT`.
+- Updated E2E port configurations.
+
 # Changelog
 
 ## [1.0.0-alpha.255] - 2026-07-11

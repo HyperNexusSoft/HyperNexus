@@ -611,6 +611,18 @@ async function handler(req: Request): Promise<Response> {
 			return compatFallback;
 		}
 		const message = error instanceof Error ? error.message : String(error);
+		if (error.name === 'AbortError') {
+		    console.error(`[TRPC-Proxy] Upstream fetch timed out: ${message}`);
+		    return new Response(
+			    JSON.stringify({
+				    error: "TRPC_UPSTREAM_TIMEOUT",
+				    message: "The Go sidecar upstream timed out.",
+				    upstream: upstreamUrl.toString(),
+			    }),
+			    { status: 504, headers: { "content-type": "application/json" } },
+		    );
+        }
+
 		console.error(`[TRPC-Proxy] Upstream fetch failed: ${message}`);
 		return new Response(
 			JSON.stringify({
