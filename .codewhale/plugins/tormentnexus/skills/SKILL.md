@@ -14,7 +14,7 @@ CodeWhale connects to it via MCP stdio (`tormentnexus.exe mcp`). The MCP server 
 ## Architecture Overview
 
 ```
-CodeWhale ⇄ MCP (tormentnexus.exe mcp) ⇄ Go Sidecar (port 7778)
+CodeWhale ⇄ MCP (tormentnexus.exe mcp) ⇄ TN Kernel (port 7778)
                                      ⇄ 20+ downstream MCP servers
                                      ⇄ SQLite L2 vector memory
                                      ⇄ Session import store (542+ sessions)
@@ -22,7 +22,7 @@ CodeWhale ⇄ MCP (tormentnexus.exe mcp) ⇄ Go Sidecar (port 7778)
                                      ⇄ Enterprise RBAC
 ```
 
-The sidecar runs as the "TormentNexusSidecar" Windows service on port 7778.
+The Kernel runs as the "TormentNexusKernel" Windows service on port 7778.
 
 ---
 
@@ -51,7 +51,7 @@ The `tormentnexus` MCP server provides 49+ tools. Tools are prefixed `mcp_tormen
 | `mcp_tormentnexus_bash` | Execute shell command (sandboxed) |
 | `mcp_tormentnexus_repomap` | Generate repository map |
 
-### MCP Routing (via Go Sidecar)
+### MCP Routing (via TN Kernel)
 | Tool | Description |
 |------|-------------|
 | `mcp_tormentnexus_mcp_list_servers` | List all registered MCP servers |
@@ -104,9 +104,9 @@ TN has three memory tiers:
 | L2 | Vector Vault | Cross-session | Persistent (SQLite + embeddings) |
 | L3 | Cold Archive | Long-term | Archived |
 
-### L2 Memory Operations (via Go Sidecar API)
+### L2 Memory Operations (via TN Kernel API)
 
-For operations not exposed through MCP tools, use the Go sidecar REST API at `http://127.0.0.1:7778`:
+For operations not exposed through MCP tools, use the TN kernel REST API at `http://127.0.0.1:7778`:
 
 **Store a memory:**
 ```bash
@@ -172,7 +172,7 @@ GET http://127.0.0.1:7778/api/code/search?q=<query>&scope=<ast-grep|deepcontext|
 ### 1. Pre-Task Context Harvesting
 Before starting significant work, harvest context from L2 memory:
 1. Use `mcp_tormentnexus_memory_scratchpad_get` to check current L1 scratchpad
-2. Search L2 via sidecar API: `GET /api/memory/search?q=<task description>&limit=5`
+2. Search L2 via Kernel API: `GET /api/memory/search?q=<task description>&limit=5`
 3. Optionally search skills: `GET /api/skills/search?q=<task description>&limit=5`
 4. Store the findings in the L1 scratchpad (`mcp_tormentnexus_memory_scratchpad_append`)
 
@@ -196,27 +196,27 @@ When unsure what tool to use:
 1. List available MCP servers: `mcp_tormentnexus_mcp_list_servers`
 2. List tools from a server: `mcp_tormentnexus_mcp_list_tools` with server name
 3. Semantic search: `GET /api/mcp/native/search?query=<natural language description>`
-4. Route through sidecar: `mcp_tormentnexus_mcp_call_tool` for downstream servers
+4. Route through Kernel: `mcp_tormentnexus_mcp_call_tool` for downstream servers
 
 ### 4. Session & Skill Discovery
 - Search imported sessions: `GET /api/memory/search?q=<query>&type=session`
 - Search skill registry: `GET /api/skills/search?q=<query>`
-- Browse all sessions: varies by sidecar endpoint
+- Browse all sessions: varies by Kernel endpoint
 
 ### 5. Code Search (Multi-Engine)
 When searching code across the workspace:
-- **AST patterns**: Use the sidecar's code search with `scope=ast-grep`
+- **AST patterns**: Use the TN Kernel's code search with `scope=ast-grep`
 - **Semantic search**: Use `scope=deepcontext`
 - **File/pattern**: Use `scope=file`
 - Or directly use `mcp_tormentnexus_grep` for simple regex
 
 ### 6. Enterprise RBAC
-The TN sidecar enforces enterprise authorization for dangerous operations. If a destructive tool call is blocked, use `mcp_tormentnexus_memory_scratchpad_set` or the sidecar memory API to record what you were doing and why before proceeding with explicitly authorized alternatives.
+The TN Kernel enforces enterprise authorization for dangerous operations. If a destructive tool call is blocked, use `mcp_tormentnexus_memory_scratchpad_set` or the TN Kernel memory API to record what you were doing and why before proceeding with explicitly authorized alternatives.
 
 ### 7. Per-Turn Memory Injection
 After each significant user request, consider:
 1. What relevant context might L2 have?
-2. Search sidecar memory API for related memories
+2. Search Kernel memory API for related memories
 3. If found, use `mcp_tormentnexus_memory_scratchpad_append` to bring it into the current L1 context
 
 ---
@@ -261,7 +261,7 @@ Interactive multi-step:
 Summarize the current session using the conversation history and L1 scratchpad. Optionally store the summary to L2 memory.
 
 ### `/tn-purge` — Purge Stale Memories
-Ask what to purge (by tag, category, or query). Use sidecar API to remove or archive matching memories.
+Ask what to purge (by tag, category, or query). Use Kernel API to remove or archive matching memories.
 
 ---
 
@@ -284,7 +284,7 @@ A structured pre-task routine:
 5. Reference the scratchpad content during the task
 
 ### At Session End
-- Store any important decisions or findings to L2 via the sidecar API
+- Store any important decisions or findings to L2 via the TN Kernel API
 - Optionally store a session summary as a memory entry
 
 ---
@@ -299,7 +299,7 @@ codewhale mcp connect tormentnexus  # Test the connection
 codewhale mcp tools       # Show all tools (includes mcp_tormentnexus_*)
 ```
 
-Sidecar health check:
+Kernel health check:
 ```bash
 curl http://127.0.0.1:7778/api/health
 ```
@@ -310,8 +310,8 @@ Dashboard (if running): `http://127.0.0.1:7779/dashboard`
 
 ## Security Notes
 
-- The sidecar runs on `127.0.0.1:7778` — localhost only
-- Enterprise RBAC is enforced at the sidecar level
+- The Kernel runs on `127.0.0.1:7778` — localhost only
+- Enterprise RBAC is enforced at the TN Kernel level
 - Dangerous operations (`rm -rf`, `sudo`, `DROP TABLE`, `git push --force`) are blocked by default unless explicitly authorized
-- All tool calls are audited in the sidecar's enterprise audit log
+- All tool calls are audited in the TN Kernel's enterprise audit log
 - User-initiated shell commands are also audited

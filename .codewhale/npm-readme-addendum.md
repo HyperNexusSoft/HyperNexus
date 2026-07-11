@@ -20,6 +20,6 @@ CodeWhale 0.8.66+ includes a built-in **TormentNexus extension** (`crates/tn-ext
 - 3 keyboard shortcuts: `Ctrl+Shift+M` (memory), `Ctrl+Shift+T` (tools), `Ctrl+Shift+P` (status)
 
 ### MCP Server Auto-Registration
-The extension automatically registers the `tormentnexus` MCP server pointing at `tormentnexus.exe mcp`. Enable it by keeping the TormentNexus sidecar running on `http://127.0.0.1:7778`.
+The extension automatically registers the `tormentnexus` MCP server pointing at `tormentnexus.exe mcp`. Enable it by keeping the TormentNexus Kernel running on `http://127.0.0.1:7778`.
 
 > Extension source: `crates/tn-extension` — implements `codewhale_extension::Extension` trait.

@@ -177,14 +177,14 @@ type ToolResult struct {
 // ─── MCP Server ───
 
 type MCPServer struct {
-	goSidecarURL string
+	tnKernelURL string
 	tools        []ToolDefinition
 	rootRegistry *roottools.Registry
 }
 
-func NewMCPServer(goSidecarURL string) *MCPServer {
+func NewMCPServer(tnKernelURL string) *MCPServer {
 	s := &MCPServer{
-		goSidecarURL: goSidecarURL,
+		tnKernelURL: tnKernelURL,
 		rootRegistry: roottools.NewRegistry(),
 	}
 	s.registerTools()
@@ -372,20 +372,20 @@ func (s *MCPServer) registerTools() {
 				},
 			},
 		},
-		// ── Go Sidecar MCP Tools ──
+		// ── TN Kernel MCP Tools ──
 		{
 			Name:        "mcp_list_servers",
-			Description: "List configured MCP servers from the Go sidecar",
+			Description: "List configured MCP servers from the TN Kernel",
 			InputSchema: InputSchema{Type: "object", Properties: emptyProperties},
 		},
 		{
 			Name:        "mcp_list_tools",
-			Description: "List available MCP tools from the Go sidecar",
+			Description: "List available MCP tools from the TN Kernel",
 			InputSchema: InputSchema{Type: "object", Properties: emptyProperties},
 		},
 		{
 			Name:        "mcp_call_tool",
-			Description: "Call an MCP tool through the Go sidecar",
+			Description: "Call an MCP tool through the TN Kernel",
 			InputSchema: InputSchema{
 				Type: "object",
 				Properties: map[string]PropertySchema{
@@ -398,7 +398,7 @@ func (s *MCPServer) registerTools() {
 		},
 		{
 			Name:        "mcp_status",
-			Description: "Get MCP runtime status from the Go sidecar",
+			Description: "Get MCP runtime status from the TN Kernel",
 			InputSchema: InputSchema{Type: "object", Properties: emptyProperties},
 		},
 		{
@@ -566,20 +566,20 @@ func (s *MCPServer) callTool(name string, args map[string]any) ToolResult {
 	case "advance_chat":
 		return advanceChat(args)
 	case "mcp_list_servers":
-		return goSidecarGet(s.goSidecarURL + "/api/mcp/servers")
+		return tnKernelGet(s.tnKernelURL + "/api/mcp/servers")
 	case "mcp_list_tools":
-		return goSidecarGet(s.goSidecarURL + "/api/mcp/tools")
+		return tnKernelGet(s.tnKernelURL + "/api/mcp/tools")
 	case "mcp_call_tool":
-		return goSidecarCallTool(s.goSidecarURL, args)
+		return tnKernelCallTool(s.tnKernelURL, args)
 	case "mcp_status":
-		return goSidecarGet(s.goSidecarURL + "/api/mcp/status")
+		return tnKernelGet(s.tnKernelURL + "/api/mcp/status")
 	case "mcp_server_test":
-		return goSidecarServerTest(s.goSidecarURL, args)
+		return tnKernelServerTest(s.tnKernelURL, args)
 	case "system_status":
-		health, _ := goSidecarGetRaw(s.goSidecarURL + "/health")
+		health, _ := tnKernelGetRaw(s.tnKernelURL + "/health")
 		return ToolResult{Content: []TextContent{{Type: "text", Text: health}}}
 	case "billing_status":
-		return goSidecarGet(s.goSidecarURL + "/api/billing/status")
+		return tnKernelGet(s.tnKernelURL + "/api/billing/status")
 	case "list_surface_profiles":
 		data, _ := json.MarshalIndent(surfaceProfiles, "", "  ")
 		return ToolResult{Content: []TextContent{{Type: "text", Text: string(data)}}}
@@ -623,7 +623,7 @@ func (s *MCPServer) callTool(name string, args map[string]any) ToolResult {
 		data, _ := json.MarshalIndent(names, "", "  ")
 		return ToolResult{Content: []TextContent{{Type: "text", Text: string(data)}}}
 	case "memory_scratchpad_get", "memory_scratchpad_set", "memory_scratchpad_append", "memory_extract_relations":
-		return goSidecarCallNativeTool(s.goSidecarURL, name, args)
+		return tnKernelCallNativeTool(s.tnKernelURL, name, args)
 	default:
 		// 1. Try root registry tools first
 		if s.rootRegistry != nil {
@@ -769,17 +769,17 @@ func advanceChat(args map[string]any) ToolResult {
 	return ToolResult{Content: []TextContent{{Type: "text", Text: fmt.Sprintf("Advance chat: %s", strings.Join(parts, ", "))}}}
 }
 
-// ─── Go Sidecar API Tools ───
+// ─── TN Kernel API Tools ───
 
-func goSidecarGet(url string) ToolResult {
-	body, err := goSidecarGetRaw(url)
+func tnKernelGet(url string) ToolResult {
+	body, err := tnKernelGetRaw(url)
 	if err != nil {
 		return ToolResult{Content: []TextContent{{Type: "text", Text: fmt.Sprintf("Error: %v", err)}}}
 	}
 	return ToolResult{Content: []TextContent{{Type: "text", Text: body}}}
 }
 
-func goSidecarGetRaw(url string) (string, error) {
+func tnKernelGetRaw(url string) (string, error) {
 	client := &http.Client{Timeout: 10 * time.Second}
 	resp, err := client.Get(url)
 	if err != nil {
@@ -790,7 +790,7 @@ func goSidecarGetRaw(url string) (string, error) {
 	return string(data), nil
 }
 
-func goSidecarCallNativeTool(baseURL string, name string, args map[string]any) ToolResult {
+func tnKernelCallNativeTool(baseURL string, name string, args map[string]any) ToolResult {
 	payload := map[string]any{
 		"name":      name,
 		"arguments": args,
@@ -822,7 +822,7 @@ func goSidecarCallNativeTool(baseURL string, name string, args map[string]any) T
 	return result.Data
 }
 
-func goSidecarCallTool(baseURL string, args map[string]any) ToolResult {
+func tnKernelCallTool(baseURL string, args map[string]any) ToolResult {
 	serverName, _ := args["serverName"].(string)
 	toolName, _ := args["toolName"].(string)
 	argsStr, _ := args["arguments"].(string)
@@ -849,7 +849,7 @@ func goSidecarCallTool(baseURL string, args map[string]any) ToolResult {
 	return ToolResult{Content: []TextContent{{Type: "text", Text: string(data)}}}
 }
 
-func goSidecarServerTest(baseURL string, args map[string]any) ToolResult {
+func tnKernelServerTest(baseURL string, args map[string]any) ToolResult {
 	serverName, _ := args["serverName"].(string)
 	operation, _ := args["operation"].(string)
 	if operation == "" {
@@ -877,7 +877,7 @@ func (s *MCPServer) getMergedTools() []ToolDefinition {
 	copy(merged, s.tools)
 
 	client := &http.Client{Timeout: 3 * time.Second}
-	resp, err := client.Get(s.goSidecarURL + "/api/mcp/tools")
+	resp, err := client.Get(s.tnKernelURL + "/api/mcp/tools")
 	if err != nil {
 		log.Printf("[MCP] Upstream tools unavailable: %v", err)
 		return merged
@@ -949,7 +949,7 @@ func (s *MCPServer) forwardToolCallToUpstream(name string, args map[string]any) 
 	}
 
 	client := &http.Client{Timeout: 60 * time.Second}
-	resp, err := client.Post(s.goSidecarURL+"/api/mcp/tools/call", "application/json", strings.NewReader(string(body)))
+	resp, err := client.Post(s.tnKernelURL+"/api/mcp/tools/call", "application/json", strings.NewReader(string(body)))
 	if err != nil {
 		return ToolResult{}, err
 	}
@@ -979,10 +979,10 @@ func (s *MCPServer) forwardToolCallToUpstream(name string, args map[string]any) 
 // ─── MCP Stdio Runner ───
 
 func cmdMCP(args []string) int {
-	goSidecarURL := ""
+	tnKernelURL := ""
 	cfg := config.Default()
 	if record, err := lockfile.Read(cfg.LockPath()); err == nil && record.Port > 0 {
-		goSidecarURL = fmt.Sprintf("http://%s:%d", record.Host, record.Port)
+		tnKernelURL = fmt.Sprintf("http://%s:%d", record.Host, record.Port)
 	} else {
 		goPort := "7778"
 		for i, a := range args {
@@ -990,11 +990,11 @@ func cmdMCP(args []string) int {
 				goPort = args[i+1]
 			}
 		}
-		goSidecarURL = fmt.Sprintf("http://127.0.0.1:%s", goPort)
+		tnKernelURL = fmt.Sprintf("http://127.0.0.1:%s", goPort)
 	}
 
-	// Auto-spawn sidecar serve daemon if it is not currently running
-	if _, err := http.Get(goSidecarURL + "/health"); err != nil {
+	// Auto-spawn TN Kernel if it is not currently running
+	if _, err := http.Get(tnKernelURL + "/health"); err != nil {
 		execPath, execErr := os.Executable()
 		if execErr == nil {
 			workspaceRoot := os.Getenv("TORMENTNEXUS_WORKSPACE_ROOT")
@@ -1006,13 +1006,13 @@ func cmdMCP(args []string) int {
 			cmd.Stdout = nil
 			cmd.Stderr = nil
 			if spawnErr := cmd.Start(); spawnErr == nil {
-				log.Printf("[MCP] Spawned Go sidecar serve daemon in background")
-				// Wait for sidecar to start and write lockfile
+				log.Printf("[MCP] Spawned TN Kernel serve daemon in background")
+				// Wait for TN Kernel to start and write lockfile
 				for retries := 0; retries < 15; retries++ {
 					time.Sleep(200 * time.Millisecond)
 					if rec, lfErr := lockfile.Read(cfg.LockPath()); lfErr == nil && rec.Port > 0 {
-						goSidecarURL = fmt.Sprintf("http://%s:%d", rec.Host, rec.Port)
-						if resp, hcErr := http.Get(goSidecarURL + "/health"); hcErr == nil {
+						tnKernelURL = fmt.Sprintf("http://%s:%d", rec.Host, rec.Port)
+						if resp, hcErr := http.Get(tnKernelURL + "/health"); hcErr == nil {
 							resp.Body.Close()
 							break
 						}
@@ -1023,9 +1023,9 @@ func cmdMCP(args []string) int {
 	}
 
 	log.SetOutput(os.Stderr)
-	log.Printf("[MCP] TormentNexus MCP Server starting (Go sidecar: %s)", goSidecarURL)
+	log.Printf("[MCP] TormentNexus MCP Server starting (TN Kernel: %s)", tnKernelURL)
 
-	server := NewMCPServer(goSidecarURL)
+	server := NewMCPServer(tnKernelURL)
 	scanner := bufio.NewScanner(os.Stdin)
 	writer := bufio.NewWriter(os.Stdout)
 

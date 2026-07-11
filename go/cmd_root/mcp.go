@@ -13,7 +13,7 @@ import (
 var mcpCmd = &cobra.Command{
 	Use:                "mcp",
 	Short:              "MCP Router and Server management",
-	Long:               `MCP Router and Server management. Proxies commands to the Go sidecar.`,
+	Long:               `MCP Router and Server management. Proxies commands to the TN Kernel.`,
 	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		cwd, err := os.Getwd()
@@ -22,30 +22,30 @@ var mcpCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		// Dynamically find the sidecar path relative to the running executable directory first,
+		// Dynamically find the TN kernel path relative to the running executable directory first,
 		// and fall back to the workspace bin/tormentnexus.exe.
 		execPath, err := os.Executable()
 		if err != nil {
 			execPath = ""
 		}
 		
-		var sidecarPath string
+		var kernelPath string
 		if execPath != "" {
-			sidecarPath = filepath.Join(filepath.Dir(execPath), "bin", "tormentnexus.exe")
-			if _, err := os.Stat(sidecarPath); err == nil {
+			kernelPath = filepath.Join(filepath.Dir(execPath), "bin", "tormentnexus.exe")
+			if _, err := os.Stat(kernelPath); err == nil {
 				goto found
 			}
-			sidecarPath = filepath.Join(filepath.Dir(execPath), "tormentnexus.exe")
-			if _, err := os.Stat(sidecarPath); err == nil {
+			kernelPath = filepath.Join(filepath.Dir(execPath), "tormentnexus.exe")
+			if _, err := os.Stat(kernelPath); err == nil {
 				goto found
 			}
 		}
 
-		sidecarPath = filepath.Join(cwd, "bin", "tormentnexus.exe")
-		if _, err := os.Stat(sidecarPath); os.IsNotExist(err) {
-			sidecarPath = filepath.Join(cwd, "go", "bin", "tormentnexus.exe")
-			if _, err := os.Stat(sidecarPath); os.IsNotExist(err) {
-				fmt.Fprintf(os.Stderr, "Sidecar binary not found. Please run 'build.bat' or compile inside the 'go' folder first.\n")
+		kernelPath = filepath.Join(cwd, "bin", "tormentnexus.exe")
+		if _, err := os.Stat(kernelPath); os.IsNotExist(err) {
+			kernelPath = filepath.Join(cwd, "go", "bin", "tormentnexus.exe")
+			if _, err := os.Stat(kernelPath); os.IsNotExist(err) {
+				fmt.Fprintf(os.Stderr, "TN Kernel binary not found. Please run 'build.bat' or compile inside the 'go' folder first.\n")
 				os.Exit(1)
 			}
 		}
@@ -54,7 +54,7 @@ var mcpCmd = &cobra.Command{
 
 		// Build proxy command
 		subArgs := append([]string{"mcp"}, args...)
-		c := exec.Command(sidecarPath, subArgs...)
+		c := exec.Command(kernelPath, subArgs...)
 		c.Stdin = os.Stdin
 		c.Stdout = os.Stdout
 		c.Stderr = os.Stderr
@@ -67,7 +67,7 @@ var mcpCmd = &cobra.Command{
 				}
 				os.Exit(exitError.ExitCode())
 			}
-			fmt.Fprintf(os.Stderr, "failed to run sidecar: %v\n", err)
+			fmt.Fprintf(os.Stderr, "failed to run kernel: %v\n", err)
 			os.Exit(1)
 		}
 	},

@@ -395,7 +395,7 @@ func hiddenWndProc(hWnd windows.HWND, msg uint32, wParam uintptr, lParam uintptr
 				title, _ := syscall.UTF16PtrFromString("TormentNexus — Exit Options")
 				msg, _ := syscall.UTF16PtrFromString("Do you want to completely quit ALL TormentNexus background processes?\n\n" +
 					"Click 'Yes' to terminate: watchdog, swarm workers, dashboard, freellm.\n" +
-					"Click 'No' to quit the sidecar only (background workers keep running).\n" +
+					"Click 'No' to quit the TN Kernel only (background workers keep running).\n" +
 					"Click 'Cancel' to stay running.")
 				resp, _, _ := pMessageBox.Call(0, uintptr(unsafe.Pointer(msg)),
 					uintptr(unsafe.Pointer(title)), MB_YESNOCANCEL|MB_ICONQUESTION)
@@ -404,7 +404,7 @@ func hiddenWndProc(hWnd windows.HWND, msg uint32, wParam uintptr, lParam uintptr
 					// Kill everything
 					go TriggerFullShutdown()
 				case IDNO:
-					// Just exit the sidecar, leave workers running
+					// Just exit the TN Kernel, leave workers running
 					os.Exit(0)
 				case IDCANCEL:
 					// Do nothing, stay running
@@ -437,7 +437,7 @@ func TriggerFullShutdown() {
 	// 4. Terminate freellm
 	_ = exec.Command("taskkill", "/F", "/IM", "freellm.exe").Run()
 
-	// 5. Exit sidecar
+	// 5. Exit TN Kernel
 	os.Exit(0)
 }
 

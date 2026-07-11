@@ -78,7 +78,7 @@ func runDeepLink(deepLink string) int {
 	cfg := config.Default()
 	record, err := lockfile.Read(cfg.LockPath())
 	if err != nil {
-		log.Printf("TormentNexus sidecar server is not currently running. Please start it using 'tormentnexus serve' first.")
+		log.Printf("TormentNexus TN Kernel is not currently running. Please start it using 'tormentnexus serve' first.")
 		return 1
 	}
 

@@ -8,7 +8,7 @@ package httpapi
  * Provides CRUD operations for user-created scripts and execution endpoints.
  *
  * WHY: The TS side has savedScriptsRouter.ts with list/get/create/update/delete/execute.
- * The Go sidecar needs native handlers so the dashboard works even when TS is unavailable.
+ * The TN Kernel needs native handlers so the dashboard works even when TS is unavailable.
  *
  * PORTING STATUS: Full parity with TS savedScriptsRouter.ts.
  */

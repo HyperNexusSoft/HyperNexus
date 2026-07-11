@@ -15,7 +15,7 @@ TormentNexus is a local AI control plane running on port 7778 with persistent L2
 
 ### Discovery & Routing
 - `mcp_tormentnexus_mcp_list_servers/tools` — discover available capabilities
-- `mcp_tormentnexus_mcp_call_tool` — route through TN's Go sidecar to 20+ MCP servers
+- `mcp_tormentnexus_mcp_call_tool` — route through TN's TN kernel to 20+ MCP servers
 - `mcp_tormentnexus_mcp_status` — check runtime health
 
 ### System Tools
@@ -30,4 +30,4 @@ TormentNexus is a local AI control plane running on port 7778 with persistent L2
 2. **During development**: Use `mcp_tormentnexus_repomap` for codebase orientation
 3. **After decisions**: Store key patterns with `mcp_tormentnexus_memory_scratchpad_set` or `mcp_tormentnexus_add_bookmark`
 4. **Tool discovery**: Use `mcp_tormentnexus_mcp_list_tools` when unsure what's available
-5. **Complex tasks**: Route through TN sidecar via `mcp_tormentnexus_mcp_call_tool`
+5. **Complex tasks**: Route through TN Kernel via `mcp_tormentnexus_mcp_call_tool`

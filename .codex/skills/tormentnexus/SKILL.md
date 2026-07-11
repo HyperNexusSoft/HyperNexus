@@ -18,7 +18,7 @@ The tormentnexus MCP server is configured and exposes tools via the `mcp_torment
 
 ### Discovery & Routing
 - `mcp_tormentnexus_mcp_list_servers/tools` — discover available capabilities
-- `mcp_tormentnexus_mcp_call_tool` — route through TN's Go sidecar to 20+ MCP servers
+- `mcp_tormentnexus_mcp_call_tool` — route through TN's TN kernel to 20+ MCP servers
 - `mcp_tormentnexus_mcp_status` — check runtime health
 
 ### System Tools
@@ -44,7 +44,7 @@ The tormentnexus MCP server is configured and exposes tools via the `mcp_torment
 2. **During development**: Use `mcp_tormentnexus_repomap` for codebase orientation
 3. **After decisions**: Store key patterns with `mcp_tormentnexus_memory_scratchpad_set`
 4. **Tool discovery**: Use `mcp_tormentnexus_mcp_list_tools` when unsure what's available
-5. **Complex tasks**: Route through TN sidecar via `mcp_tormentnexus_mcp_call_tool`
+5. **Complex tasks**: Route through TN Kernel via `mcp_tormentnexus_mcp_call_tool`
 6. **Cross-session**: Use scratchpad tools to persist context between sessions
 
 ## Rules
@@ -52,4 +52,4 @@ The tormentnexus MCP server is configured and exposes tools via the `mcp_torment
 - Always check scratchpad memory before starting complex multi-step tasks
 - Store important decisions and patterns after completing significant work
 - Use repomap for codebase orientation in unfamiliar projects
-- Route enterprise integrations (Jira, Confluence) through TN sidecar
+- Route enterprise integrations (Jira, Confluence) through TN Kernel

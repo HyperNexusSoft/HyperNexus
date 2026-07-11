@@ -36,5 +36,5 @@ All TN tools are available through the `mcp_tormentnexus_*` namespace:
 
 1. At task start: check scratchpad for existing context
 2. During work: use repomap for orientation, grep for search
-3. When stuck: list tools for discovery, route through sidecar
+3. When stuck: list tools for discovery, route through TN Kernel
 4. After decisions: persist to scratchpad for cross-session recall

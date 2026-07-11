@@ -16,7 +16,7 @@ Adds `crates/tn-extension` — a native Rust extension implementing the `codewha
 - **ToolCall** — logs tool calls; checks 6 dangerous patterns (`rm -rf`, `sudo`, `DROP TABLE`, etc.) against `POST /api/enterprise/authorize`
 - **ToolResult** — auto-stores substantial results (>=100 chars) from 6 key tools to L2
 - **TurnEnd** — logs tool usage summary per turn
-- **Input** — expands `@memory:key` inline with L2 content from TN sidecar
+- **Input** — expands `@memory:key` inline with L2 content from TN Kernel
 - **UserBash** — audit-logs shell commands to TN enterprise audit
 - **ModelSelect** — tracks model changes to L2
 - **SessionBeforeCompact** / **SessionCompact** — preserves memory across compaction boundaries
@@ -33,7 +33,7 @@ Adds `crates/tn-extension` — a native Rust extension implementing the `codewha
 - `Cargo.toml` (workspace root) — added `crates/tn-extension` as workspace member
 
 ## Dependencies
-- `reqwest` (HTTP client for TN sidecar API)
+- `reqwest` (HTTP client for TN Kernel API)
 - `serde_json` (JSON serialization for API payloads)
 - `chrono` (RFC3339 timestamps)
 - `async-trait` (async trait support for Extension)

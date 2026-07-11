@@ -510,12 +510,12 @@ func TestSessionContextEndpoint(t *testing.T) {
 		case "/trpc/memory.getSessionBootstrap":
 			_ = json.NewEncoder(w).Encode(map[string]any{
 				"result": map[string]any{"data": map[string]any{"json": map[string]any{
-					"goal":                   "ship the go sidecar",
+					"goal":                   "ship the TN kernel",
 					"objective":              "surface current context",
 					"summaryCount":           2,
 					"observationCount":       3,
 					"toolAdvertisementCount": 1,
-					"prompt":                 "Memory bootstrap:\nCurrent goal: ship the go sidecar",
+					"prompt":                 "Memory bootstrap:\nCurrent goal: ship the TN kernel",
 				}}},
 			})
 		case "/trpc/mcp.searchTools":
@@ -523,7 +523,7 @@ func TestSessionContextEndpoint(t *testing.T) {
 			if err != nil {
 				t.Fatalf("failed to read searchTools body: %v", err)
 			}
-			if !strings.Contains(string(body), `"query":"surface current context ship the go sidecar"`) || !strings.Contains(string(body), `"profile":"repo-coding"`) {
+			if !strings.Contains(string(body), `"query":"surface current context ship the TN kernel"`) || !strings.Contains(string(body), `"profile":"repo-coding"`) {
 				t.Fatalf("expected contextual searchTools payload, got %s", string(body))
 			}
 			_ = json.NewEncoder(w).Encode(map[string]any{
@@ -536,7 +536,7 @@ func TestSessionContextEndpoint(t *testing.T) {
 			if err != nil {
 				t.Fatalf("failed to read callTool body: %v", err)
 			}
-			if !strings.Contains(string(body), `"name":"list_all_tools"`) || !strings.Contains(string(body), `"query":"surface current context ship the go sidecar"`) {
+			if !strings.Contains(string(body), `"name":"list_all_tools"`) || !strings.Contains(string(body), `"query":"surface current context ship the TN kernel"`) {
 				t.Fatalf("expected list_all_tools payload, got %s", string(body))
 			}
 			_ = json.NewEncoder(w).Encode(map[string]any{
@@ -601,7 +601,7 @@ func TestSessionContextEndpoint(t *testing.T) {
 	if !strings.Contains(recorder.Body.String(), "\"startup\"") {
 		t.Fatalf("expected startup payload, got %s", recorder.Body.String())
 	}
-	if !strings.Contains(recorder.Body.String(), "\"Memory bootstrap:\\nCurrent goal: ship the go sidecar\"") {
+	if !strings.Contains(recorder.Body.String(), "\"Memory bootstrap:\\nCurrent goal: ship the TN kernel\"") {
 		t.Fatalf("expected bootstrap prompt, got %s", recorder.Body.String())
 	}
 	if !strings.Contains(recorder.Body.String(), "\"recommendedTools\"") || !strings.Contains(recorder.Body.String(), "\"procedure\":\"mcp.searchTools\"") {

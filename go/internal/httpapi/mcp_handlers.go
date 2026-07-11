@@ -437,7 +437,7 @@ func (s *Server) buildMCPServersList(ctx context.Context) (map[string]any, error
 	}, nil
 }
 
-// handleMCPPredictConversational is the primary sidecar endpoint called by the
+// handleMCPPredictConversational is the primary kernel endpoint called by the
 // TypeScript ConversationalToolInjector before falling back to cloud LLMs.
 //
 // Request:  POST /api/mcp/tools/predict-conversational

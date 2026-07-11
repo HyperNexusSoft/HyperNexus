@@ -4,11 +4,11 @@ package memorystore
  * @file hydration.go
  * @module go/internal/memorystore
  *
- * WHAT: Memory hydration engine that bootstraps the Go sidecar's context
+ * WHAT: Memory hydration engine that bootstraps the TN Kernel's context
  * store with essential project knowledge for autonomous operation.
  *
- * WHY: Total Autonomy — The Go sidecar needs a populated memory store to
- * operate independently. Without hydrated context, the sidecar cannot make
+ * WHY: Total Autonomy — The TN Kernel needs a populated memory store to
+ * operate independently. Without hydrated context, the TN Kernel cannot make
  * informed decisions about tool selection, code architecture, or project state.
  */
 

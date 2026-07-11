@@ -702,7 +702,7 @@ func (s *Server) handleStripeSubscribe(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// handleBillingWebhook processes Stripe billing webhooks locally in the Go sidecar.
+// handleBillingWebhook processes Stripe billing webhooks locally in the TN Kernel.
 func (s *Server) handleBillingWebhook(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)

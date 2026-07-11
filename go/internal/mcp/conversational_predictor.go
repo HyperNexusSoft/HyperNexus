@@ -10,7 +10,7 @@ package mcp
  *       the session working set.
  *
  * WHY: The TypeScript ConversationalToolInjector (Phase 113) calls this
- *      sidecar endpoint first before falling back to cloud LLMs. By handling
+ *      kernel endpoint first before falling back to cloud LLMs. By handling
  *      prediction here natively we keep latency low (<200ms for local Ollama)
  *      and avoid cloud API costs for routine tool routing.
  *

@@ -34,5 +34,5 @@ You have access to TormentNexus — a local AI control plane running on port 777
 1. Check scratchpad before starting complex tasks
 2. Store key patterns and decisions with scratchpad_set
 3. Use repomap for codebase orientation in new projects
-4. Route through TN sidecar for enterprise integrations (Jira, Confluence)
+4. Route through TN Kernel for enterprise integrations (Jira, Confluence)
 5. Use code_interpreter for safe code execution

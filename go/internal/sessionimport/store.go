@@ -103,7 +103,7 @@ type ImportedInstructionDoc struct {
 	Size      int64  `json:"size"`
 }
 
-type importedSessionArchiveSidecar struct {
+type importedSessionArchiveFile struct {
 	SessionID               string         `json:"sessionId"`
 	SourceTool              string         `json:"sourceTool"`
 	SourcePath              string         `json:"sourcePath"`
@@ -492,7 +492,7 @@ func (s *ImportedSessionStore) writeTranscriptArchive(sessionID string, input Im
 	if err := writeGzipFile(transcriptPath, []byte(input.Transcript)); err != nil {
 		return nil, err
 	}
-	sidecar := importedSessionArchiveSidecar{
+	archive := importedSessionArchiveFile{
 		SessionID:               sessionID,
 		SourceTool:              input.SourceTool,
 		SourcePath:              input.SourcePath,
@@ -508,7 +508,7 @@ func (s *ImportedSessionStore) writeTranscriptArchive(sessionID string, input Im
 		RetentionSummary:        mapValue(input.Metadata, "retentionSummary"),
 		ArchivedAt:              archivedAt,
 	}
-	payload, err := json.MarshalIndent(sidecar, "", "  ")
+	payload, err := json.MarshalIndent(archive, "", "  ")
 	if err != nil {
 		return nil, err
 	}

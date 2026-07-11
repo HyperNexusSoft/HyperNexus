@@ -82,7 +82,7 @@ var sessionExportKnownFormats = []map[string]any{
 
 // corsMiddleware wraps an http.Handler to add CORS headers for all responses.
 // This allows the Next.js dashboard (port 3000) and browser extensions to
-// call Go sidecar endpoints without CORS blocks.
+// call TN Kernel endpoints without CORS blocks.
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		origin := r.Header.Get("Origin")
@@ -428,7 +428,7 @@ type ImportedSessionMaintenanceStats struct {
 	MissingRetentionSummaryCount int `json:"missingRetentionSummaryCount"`
 }
 
-type importedSessionArchiveSidecar struct {
+type importedSessionArchiveFile struct {
 	SessionID               string         `json:"sessionId"`
 	SourceTool              string         `json:"sourceTool"`
 	SourcePath              string         `json:"sourcePath"`
@@ -593,7 +593,7 @@ func New(cfg config.Config, detector controlplane.ToolProvider) *Server {
 		}
 	}
 
-	// Register all local skills as provided by this sidecar in the A2A skill registry
+	// Register all local skills as provided by this kernel in the A2A skill registry
 	if skillIDs, err := server.skillStore.ListSkills(); err == nil {
 		for _, id := range skillIDs {
 			orchestration.GlobalSkillRegistry.RegisterAgentSkill("http://localhost:4300", id)
@@ -1818,10 +1818,10 @@ func (s *Server) handleAPIIndex(w http.ResponseWriter, _ *http.Request) {
 			BaseURL: s.cfg.BaseURL(),
 			Routes: []RouteInfo{
 				{Path: "/health", Category: "meta", Description: "Basic service health check."},
-				{Path: "/version", Category: "meta", Description: "Build version for the Go sidecar."},
-				{Path: "/api/index", Category: "meta", Description: "Self-describing index of the Go sidecar API surface."},
+				{Path: "/version", Category: "meta", Description: "Build version for the TN Kernel."},
+				{Path: "/api/index", Category: "meta", Description: "Self-describing index of the TN Kernel API surface."},
 				{Path: "/api/health/server", Category: "meta", Description: "Health check alias for API consumers."},
-				{Path: "/api/config/status", Category: "config", Description: "Path and config visibility snapshot for the sidecar and main workspace."},
+				{Path: "/api/config/status", Category: "config", Description: "Path and config visibility snapshot for the kernel and main workspace."},
 				{Path: "/api/config/list", Category: "config", Description: "List config key/value entries through the TypeScript config router."},
 				{Path: "/api/config/get", Category: "config", Description: "Read one config key through the TypeScript config router."},
 				{Path: "/api/config/upsert", Category: "config", Description: "Upsert a config key through the TypeScript config router."},
@@ -1892,7 +1892,7 @@ func (s *Server) handleAPIIndex(w http.ResponseWriter, _ *http.Request) {
 				{Path: "/api/billing/stripe/webhook", Category: "providers", Description: "Receive Stripe webhook events (checkout, subscription, invoice)."},
 				{Path: "/api/billing/stripe/subscription", Category: "providers", Description: "Get current subscription status from Stripe."},
 				{Path: "/api/billing/stripe/subscribe", Category: "providers", Description: "Manually set subscription details (legacy/local)."},
-				{Path: "/api/billing/webhook", Category: "providers", Description: "Handle Stripe billing webhooks locally in the Go sidecar."},
+				{Path: "/api/billing/webhook", Category: "providers", Description: "Handle Stripe billing webhooks locally in the TN Kernel."},
 				{Path: "/api/mcp/status", Category: "mcp", Description: "Bridge to TypeScript MCP runtime status and pool state."},
 				{Path: "/api/mcp/servers/runtime", Category: "mcp", Description: "Bridge to TypeScript runtime MCP server visibility."},
 				{Path: "/api/mcp/servers/configured", Category: "mcp", Description: "Bridge to configured MCP server records managed by the TypeScript control plane."},
@@ -1924,7 +1924,7 @@ func (s *Server) handleAPIIndex(w http.ResponseWriter, _ *http.Request) {
 				{Path: "/api/mcp/lifecycle-modes", Category: "mcp", Description: "Update MCP pool lifecycle modes, with local Go state fallback when the TypeScript MCP router is unavailable."},
 				{Path: "/api/mcp/runtime-servers/add", Category: "mcp", Description: "Add a downstream runtime MCP server through the TypeScript control plane."},
 				{Path: "/api/mcp/runtime-servers/remove", Category: "mcp", Description: "Remove a downstream runtime MCP server through the TypeScript control plane."},
-				{Path: "/api/mcp/config/jsonc", Category: "mcp", Description: "Read or update the TypeScript MCP JSONC config through the sidecar."},
+				{Path: "/api/mcp/config/jsonc", Category: "mcp", Description: "Read or update the TypeScript MCP JSONC config through the TN Kernel."},
 				{Path: "/api/mcp/working-set", Category: "mcp", Description: "Read the MCP working-set snapshot, with a local empty-state fallback when the TypeScript MCP router is unavailable."},
 				{Path: "/api/mcp/working-set/evictions", Category: "mcp", Description: "Read MCP working-set eviction history, with a local empty-state fallback when the TypeScript MCP router is unavailable."},
 				{Path: "/api/mcp/working-set/evictions/clear", Category: "mcp", Description: "Clear MCP working-set eviction history, with a local no-op fallback when the TypeScript MCP router is unavailable."},
@@ -2361,10 +2361,10 @@ func (s *Server) handleAPIIndex(w http.ResponseWriter, _ *http.Request) {
 				{Path: "/api/import/candidates", Category: "imports", Description: "Validated import candidates with metadata."},
 				{Path: "/api/import/manifest", Category: "imports", Description: "Structured manifest of validated import candidates."},
 				{Path: "/api/import/summary", Category: "imports", Description: "Aggregate summary of validated import candidates."},
-				{Path: "/api/runtime/locks", Category: "runtime", Description: "Visibility into main tormentnexus and sidecar lock files."},
+				{Path: "/api/runtime/locks", Category: "runtime", Description: "Visibility into main tormentnexus and kernel lock files."},
 				{Path: "/api/runtime/status", Category: "runtime", Description: "Top-level runtime summary across CLI, imports, providers, memory, and sessions."},
 				{Path: "/api/runtime/imported-instructions", Category: "runtime", Description: "Read-only bridge to imported instructions generated by the main fork."},
-				{Path: "/api/startup/status", Category: "runtime", Description: "Truthful Go-sidecar startup readiness snapshot, including upstream control-plane dependency state."},
+				{Path: "/api/startup/status", Category: "runtime", Description: "Truthful kernel startup readiness snapshot, including upstream control-plane dependency state."},
 				{Path: "/api/mesh/status", Category: "mesh", Description: "Native Go mesh node id plus current known peer count."},
 				{Path: "/api/mesh/peers", Category: "mesh", Description: "Known mesh peers discovered from the Go mesh visibility layer."},
 				{Path: "/api/mesh/capabilities", Category: "mesh", Description: "Combined capability map for the Go node plus upstream-discovered peers."},
@@ -11207,7 +11207,7 @@ func (s *Server) handleMemoryProjectSync(w http.ResponseWriter, r *http.Request)
 		"bridge": map[string]any{
 			"fallback":  "go-local-memory",
 			"procedure": "memory.project.sync",
-			"reason":    "synced .memdb directly via Go sidecar",
+			"reason":    "synced .memdb directly via TN Kernel",
 		},
 	})
 }
@@ -18632,31 +18632,31 @@ func readGzipText(filePath string) (string, error) {
 	return string(decoded), nil
 }
 
-func archivedImportedSessionRecord(sidecar importedSessionArchiveSidecar, metadataPath string) (ImportedSessionRecord, error) {
+func archivedImportedSessionRecord(archive importedSessionArchiveFile, metadataPath string) (ImportedSessionRecord, error) {
 	transcriptPath := strings.TrimSuffix(metadataPath, ".meta.json.gz") + ".txt.gz"
 	transcript, err := readGzipText(transcriptPath)
 	if err != nil {
 		return ImportedSessionRecord{}, err
 	}
 
-	sessionID := strings.TrimSpace(sidecar.SessionID)
+	sessionID := strings.TrimSpace(archive.SessionID)
 	if sessionID == "" {
 		sessionID = "import-" + stableHash(metadataPath)[:16]
 	}
-	transcriptHash := strings.TrimSpace(sidecar.TranscriptHash)
+	transcriptHash := strings.TrimSpace(archive.TranscriptHash)
 	if transcriptHash == "" {
-		transcriptHash = stableHash(sidecar.SourceTool + "\n" + sidecar.SourcePath + "\n" + sidecar.SessionFormat)
+		transcriptHash = stableHash(archive.SourceTool + "\n" + archive.SourcePath + "\n" + archive.SessionFormat)
 	}
 
-	title := sidecar.Title
+	title := archive.Title
 	if title == nil || strings.TrimSpace(*title) == "" {
-		titleText := filepath.Base(sidecar.SourcePath)
+		titleText := filepath.Base(archive.SourcePath)
 		if strings.TrimSpace(titleText) != "" {
 			title = &titleText
 		}
 	}
 
-	excerpt := sidecar.Excerpt
+	excerpt := archive.Excerpt
 	if excerpt == nil && strings.TrimSpace(transcript) != "" {
 		excerptText := transcript
 		if len(excerptText) > 240 {
@@ -18665,7 +18665,7 @@ func archivedImportedSessionRecord(sidecar importedSessionArchiveSidecar, metada
 		excerpt = &excerptText
 	}
 
-	importedAt := sidecar.ArchivedAt
+	importedAt := archive.ArchivedAt
 	if importedAt <= 0 {
 		if stat, statErr := os.Stat(metadataPath); statErr == nil {
 			importedAt = stat.ModTime().UTC().UnixMilli()
@@ -18679,24 +18679,24 @@ func archivedImportedSessionRecord(sidecar importedSessionArchiveSidecar, metada
 	}
 	metadata := map[string]any{
 		"archiveFormat":           "gzip-text-v1",
-		"durableMemoryCount":      sidecar.DurableMemoryCount,
-		"durableInstructionCount": sidecar.DurableInstructionCount,
-		"memoryTags":              sidecar.MemoryTags,
+		"durableMemoryCount":      archive.DurableMemoryCount,
+		"durableInstructionCount": archive.DurableInstructionCount,
+		"memoryTags":              archive.MemoryTags,
 	}
-	if sidecar.RetentionSummary != nil {
-		metadata["retentionSummary"] = sidecar.RetentionSummary
+	if archive.RetentionSummary != nil {
+		metadata["retentionSummary"] = archive.RetentionSummary
 	}
 
 	return ImportedSessionRecord{
 		ID:                sessionID,
-		SourceTool:        sidecar.SourceTool,
-		SourcePath:        sidecar.SourcePath,
+		SourceTool:        archive.SourceTool,
+		SourcePath:        archive.SourcePath,
 		ExternalSessionID: nil,
 		Title:             title,
-		SessionFormat:     sidecar.SessionFormat,
+		SessionFormat:     archive.SessionFormat,
 		Transcript:        transcript,
 		Excerpt:           excerpt,
-		WorkingDirectory:  sidecar.WorkingDirectory,
+		WorkingDirectory:  archive.WorkingDirectory,
 		TranscriptHash:    transcriptHash,
 		NormalizedSession: normalized,
 		Metadata:          metadata,
@@ -18733,11 +18733,11 @@ func (s *Server) loadArchivedImportedSessionRecords() ([]ImportedSessionRecord, 
 			return nil
 		}
 
-		var sidecar importedSessionArchiveSidecar
-		if err := readGzipJSON(path, &sidecar); err != nil {
+		var archive importedSessionArchiveFile
+		if err := readGzipJSON(path, &archive); err != nil {
 			return nil
 		}
-		record, err := archivedImportedSessionRecord(sidecar, path)
+		record, err := archivedImportedSessionRecord(archive, path)
 		if err != nil {
 			return nil
 		}

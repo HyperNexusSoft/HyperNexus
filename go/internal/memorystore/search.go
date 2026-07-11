@@ -21,7 +21,7 @@ type SearchResult struct {
 }
 
 // Search executes a fast full-text or LIKE search directly across the TormentNexus local SQLite database.
-// This serves as the Go sidecar fallback for the more complex LanceDB vector router in TypeScript.
+// This serves as the TN Kernel fallback for the more complex LanceDB vector router in TypeScript.
 func Search(workspaceRoot string, query string, limit int) ([]SearchResult, error) {
 	if limit <= 0 {
 		limit = 50

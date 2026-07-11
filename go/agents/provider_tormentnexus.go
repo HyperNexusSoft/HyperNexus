@@ -87,7 +87,7 @@ func (p *TormentNexusControlPlaneProvider) Chat(ctx context.Context, messages []
 }
 
 func (p *TormentNexusControlPlaneProvider) Stream(ctx context.Context, messages []Message, tools []Tool, chunkChan chan<- string) error {
-	// Fallback to synchronous chat if streaming isn't perfectly supported on the sidecar yet
+	// Fallback to synchronous chat if streaming isn't perfectly supported on the TN Kernel yet
 	msg, err := p.Chat(ctx, messages, tools)
 	if err != nil {
 		return err

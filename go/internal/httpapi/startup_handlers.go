@@ -110,13 +110,13 @@ func (s *Server) buildStartupStatus(ctx context.Context) (StartupStatus, error) 
 	if !configStatus.WorkspaceRoot.Exists {
 		blockingReasons = append(blockingReasons, StartupBlockingReason{
 			Code:   "workspace_root_missing",
-			Detail: "Workspace root is not available to the Go sidecar.",
+			Detail: "Workspace root is not available to the TN Kernel.",
 		})
 	}
 	if !configStatus.ConfigDir.Exists {
 		blockingReasons = append(blockingReasons, StartupBlockingReason{
 			Code:   "go_config_dir_missing",
-			Detail: "Go sidecar config directory has not been created yet.",
+			Detail: "TN Kernel config directory has not been created yet.",
 		})
 	}
 	if !memoryStatus.Exists {

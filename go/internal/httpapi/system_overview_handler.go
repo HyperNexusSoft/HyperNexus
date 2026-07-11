@@ -110,7 +110,7 @@ func (s *Server) handleSystemOverview(w http.ResponseWriter, r *http.Request) {
 			"startupStatus": map[string]any{
 				"status":  "running",
 				"ready":   true,
-				"summary": "Go sidecar operational",
+				"summary": "TN Kernel operational",
 				"bridge":  startupBridge,
 			},
 			"sessions": map[string]any{
@@ -123,7 +123,7 @@ func (s *Server) handleSystemOverview(w http.ResponseWriter, r *http.Request) {
 				"bridge": memoryBridge,
 			},
 			"health": map[string]any{
-				"goSidecar":  goHealth,
+				"tnKernel":  goHealth,
 				"tsCore":     coreHealth,
 				"coreBridge": coreBridge,
 			},

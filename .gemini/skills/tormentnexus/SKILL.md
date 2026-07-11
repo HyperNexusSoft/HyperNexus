@@ -18,7 +18,7 @@ The tormentnexus MCP server is configured and exposes tools via the `mcp_torment
 - `mcp_tormentnexus_add_bookmark` — save URLs with tags
 
 ### Discovery Tools
-- `mcp_tormentnexus_mcp_call_tool` — route through TN's Go sidecar to 20+ MCP servers
+- `mcp_tormentnexus_mcp_call_tool` — route through TN's TN kernel to 20+ MCP servers
 - `mcp_tormentnexus_mcp_list_tools` — discover available MCP tools
 - `mcp_tormentnexus_mcp_list_servers` — list connected MCP servers
 
@@ -40,4 +40,4 @@ The tormentnexus MCP server is configured and exposes tools via the `mcp_torment
 2. **During development**: Use `mcp_tormentnexus_repomap` for codebase orientation
 3. **After decisions**: Store key decisions via `mcp_tormentnexus_memory_scratchpad_set`
 4. **Tool discovery**: Use `mcp_tormentnexus_mcp_list_tools` when unsure what's available
-5. **Complex tasks**: Route through TN sidecar via `mcp_tormentnexus_mcp_call_tool` for deep context
+5. **Complex tasks**: Route through TN Kernel via `mcp_tormentnexus_mcp_call_tool` for deep context
