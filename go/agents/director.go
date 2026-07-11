@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/NexusSoftMDMA/TormentNexus/foundation/adapters"
-	foundationorchestration "github.com/NexusSoftMDMA/TormentNexus/foundation/orchestration"
+	"github.com/MDMAtk/TormentNexus/foundation/adapters"
+	foundationorchestration "github.com/MDMAtk/TormentNexus/foundation/orchestration"
 )
 
 // Director Agent translates the TS core Director orchestrator.

@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/NexusSoftMDMA/TormentNexus/tormentnexus"
+	"github.com/MDMAtk/TormentNexus"
 )
 
 type TormentNexusStatus struct {

@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	roottools "github.com/NexusSoftMDMA/TormentNexus/tools"
+	roottools "github.com/MDMAtk/TormentNexus/tools"
 	"github.com/MDMAtk/TormentNexus/internal/config"
 	"github.com/MDMAtk/TormentNexus/internal/lockfile"
 	"github.com/MDMAtk/TormentNexus/internal/mcpimpl"

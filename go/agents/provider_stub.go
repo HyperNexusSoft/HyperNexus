@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/NexusSoftMDMA/TormentNexus/foundation/adapters"
+	"github.com/MDMAtk/TormentNexus/foundation/adapters"
 )
 
 // DefaultProvider simulates the LLM locally.

@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/NexusSoftMDMA/TormentNexus/tui"
+	"github.com/MDMAtk/TormentNexus/tui"
 	"github.com/spf13/cobra"
 	"os"
 )

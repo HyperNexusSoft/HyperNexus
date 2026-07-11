@@ -5,8 +5,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/NexusSoftMDMA/TormentNexus/config"
-	"github.com/NexusSoftMDMA/TormentNexus/llm"
+	"github.com/MDMAtk/TormentNexus/config"
+	"github.com/MDMAtk/TormentNexus/llm"
 )
 
 type ProviderStatus struct {

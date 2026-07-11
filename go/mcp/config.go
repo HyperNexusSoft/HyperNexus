@@ -1,6 +1,6 @@
 package mcp
 
-import "github.com/NexusSoftMDMA/TormentNexus/foundation/adapters"
+import "github.com/MDMAtk/TormentNexus/foundation/adapters"
 
 // Config binds the ~/.tormentnexus/mcp.json native parsing.
 type Config struct {

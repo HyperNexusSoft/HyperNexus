@@ -3,7 +3,7 @@ package pi
 import (
 	"encoding/json"
 
-	"github.com/NexusSoftMDMA/TormentNexus/foundation/compat"
+	"github.com/MDMAtk/TormentNexus/foundation/compat"
 )
 
 type ThinkingLevel string

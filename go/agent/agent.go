@@ -7,9 +7,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/NexusSoftMDMA/TormentNexus/tormentnexus"
-	"github.com/NexusSoftMDMA/TormentNexus/foundation/adapters"
-	"github.com/NexusSoftMDMA/TormentNexus/tools"
+	"github.com/MDMAtk/TormentNexus"
+	"github.com/MDMAtk/TormentNexus/foundation/adapters"
+	"github.com/MDMAtk/TormentNexus/tools"
 	"github.com/sashabaranov/go-openai"
 )
 
