@@ -8,6 +8,16 @@
     h1 { color: #38bdf8; }
     .panel { background: #1e293b; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
     .metric { font-size: 24px; font-weight: bold; }
+    .nav-cta {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: #38bdf8;
+      color: #0f172a;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
@@ -16,6 +26,7 @@
     <h2>Live Telemetry</h2>
     <p>Go Sidecar Status: <span id="status" class="metric">Checking...</span></p>
     <p>Active Agents: <span class="metric">42</span></p>
+    <a href="../hypernexus.site/index.html" class="nav-cta">← Back to HyperNexus</a>
   </div>
   <script>
     async function checkSidecar() {
