@@ -1,19 +1,17 @@
-# Handoff — Executive Protocol R19
+# Handoff — Executive Protocol R20
 
 ## Completed
 
-### Stripe Adjustable Quantity Selection & Billing Limits
-- **Adjustable Seats**: Added Stripe Checkout Session `adjustable_quantity` configuration parameters to `/opt/marketing_agent/internal/billing/billing.go` (since Stripe requests are handled by the Marketing Agent backend).
-- **Price Cap Validation**: Fixed client-side Stripe Checkout 400 Bad Request errors by adjusting the maximum seat limit to `100,000` (yielding a max transaction of $500,000, staying well within Stripe's strict $999,999.99 invoice cap).
-- **Rebuilt & Restarted**: Successfully recompiled the Marketing Agent binary and restarted `marketing-agent` daemon.
+### Git Upstream & Submodule Sync
+- **Remote Reconciliation**: Fetched tags and branch histories from both `origin` and `origin-backup` remotes.
+- **Feature Branch Reconciliation**: Verified the only remote feature branch `remotes/origin-backup/feature/cloud-dashboard-mcp-sse-389806464713532918` was fully merged into `main` (containing zero unique commits).
+- **Submodules Verification**: Verified that there are no active submodules in the git tree.
 
-### Multi-Tenant Container Isolation
-- **Alpine Base Migration**: Refactored the `Dockerfile` to use Alpine base images (`node:20-alpine` and `golang:1.25-alpine`) to bypass Debian GPG signature verification failures.
-- **Docker Workspace Resolution**: Whitelisted and copied `apps/tormentnexus-extension` and `packages/enterprise` in `.dockerignore` and `Dockerfile` builder stage to ensure Turborepo successfully finds all workspace dependencies.
-- **Environment & Port Mapping**: Passed `PORT=7779` to Next.js containers and mapped them in `deploy/tenant-provision.sh` so dynamic port mappings load the observation dashboard successfully.
-- **Reclaimed Disk Space**: Purged 17 GB of redundant backups under `/srv/www` on the server.
-- **Verified Provisioning**: Provisioned a test tenant (`test-org` on port `3001`). Confirmed that both Next.js and Go sidecar containers start successfully and the dashboard returns `HTTP 200 OK`.
+### Documentation Metric Sanitization & Versioning
+- **Documentation Refactoring**: Swept all documentation files including `README.md`, `ROADMAP.md`, `TODO.md`, and `demo.html` to systematically replace all static tool, memory, and catalog counts with "**infinite**" or "**unlimited**" descriptors to prevent stale marketing copy.
+- **README Restructuring**: Restructured `README.md` to prioritize local-first open-source capabilities at the top, and integrated a dedicated Corporate Focus section showcasing **HyperNexus** as the authoritative enterprise SaaS cloud installation of the TormentNexus kernel.
+- **Version Governance**: Bumped version to `1.0.0-alpha.255` and synchronized it across all 35 workspace packages and internal dependencies.
+- **Changelog Updates**: Documented versions `1.0.0-alpha.254` and `1.0.0-alpha.255` in `CHANGELOG.md`.
 
-## Pending & Next Steps
-1. **Dynamic Wildcard SSL Challenge**: Implement dynamic SSL/TLS certificate updates for newly created tenant subdomains.
-2. **Database Schema Auto-Segregation**: Map tenant SQLite local caches to distinct PostgreSQL schema namespaces in the virtualization layer.
+### Push & Commit
+- Staged all changes and committed the version bump to GitHub, successfully pushing the new tip to the master remote.
