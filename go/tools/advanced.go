@@ -2,7 +2,7 @@ package tools
 
 import (
 	"fmt"
-	"github.com/NexusSoftMDMA/TormentNexus/mcp"
+	"github.com/MDMAtk/TormentNexus/mcp"
 )
 
 func (r *Registry) registerAdvancedTools() {

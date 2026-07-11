@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/NexusSoftMDMA/TormentNexus/foundation/adapters"
+	"github.com/MDMAtk/TormentNexus/foundation/adapters"
 )
 
 // ServerManager handles the installation and lifecycle of MCP servers (Smithery parity).

@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"time"
 
-	foundationrepomap "github.com/NexusSoftMDMA/TormentNexus/foundation/repomap"
-	"github.com/NexusSoftMDMA/TormentNexus/mcp"
-	"github.com/NexusSoftMDMA/TormentNexus/orchestrator"
+	foundationrepomap "github.com/MDMAtk/TormentNexus/foundation/repomap"
+	"github.com/MDMAtk/TormentNexus/mcp"
+	"github.com/MDMAtk/TormentNexus/orchestrator"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/websocket/v2"

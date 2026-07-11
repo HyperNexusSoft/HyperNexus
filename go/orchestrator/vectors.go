@@ -7,7 +7,7 @@ import (
 	"math"
 	"sort"
 
-	"github.com/NexusSoftMDMA/TormentNexus/agents"
+	"github.com/MDMAtk/TormentNexus/agents"
 )
 
 // VectorDB handles the "Jules Autopilot" requirement directly over SQLite natively

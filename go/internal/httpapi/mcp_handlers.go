@@ -11,7 +11,7 @@ import (
 
 	"github.com/MDMAtk/TormentNexus/internal/mcp"
 	"github.com/MDMAtk/TormentNexus/internal/cache"
-	roottools "github.com/NexusSoftMDMA/TormentNexus/tools"
+	roottools "github.com/MDMAtk/TormentNexus/tools"
 )
 
 func (s *Server) handleMCPStatus(w http.ResponseWriter, r *http.Request) {
