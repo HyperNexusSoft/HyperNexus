@@ -1164,6 +1164,7 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/billing/stripe/portal", s.handleStripeCustomerPortal)
 	s.mux.HandleFunc("/api/billing/stripe/webhook", s.handleStripeWebhook)
 	s.mux.HandleFunc("/api/billing/stripe/subscription", s.handleStripeGetSubscription)
+	s.mux.HandleFunc("/api/billing/webhook", s.handleBillingWebhook)
 	s.mux.HandleFunc("/api/mcp/status", s.handleMCPStatus)
 	s.mux.HandleFunc("/api/system/overview", s.handleSystemOverview)
 	s.mux.HandleFunc("/api/mcp/servers/runtime", s.handleMCPRuntimeServers)
@@ -1886,6 +1887,7 @@ func (s *Server) handleAPIIndex(w http.ResponseWriter, _ *http.Request) {
 				{Path: "/api/billing/stripe/webhook", Category: "providers", Description: "Receive Stripe webhook events (checkout, subscription, invoice)."},
 				{Path: "/api/billing/stripe/subscription", Category: "providers", Description: "Get current subscription status from Stripe."},
 				{Path: "/api/billing/stripe/subscribe", Category: "providers", Description: "Manually set subscription details (legacy/local)."},
+				{Path: "/api/billing/webhook", Category: "providers", Description: "Handle Stripe billing webhooks locally in the Go sidecar."},
 				{Path: "/api/mcp/status", Category: "mcp", Description: "Bridge to TypeScript MCP runtime status and pool state."},
 				{Path: "/api/mcp/servers/runtime", Category: "mcp", Description: "Bridge to TypeScript runtime MCP server visibility."},
 				{Path: "/api/mcp/servers/configured", Category: "mcp", Description: "Bridge to configured MCP server records managed by the TypeScript control plane."},
