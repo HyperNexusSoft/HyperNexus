@@ -1,5 +1,16 @@
 # MEMORY.md — Multi-Agent Observations
 
+## Session 2026-07-11 (Stripe Limits, Alpine Migration, and Docker Workspace Alignment)
+
+### Stripe Invoice Limits & Quantity Selector
+- **Stripe Transaction Cap**: Stripe enforces a strict maximum invoice/transaction cap of **$999,999.99** per session. Setting the `adjustable_quantity` maximum parameter to a value (like one billion) that multiplied by the unit price exceeds this cap causes Stripe's client-side payment app to fail with a `400 Bad Request`. Limit the maximum quantity to a safe value (like `100,000` for a `$5` seat price) to keep the total checkout price valid.
+
+### Docker Alpine Migration & GPG/Seccomp Bypass
+- **Debian APT GPG Failures**: Compiling newer Debian Bookworm images on older host Linux kernels often triggers signature verification failures (`At least one invalid signature was encountered`) due to libseccomp filtering. Migrating to Alpine-based runner and builder stages (`node:20-alpine`) resolves this seccomp issue.
+
+### Docker Workspace Isolation Alignment
+- **Workspace Manifest Whitelisting**: If a monorepo workspace package (like `tormentnexus-extension` or `packages/enterprise`) is excluded in the build context via `.dockerignore`, Turborepo will fail with `No package found in workspace`. Copying the package directories (or at least their manifests) and using `--ignore-scripts` during `pnpm install` ensures dependency resolution succeeds cleanly.
+
 ## Session 2026-07-08 (JSX Balancing, Port Consolidation, SQLite Gotchas & Swarm Refinement)
 
 ### Port Consolidation & Upstream tRPC routing

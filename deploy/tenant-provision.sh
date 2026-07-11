@@ -36,6 +36,7 @@ services:
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=http://sidecar-${TENANT_ID}:7778
+      - PORT=7779
     ports:
       - "127.0.0.1:${TENANT_PORT}:7779"
     depends_on:
