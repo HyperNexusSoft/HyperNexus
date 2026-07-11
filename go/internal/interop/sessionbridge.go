@@ -31,7 +31,7 @@ func sharedTRPCClient() *http.Client {
 			IdleConnTimeout:     30 * time.Second,
 		}
 		sharedClientInst = &http.Client{
-			Timeout:   30 * time.Second,
+			Timeout:   2 * time.Second,
 			Transport: transport,
 		}
 	})
