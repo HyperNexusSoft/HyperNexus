@@ -190,7 +190,7 @@ func (s *Server) handleMemoryFTSearch(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func (s *Server) handleMemoryMaintenance(w http.ResponseWriter, r *http.Request) {
+func (s *Server) handleMemoryMaintenanceLocal(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		writeJSON(w, http.StatusMethodNotAllowed, map[string]any{"success": false, "error": "use POST"})
 		return
