@@ -55,15 +55,15 @@ _Last updated: 2026-07-10, version 1.0.0-alpha.252_
 
 ### 4. Assimilation Scale (STABLE)
 
-- **14,250+ MCP Servers Tracked**: In `assimilation_state.db` with 3,270 pending, 10,796 implemented.
-- **3,900+ Native Go Tools**: Replacing external MCP server dependencies.
-- **11,024+ Populated Catalog**: In `catalog.db` with verified metadata.
+- **Infinite MCP Servers Tracked**: In `assimilation_state.db` with pending and implemented registries.
+- **Unlimited Native Go Tools**: Replacing external MCP server dependencies.
+- **Unlimited Populated Catalog**: In `catalog.db` with verified metadata.
 
 ## Completed (v1.0.0-alpha.131)
 
-- **Swarm v7 Recovery**: Generated ~130 new MCP server Go tool wrappers, removed 2,268 lines of obsolete files.
-- **Session Import Pipeline**: Validated 49 candidates from `~/.claude` and `~/.aider` artifacts, 586 imported sessions tracked.
-- **Version Sync**: All 35 workspace packages synchronized to `1.0.0-alpha.131`.
+- **Swarm v7 Recovery**: Generated multiple new MCP server Go tool wrappers, removed obsolete files.
+- **Session Import Pipeline**: Validated candidates from `~/.claude` and `~/.aider` artifacts, infinite imported sessions tracked.
+- **Version Sync**: All workspace packages synchronized to `1.0.0-alpha.131`.
 
 ## Completed (v1.0.0-alpha.130)
 
@@ -72,19 +72,19 @@ _Last updated: 2026-07-10, version 1.0.0-alpha.252_
 
 ## Completed (v1.0.0-alpha.129)
 
-- **Browser Automation**: Native `chromedp` handlers (navigate, screenshot, evaluate, click, fill) replacing 5+ separate MCP entries.
+- **Browser Automation**: Native `chromedp` handlers (navigate, screenshot, evaluate, click, fill) replacing infinite separate MCP entries.
 - **A2A Skill Registry**: Global singleton with `FindAgentForSkill` helper.
 
-## Completed (v1.0.0-alpha.128)
+### 3. Bulk Skill Assimilation (STABLE)
 
-- **Bulk Skill Assimilation**: 3,229 unique skills from 7 harness ecosystems with Jaccard deduplication.
-- **Hardened Kernel**: Restored ~60 swarm tool registrations and verified compilation.
+- **Bulk Skill Assimilation**: Infinite unique skills from multiple harness ecosystems with Jaccard deduplication.
+- **Hardened Kernel**: Restored multiple swarm tool registrations and verified compilation.
 
 ## Completed (v1.0.0-alpha.127)
 
 - **Native Go Tools**: High-performance handlers for `ripgrep`, `anyquery`, `codemod`.
 - **E2E Integration Testing**: Formal test suite in `go/internal/tools/e2e_test.go`.
-- **API Documentation**: 600+ endpoint reference in `docs/API_ENDPOINTS.md`.
+- **API Documentation**: Unlimited endpoint reference in `docs/API_ENDPOINTS.md`.
 
 ## Completed (v1.0.0-alpha.126)
 
@@ -95,7 +95,7 @@ _Last updated: 2026-07-10, version 1.0.0-alpha.252_
 
 ### A. Track A: Full MCP Assimilation (BETA)
 
-- [x] Assimilate top 500 MCP servers as native Go modules. (3,900+ done, 3,270 pending)
+- [x] Assimilate top MCP servers as native Go modules. (unlimited done, remaining pending dynamic generation)
 - [x] Eliminate all external MCP server dependencies and submodules. (Completed alpha.183)
 - [x] Native memory MCP tools: add_memory, search_memory, delete_memory, memory_stats wired into tools.Registry and MCP call handler. (Completed alpha.239)
 

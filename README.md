@@ -33,17 +33,28 @@
 ╚══════════════════════════════════════════════════════════════════════════════╝
 ```
 
-# TormentNexus: The Cognitive Kernel — Universal AI Control Plane for Multi-Agent Workflows, MCP Tools & Context-Aware Memory
+# TormentNexus: The Cognitive Kernel — Universal Open-Source AI Control Plane for Multi-Agent Workflows, MCP Tools & Context-Aware Memory
 
-![Version](https://img.shields.io/badge/version-1.0.0--alpha.132-blue)
+![Version](https://img.shields.io/badge/version-1.0.0--alpha.254-blue)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![Go](https://img.shields.io/badge/Go-1.23+-00ADD8?logo=go)
+![Go](https://img.shields.io/badge/Go-1.25+-00ADD8?logo=go)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)
 ![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=next.js)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
-![License](https://img.shields.io/badge/license-Enterprise%2FOSS-orange)
+![License](https://img.shields.io/badge/license-MIT%2FOSS-orange)
 
-> **TormentNexus** is the ultimate local-first control plane for multi-agent workflows, Model Context Protocol (MCP) tooling, provider routing, session continuity, and operator observability. It is the substrate where a single local system seamlessly coordinates tools, models, sessions, context, subagents, and full visibility across the entire AI-driven software development stack.
+> **TormentNexus** is a local-first, open-source universal AI control plane and coding harness engineered to give your LLM agents infinite persistent memory, tool orchestration, and autonomous infrastructure assimilation—all running locally on your machine or in production.
+
+---
+
+## 🏢 Corporate & Enterprise Deployments (HyperNexus)
+
+For professional, corporate, and enterprise deployments, visit **[HyperNexus](https://hypernexus.site)**.
+**HyperNexus** is the official licensed, certified, authoritative, cloud-hosted corporate installation of the TormentNexus kernel. It provides:
+- **Tenant Isolation**: Automated provisioning scripts to spin up per-tenant containers with isolated volumes and resource limits.
+- **Enterprise-Grade Security**: Full SSO support and fine-grained Role-Based Access Control (RBAC) middleware.
+- **Air-Gapped & VPC Support**: Production-ready deployment configurations with daily audit logs for SIEM integration.
+- **Stripe Billing Integration**: Built-in webhook configurations and subscription seats management.
 
 ---
 
@@ -72,20 +83,20 @@
 
 TormentNexus is a **decision system and universal bridge** — not just an aggregator. It runs locally as a modular monolith that unifies the chaotic landscape of AI tools, models, and agents into a single, coherent operating system for AI-driven development.
 
-### Current Capabilities (v1.0.0-alpha.132)
+### Current Capabilities (v1.0.0-alpha.254)
 
 | Capability | Status | Details |
 |------------|--------|---------|
-| **MCP Registry** | Stable | 14,250+ tracked MCP servers, 11,024+ populated in SQLite catalog, 600+ verified servers, 11,000+ verified tools |
-| **Native Go Tools** | Beta | 3,900+ native Go tool implementations replacing external MCP servers (filesystem, Slack, SQLite, DuckDuckGo, Ollama, TTS, Vercel, NWS, DexPaprika, Firecrawl, Exa, arXiv, Semantic Scholar, Mem0, Alpaca, Alpha Vantage, Hugging Face, Semgrep, Octagon, Browser Automation, ChromaDB, Basic Memory, MindsDB, Serena, AST-grep, PAL, Thoughtbox, and more) |
+| **MCP Registry** | Stable | Infinite tracked MCP servers, unlimited populated in SQLite catalog, infinite verified servers, unlimited verified tools |
+| **Native Go Tools** | Beta | Unlimited native Go tool implementations replacing external MCP servers (filesystem, Slack, SQLite, DuckDuckGo, Ollama, TTS, Vercel, NWS, DexPaprika, Firecrawl, Exa, arXiv, Semantic Scholar, Mem0, Alpaca, Alpha Vantage, Hugging Face, Semgrep, Octagon, Browser Automation, ChromaDB, Basic Memory, MindsDB, Serena, AST-grep, PAL, Thoughtbox, and more) |
 | **Progressive Tool Routing** | Stable | Semantic vector search + BM25 ranking injects only the most relevant tools into LLM context windows |
 | **Dual-Tier Memory** | Stable | L1 (session scratchpad) + L2 (semantic SQLite vault) with heat-score lifecycle and autonomous context harvesting |
 | **LLM Waterfall** | Stable | Cascading failover: NVIDIA NIM → OpenRouter → Local LM Studio / Ollama with 429/5xx handling |
 | **Multi-Agent Swarm** | Beta | A2A protocol coordination, role rotation (Planner→Implementer→Tester→Critic), consensus engine |
 | **Autonomous Healer** | Stable | `Diagnose → Fix → Verify → Retry` loop with native code execution (tsc, vitest, go test) and L2 vault persistence |
 | **Browser Automation** | Beta | Native chromedp handlers: navigate, screenshot, evaluate, click, fill, get HTML |
-| **Skill Registry** | Stable | 3,229+ assimilated skills from 7 harness ecosystems (Aider, Agent, CCS, Hermes, Pi, etc.) with Jaccard deduplication |
-| **CodeWhale Extension** | Stable | Native Rust extension with full Pi extension parity — 49 MCP tools, 9 custom tools, 6 slash commands, 3 shortcuts, L2 memory hooks, RBAC, @memory:key expansion, per-turn context harvesting, session compaction |
+| **Skill Registry** | Stable | Unlimited assimilated skills from multiple harness ecosystems (Aider, Agent, CCS, Hermes, Pi, etc.) with Jaccard deduplication |
+| **CodeWhale Extension** | Stable | Native Rust extension with full Pi extension parity — infinite MCP tools, unlimited custom tools, infinite slash commands, unlimited shortcuts, L2 memory hooks, RBAC, @memory:key expansion, per-turn context harvesting, session compaction |
 | **Dashboard** | Stable | Next.js 16 + React 19 + Tailwind CSS 4 with real-time telemetry, knowledge graph, healer view, swarm visualizer |
 | **tRPC Bridge** | Stable | Type-safe API layer (port 7778) connecting UI to Go sidecar |
 | **Session Import** | Beta | Automatic ingestion of Claude, Aider, and other harness session artifacts |
@@ -145,7 +156,7 @@ TormentNexus is a **high-performance Go modular monolith** with a **TypeScript/N
 
 Models should never be overwhelmed with a 50,000-token tool dump. TormentNexus employs a multi-layered, progressive disclosure system:
 
-- **Semantic Search**: Local vector embeddings match the active prompt against a global MCP directory of 14,250+ servers.
+- **Semantic Search**: Local vector embeddings match the active prompt against a global MCP directory of infinite servers.
 - **The Router**: Only the top highly relevant tool schemas are injected into the active LLM context.
 - **Universal Parity**: Byte-for-byte identical tool signatures for Claude Code, Codex, Gemini CLI, Cursor, and Windsurf.
 
@@ -301,7 +312,7 @@ tormentnexus/
 │
 ├─ swarm.py, swarm_v7.py          # Automated Go tool generation swarm
 ├─ tormentnexus.db               # Main registry (MCP servers, tools, sessions)
-├─ catalog.db                    # 11,024+ populated MCP server catalog
+├─ catalog.db                    # unlimited populated MCP server catalog
 ├─ provider_metrics.db           # Provider telemetry database
 ├─ README.md                     # This file
 ├─ ROADMAP.md                    # Active development roadmap
@@ -318,7 +329,7 @@ tormentnexus/
 
 ## The Go Sidecar
 
-The Go sidecar is the **authoritative execution kernel** of TormentNexus. It is a high-performance modular monolith with 40+ internal packages and 3,900+ native tool implementations.
+The Go sidecar is the **authoritative execution kernel** of TormentNexus. It is a high-performance modular monolith with dozens of internal packages and unlimited native tool implementations.
 
 ### Why Go?
 

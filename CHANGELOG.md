@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.0-alpha.255] - 2026-07-11
+
+### Changed
+- Sanitized all documentation files (`README.md`, `ROADMAP.md`, `TODO.md`, `demo.html`) to replace exact statistical counts with infinite/unlimited metrics.
+- Updated `README.md` to highlight open-source self-hosting first and added a dedicated Corporate Focus section referencing HyperNexus as the authoritative enterprise offering.
+
+## [1.0.0-alpha.254] - 2026-07-11
+
+### Added
+- Multi-tenant docker-isolated container provisioning and verification script on the production server.
+- Stripe adjustable seat quantity parameters with a safe limit of 100,000 to comply with Stripe's transaction limits.
+- Moved multi-tenant containers to Alpine Linux to bypass host kernel seccomp conflicts.
+
 ## [1.0.0-alpha.252] - 2026-07-10
 
 ### Added
