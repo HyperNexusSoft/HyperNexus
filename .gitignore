@@ -281,3 +281,4 @@ go/internal/tools/_broken/
 tormentnexus-linux
 go/catalog.db
 go/tormentnexus.db
+!go/tormentnexus/
