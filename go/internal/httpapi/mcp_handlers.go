@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MDMAtk/TormentNexus/internal/mcp"
 	"github.com/MDMAtk/TormentNexus/internal/cache"
+	"github.com/MDMAtk/TormentNexus/internal/mcp"
 	roottools "github.com/MDMAtk/TormentNexus/tools"
 )
 
@@ -32,10 +32,10 @@ func (s *Server) buildMCPStatus(ctx context.Context) (map[string]any, error) {
 	if err == nil {
 		return map[string]any{
 			"success": true,
-			"data": result,
+			"data":    result,
 			"bridge": map[string]any{
 				"upstreamBase": upstreamBase,
-				"procedure": "mcp.getStatus",
+				"procedure":    "mcp.getStatus",
 			},
 		}, nil
 	}
@@ -46,20 +46,20 @@ func (s *Server) buildMCPStatus(ctx context.Context) (map[string]any, error) {
 	return map[string]any{
 		"success": true,
 		"data": map[string]any{
-			"initialized": true,
-			"connected": summary.SourceBackedHarnessCount > 0,
-			"toolCount": summary.SourceBackedToolCount,
-			"serverCount": summary.InstalledHarnessCount,
-			"connectedCount": summary.SourceBackedHarnessCount,
+			"initialized":              true,
+			"connected":                summary.SourceBackedHarnessCount > 0,
+			"toolCount":                summary.SourceBackedToolCount,
+			"serverCount":              summary.InstalledHarnessCount,
+			"connectedCount":           summary.SourceBackedHarnessCount,
 			"sourceBackedHarnessCount": summary.SourceBackedHarnessCount,
-			"source": "source-backed-local-summary",
-			"lazySessionMode": false,
-			"singleActiveServerMode": false,
+			"source":                   "source-backed-local-summary",
+			"lazySessionMode":          false,
+			"singleActiveServerMode":   false,
 		},
 		"bridge": map[string]any{
-			"fallback": "go-local-mcp",
+			"fallback":  "go-local-mcp",
 			"procedure": "mcp.getStatus",
-			"reason": "upstream unavailable; using local MCP harness summary",
+			"reason":    "upstream unavailable; using local MCP harness summary",
 		},
 	}, nil
 }
@@ -362,10 +362,10 @@ func (s *Server) buildMCPServersList(ctx context.Context) (map[string]any, error
 	if err == nil {
 		return map[string]any{
 			"success": true,
-			"data": result,
+			"data":    result,
 			"bridge": map[string]any{
 				"upstreamBase": upstreamBase,
-				"procedure": "mcp.listServers",
+				"procedure":    "mcp.listServers",
 			},
 		}, nil
 	}
@@ -374,9 +374,9 @@ func (s *Server) buildMCPServersList(ctx context.Context) (map[string]any, error
 	_, cliSummary, _ := s.localMCPSummary(ctx)
 
 	type serverEntry struct {
-		Name string `json:"name"`
-		Status string `json:"status"`
-		ToolCount int `json:"toolCount"`
+		Name      string `json:"name"`
+		Status    string `json:"status"`
+		ToolCount int    `json:"toolCount"`
 	}
 
 	var servers []serverEntry
@@ -393,8 +393,8 @@ func (s *Server) buildMCPServersList(ctx context.Context) (map[string]any, error
 				status = "connected"
 			}
 			servers = append(servers, serverEntry{
-				Name: srv.Name,
-				Status: status,
+				Name:      srv.Name,
+				Status:    status,
 				ToolCount: srv.ToolCount,
 			})
 		}
@@ -408,8 +408,8 @@ func (s *Server) buildMCPServersList(ctx context.Context) (map[string]any, error
 				status = "connected"
 			}
 			servers = append(servers, serverEntry{
-				Name: srv.Name,
-				Status: status,
+				Name:      srv.Name,
+				Status:    status,
 				ToolCount: srv.ToolCount,
 			})
 		}
@@ -421,18 +421,18 @@ func (s *Server) buildMCPServersList(ctx context.Context) (map[string]any, error
 		}
 		seen[h.ID] = true
 		servers = append(servers, serverEntry{
-			Name: h.ID,
+			Name:   h.ID,
 			Status: "available",
 		})
 	}
 
 	return map[string]any{
 		"success": true,
-		"data": servers,
+		"data":    servers,
 		"bridge": map[string]any{
-			"fallback": "go-local-mcp",
+			"fallback":  "go-local-mcp",
 			"procedure": "mcp.listServers",
-			"reason": "upstream unavailable; using local MCP inventory",
+			"reason":    "upstream unavailable; using local MCP inventory",
 		},
 	}, nil
 }
@@ -441,7 +441,8 @@ func (s *Server) buildMCPServersList(ctx context.Context) (map[string]any, error
 // TypeScript ConversationalToolInjector before falling back to cloud LLMs.
 //
 // Request:  POST /api/mcp/tools/predict-conversational
-//           { "prompt": "...", "systemPrompt": "..." }
+//
+//	{ "prompt": "...", "systemPrompt": "..." }
 //
 // Response: { "success": true, "data": { "tools": ["tool_name_1", ...] } }
 func (s *Server) handleMCPPredictConversational(w http.ResponseWriter, r *http.Request) {
@@ -494,7 +495,8 @@ func (s *Server) handleMCPPredictConversational(w http.ResponseWriter, r *http.R
 // to build its own window independently for preemptive advertisement.
 //
 // Request:  POST /api/mcp/conversation/append
-//           { "role": "user"|"assistant"|"tool", "text": "..." }
+//
+//	{ "role": "user"|"assistant"|"tool", "text": "..." }
 //
 // Response: { "success": true }
 func (s *Server) handleMCPConversationAppend(w http.ResponseWriter, r *http.Request) {
@@ -611,39 +613,39 @@ func (s *Server) injectAlwaysOnStatus(tools []map[string]any) []map[string]any {
 	// List of high-value tools and tools native to other harnesses that must always be always-on by default
 	parityTools := map[string]bool{
 		// ── High-Value Chat Automation / Process Tools ──
-		"list_processes":             true,
-		"kill_process":               true,
-		"set_chat_input":             true,
-		"submit_chat_input":          true,
-		"click_chat_button":          true,
-		"advance_chat":               true,
-		"mcp_list_servers":           true,
-		"mcp_list_tools":             true,
-		"mcp_call_tool":              true,
-		"mcp_status":                 true,
-		"mcp_server_test":            true,
-		"system_status":              true,
-		"billing_status":             true,
-		"list_accessory_tools":       true,
+		"list_processes":       true,
+		"kill_process":         true,
+		"set_chat_input":       true,
+		"submit_chat_input":    true,
+		"click_chat_button":    true,
+		"advance_chat":         true,
+		"mcp_list_servers":     true,
+		"mcp_list_tools":       true,
+		"mcp_call_tool":        true,
+		"mcp_status":           true,
+		"mcp_server_test":      true,
+		"system_status":        true,
+		"billing_status":       true,
+		"list_accessory_tools": true,
 
 		// ── Tools Native to Other Harnesses (Pi, Aider, Confluence, etc.) ──
-		"read":                       true,
-		"write":                      true,
-		"edit":                       true,
-		"bash":                       true,
-		"grep":                       true,
-		"find":                       true,
-		"ls":                         true,
-		"apply_search_replace":       true,
-		"code_interpreter":           true,
-		"cloud_troubleshoot":         true,
-		"generate_devops_pipeline":   true,
-		"jira_create_issue":          true,
-		"confluence_search":          true,
-		"add_bookmark":               true,
-		"launch_webview":             true,
-		"get_system_stats":           true,
-		"download_llamafile":         true,
+		"read":                     true,
+		"write":                    true,
+		"edit":                     true,
+		"bash":                     true,
+		"grep":                     true,
+		"find":                     true,
+		"ls":                       true,
+		"apply_search_replace":     true,
+		"code_interpreter":         true,
+		"cloud_troubleshoot":       true,
+		"generate_devops_pipeline": true,
+		"jira_create_issue":        true,
+		"confluence_search":        true,
+		"add_bookmark":             true,
+		"launch_webview":           true,
+		"get_system_stats":         true,
+		"download_llamafile":       true,
 	}
 
 	for _, tool := range tools {
@@ -821,4 +823,3 @@ func (s *Server) mergeAccessoryTools(toolsList []map[string]any) []map[string]an
 
 	return toolsList
 }
-

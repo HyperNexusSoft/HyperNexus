@@ -28,7 +28,7 @@ var mcpCmd = &cobra.Command{
 		if err != nil {
 			execPath = ""
 		}
-		
+
 		var kernelPath string
 		if execPath != "" {
 			kernelPath = filepath.Join(filepath.Dir(execPath), "bin", "tormentnexus.exe")

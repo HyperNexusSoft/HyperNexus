@@ -4,6 +4,7 @@ TormentNexus Universal Client Support Installer
 Detects installed AI coding clients and installs MCP configs,
 skill files, plugins, extensions, hooks, and commands.
 """
+
 import os
 import json
 import shutil
@@ -19,143 +20,274 @@ CLIENTS = {
     # Category 1: Official Big-Tech Frameworks
     "claude": {
         "dirs": [".claude"],
-        "skills": True, "mcp": True, "hooks": True, "commands": True, "ext": False,
+        "skills": True,
+        "mcp": True,
+        "hooks": True,
+        "commands": True,
+        "ext": False,
     },
     "gemini": {
         "dirs": [".gemini"],
-        "skills": True, "mcp": True, "ext": True, "commands": False, "hooks": False,
+        "skills": True,
+        "mcp": True,
+        "ext": True,
+        "commands": False,
+        "hooks": False,
     },
     "codex": {
         "dirs": [".codex"],
-        "skills": True, "mcp": True, "commands": True, "hooks": False, "ext": False,
+        "skills": True,
+        "mcp": True,
+        "commands": True,
+        "hooks": False,
+        "ext": False,
     },
     "grok": {
         "dirs": [".grok"],
-        "skills": True, "mcp": True, "commands": True, "hooks": False, "ext": False,
+        "skills": True,
+        "mcp": True,
+        "commands": True,
+        "hooks": False,
+        "ext": False,
     },
     "antigravity": {
         "dirs": [".antigravity", ".gemini/antigravity-ide"],
-        "skills": True, "mcp": True, "ext": True, "agents": True, "commands": False,
+        "skills": True,
+        "mcp": True,
+        "ext": True,
+        "agents": True,
+        "commands": False,
     },
     # Category 2: Open-Source BYOK CLIs
     "aider": {
         "dirs": [".aider"],
-        "mcp": True, "skills": False, "hooks": False, "commands": False, "ext": False,
+        "mcp": True,
+        "skills": False,
+        "hooks": False,
+        "commands": False,
+        "ext": False,
     },
     "opencode": {
         "dirs": [".opencode"],
-        "mcp": True, "skills": True, "commands": True, "hooks": False, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "commands": True,
+        "hooks": False,
+        "ext": False,
     },
     "openclaw": {
         "dirs": [".openclaw"],
-        "mcp": True, "skills": True, "hooks": False, "commands": False, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "hooks": False,
+        "commands": False,
+        "ext": False,
     },
     "goose": {
         "dirs": [".goose", "goose"],
-        "mcp": True, "ext": True, "skills": True, "hooks": False, "commands": False,
+        "mcp": True,
+        "ext": True,
+        "skills": True,
+        "hooks": False,
+        "commands": False,
     },
     "iflow": {
         "dirs": [".iflow"],
-        "mcp": True, "skills": True, "hooks": False, "commands": False, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "hooks": False,
+        "commands": False,
+        "ext": False,
     },
     "roo": {
         "dirs": [".roo", ".roo-code"],
-        "mcp": True, "skills": True, "hooks": False, "commands": True, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "hooks": False,
+        "commands": True,
+        "ext": False,
     },
     "cline": {
         "dirs": [".cline"],
-        "mcp": True, "skills": True, "hooks": True, "commands": True, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "hooks": True,
+        "commands": True,
+        "ext": False,
     },
     # Category 3: Full-IDE Clients
     "cursor": {
         "dirs": [".cursor"],
-        "skills": True, "mcp": True, "commands": True, "hooks": False,
+        "skills": True,
+        "mcp": True,
+        "commands": True,
+        "hooks": False,
         "ext_dirs": ["extensions"],
     },
     "windsurf": {
         "dirs": [".windsurf"],
-        "mcp": True, "skills": True, "commands": True, "hooks": False, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "commands": True,
+        "hooks": False,
+        "ext": False,
     },
     "zed": {
         "dirs": [".zed"],
-        "mcp": True, "skills": True, "hooks": False, "commands": False, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "hooks": False,
+        "commands": False,
+        "ext": False,
     },
     "trae": {
         "dirs": [".trae"],
-        "mcp": True, "skills": True, "hooks": False, "commands": False, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "hooks": False,
+        "commands": False,
+        "ext": False,
     },
     "continue": {
         "dirs": [".continue"],
-        "mcp": True, "skills": True, "ext": True, "hooks": False, "commands": False,
+        "mcp": True,
+        "skills": True,
+        "ext": True,
+        "hooks": False,
+        "commands": False,
     },
     # Category 4: B2B Autonomous Platforms
     "factory": {
         "dirs": [".factory"],
-        "mcp": True, "skills": True, "commands": True, "hooks": False, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "commands": True,
+        "hooks": False,
+        "ext": False,
     },
     "openhands": {
         "dirs": [".openhands"],
-        "mcp": True, "skills": True, "hooks": False, "commands": False, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "hooks": False,
+        "commands": False,
+        "ext": False,
     },
     "kiro": {
         "dirs": [".kiro"],
-        "mcp": True, "skills": True, "hooks": False, "commands": False, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "hooks": False,
+        "commands": False,
+        "ext": False,
     },
     "codewhale": {
         "dirs": [".codewhale"],
-        "skills": True, "mcp": True, "plugin": True, "ext": True, "commands": False,
+        "skills": True,
+        "mcp": True,
+        "plugin": True,
+        "ext": True,
+        "commands": False,
     },
     # Category 5: Orchestrators
     "omnigent": {
         "dirs": [".omnigent"],
-        "mcp": True, "skills": True, "hooks": False, "commands": False, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "hooks": False,
+        "commands": False,
+        "ext": False,
     },
     "citadel": {
         "dirs": [".citadel"],
-        "mcp": True, "skills": True, "hooks": False, "commands": False, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "hooks": False,
+        "commands": False,
+        "ext": False,
     },
     "agent-fusion": {
         "dirs": [".agent-fusion"],
-        "mcp": True, "skills": True, "hooks": False, "commands": False, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "hooks": False,
+        "commands": False,
+        "ext": False,
     },
     "herdr": {
         "dirs": [".herdr"],
-        "mcp": True, "skills": True, "hooks": False, "commands": False, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "hooks": False,
+        "commands": False,
+        "ext": False,
     },
     "claude-squad": {
         "dirs": [".claude-squad"],
-        "mcp": True, "skills": True, "hooks": False, "commands": False, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "hooks": False,
+        "commands": False,
+        "ext": False,
     },
     # Category 6: Runtimes & Specialized Engines
     "qwen-code": {
         "dirs": [".qwen-code", ".qwen"],
-        "mcp": True, "skills": True, "hooks": False, "commands": False, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "hooks": False,
+        "commands": False,
+        "ext": False,
     },
     "pi": {
         "dirs": [".pi/agent"],
-        "ext": True, "mcp": True, "skills": False, "hooks": False, "commands": False,
+        "ext": True,
+        "mcp": True,
+        "skills": False,
+        "hooks": False,
+        "commands": False,
     },
     "kimi-code": {
         "dirs": [".kimi-code", ".moonshot"],
-        "mcp": True, "skills": True, "hooks": False, "commands": False, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "hooks": False,
+        "commands": False,
+        "ext": False,
     },
     "cliproxyapi": {
         "dirs": [".cliproxyapi"],
-        "mcp": True, "skills": True, "hooks": False, "commands": False, "ext": False,
+        "mcp": True,
+        "skills": True,
+        "hooks": False,
+        "commands": False,
+        "ext": False,
     },
     # Bonus: VS Code & JetBrains
     "vscode": {
         "dirs": [".vscode"],
-        "skills": True, "mcp": True, "ext": True, "hooks": False, "commands": True,
+        "skills": True,
+        "mcp": True,
+        "ext": True,
+        "hooks": False,
+        "commands": True,
     },
     "jetbrains": {
         "dirs": [".jetbrains"],
-        "skills": True, "mcp": True, "ext": True, "hooks": False, "commands": False,
+        "skills": True,
+        "mcp": True,
+        "ext": True,
+        "hooks": False,
+        "commands": False,
     },
     # Hermes memory
     "hermes": {
         "dirs": [".hermes"],
-        "skills": True, "mcp": True, "hooks": False, "commands": False, "ext": False,
+        "skills": True,
+        "mcp": True,
+        "hooks": False,
+        "commands": False,
+        "ext": False,
     },
 }
 
@@ -200,7 +332,9 @@ def get_mcp_config():
     return {
         "mcpServers": {
             "tormentnexus": {
-                "command": "tormentnexus" if SYSTEM != "Windows" else "tormentnexus.exe",
+                "command": "tormentnexus"
+                if SYSTEM != "Windows"
+                else "tormentnexus.exe",
                 "args": ["mcp"],
                 "env": {"TORMENTNEXUS_WORKSPACE_ROOT": WORKSPACE},
                 "type": "stdio",
@@ -311,7 +445,14 @@ def install():
                 if config.get("commands"):
                     cmd_dir = os.path.join(base, "commands")
                     os.makedirs(cmd_dir, exist_ok=True)
-                    for cmd in ["tn-store", "tn-search", "tn-status", "tn-plan", "tn-purge", "tn-summary"]:
+                    for cmd in [
+                        "tn-store",
+                        "tn-search",
+                        "tn-status",
+                        "tn-plan",
+                        "tn-purge",
+                        "tn-summary",
+                    ]:
                         with open(os.path.join(cmd_dir, f"{cmd}.md"), "w") as f:
                             f.write(get_command_content(cmd))
 
@@ -327,18 +468,24 @@ def install():
                     hooks_dir = os.path.join(base, "hooks")
                     os.makedirs(hooks_dir, exist_ok=True)
                     with open(os.path.join(hooks_dir, "config.json"), "w") as f:
-                        json.dump({
-                            "on_session_start": "tn_context_harvest",
-                            "on_tool_error": "tn_memory_store",
-                            "on_decision": "tn_memory_store"
-                        }, f, indent=2)
+                        json.dump(
+                            {
+                                "on_session_start": "tn_context_harvest",
+                                "on_tool_error": "tn_memory_store",
+                                "on_decision": "tn_memory_store",
+                            },
+                            f,
+                            indent=2,
+                        )
 
                 # Extension
                 if config.get("ext"):
                     ext_dir = os.path.join(base, "extensions")
                     os.makedirs(ext_dir, exist_ok=True)
                     # Copy Pi extension for clients that support it
-                    src_ext = os.path.join(HOME, ".pi", "agent", "extensions", "tormentnexus.ts")
+                    src_ext = os.path.join(
+                        HOME, ".pi", "agent", "extensions", "tormentnexus.ts"
+                    )
                     if os.path.exists(src_ext):
                         shutil.copy2(src_ext, ext_dir)
 

@@ -107,7 +107,7 @@ func (s *Service) QueryCapabilities(ctx context.Context, nodeID string, timeoutM
 	if nodeID == s.localNodeID {
 		return CapabilityDetails{
 			Capabilities: append([]string(nil), s.localCapabilities()...),
-			Role: "tn-kernel",
+			Role:         "tn-kernel",
 			CachedAt:     time.Now().UnixMilli(),
 		}, nil
 	}

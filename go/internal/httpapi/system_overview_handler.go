@@ -114,16 +114,16 @@ func (s *Server) handleSystemOverview(w http.ResponseWriter, r *http.Request) {
 				"bridge":  startupBridge,
 			},
 			"sessions": map[string]any{
-				"list":  sessionsData,
+				"list":   sessionsData,
 				"bridge": sessionsBridge,
 			},
 			"memory": map[string]any{
-				"items": []any{},
-				"count": 0,
+				"items":  []any{},
+				"count":  0,
 				"bridge": memoryBridge,
 			},
 			"health": map[string]any{
-				"tnKernel":  goHealth,
+				"tnKernel":   goHealth,
 				"tsCore":     coreHealth,
 				"coreBridge": coreBridge,
 			},

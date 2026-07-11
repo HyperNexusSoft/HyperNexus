@@ -16,10 +16,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/google/uuid"
 	_ "github.com/glebarez/go-sqlite"
+	"github.com/google/uuid"
 
-	"github.com/MDMAtk/TormentNexus/internal/database")
+	"github.com/MDMAtk/TormentNexus/internal/database"
+)
 
 type ImportedSessionMemoryKind string
 

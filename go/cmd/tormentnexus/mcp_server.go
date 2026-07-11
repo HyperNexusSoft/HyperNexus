@@ -14,10 +14,10 @@ import (
 	"strings"
 	"time"
 
-	roottools "github.com/MDMAtk/TormentNexus/tools"
 	"github.com/MDMAtk/TormentNexus/internal/config"
 	"github.com/MDMAtk/TormentNexus/internal/lockfile"
 	"github.com/MDMAtk/TormentNexus/internal/mcpimpl"
+	roottools "github.com/MDMAtk/TormentNexus/tools"
 )
 
 // ─── Supervisor Settings and Profiles ───
@@ -86,10 +86,10 @@ type SurfaceProfile struct {
 
 var surfaceProfiles = []SurfaceProfile{
 	{
-		ID:           "default",
-		DisplayName:  "Default chat surface",
-		ActionLabels: []string{"Run", "Expand", "Always Allow", "Retry", "Accept all", "Accept", "Allow", "Approve", "Proceed", "Keep"},
-		SubmitKeyChord: "alt+enter",
+		ID:                "default",
+		DisplayName:       "Default chat surface",
+		ActionLabels:      []string{"Run", "Expand", "Always Allow", "Retry", "Accept all", "Accept", "Allow", "Approve", "Proceed", "Keep"},
+		SubmitKeyChord:    "alt+enter",
 		InputControlTypes: []string{"Document", "Edit"},
 		Notes: []string{
 			"Fallback profile when no fork-specific adapter matches",
@@ -97,10 +97,10 @@ var surfaceProfiles = []SurfaceProfile{
 		},
 	},
 	{
-		ID:           "antigravity",
-		DisplayName:  "Antigravity browser chat",
-		ActionLabels: []string{"Run", "Expand", "Always Allow", "Retry", "Accept all", "Accept", "Allow", "Approve", "Proceed", "Keep"},
-		SubmitKeyChord: "alt+enter",
+		ID:                "antigravity",
+		DisplayName:       "Antigravity browser chat",
+		ActionLabels:      []string{"Run", "Expand", "Always Allow", "Retry", "Accept all", "Accept", "Allow", "Approve", "Proceed", "Keep"},
+		SubmitKeyChord:    "alt+enter",
 		InputControlTypes: []string{"Document", "Edit"},
 		Notes: []string{
 			"Optimized for browser-hosted coding chats with approval buttons",
@@ -108,10 +108,10 @@ var surfaceProfiles = []SurfaceProfile{
 		},
 	},
 	{
-		ID:           "claude-web",
-		DisplayName:  "Claude web chat",
-		ActionLabels: []string{"Retry", "Accept", "Allow", "Proceed", "Keep"},
-		SubmitKeyChord: "enter",
+		ID:                "claude-web",
+		DisplayName:       "Claude web chat",
+		ActionLabels:      []string{"Retry", "Accept", "Allow", "Proceed", "Keep"},
+		SubmitKeyChord:    "enter",
 		InputControlTypes: []string{"Document", "Edit"},
 		Notes: []string{
 			"Uses Enter as a safer default unless overridden by settings or tool arguments",
@@ -177,14 +177,14 @@ type ToolResult struct {
 // ─── MCP Server ───
 
 type MCPServer struct {
-	tnKernelURL string
+	tnKernelURL  string
 	tools        []ToolDefinition
 	rootRegistry *roottools.Registry
 }
 
 func NewMCPServer(tnKernelURL string) *MCPServer {
 	s := &MCPServer{
-		tnKernelURL: tnKernelURL,
+		tnKernelURL:  tnKernelURL,
 		rootRegistry: roottools.NewRegistry(),
 	}
 	s.registerTools()
@@ -961,8 +961,8 @@ func (s *MCPServer) forwardToolCallToUpstream(name string, args map[string]any) 
 	}
 
 	var apiResp struct {
-		Success bool `json:"success"`
-		Error   string `json:"error"`
+		Success bool       `json:"success"`
+		Error   string     `json:"error"`
 		Data    ToolResult `json:"data"`
 	}
 	if err := json.NewDecoder(resp.Body).Decode(&apiResp); err != nil {

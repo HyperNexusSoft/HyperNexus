@@ -461,8 +461,8 @@ func (hs *HydrationStore) ingestEnvironment() int {
 	count := 0
 
 	envInfo := map[string]string{
-		"os":      runtime.GOOS,
-		"arch":    runtime.GOARCH,
+		"os":       runtime.GOOS,
+		"arch":     runtime.GOARCH,
 		"cpuCount": fmt.Sprintf("%d", runtime.NumCPU()),
 	}
 
@@ -494,14 +494,14 @@ func (hs *HydrationStore) ingestEnvironment() int {
 
 // HydrationReport summarizes the results of a hydration operation.
 type HydrationReport struct {
-	StartedAt            string   `json:"startedAt"`
-	CompletedAt          string   `json:"completedAt"`
-	TotalEntries         int      `json:"totalEntries"`
-	Sections             []string `json:"sections"`
-	ProjectContext       int      `json:"projectContextEntries"`
-	ArchitectureEntries  int      `json:"architectureEntries"`
-	AgentInstructions    int      `json:"agentInstructionsEntries"`
-	ConfigEntries        int      `json:"configEntries"`
-	RepoGraphEntries     int      `json:"repoGraphEntries"`
-	EnvironmentEntries   int      `json:"environmentEntries"`
+	StartedAt           string   `json:"startedAt"`
+	CompletedAt         string   `json:"completedAt"`
+	TotalEntries        int      `json:"totalEntries"`
+	Sections            []string `json:"sections"`
+	ProjectContext      int      `json:"projectContextEntries"`
+	ArchitectureEntries int      `json:"architectureEntries"`
+	AgentInstructions   int      `json:"agentInstructionsEntries"`
+	ConfigEntries       int      `json:"configEntries"`
+	RepoGraphEntries    int      `json:"repoGraphEntries"`
+	EnvironmentEntries  int      `json:"environmentEntries"`
 }

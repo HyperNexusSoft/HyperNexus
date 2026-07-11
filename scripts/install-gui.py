@@ -3,6 +3,7 @@
 TormentNexus GUI Installer — Windows & macOS
 Simple visual wizard that installs support for 38+ AI coding clients.
 """
+
 import tkinter as tk
 from tkinter import ttk, messagebox
 import subprocess
@@ -16,13 +17,39 @@ INSTALLER_PY = os.path.join(SCRIPT_DIR, "install-client-support.py")
 
 WIDTH, HEIGHT = 700, 500
 CLIENTS = [
-    "Claude Code", "Gemini CLI", "Codex CLI", "Grok Build", "Antigravity",
-    "Aider", "OpenCode", "OpenClaw", "Goose", "iFlow",
-    "Roo Code", "Cline", "Cursor", "Windsurf", "Zed",
-    "Trae", "Continue.dev", "Factory Droid", "OpenHands", "Kiro",
-    "CodeWhale", "Omnigent", "Citadel", "Agent-Fusion", "Herdr",
-    "Claude Squad", "Qwen Code", "Pi Coding Agent", "Kimi Code",
-    "CLIProxyAPI", "VS Code", "JetBrains", "Hermes",
+    "Claude Code",
+    "Gemini CLI",
+    "Codex CLI",
+    "Grok Build",
+    "Antigravity",
+    "Aider",
+    "OpenCode",
+    "OpenClaw",
+    "Goose",
+    "iFlow",
+    "Roo Code",
+    "Cline",
+    "Cursor",
+    "Windsurf",
+    "Zed",
+    "Trae",
+    "Continue.dev",
+    "Factory Droid",
+    "OpenHands",
+    "Kiro",
+    "CodeWhale",
+    "Omnigent",
+    "Citadel",
+    "Agent-Fusion",
+    "Herdr",
+    "Claude Squad",
+    "Qwen Code",
+    "Pi Coding Agent",
+    "Kimi Code",
+    "CLIProxyAPI",
+    "VS Code",
+    "JetBrains",
+    "Hermes",
 ]
 
 
@@ -88,7 +115,9 @@ class InstallerApp:
         scrollbar = tk.Scrollbar(grid_frame, orient="vertical", command=canvas.yview)
         self.client_frame = tk.Frame(canvas, bg=self.BG)
 
-        canvas.create_window((0, 0), window=self.client_frame, anchor="nw", tags="inner")
+        canvas.create_window(
+            (0, 0), window=self.client_frame, anchor="nw", tags="inner"
+        )
         canvas.configure(yscrollcommand=scrollbar.set)
 
         # Grid layout: 3 columns
@@ -98,9 +127,7 @@ class InstallerApp:
             self._client_card(client, row, col)
 
         # Progress bar
-        self.progress = ttk.Progressbar(
-            self.root, mode="indeterminate", length=500
-        )
+        self.progress = ttk.Progressbar(self.root, mode="indeterminate", length=500)
         self.progress.pack(pady=(0, 5))
 
         # Status
