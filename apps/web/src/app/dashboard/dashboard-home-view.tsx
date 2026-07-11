@@ -611,7 +611,7 @@ function isProviderDegraded(provider: DashboardProviderSummary): boolean {
         return false;
     }
 
-    if (provider.authenticated === false || Boolean(provider.lastError)) {
+    if (provider.authenticated === false || provider.lastError) {
         return true;
     }
 
@@ -897,7 +897,7 @@ export function buildDashboardAlerts(
     } else if (
         (checks.mcpAggregator.advertisedAlwaysOnServerCount ?? 0) > 0
         && (checks.mcpAggregator.residentConnectedCount ?? 0) === 0
-        && Boolean(checks.mcpAggregator.liveReady ?? checks.mcpAggregator.ready)
+        && checks.mcpAggregator.liveReady ?? checks.mcpAggregator.ready
     ) {
         alerts.push({
             id: 'router-disconnected',
@@ -2855,6 +2855,28 @@ export function DashboardHomeView({
                                 </div>
                             </div>
                         </div>
+
+                        {/* Cloud Deployment */}
+                        {typeof window !== 'undefined' && !window.location.hostname.includes('hypernexus') && (
+                        <div className="rounded-2xl border border-purple-700/50 bg-gradient-to-br from-purple-950/30 to-slate-900/70 p-6 space-y-3">
+                            <div className="flex items-center gap-2">
+                                <h2 className="text-base font-semibold text-white">HyperNexus Cloud</h2>
+                                <span className="text-xs bg-purple-700 text-purple-100 px-2 py-0.5 rounded-full">New</span>
+                            </div>
+                            <p className="text-xs text-slate-400">
+                                Deploy TormentNexus as a multi-tenant SaaS platform.
+                                Spin up isolated workspaces for enterprise customers.
+                            </p>
+                            <a
+                                href="https://cloud.hypernexus.site"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block w-full text-center bg-purple-600 hover:bg-purple-500 text-white font-semibold text-sm px-4 py-2.5 rounded transition-colors"
+                            >
+                                Launch Cloud Dashboard &rarr;
+                            </a>
+                        </div>
+                        )}
 
                         {/* OS Protocol Registry */}
                         <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 space-y-4 flex flex-col justify-between">

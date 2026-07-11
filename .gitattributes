@@ -3,12 +3,10 @@ provider_metrics.db filter=lfs diff=lfs merge=lfs -text
 tormentnexus.db filter=lfs diff=lfs merge=lfs -text
 tormentnexus.db-shm filter=lfs diff=lfs merge=lfs -text
 tormentnexus.db-wal filter=lfs diff=lfs merge=lfs -text
-catalog.db filter=lfs diff=lfs merge=lfs -text
 # Explicit large DB files (root repo only)
 tormentnexus.db filter=lfs diff=lfs merge=lfs -text
 tormentnexus.db-shm filter=lfs diff=lfs merge=lfs -text
 tormentnexus.db-wal filter=lfs diff=lfs merge=lfs -text
-catalog.db filter=lfs diff=lfs merge=lfs -text
 provider_metrics.db filter=lfs diff=lfs merge=lfs -text
 
 # Submodule DB files are handled by their own .gitattributes — exclude from root
