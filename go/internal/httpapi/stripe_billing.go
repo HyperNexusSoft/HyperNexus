@@ -167,7 +167,7 @@ func (s *Server) handleStripeCreateCheckout(w http.ResponseWriter, r *http.Reque
 	}
 
 	body := fmt.Sprintf(
-		"mode=subscription&success_url=%s&cancel_url=%s&line_items[0][price]=%s&line_items[0][quantity]=1",
+		"mode=subscription&success_url=%s&cancel_url=%s&line_items[0][price]=%s&line_items[0][quantity]=1&line_items[0][adjustable_quantity][enabled]=true&line_items[0][adjustable_quantity][minimum]=1&line_items[0][adjustable_quantity][maximum]=999",
 		successURL, cancelURL, priceID,
 	)
 	if custID != "" {
