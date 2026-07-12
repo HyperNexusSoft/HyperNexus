@@ -89627,3 +89627,260 @@ Actually, the commit already went through (it's in the local repo at `585ba69cd`
 - `install-gui.py` — visual Tkinter wizard with 38-client grid
 - `scripts/install-client-support.py` — the engine
 
+## Turn 1 | 2026-07-12T03:08:51.816Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: The user wants me to add all files, commit everything, and push to both remotes.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && git add -A && git status --short | head -20")
+**Observation**: bash: success
+
+## Turn 2 | 2026-07-12T03:09:00.131Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: Just two modified files - the memory log and catalog.db. Let me commit and push.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && git commit -m "chore: sync memory log and catalog.db" 2>&1 | tail -3 && git push origin main 2>&1 | tail -3", timeout: 60)
+**Observation**: bash: error
+
+## Turn 3 | 2026-07-12T03:10:07.511Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: Again LFS is blocking (catalog.db). Let me push LFS first then the commit.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && git lfs push origin main 2>&1 | tail -3 && git push origin main 2>&1 | tail -3 && git push origin-backup main 2>&1 | tail -3", timeout: 300)
+**Observation**: bash: success
+
+## Turn 4 | 2026-07-12T03:14:28.047Z | deepseek/deepseek-v4-pro
+
+**Thought**: Done. Both remotes pushed at `4595c94de`.
+
+## Turn 1 | 2026-07-12T03:46:25.135Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: The user wants two things:
+
+1. Document the installation process in the README.md
+2. Make the installer support a "corporate local installation" mode (not cloud hosted) - this would be for enterprises that want to run TormentNexus on-premises, not cloud-hosted.
+
+Let me first check the current README, then update it with install instructions, and modify the installer to support a corporate/local mode.
+**Action**: bash(command: "wc -l ~/workspace/tormentnexus/README.md && head -30 ~/workspace/tormentnexus/README.md")
+**Observation**: bash: success
+
+## Turn 2 | 2026-07-12T03:46:35.431Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: Let me read the rest of the README to understand the structure, then add the install section and update the installer for corporate/local mode.
+
+For the installer, "corporate local installation" means:
+- Install TormentNexus as a self-hosted on-premises deployment
+- Not connecting to cloud.hypernexus.site
+- Running the TN Kernel locally with full enterprise features
+- Supporting multi-tenant isolation for organizations running their own instance
+
+This means adding a `--mode` flag to the installer:
+- `--mode personal` (default) - full client support for individual developers
+- `--mode corporate` - adds enterprise features like tenant isolation, SSO configs, RBAC, audit logging
+
+Let me update the README first, then the installer.
+**Action**: read(offset: 720, path: "C:/Users/hyper/workspace/tormentnexus/README.md")
+**Observation**: read: success
+
+## Turn 3 | 2026-07-12T03:46:46.193Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: Good. The README is 758 lines with ASCII art, feature sections, and a CodeWhale-specific install. I need to add a comprehensive installation section and update the installer for corporate/local mode.
+
+Let me add the install section after the ASCII art header (around line 32), and then update the installer.
+**Action**: read(limit: 15, offset: 30, path: "C:/Users/hyper/workspace/tormentnexus/README.md")
+**Observation**: read: success
+
+## Turn 4 | 2026-07-12T03:46:52.005Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: Let me replace the README with a full update including the new installation section. I'll add it right after the ASCII art header.
+**Action**: edit(edits: [object Object], path: "C:/Users/hyper/workspace/tormentnexus/README.md")
+**Observation**: edit: error
+
+## Turn 5 | 2026-07-12T03:47:08.564Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: Multiple matches for ```. I need to use more context. Let me target the specific one after the ASCII art.
+**Action**: edit(edits: [object Object], path: "C:/Users/hyper/workspace/tormentnexus/README.md")
+**Observation**: edit: success
+
+## Turn 6 | 2026-07-12T03:47:35.205Z | deepseek/deepseek-v4-pro
+
+**Thought**: Now update the installer for corporate mode.
+**Thinking**: README updated. Now let me update the installer to support `--mode corporate`. This adds enterprise configs (SSO, RBAC, audit, tenant isolation, license setup).
+**Action**: read(path: "C:/Users/hyper/workspace/tormentnexus/scripts/install-client-support.py", limit: 10, offset: 490)
+**Observation**: read: success
+
+## Turn 7 | 2026-07-12T03:47:51.316Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: Now let me update the installer to support `--mode corporate`. I need to:
+1. Parse command line args for `--mode`
+2. When corporate mode, install additional enterprise configs:
+   - SSO/OIDC config
+   - RBAC role definitions
+   - Audit logging config
+   - Multi-tenant isolation config
+   - Enterprise license template
+3. Install these to `.tormentnexus/enterprise/`
+**Action**: edit(edits: [object Object], path: "C:/Users/hyper/workspace/tormentnexus/scripts/install-client-support.py")
+**Observation**: edit: success
+
+## Turn 8 | 2026-07-12T03:48:45.381Z | deepseek/deepseek-v4-pro
+
+**Thought**: Let me also update install.bat for corporate mode, then test.
+**Thinking**: The `sys` module is imported at the top of the file (line 7: `import os, sys, json, shutil, platform`). The pi-lens checker is giving a false positive. Let me also update the batch install script to support corporate mode.
+**Action**: read(path: "C:/Users/hyper/workspace/tormentnexus/scripts/install.bat")
+**Observation**: read: success
+
+## Turn 9 | 2026-07-12T03:49:14.269Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: Let me update install.bat to support `corporate` mode argument and add enterprise mode output.
+**Action**: edit(edits: [object Object], path: "C:/Users/hyper/workspace/tormentnexus/scripts/install.bat")
+**Observation**: edit: error
+
+## Turn 10 | 2026-07-12T03:49:21.742Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: The batch file has `@echo off` on its own line and `echo ===` on the next. The `echo ============================================================` is on line 2, then a blank line, then line 4 has the same. Let me just rewrite the whole install.bat.
+**Action**: write(content: "@echo off
+set MODE=%1
+if "%MODE%"=="" set MODE=personal
+
+echo ============================================================
+echo TormentNexus Universal Installer for Windows
+echo Mode: %MODE%
+echo ============================================================
+echo.
+echo This will install TormentNexus support for ALL detected
+echo AI coding clients on your system (38+ supported).
+if "%MODE%"=="corporate" (
+    echo.
+    echo *** CORPORATE MODE - Enterprise Features ***
+    echo     SSO/OIDC configuration for identity providers
+    echo     RBAC roles (admin, developer, auditor, viewer)
+    echo     Audit logging with daily rotation
+    echo     Multi-tenant isolation config
+    echo     Enterprise license template
+    echo.
+)
+echo Press Ctrl+C to cancel, or any key to continue...
+pause >nul
+
+echo.
+echo [1/3] Installing Python client support (mode=%MODE%)...
+python "%~dp0install-client-support.py" --mode %MODE%
+if %ERRORLEVEL% NEQ 0 (
+    echo ERROR: Python not found or script failed.
+    echo Please install Python 3.9+ and try again.
+    pause
+    exit /b 1
+)
+
+echo.
+echo [2/3] Installing Pi extension...
+if exist "%USERPROFILE%\.pi\agent\extensions" (
+    copy /Y "%~dp0..\packages\tormentnexus\index.ts" "%USERPROFILE%\.pi\agent\extensions\tormentnexus.ts" 2>nul
+    echo   Pi extension installed.
+) else (
+    echo   Pi not detected - skipping.
+)
+
+echo.
+echo [3/3] Installing VS Code extension...
+if exist "%USERPROFILE%\.vscode\extensions" (
+    mkdir "%USERPROFILE%\.vscode\extensions\tormentnexus" 2>nul
+    xcopy /E /Y "%~dp0..\apps\vscode\*" "%USERPROFILE%\.vscode\extensions\tormentnexus\" 2>nul
+    echo   VS Code extension installed.
+) else (
+    echo   VS Code not detected - skipping.
+)
+
+echo.
+echo ============================================================
+echo TormentNexus installation complete! (mode: %MODE%)
+echo.
+echo Start the TN Kernel with: tormentnexus serve
+echo Open dashboard at: http://localhost:7779
+echo Cloud dashboard: https://cloud.hypernexus.site
+echo ============================================================
+pause
+", path: "C:/Users/hyper/workspace/tormentnexus/scripts/install.bat")
+**Observation**: write: success
+
+## Turn 11 | 2026-07-12T03:49:41.161Z | deepseek/deepseek-v4-pro
+
+**Thought**: Test corporate mode.
+**Thinking**: Good. Now let me test the corporate mode installer and verify it creates the enterprise configs.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && PYTHONIOENCODING=utf-8 python3 scripts/install-client-support.py --mode corporate 2>&1 | tail -15", timeout: 30)
+**Observation**: bash: success
+
+## Turn 12 | 2026-07-12T03:49:47.900Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: The ruff autofix removed the `sys` import or it was never there. Let me check the imports at the top of the file.
+**Action**: bash(command: "head -8 ~/workspace/tormentnexus/scripts/install-client-support.py")
+**Observation**: bash: success
+
+## Turn 13 | 2026-07-12T03:49:53.294Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: The imports were truncated by the autofix removing `sys, json, shutil, platform`. Let me fix.
+**Action**: edit(edits: [object Object], path: "C:/Users/hyper/workspace/tormentnexus/scripts/install-client-support.py")
+**Observation**: edit: success
+
+## Turn 14 | 2026-07-12T03:50:13.846Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: Good. Now let me also update the install function to use argparse properly (which was added by the autofix), and test.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && PYTHONIOENCODING=utf-8 python3 scripts/install-client-support.py --mode corporate 2>&1 | tail -20", timeout: 15)
+**Observation**: bash: success
+
+## Turn 15 | 2026-07-12T03:50:40.945Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: Corporate mode works - enterprise configs created at `~/.tormentnexus/enterprise/`. Let me verify and then commit everything.
+**Action**: bash(command: "ls -la ~/.tormentnexus/enterprise/ && echo "---" && cat ~/.tormentnexus/enterprise/rbac.json")
+**Observation**: bash: success
+
+## Turn 16 | 2026-07-12T03:50:47.847Z | deepseek/deepseek-v4-pro
+
+**Thought**: Commit and push.
+**Thinking**: All enterprise configs created. Let me commit and push everything.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && git add README.md scripts/install-client-support.py scripts/install.bat && git commit -m "docs: README install guide + corporate on-premises mode
+
+- README: full installation instructions with client matrix, corporate mode docs
+- install-client-support.py: --mode corporate adds SSO, RBAC, audit, tenant isolation, license template
+- install.bat: supports 'corporate' argument for enterprise mode
+- Corporate configs written to ~/.tormentnexus/enterprise/ (sso.json, rbac.json, audit.json, tenants.json, license.template.json)" 2>&1 | tail -3 && git push origin main 2>&1 | tail -3", timeout: 30)
+**Observation**: bash: success
+
+## Turn 17 | 2026-07-12T03:51:07.633Z | deepseek/deepseek-v4-pro
+
+**Thought**: ## ✅ Done
+
+### README.md updated with:
+- Quick start for Windows, macOS, Linux
+- 38-client support matrix (SKILL, MCP, CMD, HOOK, EXT, AGENT)
+- GUI installer instructions
+- Corporate on-premises installation docs
+- Server deployment via PM2
+
+### Corporate mode (`--mode corporate`):
+```bash
+scripts\install.bat corporate
+python3 scripts/install-client-support.py --mode corporate
+```
+
+Creates `~/.tormentnexus/enterprise/`:
+| File | Purpose |
+|------|---------|
+| `sso.json` | OIDC provider config, scopes, claim mapping |
+| `rbac.json` | 4 roles: admin, developer, auditor, viewer |
+| `audit.json` | SQLite audit logging, daily rotation, 90-day retention |
+| `tenants.json` | Container isolation, resource limits, auto-provision |
+| `license.template.json` | Feature flags, seat count, expiry |
+

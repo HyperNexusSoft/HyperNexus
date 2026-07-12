@@ -435,11 +435,9 @@ def install():
                     os.makedirs(skill_dir, exist_ok=True)
                     content = get_skill_content()
                     if mode == "corporate":
-                        content = content.replace(
-                            "TormentNexus", "HyperNexus"
-                        ).replace(
+                        content = content.replace("TormentNexus", "HyperNexus").replace(
                             "local AI control plane",
-                            "enterprise AI control plane with SSO, RBAC, and audit logging"
+                            "enterprise AI control plane with SSO, RBAC, and audit logging",
                         )
                     with open(os.path.join(skill_dir, "SKILL.md"), "w") as f:
                         f.write(content)
@@ -528,8 +526,14 @@ def install():
         # RBAC roles
         rbac = {
             "roles": {
-                "admin": {"permissions": ["*"], "scopes": ["memory:write", "tool:exec", "config:write"]},
-                "developer": {"permissions": ["memory:read", "memory:write", "tool:exec"], "scopes": []},
+                "admin": {
+                    "permissions": ["*"],
+                    "scopes": ["memory:write", "tool:exec", "config:write"],
+                },
+                "developer": {
+                    "permissions": ["memory:read", "memory:write", "tool:exec"],
+                    "scopes": [],
+                },
                 "auditor": {"permissions": ["memory:read", "audit:read"], "scopes": []},
                 "viewer": {"permissions": ["memory:read"], "scopes": []},
             }
@@ -539,7 +543,13 @@ def install():
         print("  RBAC roles -> rbac.json")
 
         # Audit config
-        audit = {"backend": "sqlite", "path": "audit.db", "rotation": "daily", "retention_days": 90, "log_level": "info"}
+        audit = {
+            "backend": "sqlite",
+            "path": "audit.db",
+            "rotation": "daily",
+            "retention_days": 90,
+            "log_level": "info",
+        }
         with open(os.path.join(enterprise_dir, "audit.json"), "w") as f:
             json.dump(audit, f, indent=2)
         print("  Audit logging -> audit.json")
@@ -557,7 +567,12 @@ def install():
         print("  Tenant isolation -> tenants.json")
 
         # License template
-        lic = {"licensed_to": "YOUR_ORGANIZATION", "features": ["sso", "rbac", "audit", "multi_tenant", "mesh"], "expires": "2027-01-01", "seats": 50}
+        lic = {
+            "licensed_to": "YOUR_ORGANIZATION",
+            "features": ["sso", "rbac", "audit", "multi_tenant", "mesh"],
+            "expires": "2027-01-01",
+            "seats": 50,
+        }
         with open(os.path.join(enterprise_dir, "license.template.json"), "w") as f:
             json.dump(lic, f, indent=2)
         print("  License template -> license.template.json")
