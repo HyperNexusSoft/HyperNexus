@@ -1,17 +1,37 @@
-# Handoff — Executive Protocol R20
+# Handoff — Session R20
 
-## Completed
+## Completed This Session
 
-### Git Upstream & Submodule Sync
-- **Remote Reconciliation**: Fetched tags and branch histories from both `origin` and `origin-backup` remotes.
-- **Feature Branch Reconciliation**: Verified the only remote feature branch `remotes/origin-backup/feature/cloud-dashboard-mcp-sse-389806464713532918` was fully merged into `main` (containing zero unique commits).
-- **Submodules Verification**: Verified that there are no active submodules in the git tree.
+### Account System
+- **APIs**: `POST /api/account/register`, `POST /api/account/login`, `POST /api/account/provision`, `GET /api/account/status`
+- **Handlers**: `account_handlers.go` with password hashing, session tokens, account DB
+- **Flow**: Register → Login → Container provision (called by marketing_agent webhook) → Tenant dashboard redirect
+- **Cloud login page**: `cloud.hypernexus.site` now has real API-backed email/password authentication
 
-### Documentation Metric Sanitization & Versioning
-- **Documentation Refactoring**: Swept all documentation files including `README.md`, `ROADMAP.md`, `TODO.md`, and `demo.html` to systematically replace all static tool, memory, and catalog counts with "**infinite**" or "**unlimited**" descriptors to prevent stale marketing copy.
-- **README Restructuring**: Restructured `README.md` to prioritize local-first open-source capabilities at the top, and integrated a dedicated Corporate Focus section showcasing **HyperNexus** as the authoritative enterprise SaaS cloud installation of the TormentNexus kernel.
-- **Version Governance**: Bumped version to `1.0.0-alpha.255` and synchronized it across all 35 workspace packages and internal dependencies.
-- **Changelog Updates**: Documented versions `1.0.0-alpha.254` and `1.0.0-alpha.255` in `CHANGELOG.md`.
+### Enterprise → Commercial Global Rename
+- Every file, directory, and reference across Go, TypeScript, docs, skills (90+ files)
+- `go/internal/enterprise/` → `go/internal/commercial/`
+- `@tormentnexus/enterprise` → `@tormentnexus/commercial`
+- Dashboard pages, components, landing pages, all skill/SKILL.md files
 
-### Push & Commit
-- Staged all changes and committed the version bump to GitHub, successfully pushing the new tip to the master remote.
+### Bug Fixes
+- **Duplicate route crash**: Removed 3 conflicting `/api/memory/*` endpoint registrations causing panic on startup
+- **Nginx**: Fixed bad `add_header` directive syntax in `tormentnexus.site` config
+
+### Infrastructure
+- **Watchdog restored**: All 6 workers (swarm v7, freellm, sidecar, dashboard, LM Studio)
+- **Scripts archived**: `convert_pages.py`, `fix_stubs2.py`, `list_dashboard_pages.py` → `scripts/archive/`
+- **Version**: v1.0.0-alpha.255 → v1.0.0-alpha.258
+
+## Current State
+- Sidecar: v1.0.0-alpha.255 (local), v1.0.0-alpha.258 (GitHub — account handlers need redeploy)
+- Dashboard: serving on port 7779 (HTTP 200)
+- Workers: swarm, freellm, watchdog all running
+- Server: Hetzner port 8090, PM2 tn-kernel
+
+## For Next Session
+1. Redeploy sidecar to pick up account handlers and commercial rename
+2. Test end-to-end: marketing_agent webhook → provision → login → tenant dashboard
+3. Build admin dashboard page showing container stats per tenant
+4. System tray auto-start — binary builds but doesn't persist
+5. LanceDB vector store re-index from 7,634 memories

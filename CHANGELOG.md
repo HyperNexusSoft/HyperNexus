@@ -1,5 +1,32 @@
 ## [1.0.0-alpha.235] - 2026-07-02
+
+## [1.0.0-alpha.258] - 2026-07-12
+
+### Added
+
+- Account system: register, login, provision, status APIs (POST /api/account/*)
+- Cloud login page: email/password auth with API-backed tenant redirect
+- Container provisioning on Stripe webhook via /api/account/provision
+
+### Changed
+
+- Renamed enterprise -> commercial globally (90+ files, all Go, TS, docs, skills)
+- go/internal/enterprise -> go/internal/commercial
+- @tormentnexus/enterprise -> @tormentnexus/commercial
+
 ### Fixed
+
+- Duplicate route crash: 3 conflicting memory endpoint registrations
+- Nginx tormentnexus.site add_header directive syntax
+
+### Maintenance
+
+- Archived stray root scripts to scripts/archive/
+- Restored watchdog + all 6 workers
+- Pushed origin-backup (caught up 3+3 commits)
+
+### Fixed
+
 - Fixed Next.js Turbopack cache corruption on Windows hosts by injecting the `--webpack` flag in dev scripts and config.
 - Improved tRPC proxy resilience by implementing `AbortController` timeouts to detect offline TS core proxies and return `504 TRPC_UPSTREAM_TIMEOUT`.
 - Updated E2E port configurations.
@@ -9,12 +36,14 @@
 ## [1.0.0-alpha.255] - 2026-07-11
 
 ### Changed
+
 - Sanitized all documentation files (`README.md`, `ROADMAP.md`, `TODO.md`, `demo.html`) to replace exact statistical counts with infinite/unlimited metrics.
 - Updated `README.md` to highlight open-source self-hosting first and added a dedicated Corporate Focus section referencing HyperNexus as the authoritative enterprise offering.
 
 ## [1.0.0-alpha.254] - 2026-07-11
 
 ### Added
+
 - Multi-tenant docker-isolated container provisioning and verification script on the production server.
 - Stripe adjustable seat quantity parameters with a safe limit of 100,000 to comply with Stripe's transaction limits.
 - Moved multi-tenant containers to Alpine Linux to bypass host kernel seccomp conflicts.
