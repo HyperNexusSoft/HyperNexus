@@ -33,7 +33,7 @@ The tormentnexus MCP server is configured and exposes tools via the `mcp_torment
 - `mcp_tormentnexus_jira_create_issue` — create Jira issues
 - `mcp_tormentnexus_confluence_search` — search Confluence
 
-### Enterprise Tools
+### Commercial Tools
 - `mcp_tormentnexus_cloud_troubleshoot` — cloud infrastructure diagnostics
 - `mcp_tormentnexus_generate_devops_pipeline` — CI/CD generation
 - `mcp_tormentnexus_install_mcp_server` — install new MCP servers
@@ -52,4 +52,4 @@ The tormentnexus MCP server is configured and exposes tools via the `mcp_torment
 - Always check scratchpad memory before starting complex multi-step tasks
 - Store important decisions and patterns after completing significant work
 - Use repomap for codebase orientation in unfamiliar projects
-- Route enterprise integrations (Jira, Confluence) through TN Kernel
+- Route commercial integrations (Jira, Confluence) through TN Kernel

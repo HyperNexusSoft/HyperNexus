@@ -486,7 +486,7 @@ func (s *Server) buildLocalBillingStatusResponse() map[string]any {
 	}
 
 	planVal, _ := s.localConfigValue("stripe.plan")
-	plan := "Enterprise Cloud SaaS"
+	plan := "Commercial Cloud SaaS"
 	if planVal != nil && planVal.(string) != "" {
 		plan = planVal.(string)
 	}

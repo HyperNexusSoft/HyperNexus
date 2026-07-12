@@ -40,7 +40,7 @@ const TABS = [
 	{ id: "mcp", label: "MCP & Tool Registry" },
 	{ id: "memory", label: "Memory & GraphRAG" },
 	{ id: "workflows", label: "Swarm & Workflows" },
-	{ id: "settings", label: "Settings & Enterprise" },
+	{ id: "settings", label: "Settings & Commercial" },
 ] as const;
 
 export function sortSessions(sessions: DashboardSessionSummary[]) {

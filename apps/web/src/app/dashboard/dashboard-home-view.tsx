@@ -1400,7 +1400,7 @@ export function DashboardHomeView({
 	const [license, setLicense] = useState<any | null>(null);
 	const [auditLogs, setAuditLogs] = useState<any[]>([]);
 	const [roles, setRoles] = useState<any[]>([]);
-	const [enterpriseLoading, setEnterpriseLoading] = useState(false);
+	const [commercialLoading, setCommercialLoading] = useState(false);
 	const [providerUrl, setProviderUrl] = useState("");
 	const [clientId, setClientId] = useState("");
 	const [clientSecret, setClientSecret] = useState("");
@@ -1410,13 +1410,13 @@ export function DashboardHomeView({
 	const [rolesSaving, setRolesSaving] = useState(false);
 	const [rolesStatus, setRolesStatus] = useState<string | null>(null);
 
-	const fetchEnterprise = useCallback(async () => {
-		setEnterpriseLoading(true);
+	const fetchCommercial = useCallback(async () => {
+		setCommercialLoading(true);
 		try {
 			const [licenseRes, auditRes, rolesRes] = await Promise.all([
-				fetch("/api/go/api/enterprise/license").catch(() => null),
-				fetch("/api/go/api/enterprise/audit?limit=20").catch(() => null),
-				fetch("/api/go/api/enterprise/roles").catch(() => null),
+				fetch("/api/go/api/commercial/license").catch(() => null),
+				fetch("/api/go/api/commercial/audit?limit=20").catch(() => null),
+				fetch("/api/go/api/commercial/roles").catch(() => null),
 			]);
 			if (licenseRes?.ok) {
 				const d = await licenseRes.json();
@@ -1439,14 +1439,14 @@ export function DashboardHomeView({
 				setEditingRoles(JSON.parse(JSON.stringify(rList)));
 			}
 		} catch {}
-		setEnterpriseLoading(false);
+		setCommercialLoading(false);
 	}, []);
 
 	const saveSSO = async () => {
 		setSsoSaving(true);
 		setSsoStatus(null);
 		try {
-			const res = await fetch("/api/go/api/enterprise/sso/update", {
+			const res = await fetch("/api/go/api/commercial/sso/update", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ providerUrl, clientId, clientSecret }),
@@ -1481,7 +1481,7 @@ export function DashboardHomeView({
 		setRolesSaving(true);
 		setRolesStatus(null);
 		try {
-			const res = await fetch("/api/go/api/enterprise/roles/update", {
+			const res = await fetch("/api/go/api/commercial/roles/update", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(editingRoles),
@@ -1501,12 +1501,12 @@ export function DashboardHomeView({
 		searchColdArchive();
 		fetchColdCount();
 		fetchImportedSessions();
-		fetchEnterprise();
+		fetchCommercial();
 	}, [
 		searchColdArchive,
 		fetchColdCount,
 		fetchImportedSessions,
-		fetchEnterprise,
+		fetchCommercial,
 	]);
 
 	const [runningDiagnostics, setRunningDiagnostics] = useState(false);
@@ -3787,7 +3787,7 @@ export function DashboardHomeView({
 													hypernexus.site
 												</div>
 												<div className="text-[10px] text-slate-500 mt-0.5">
-													Enterprise layout
+													Commercial layout
 												</div>
 											</div>
 											<button
@@ -3820,7 +3820,7 @@ export function DashboardHomeView({
 										</div>
 										<p className="text-xs text-slate-400">
 											Deploy TormentNexus as a multi-tenant SaaS platform. Spin
-											up isolated workspaces for enterprise customers.
+											up isolated workspaces for commercial customers.
 										</p>
 										<a
 											href="https://cloud.hypernexus.site"
@@ -3906,7 +3906,7 @@ export function DashboardHomeView({
 					<div className="space-y-4 pt-8 pb-8 border-t border-slate-800">
 						<div className="flex items-center justify-between border-b border-slate-800 pb-2">
 							<h2 className="text-lg font-bold text-white tracking-wide">
-								Enterprise Security &amp; Auditing
+								Commercial Security &amp; Auditing
 							</h2>
 							<span className="text-[10px] text-cyan-400 font-mono uppercase border border-cyan-500/20 bg-cyan-500/5 px-2 py-0.5 rounded font-semibold">
 								Governance &amp; SSO
@@ -3928,8 +3928,8 @@ export function DashboardHomeView({
 										</span>
 									</div>
 									<button
-										onClick={fetchEnterprise}
-										disabled={enterpriseLoading}
+										onClick={fetchCommercial}
+										disabled={commercialLoading}
 										className="px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-white rounded text-xs transition-colors"
 										title="Reload license authority cache"
 									>
@@ -3994,7 +3994,7 @@ export function DashboardHomeView({
 									</div>
 								) : (
 									<div className="text-slate-500 text-xs italic">
-										{enterpriseLoading
+										{commercialLoading
 											? "Retrieving license authority leases..."
 											: "No license lease validated."}
 									</div>

@@ -6,11 +6,11 @@ CodeWhale 0.8.66+ includes a built-in **TormentNexus extension** (`crates/tn-ext
 ### Lifecycle Hooks
 - **SessionStart** — logs session info to TN L2 memory on port 7778
 - **BeforeAgentStart** — injects TN system prompt guidance + searches L2 for relevant context
-- **ToolCall** — logs tool calls; checks 6 dangerous patterns against TN enterprise RBAC
+- **ToolCall** — logs tool calls; checks 6 dangerous patterns against TN commercial RBAC
 - **ToolResult** — auto-stores substantial results from key tools to L2
 - **TurnEnd** — logs tool usage per turn
 - **Input** — expands `@memory:key` inline with L2 content
-- **UserBash** — audit-logs shell commands to TN enterprise audit
+- **UserBash** — audit-logs shell commands to TN commercial audit
 - **ModelSelect** — tracks model changes
 - **SessionCompact** — preserves memory across compaction
 

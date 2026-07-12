@@ -1,4 +1,4 @@
-package enterprise
+package commercial
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// AuditEvent represents a single auditable action in the enterprise tier.
+// AuditEvent represents a single auditable action in the commercial tier.
 type AuditEvent struct {
 	Timestamp time.Time `json:"timestamp"`
 	UserID    string    `json:"userId"`
@@ -24,14 +24,14 @@ type Auditor struct {
 	LogDir string
 }
 
-// NewAuditor creates a new enterprise auditor.
+// NewAuditor creates a new commercial auditor.
 func NewAuditor(workspaceRoot string) *Auditor {
 	logDir := filepath.Join(workspaceRoot, ".tormentnexus", "audit")
 	_ = os.MkdirAll(logDir, 0755)
 	return &Auditor{LogDir: logDir}
 }
 
-// Log records an enterprise audit event.
+// Log records an commercial audit event.
 func (a *Auditor) Log(event AuditEvent) {
 	if event.Timestamp.IsZero() {
 		event.Timestamp = time.Now()
@@ -42,7 +42,7 @@ func (a *Auditor) Log(event AuditEvent) {
 	// Structured logging to stdout
 	log.Printf("[AUDIT] %s", string(data))
 
-	// Persist to enterprise audit JSONL file
+	// Persist to commercial audit JSONL file
 	logPath := filepath.Join(a.LogDir, "audit-"+time.Now().UTC().Format("2006-01-02")+".jsonl")
 	f, err := os.OpenFile(logPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err == nil {

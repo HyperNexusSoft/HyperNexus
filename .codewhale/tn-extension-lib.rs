@@ -21,7 +21,7 @@ use serde_json::{json, Value};
 
 const TN_BASE: &str = "http://127.0.0.1:7778";
 
-/// Dangerous operation patterns checked against enterprise RBAC.
+/// Dangerous operation patterns checked against commercial RBAC.
 const DANGEROUS_PATTERNS: &[&str] = &[
     "rm -rf", "sudo ", "chmod -R 777",
     "DROP TABLE", "DROP DATABASE", "git push --force",
@@ -143,11 +143,11 @@ impl Extension for TormentNexusExtension {
                 let args_str = serde_json::to_string(args).unwrap_or_default().to_lowercase();
                 for pattern in DANGEROUS_PATTERNS {
                     if args_str.contains(pattern) {
-                        self.tn_post("/api/enterprise/authorize", json!({
+                        self.tn_post("/api/commercial/authorize", json!({
                             "tool": tool_name, "action": pattern, "args": args,
                             "timestamp": chrono::Utc::now().to_rfc3339(),
                         })).await;
-                        self.tn_post("/api/enterprise/audit/log", json!({
+                        self.tn_post("/api/commercial/audit/log", json!({
                             "tool": tool_name, "action": pattern, "args": args,
                             "timestamp": chrono::Utc::now().to_rfc3339(),
                             "userId": "codewhale-agent",
@@ -213,7 +213,7 @@ impl Extension for TormentNexusExtension {
             }
 
             HookEvent::UserBash { command } => {
-                self.tn_post("/api/enterprise/audit/log", json!({
+                self.tn_post("/api/commercial/audit/log", json!({
                     "tool": "user_bash", "command": command,
                     "timestamp": chrono::Utc::now().to_rfc3339(),
                 })).await;

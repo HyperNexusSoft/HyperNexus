@@ -300,13 +300,13 @@ def get_skill_content():
 ## Overview
 TormentNexus is your local AI control plane running on port 7778. It provides persistent
 multi-tier memory (L1 scratchpad, L2 vector store, L3 cold archive), MCP tool routing
-across 20+ servers, session import from Claude Code/Aider/Gemini, and enterprise RBAC.
+across 20+ servers, session import from Claude Code/Aider/Gemini, and commercial RBAC.
 
 ## Quick Start
 1. Ensure TN Kernel is running: `http://127.0.0.1:7778/api/runtime/status`
 2. Use `tn_memory_search` before any significant task to recall past context
 3. Store key decisions with `tn_memory_store` using descriptive tags
-4. Route through TN Kernel for enterprise integrations (Jira, Confluence)
+4. Route through TN Kernel for commercial integrations (Jira, Confluence)
 5. Use `tn_tool_search` to find the right tool for any job
 
 ## Available Tools
@@ -325,8 +325,8 @@ across 20+ servers, session import from Claude Code/Aider/Gemini, and enterprise
 3. Use `@memory:keyword` inline for auto-expanded context
 4. Check the cold archive for archived knowledge
 
-## Enterprise Security
-All destructive tool calls are checked against enterprise RBAC policies.
+## Commercial Security
+All destructive tool calls are checked against commercial RBAC policies.
 """
 
 
@@ -350,7 +350,7 @@ def get_plugin_config():
     return """[plugin]
 name = "tormentnexus"
 version = "1.0.0"
-description = "TormentNexus AI Control Plane — persistent memory, MCP routing, session import, enterprise RBAC"
+description = "TormentNexus AI Control Plane — persistent memory, MCP routing, session import, commercial RBAC"
 
 [hooks]
 on_session_start = "tn_context_harvest"
@@ -395,13 +395,13 @@ with persistent memory, tool orchestration, and session management.
 - Persistent multi-tier memory (L1/L2/L3)
 - MCP tool routing across 20+ servers
 - Session import from Claude Code, Aider, Gemini
-- Enterprise RBAC security
+- Commercial RBAC security
 - Skill registry with 5,776+ modules
 
 ## Instructions
 1. Use tn_memory_search before starting any task
 2. Store key decisions as you work
-3. Route enterprise integrations through TN Kernel
+3. Route commercial integrations through TN Kernel
 4. Check the cold archive for historical context
 5. Use tn_context_harvest for complex multi-step tasks
 """
@@ -437,7 +437,7 @@ def install():
                     if mode == "corporate":
                         content = content.replace("TormentNexus", "HyperNexus").replace(
                             "local AI control plane",
-                            "enterprise AI control plane with SSO, RBAC, and audit logging",
+                            "commercial AI control plane with SSO, RBAC, and audit logging",
                         )
                     with open(os.path.join(skill_dir, "SKILL.md"), "w") as f:
                         f.write(content)
@@ -505,11 +505,11 @@ def install():
                 print(f"  {client_name} -> {base}")
                 installed += 1
 
-    # Corporate mode: install enterprise config
+    # Corporate mode: install commercial config
     if mode == "corporate":
-        print("\n--- Installing Enterprise Configuration ---")
-        enterprise_dir = os.path.join(HOME, ".tormentnexus", "enterprise")
-        os.makedirs(enterprise_dir, exist_ok=True)
+        print("\n--- Installing Commercial Configuration ---")
+        commercial_dir = os.path.join(HOME, ".tormentnexus", "commercial")
+        os.makedirs(commercial_dir, exist_ok=True)
 
         # SSO/OIDC config
         sso_config = {
@@ -519,7 +519,7 @@ def install():
             "claim_mapping": {"email": "email", "groups": "groups", "name": "name"},
             "session_timeout": 3600,
         }
-        with open(os.path.join(enterprise_dir, "sso.json"), "w") as f:
+        with open(os.path.join(commercial_dir, "sso.json"), "w") as f:
             json.dump(sso_config, f, indent=2)
         print("  SSO/OIDC config -> sso.json")
 
@@ -538,7 +538,7 @@ def install():
                 "viewer": {"permissions": ["memory:read"], "scopes": []},
             }
         }
-        with open(os.path.join(enterprise_dir, "rbac.json"), "w") as f:
+        with open(os.path.join(commercial_dir, "rbac.json"), "w") as f:
             json.dump(rbac, f, indent=2)
         print("  RBAC roles -> rbac.json")
 
@@ -550,7 +550,7 @@ def install():
             "retention_days": 90,
             "log_level": "info",
         }
-        with open(os.path.join(enterprise_dir, "audit.json"), "w") as f:
+        with open(os.path.join(commercial_dir, "audit.json"), "w") as f:
             json.dump(audit, f, indent=2)
         print("  Audit logging -> audit.json")
 
@@ -562,7 +562,7 @@ def install():
             "resource_limits": {"cpu": "1.5", "memory": "2G"},
             "auto_provision": True,
         }
-        with open(os.path.join(enterprise_dir, "tenants.json"), "w") as f:
+        with open(os.path.join(commercial_dir, "tenants.json"), "w") as f:
             json.dump(tenant, f, indent=2)
         print("  Tenant isolation -> tenants.json")
 
@@ -573,7 +573,7 @@ def install():
             "expires": "2027-01-01",
             "seats": 50,
         }
-        with open(os.path.join(enterprise_dir, "license.template.json"), "w") as f:
+        with open(os.path.join(commercial_dir, "license.template.json"), "w") as f:
             json.dump(lic, f, indent=2)
         print("  License template -> license.template.json")
 

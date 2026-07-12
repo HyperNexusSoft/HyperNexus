@@ -1,13 +1,13 @@
 ---
 name: tormentnexus
-description: TormentNexus AI control plane — L2 vector memory, semantic tool discovery, skill registry, session import, code search, subagent orchestration, and enterprise RBAC
+description: TormentNexus AI control plane — L2 vector memory, semantic tool discovery, skill registry, session import, code search, subagent orchestration, and commercial RBAC
 metadata:
   short-description: TormentNexus AI control plane
 ---
 
 # TormentNexus Integration
 
-TormentNexus is a local AI control plane running on port 7778 with persistent L2 vector memory, semantic tool discovery, imported sessions, a skill registry, enterprise RBAC, and subagent orchestration.
+TormentNexus is a local AI control plane running on port 7778 with persistent L2 vector memory, semantic tool discovery, imported sessions, a skill registry, commercial RBAC, and subagent orchestration.
 
 CodeWhale connects to it via MCP stdio (`tormentnexus.exe mcp`). The MCP server is auto-configured in `~/.codewhale/mcp.json` by the TN installer.
 
@@ -19,7 +19,7 @@ CodeWhale ⇄ MCP (tormentnexus.exe mcp) ⇄ TN Kernel (port 7778)
                                      ⇄ SQLite L2 vector memory
                                      ⇄ Session import store (542+ sessions)
                                      ⇄ Skill registry (5,776+ modules)
-                                     ⇄ Enterprise RBAC
+                                     ⇄ Commercial RBAC
 ```
 
 The Kernel runs as the "TormentNexusKernel" Windows service on port 7778.
@@ -74,7 +74,7 @@ The `tormentnexus` MCP server provides 49+ tools. Tools are prefixed `mcp_tormen
 | `mcp_tormentnexus_submit_chat_input` | Submit chat input |
 | `mcp_tormentnexus_advance_chat` | Advance chat session |
 
-### Enterprise & Integrations
+### Commercial & Integrations
 | Tool | Description |
 |------|-------------|
 | `mcp_tormentnexus_jira_create_issue` | Create a Jira issue |
@@ -210,8 +210,8 @@ When searching code across the workspace:
 - **File/pattern**: Use `scope=file`
 - Or directly use `mcp_tormentnexus_grep` for simple regex
 
-### 6. Enterprise RBAC
-The TN Kernel enforces enterprise authorization for dangerous operations. If a destructive tool call is blocked, use `mcp_tormentnexus_memory_scratchpad_set` or the TN Kernel memory API to record what you were doing and why before proceeding with explicitly authorized alternatives.
+### 6. Commercial RBAC
+The TN Kernel enforces commercial authorization for dangerous operations. If a destructive tool call is blocked, use `mcp_tormentnexus_memory_scratchpad_set` or the TN Kernel memory API to record what you were doing and why before proceeding with explicitly authorized alternatives.
 
 ### 7. Per-Turn Memory Injection
 After each significant user request, consider:
@@ -311,7 +311,7 @@ Dashboard (if running): `http://127.0.0.1:7779/dashboard`
 ## Security Notes
 
 - The Kernel runs on `127.0.0.1:7778` — localhost only
-- Enterprise RBAC is enforced at the TN Kernel level
+- Commercial RBAC is enforced at the TN Kernel level
 - Dangerous operations (`rm -rf`, `sudo`, `DROP TABLE`, `git push --force`) are blocked by default unless explicitly authorized
-- All tool calls are audited in the TN Kernel's enterprise audit log
+- All tool calls are audited in the TN Kernel's commercial audit log
 - User-initiated shell commands are also audited

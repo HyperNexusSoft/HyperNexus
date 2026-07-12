@@ -13,11 +13,11 @@ Adds `crates/tn-extension` — a native Rust extension implementing the `codewha
 ### Extension Lifecycle Hooks
 - **SessionStart** — logs session to TN L2 memory at `http://127.0.0.1:7778/api/memory/add`
 - **BeforeAgentStart** — injects TN system prompt guidance + searches L2 for relevant context per turn
-- **ToolCall** — logs tool calls; checks 6 dangerous patterns (`rm -rf`, `sudo`, `DROP TABLE`, etc.) against `POST /api/enterprise/authorize`
+- **ToolCall** — logs tool calls; checks 6 dangerous patterns (`rm -rf`, `sudo`, `DROP TABLE`, etc.) against `POST /api/commercial/authorize`
 - **ToolResult** — auto-stores substantial results (>=100 chars) from 6 key tools to L2
 - **TurnEnd** — logs tool usage summary per turn
 - **Input** — expands `@memory:key` inline with L2 content from TN Kernel
-- **UserBash** — audit-logs shell commands to TN enterprise audit
+- **UserBash** — audit-logs shell commands to TN commercial audit
 - **ModelSelect** — tracks model changes to L2
 - **SessionBeforeCompact** / **SessionCompact** — preserves memory across compaction boundaries
 

@@ -397,7 +397,7 @@ export default function ProviderAuthBillingMatrix() {
                             <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3">
                                 <div>
                                     <div className="text-xs text-zinc-500 uppercase">Subscription Plan</div>
-                                    <div className="text-base font-bold text-white mt-1">{status?.plan_name || "Enterprise Cloud SaaS"}</div>
+                                    <div className="text-base font-bold text-white mt-1">{status?.plan_name || "Commercial Cloud SaaS"}</div>
                                 </div>
                                 <Badge variant="outline" className="bg-cyan-500/10 text-cyan-400 border-cyan-500/20 text-xs">
                                     {(status?.status || "ACTIVE (PAID)").toUpperCase()}
@@ -573,7 +573,7 @@ export default function ProviderAuthBillingMatrix() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-3">
-                            <div className="text-xs text-zinc-400 mb-2">Configure functional permissions across enterprise roles:</div>
+                            <div className="text-xs text-zinc-400 mb-2">Configure functional permissions across commercial roles:</div>
                             <div className="space-y-3 text-xs">
                                 <div className="space-y-1">
                                     <div className="font-semibold text-zinc-300">Admin Role</div>

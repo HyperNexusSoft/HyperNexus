@@ -11,12 +11,12 @@ echo This will install TormentNexus support for ALL detected
 echo AI coding clients on your system (38+ supported).
 if "%MODE%"=="corporate" (
     echo.
-    echo *** CORPORATE MODE - Enterprise Features ***
+    echo *** CORPORATE MODE - Commercial Features ***
     echo     SSO/OIDC configuration for identity providers
     echo     RBAC roles (admin, developer, auditor, viewer)
     echo     Audit logging with daily rotation
     echo     Multi-tenant isolation config
-    echo     Enterprise license template
+    echo     Commercial license template
     echo.
 )
 echo Press Ctrl+C to cancel, or any key to continue...

@@ -43,7 +43,7 @@ func stripePriceID(plan string) string {
 		return os.Getenv("STRIPE_PRICE_ID_BASIC")
 	case "pro":
 		return os.Getenv("STRIPE_PRICE_ID_PRO")
-	case "enterprise":
+	case "commercial":
 		return os.Getenv("STRIPE_PRICE_ID_ENTERPRISE")
 	}
 	return os.Getenv("STRIPE_PRICE_ID_ENTERPRISE")
@@ -96,12 +96,12 @@ func availablePlans() []StripePlan {
 			Features:    []string{"5 users", "1M tokens/month", "Priority support", "API access", "Custom models"},
 		},
 		{
-			ID:          "enterprise",
-			Name:        "Enterprise Cloud SaaS",
+			ID:          "commercial",
+			Name:        "Commercial Cloud SaaS",
 			Description: "For organizations with advanced needs",
 			Price:       499.00,
 			Interval:    "month",
-			PriceID:     stripePriceID("enterprise"),
+			PriceID:     stripePriceID("commercial"),
 			Features:    []string{"Unlimited users", "Unlimited tokens", "24/7 support", "SSO/SAML", "Dedicated infrastructure", "SLA guarantees"},
 		},
 	}

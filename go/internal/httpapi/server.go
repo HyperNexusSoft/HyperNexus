@@ -14,7 +14,7 @@ import (
 	"github.com/MDMAtk/TormentNexus/internal/ai"
 	"github.com/MDMAtk/TormentNexus/internal/catalogingestor"
 	"github.com/MDMAtk/TormentNexus/internal/codeexec"
-	"github.com/MDMAtk/TormentNexus/internal/enterprise"
+	"github.com/MDMAtk/TormentNexus/internal/commercial"
 	memorypkg "github.com/MDMAtk/TormentNexus/internal/memory"
 	"github.com/MDMAtk/TormentNexus/internal/memorystore"
 	"io"
@@ -188,9 +188,9 @@ type Server struct {
 	conversationalPredictor *mcp.ConversationalPredictor
 	udpGossip               *mesh.GossipProtocol
 
-	// --- Enterprise Security (alpha.129+) ---
-	enterpriseWrapper *enterprise.EnterpriseWrapper
-	auditor           *enterprise.Auditor
+	// --- Commercial Security (alpha.129+) ---
+	commercialWrapper *commercial.CommercialWrapper
+	auditor           *commercial.Auditor
 }
 
 // eventBusAdapter wraps *eventbus.EventBus so it satisfies the string-based
@@ -701,9 +701,9 @@ func New(cfg config.Config, detector controlplane.ToolProvider) *Server {
 		fmt.Printf("[Gossip] Failed to start discovery: %v\n", err)
 	}
 
-	// Initialize Enterprise Security Wrapper (with placeholder provider)
-	server.auditor = enterprise.NewAuditor(cfg.WorkspaceRoot)
-	server.enterpriseWrapper = enterprise.NewEnterpriseWrapper(enterprise.NewSimpleRBACProvider(), cfg.WorkspaceRoot)
+	// Initialize Commercial Security Wrapper (with placeholder provider)
+	server.auditor = commercial.NewAuditor(cfg.WorkspaceRoot)
+	server.commercialWrapper = commercial.NewCommercialWrapper(commercial.NewSimpleRBACProvider(), cfg.WorkspaceRoot)
 	server.consensusEngine = orchestration.NewConsensusEngine(server.debateHistory, memoryVS)
 	server.eventBus.OnGlobal(func(ev eventbus.SystemEvent) {
 		if data, err := json.Marshal(ev); err == nil {
@@ -1038,9 +1038,9 @@ func (s *Server) PreWarmCaches() {
 func (s *Server) ListenAndServe(ctx context.Context) error {
 	var handler http.Handler = s.mux
 
-	// Wrap with Enterprise Security if enabled
-	if s.enterpriseWrapper != nil {
-		handler = s.enterpriseWrapper.Middleware(handler)
+	// Wrap with Commercial Security if enabled
+	if s.commercialWrapper != nil {
+		handler = s.commercialWrapper.Middleware(handler)
 	}
 
 	httpServer := &http.Server{
@@ -1503,11 +1503,11 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/settings/environment", s.handleSettingsEnvironment)
 	s.mux.HandleFunc("/api/settings/mcp-servers", s.handleSettingsMCPServers)
 	s.mux.HandleFunc("/api/settings/provider-key", s.handleSettingsProviderKey)
-	s.mux.HandleFunc("/api/enterprise/license", s.handleEnterpriseLicense)
-	s.mux.HandleFunc("/api/enterprise/audit", s.handleEnterpriseAudit)
-	s.mux.HandleFunc("/api/enterprise/roles", s.handleEnterpriseRoles)
-	s.mux.HandleFunc("/api/enterprise/sso/update", s.handleEnterpriseUpdateSSO)
-	s.mux.HandleFunc("/api/enterprise/roles/update", s.handleEnterpriseUpdateRoles)
+	s.mux.HandleFunc("/api/commercial/license", s.handleCommercialLicense)
+	s.mux.HandleFunc("/api/commercial/audit", s.handleCommercialAudit)
+	s.mux.HandleFunc("/api/commercial/roles", s.handleCommercialRoles)
+	s.mux.HandleFunc("/api/commercial/sso/update", s.handleCommercialUpdateSSO)
+	s.mux.HandleFunc("/api/commercial/roles/update", s.handleCommercialUpdateRoles)
 	s.mux.HandleFunc("/api/skills/get", s.handleSkillGet)
 	s.mux.HandleFunc("/api/skills/list", s.handleSkillList)
 	s.mux.HandleFunc("/api/skills/search", s.handleSkillSearch)
@@ -7229,7 +7229,7 @@ func (s *Server) handleAgentRunTool(w http.ResponseWriter, r *http.Request) {
 	if s.toolsRegistry != nil && s.toolsRegistry.HasTool(payload.Name) && !isNativeDisabled {
 		result, err := s.toolsRegistry.Execute(r.Context(), payload.Name, payload.Arguments)
 
-		// Audit Tool Execution (Enterprise Tier)
+		// Audit Tool Execution (Commercial Tier)
 		if s.auditor != nil {
 			status := "SUCCESS"
 			if err != nil {

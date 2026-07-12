@@ -19,7 +19,7 @@ interface RBACRole {
   description?: string;
 }
 
-export default function EnterprisePage() {
+export default function CommercialPage() {
   const [license, setLicense] = useState<LicenseInfo | null>(null);
   const [auditLogs, setAuditLogs] = useState<any[]>([]);
   const [roles, setRoles] = useState<RBACRole[]>([]);
@@ -41,9 +41,9 @@ export default function EnterprisePage() {
     setLoading(true);
     try {
       const [licenseRes, auditRes, rolesRes] = await Promise.all([
-        fetch("/api/go/api/enterprise/license").catch(() => null),
-        fetch("/api/go/api/enterprise/audit?limit=20").catch(() => null),
-        fetch("/api/go/api/enterprise/roles").catch(() => null),
+        fetch("/api/go/api/commercial/license").catch(() => null),
+        fetch("/api/go/api/commercial/audit?limit=20").catch(() => null),
+        fetch("/api/go/api/commercial/roles").catch(() => null),
       ]);
       if (licenseRes?.ok) {
         const d = await licenseRes.json();
@@ -77,7 +77,7 @@ export default function EnterprisePage() {
     setSsoSaving(true);
     setSsoStatus(null);
     try {
-      const res = await fetch("/api/go/api/enterprise/sso/update", {
+      const res = await fetch("/api/go/api/commercial/sso/update", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ providerUrl, clientId, clientSecret }),
@@ -109,7 +109,7 @@ export default function EnterprisePage() {
     setRolesSaving(true);
     setRolesStatus(null);
     try {
-      const res = await fetch("/api/go/api/enterprise/roles/update", {
+      const res = await fetch("/api/go/api/commercial/roles/update", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editingRoles),
@@ -132,7 +132,7 @@ export default function EnterprisePage() {
         <div className="flex items-center gap-3">
           <Shield className="w-5 h-5 text-amber-400" />
           <div>
-            <h1 className="text-lg font-semibold text-white">Enterprise Security</h1>
+            <h1 className="text-lg font-semibold text-white">Commercial Security</h1>
             <p className="text-xs text-zinc-500 mt-0.5">
               License validation, RBAC permissions, and audit logging
             </p>
@@ -142,7 +142,7 @@ export default function EnterprisePage() {
           onClick={fetchAll}
           disabled={loading}
           className="px-3 py-1.5 bg-zinc-800 rounded hover:bg-zinc-700 text-xs disabled:opacity-50 flex items-center gap-1.5"
-          title="Refresh enterprise security data"
+          title="Refresh commercial security data"
         >
           {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
           Refresh

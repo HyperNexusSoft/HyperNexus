@@ -1,4 +1,4 @@
-package enterprise
+package commercial
 
 import (
 	"context"
@@ -9,14 +9,14 @@ import (
 	"sync"
 )
 
-// SecurityProvider defines the interface for enterprise-grade security features.
+// SecurityProvider defines the interface for commercial-grade security features.
 type SecurityProvider interface {
 	ValidateSSO(ctx context.Context, token string) (bool, error)
 	Authorize(ctx context.Context, userID string, resource string, action string) (bool, error)
 }
 
-// EnterpriseWrapper wraps the core execution engine with enterprise security.
-type EnterpriseWrapper struct {
+// CommercialWrapper wraps the core execution engine with commercial security.
+type CommercialWrapper struct {
 	provider   SecurityProvider
 	configPath string
 	mu         sync.RWMutex
@@ -24,15 +24,15 @@ type EnterpriseWrapper struct {
 	roles      []map[string]any
 }
 
-type EnterpriseConfig struct {
+type CommercialConfig struct {
 	SSO   map[string]string `json:"sso"`
 	Roles []map[string]any  `json:"roles"`
 }
 
-// NewEnterpriseWrapper creates a new wrapper with the given provider.
-func NewEnterpriseWrapper(provider SecurityProvider, workspaceRoot string) *EnterpriseWrapper {
-	cfgPath := filepath.Join(workspaceRoot, ".tormentnexus", "enterprise_config.json")
-	ew := &EnterpriseWrapper{
+// NewCommercialWrapper creates a new wrapper with the given provider.
+func NewCommercialWrapper(provider SecurityProvider, workspaceRoot string) *CommercialWrapper {
+	cfgPath := filepath.Join(workspaceRoot, ".tormentnexus", "commercial_config.json")
+	ew := &CommercialWrapper{
 		provider:   provider,
 		configPath: cfgPath,
 		ssoConfig:  make(map[string]string),
@@ -51,7 +51,7 @@ func defaultRoles() []map[string]any {
 }
 
 // Load loads the configuration from disk.
-func (ew *EnterpriseWrapper) Load() error {
+func (ew *CommercialWrapper) Load() error {
 	ew.mu.Lock()
 	defer ew.mu.Unlock()
 
@@ -60,7 +60,7 @@ func (ew *EnterpriseWrapper) Load() error {
 		return err
 	}
 
-	var config EnterpriseConfig
+	var config CommercialConfig
 	if err := json.Unmarshal(data, &config); err != nil {
 		return err
 	}
@@ -75,9 +75,9 @@ func (ew *EnterpriseWrapper) Load() error {
 }
 
 // Save saves the current configuration to disk.
-func (ew *EnterpriseWrapper) Save() error {
+func (ew *CommercialWrapper) Save() error {
 	ew.mu.RLock()
-	config := EnterpriseConfig{
+	config := CommercialConfig{
 		SSO:   ew.ssoConfig,
 		Roles: ew.roles,
 	}
@@ -95,15 +95,15 @@ func (ew *EnterpriseWrapper) Save() error {
 	return os.WriteFile(ew.configPath, data, 0644)
 }
 
-// Info returns enterprise license and security info.
-func (ew *EnterpriseWrapper) Info() map[string]any {
+// Info returns commercial license and security info.
+func (ew *CommercialWrapper) Info() map[string]any {
 	ew.mu.RLock()
 	defer ew.mu.RUnlock()
 
 	return map[string]any{
 		"valid":       true,
-		"licensedTo":  "TormentNexus Enterprise",
-		"tier":        "enterprise",
+		"licensedTo":  "TormentNexus Commercial",
+		"tier":        "commercial",
 		"maxNodes":    10,
 		"features":    []string{"sso", "rbac", "audit", "encryption"},
 		"expiresAt":   "",
@@ -112,14 +112,14 @@ func (ew *EnterpriseWrapper) Info() map[string]any {
 }
 
 // GetRoles returns the available RBAC roles.
-func (ew *EnterpriseWrapper) GetRoles() []map[string]any {
+func (ew *CommercialWrapper) GetRoles() []map[string]any {
 	ew.mu.RLock()
 	defer ew.mu.RUnlock()
 	return ew.roles
 }
 
 // UpdateSSO updates the SSO configuration.
-func (ew *EnterpriseWrapper) UpdateSSO(sso map[string]string) error {
+func (ew *CommercialWrapper) UpdateSSO(sso map[string]string) error {
 	ew.mu.Lock()
 	ew.ssoConfig = sso
 	ew.mu.Unlock()
@@ -127,17 +127,17 @@ func (ew *EnterpriseWrapper) UpdateSSO(sso map[string]string) error {
 }
 
 // UpdateRoles updates the RBAC roles.
-func (ew *EnterpriseWrapper) UpdateRoles(roles []map[string]any) error {
+func (ew *CommercialWrapper) UpdateRoles(roles []map[string]any) error {
 	ew.mu.Lock()
 	ew.roles = roles
 	ew.mu.Unlock()
 	return ew.Save()
 }
 
-// Middleware provides an HTTP middleware for enterprise security checks.
-func (ew *EnterpriseWrapper) Middleware(next http.Handler) http.Handler {
+// Middleware provides an HTTP middleware for commercial security checks.
+func (ew *CommercialWrapper) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		token := r.Header.Get("X-Enterprise-SSO")
+		token := r.Header.Get("X-Commercial-SSO")
 		if token != "" && ew.provider != nil {
 			valid, err := ew.provider.ValidateSSO(r.Context(), token)
 			if err != nil || !valid {

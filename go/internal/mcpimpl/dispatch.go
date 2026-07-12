@@ -1419,7 +1419,7 @@ var dispatchMap = map[string]func(ctx context.Context, args map[string]interface
 	"HandleGetElement":                                 HandleGetElement,                                 // from icepanel_mcp_server.go
 	"HandleGetElementInfo":                             HandleGetElementInfo,                             // from dom_pointer_mcp_server.go
 	"HandleGetEmails":                                  HandleGetEmails,                                  // from mcp_server_email.go
-	"HandleGetEmployee":                                HandleGetEmployee,                                // from hebbian_mind_enterprise.go
+	"HandleGetEmployee":                                HandleGetEmployee,                                // from hebbian_mind_commercial.go
 	"HandleGetEmployeeById":                            HandleGetEmployeeById,                            // from mcp_bamboohr.go
 	"HandleGetEmployeeDirectory":                       HandleGetEmployeeDirectory,                       // from mcp_bamboohr.go
 	"HandleGetEmployeeStatus":                          HandleGetEmployeeStatus,                          // from hermes_paperclip_adapter.go
@@ -2589,7 +2589,7 @@ var dispatchMap = map[string]func(ctx context.Context, args map[string]interface
 	"HandleListEC2Instances":                                      HandleListEC2Instances,                                      // from mcp_server_aws.go
 	"HandleListEmails_outlook_assistant":                          HandleListEmails_outlook_assistant,                          // from outlook_assistant.go
 	"HandleListEmails_zoho_mail_mcp":                              HandleListEmails_zoho_mail_mcp,                              // from zoho_mail_mcp.go
-	"HandleListEmployees":                                         HandleListEmployees,                                         // from hebbian_mind_enterprise.go
+	"HandleListEmployees":                                         HandleListEmployees,                                         // from hebbian_mind_commercial.go
 	"HandleListEndpoints_genlobe_mcp_server":                      HandleListEndpoints_genlobe_mcp_server,                      // from genlobe_mcp_server.go
 	"HandleListEndpoints_mcp_link":                                HandleListEndpoints_mcp_link,                                // from mcp_link.go
 	"HandleListEntities":                                          HandleListEntities,                                          // from newrelic_mcp.go

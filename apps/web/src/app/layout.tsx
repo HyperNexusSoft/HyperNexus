@@ -23,14 +23,14 @@ export const metadata: Metadata = {
 };
 
 import { TRPCProvider } from "../utils/TRPCProvider";
-import { Toaster, enterpriseRegistry } from "@tormentnexus/ui";
+import { Toaster, commercialRegistry } from "@tormentnexus/ui";
 import { Navigation } from "../components/Navigation";
-import { OidcConfig, RbacManager, AuditLogViewer } from "@tormentnexus/enterprise";
+import { OidcConfig, RbacManager, AuditLogViewer } from "@tormentnexus/commercial";
 
-// Bind the enterprise compliance components to the runtime registry
-enterpriseRegistry.OidcConfig = OidcConfig;
-enterpriseRegistry.RbacManager = RbacManager;
-enterpriseRegistry.AuditLogViewer = AuditLogViewer;
+// Bind the commercial compliance components to the runtime registry
+commercialRegistry.OidcConfig = OidcConfig;
+commercialRegistry.RbacManager = RbacManager;
+commercialRegistry.AuditLogViewer = AuditLogViewer;
 
 
 function getVersionLabel(): string {

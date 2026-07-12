@@ -505,10 +505,10 @@ func HandleVolcanoAgentExecute(ctx context.Context, args map[string]interface{})
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// 50. ENScan_GO  (4,430 ★) — Chinese enterprise info scanner
+// 50. ENScan_GO  (4,430 ★) — Chinese commercial info scanner
 // ═══════════════════════════════════════════════════════════════════
 
-// HandleENScanCompany scans Chinese enterprise information.
+// HandleENScanCompany scans Chinese commercial information.
 func HandleENScanCompany(ctx context.Context, args map[string]interface{}) (ToolResponse, error) {
 	keyword, _ := getString(args, "keyword")
 	if keyword == "" {

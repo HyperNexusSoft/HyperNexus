@@ -368,19 +368,19 @@ func (s *Server) handleColdArchivePromote(w http.ResponseWriter, r *http.Request
 	writeJSON(w, http.StatusOK, map[string]any{"success": true, "data": record})
 }
 
-func (s *Server) handleEnterpriseLicense(w http.ResponseWriter, r *http.Request) {
-	if s.enterpriseWrapper == nil {
+func (s *Server) handleCommercialLicense(w http.ResponseWriter, r *http.Request) {
+	if s.commercialWrapper == nil {
 		writeJSON(w, http.StatusOK, map[string]any{
 			"success": true,
 			"data":    map[string]any{"valid": false, "licensedTo": "", "features": []string{}},
 		})
 		return
 	}
-	info := s.enterpriseWrapper.Info()
+	info := s.commercialWrapper.Info()
 	writeJSON(w, http.StatusOK, map[string]any{"success": true, "data": info})
 }
 
-func (s *Server) handleEnterpriseAudit(w http.ResponseWriter, r *http.Request) {
+func (s *Server) handleCommercialAudit(w http.ResponseWriter, r *http.Request) {
 	limit := 20
 	if l := r.URL.Query().Get("limit"); l != "" {
 		if p, err := strconv.Atoi(l); err == nil && p > 0 && p <= 100 {
@@ -395,22 +395,22 @@ func (s *Server) handleEnterpriseAudit(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]any{"success": true, "data": logs})
 }
 
-func (s *Server) handleEnterpriseRoles(w http.ResponseWriter, r *http.Request) {
-	if s.enterpriseWrapper == nil {
+func (s *Server) handleCommercialRoles(w http.ResponseWriter, r *http.Request) {
+	if s.commercialWrapper == nil {
 		writeJSON(w, http.StatusOK, map[string]any{"success": true, "data": []map[string]any{}})
 		return
 	}
-	roles := s.enterpriseWrapper.GetRoles()
+	roles := s.commercialWrapper.GetRoles()
 	writeJSON(w, http.StatusOK, map[string]any{"success": true, "data": roles})
 }
 
-func (s *Server) handleEnterpriseUpdateSSO(w http.ResponseWriter, r *http.Request) {
+func (s *Server) handleCommercialUpdateSSO(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	if s.enterpriseWrapper == nil {
-		writeJSON(w, http.StatusServiceUnavailable, map[string]any{"success": false, "error": "enterprise service unavailable"})
+	if s.commercialWrapper == nil {
+		writeJSON(w, http.StatusServiceUnavailable, map[string]any{"success": false, "error": "commercial service unavailable"})
 		return
 	}
 	var sso map[string]string
@@ -418,20 +418,20 @@ func (s *Server) handleEnterpriseUpdateSSO(w http.ResponseWriter, r *http.Reques
 		writeJSON(w, http.StatusBadRequest, map[string]any{"success": false, "error": err.Error()})
 		return
 	}
-	if err := s.enterpriseWrapper.UpdateSSO(sso); err != nil {
+	if err := s.commercialWrapper.UpdateSSO(sso); err != nil {
 		writeJSON(w, http.StatusInternalServerError, map[string]any{"success": false, "error": err.Error()})
 		return
 	}
 	writeJSON(w, http.StatusOK, map[string]any{"success": true})
 }
 
-func (s *Server) handleEnterpriseUpdateRoles(w http.ResponseWriter, r *http.Request) {
+func (s *Server) handleCommercialUpdateRoles(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	if s.enterpriseWrapper == nil {
-		writeJSON(w, http.StatusServiceUnavailable, map[string]any{"success": false, "error": "enterprise service unavailable"})
+	if s.commercialWrapper == nil {
+		writeJSON(w, http.StatusServiceUnavailable, map[string]any{"success": false, "error": "commercial service unavailable"})
 		return
 	}
 	var roles []map[string]any
@@ -439,7 +439,7 @@ func (s *Server) handleEnterpriseUpdateRoles(w http.ResponseWriter, r *http.Requ
 		writeJSON(w, http.StatusBadRequest, map[string]any{"success": false, "error": err.Error()})
 		return
 	}
-	if err := s.enterpriseWrapper.UpdateRoles(roles); err != nil {
+	if err := s.commercialWrapper.UpdateRoles(roles); err != nil {
 		writeJSON(w, http.StatusInternalServerError, map[string]any{"success": false, "error": err.Error()})
 		return
 	}

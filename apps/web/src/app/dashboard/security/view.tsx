@@ -10,7 +10,7 @@ import { Button } from '@tormentnexus/ui';
 import { ScrollArea } from '@tormentnexus/ui';
 import { Shield, Lock, Rocket, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
-import { OidcConfig, RbacManager } from '@tormentnexus/enterprise';
+import { OidcConfig, RbacManager } from '@tormentnexus/commercial';
 
 interface AuditLogEntry {
     timestamp: number;
