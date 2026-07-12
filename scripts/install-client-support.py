@@ -31,7 +31,8 @@ CLIENTS = {
         "skills": True,
         "mcp": True,
         "ext": True,
-        "commands": False,
+        "agents": True,
+        "commands": True,
         "hooks": False,
     },
     "codex": {
@@ -47,8 +48,8 @@ CLIENTS = {
         "skills": True,
         "mcp": True,
         "commands": True,
-        "hooks": False,
-        "ext": False,
+        "hooks": True,
+        "ext": True,
     },
     "antigravity": {
         "dirs": [".antigravity", ".gemini/antigravity-ide"],
@@ -88,8 +89,8 @@ CLIENTS = {
         "mcp": True,
         "ext": True,
         "skills": True,
-        "hooks": False,
-        "commands": False,
+        "hooks": True,
+        "commands": True,
     },
     "iflow": {
         "dirs": [".iflow"],
@@ -121,16 +122,16 @@ CLIENTS = {
         "skills": True,
         "mcp": True,
         "commands": True,
-        "hooks": False,
-        "ext_dirs": ["extensions"],
+        "hooks": True,
+        "ext": True,
     },
     "windsurf": {
         "dirs": [".windsurf"],
         "mcp": True,
         "skills": True,
         "commands": True,
-        "hooks": False,
-        "ext": False,
+        "hooks": True,
+        "ext": True,
     },
     "zed": {
         "dirs": [".zed"],
@@ -187,7 +188,7 @@ CLIENTS = {
         "mcp": True,
         "plugin": True,
         "ext": True,
-        "commands": False,
+        "commands": True,
     },
     # Category 5: Orchestrators
     "omnigent": {
