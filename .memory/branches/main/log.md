@@ -91412,3 +91412,33 @@ done && echo "Done" && echo "=== Verify ZERO ===" && grep -rn "sidecar\|Sidecar\
 **Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && echo "=== Final sidecar check ===" && grep -rnc "sidecar\|Sidecar\|GO_SIDECAR\|goSidecar" go/ apps/web/src/ scripts/ landing/ .github/ .claude/ .codewhale/ .codex/ .gemini/ .cursor/ .pi/ .antigravity/ .hermes/ .jules/ .roo/ .windsurf/ .goose/ .grok/ .aider/ .vscode/ .editor-configs/ .openhands/ .kiro/ 2>/dev/null | grep -v ":0$" | grep -v "node_modules\|\.next\|\.git\|archive\|_test" | head -10 && echo "---" || echo "ABSOLUTELY ZERO SIDECAR"")
 **Observation**: bash: success
 
+## Turn 5 | 2026-07-12T15:20:40.977Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: Only 3 remaining — they're in `go/cmd/tormentnexus-gui/frontend/dist/` which is a BUILD DISTRIBUTION directory (compiled frontend JS bundles). These are in minified JS files that were compiled from the dashboard source. They should be cleaned/regenerated, not sed'd (they're binary-ish minified files). The source code is clean.
+
+Let me commit and rebuild the GUI frontend to regenerate these properly.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && echo "=== Those 3 are compiled frontend dist (minified JS bundles) ===" && echo "Need to rebuild GUI frontend to regenerate clean dist" && echo "=== Commit source rename ===" && git add -A && git status --short | head -10 && git commit -m "refactor: remove ALL remaining sidecar references -> kernel
+
+- apps/web: GO_SIDECAR -> TN_KERNEL, goSidecar -> tnKernel
+- All TypeScript route files: sidecarURL -> kernelURL
+- Comments, strings, variable names - everything
+- Remaining 3 hits in compiled frontend dist (will regenerate on next build)" 2>&1 | tail -3", timeout: 15)
+**Observation**: bash: success
+
+## Turn 6 | 2026-07-12T15:20:59.712Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: Wait - I see `scripts/register_services.ps1` had "sidecar" removed too. That might have been the ONLY reference. Let me also check if `useGoSidecarData.ts` was renamed — I see it in the modified files. The filename should probably be renamed too.
+
+Let me check and fix the filename.
+**Action**: bash(command: "ls ~/workspace/tormentnexus/apps/web/src/hooks/useGoSidecarData.ts 2>/dev/null && echo "Still has old filename" || echo "Already renamed" && echo "---" && echo "=== Rename the hook file ===" && mv ~/workspace/tormentnexus/apps/web/src/hooks/useGoSidecarData.ts ~/workspace/tormentnexus/apps/web/src/hooks/useTNKernelData.ts 2>/dev/null && echo "Renamed" && echo "=== Check for any imports of old name ===" && grep -rn "useGoSidecarData\|GoSidecarData" apps/web/src/ 2>/dev/null | grep -v node_modules | head -5 || echo "No imports found"")
+**Observation**: bash: success
+
+## Turn 7 | 2026-07-12T15:21:10.185Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: The file was renamed and no imports reference the old name. Let me do one last global check for any missed "sidecar" references, then commit and push.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && echo "=== GLOBAL FINAL sidecar check ===" && grep -rn "sidecar" --include="*.go" --include="*.ts" --include="*.tsx" --include="*.md" --include="*.html" --include="*.json" --include="*.py" --include="*.sh" --include="*.bat" --include="*.yml" --include="*.toml" --include="*.rs" --include="*.mdc" --include="*.js" . 2>/dev/null | grep -v "node_modules\|\.next\|\.git\|\.turbo\|archive\|\.memory\|\.tormentnexus/skills\|\.tormentnexus/imported\|\.tormentnexus/logs\|\.tormentnexus/handoffs\|\.tormentnexus/agent_memory\|\.tormentnexus/hydration\|_test\|\.exe\|\.db\|\.sqlite\|\.zip\|\.png\|\.jpg\|\.dll" | head -5 && echo "---" || echo "ZERO SIDECAR IN ENTIRE PROJECT"", timeout: 60)
+**Observation**: bash: error
+
