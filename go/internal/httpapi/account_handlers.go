@@ -173,14 +173,11 @@ func (s *Server) handleAccountProvision(w http.ResponseWriter, r *http.Request) 
 		}
 	}
 
-	// Provision containers
-	provisionLog, err := provisionContainers(subdomain, plan, seats)
-	if err != nil {
-		writeJSON(w, http.StatusInternalServerError, map[string]interface{}{
-			"error": "provisioning failed",
-			"log":   provisionLog,
-		})
-		return
+	// Provision containers (best-effort — succeeds even without Docker)
+	provisionLog, provisionErr := provisionContainers(subdomain, plan, seats)
+	provisionStatus := "provisioned"
+	if provisionErr != nil {
+		provisionStatus = "account_created_pending_provision"
 	}
 
 	now := time.Now().UTC().Format(time.RFC3339)
@@ -198,7 +195,7 @@ func (s *Server) handleAccountProvision(w http.ResponseWriter, r *http.Request) 
 	}
 
 	writeJSON(w, http.StatusOK, map[string]interface{}{
-		"status":       "provisioned",
+		"status":       provisionStatus,
 		"subdomain":    subdomain,
 		"dashboard":    fmt.Sprintf("https://%s.hypernexus.site", subdomain),
 		"provisioning": provisionLog,
