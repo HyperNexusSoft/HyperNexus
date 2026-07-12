@@ -440,7 +440,7 @@ async function tryCompatFallback(
 
 /**
  * Procedures that have fast Go-native implementations.
- * These are served directly from the Go sidecar (<5ms) instead of
+ * These are served directly from the TN Kernel (<5ms) instead of
  * proxying through the TS Core tRPC server (~100-300ms).
  */
 const GO_NATIVE_PROCEDURES = new Set([
@@ -571,7 +571,7 @@ async function handler(req: Request): Promise<Response> {
 				{ status: 200, headers: { "content-type": "application/json" } },
 			);
 		}
-		// Go sidecar unavailable; fall through to tRPC upstream
+		// TN Kernel unavailable; fall through to tRPC upstream
 	}
 
 	const upstreamUrl = buildUpstreamUrl(req);
@@ -616,7 +616,7 @@ async function handler(req: Request): Promise<Response> {
 		    return new Response(
 			    JSON.stringify({
 				    error: "TRPC_UPSTREAM_TIMEOUT",
-				    message: "The Go sidecar upstream timed out.",
+				    message: "The TN Kernel upstream timed out.",
 				    upstream: upstreamUrl.toString(),
 			    }),
 			    { status: 504, headers: { "content-type": "application/json" } },

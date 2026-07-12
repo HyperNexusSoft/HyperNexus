@@ -468,7 +468,7 @@ export default function CognitiveBrainDashboard() {
 					// Ignore fetch errors, will show hydration error below
 				}
 			}
-			setHydrationError("Hydration failed — could not reach Go sidecar");
+			setHydrationError("Hydration failed — could not reach TN Kernel");
 		} finally {
 			setHydrating(false);
 		}
@@ -2174,7 +2174,7 @@ export default function CognitiveBrainDashboard() {
 								</CardHeader>
 								<CardContent className="p-0 pt-2 space-y-4">
 									<p className="text-sm text-zinc-400">
-										Bootstrap the Go sidecar context store with essential
+										Bootstrap the TN Kernel context store with essential
 										project knowledge for autonomous operation.
 									</p>
 

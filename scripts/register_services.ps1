@@ -9,10 +9,10 @@ $trigger = New-ScheduledTaskTrigger -AtLogOn
 $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
 
 try {
-    Register-ScheduledTask -TaskName "TormentNexus Sidecar" -Action $action1 -Trigger $trigger -Settings $settings -Force
-    Write-Host "✅ TormentNexus Sidecar scheduled task created"
+    Register-ScheduledTask -TaskName "TormentNexus Kernel" -Action $action1 -Trigger $trigger -Settings $settings -Force
+    Write-Host "✅ TormentNexus Kernel scheduled task created"
 } catch {
-    Write-Host "❌ Sidecar: $_"
+    Write-Host "❌ Kernel: $_"
 }
 
 try {
@@ -31,4 +31,4 @@ try {
 
 Write-Host ""
 Write-Host "Done. Tasks will start on next login."
-Write-Host "To run now: Start-ScheduledTask -TaskName 'TormentNexus Sidecar'"
+Write-Host "To run now: Start-ScheduledTask -TaskName 'TormentNexus Kernel'"

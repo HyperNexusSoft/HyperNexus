@@ -27,9 +27,9 @@ else
   echo "[1/4] Skipping install"
 fi
 
-# 2. Build Go sidecar
+# 2. Build TN Kernel
 if [ "$SKIP_GO" = false ] && command -v go &>/dev/null; then
-  echo "[2/4] Building Go sidecar..."
+  echo "[2/4] Building TN Kernel..."
   (cd go && go build -ldflags "-X github.com/MDMAtk/TormentNexus/internal/buildinfo.Version=${VER}" -buildvcs=false -o ../bin/tormentnexus ./cmd/tormentnexus)
   echo "      ✓ bin/tormentnexus built"
 else
@@ -45,11 +45,11 @@ echo "      ✓ TypeScript compiled"
 echo "[4/4] Starting services..."
 echo ""
 
-# Go sidecar (background)
+# TN Kernel (background)
 if [ -x bin/tormentnexus ]; then
   bin/tormentnexus -port 4300 &>/dev/null &
   GO_PID=$!
-  echo "  Go sidecar:  http://127.0.0.1:4300 (PID $GO_PID)"
+  echo "  TN Kernel:  http://127.0.0.1:4300 (PID $GO_PID)"
 fi
 
 # TS control plane (foreground)

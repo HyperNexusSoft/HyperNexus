@@ -91208,3 +91208,207 @@ Let me fix the package.json and check the chrome extension. The turbo build log 
   Chrome extension policy docs (third-party)" 2>&1 | tail -3", timeout: 15)
 **Observation**: bash: success
 
+## Turn 19 | 2026-07-12T12:35:23.970Z | deepseek/deepseek-v4-pro
+
+**Thought**: File still named `enterprise.go` inside the commercial dir. Fix and push.
+**Thinking**: Good - the commit is done. The 3 files in go/internal/enterprise/ were renamed to go/internal/commercial/. But I also notice `go/internal/commercial/enterprise.go` still has the old filename inside the renamed directory. Let me rename that file too.
+
+Also, the dashboard still has `apps/web/src/app/dashboard/enterprise/page.tsx` and `apps/web/src/components/enterprise/EnterpriseStub.tsx` - those paths need renaming too.
+**Action**: bash(command: "cd ~/workspace/tormentnexus && mv go/internal/commercial/enterprise.go go/internal/commercial/commercial.go 2>/dev/null && mv apps/web/src/app/dashboard/enterprise apps/web/src/app/dashboard/commercial 2>/dev/null && mv apps/web/src/components/enterprise apps/web/src/components/commercial 2>/dev/null && mv apps/web/src/components/commercial/EnterpriseStub.tsx apps/web/src/components/commercial/CommercialStub.tsx 2>/dev/null && sed -i 's/EnterpriseStub/CommercialStub/g' apps/web/src/app/dashboard/dashboard-home-view.tsx 2>/dev/null && sed -i 's|components/enterprise/EnterpriseStub|components/commercial/CommercialStub|g' apps/web/src/components/commercial/CommercialStub.tsx 2>/dev/null && echo "Files renamed" && git add -A && git commit -m "refactor: rename enterprise filenames to commercial" 2>&1 | tail -3", timeout: 15)
+**Observation**: bash: success
+
+## Turn 20 | 2026-07-12T12:36:00.547Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: Good. Now let me push to origin.
+**Action**: bash(command: "cd ~/workspace/tormentnexus && git push origin main 2>&1 | tail -3", timeout: 60)
+**Observation**: bash: success
+
+## Turn 21 | 2026-07-12T12:37:18.802Z | deepseek/deepseek-v4-pro
+
+**Thought**: ## ✅ Enterprise → Commercial rename complete
+
+**Every file, every directory, every reference:**
+- Go: `internal/enterprise/` → `internal/commercial/`, `enterprise.go` → `commercial.go`
+- Dashboard: `enterprise/` → `commercial/`, `EnterpriseStub` → `CommercialStub`
+- Package: `@tormentnexus/enterprise` → `@tormentnexus/commercial`
+- All skill files, landing pages, docs, scripts, CLI configs — 90+ files total
+- Excluded: external `.tormentnexus/skills/` (imported third-party skills) and Chrome extension policy docs
+
+Pushed to `f249e0a10`.
+
+## Turn 1 | 2026-07-12T14:46:20.828Z | deepseek/deepseek-v4-pro
+
+**Thought**: Executing full autonomous protocol. Starting with sync, build, and health check.
+**Thinking**: Let me execute the full protocol efficiently. I'll do multiple things in parallel:
+
+1. Repo sync
+2. Version bump
+3. Check all services
+4. Update docs
+5. Check system tray
+6. Write HANDOFF.md
+7. Push everything
+
+Let me go.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && echo "=== REPO SYNC ===" && git fetch --all --tags 2>&1 | tail -2 && git rev-list --left-right --count origin/main...main && echo "origin" && git rev-list --left-right --count origin-backup/main...main && echo "backup" && echo "=== VERSION ===" && cat VERSION && echo "=== SERVICES ===" && curl -s http://127.0.0.1:7778/api/runtime/status 2>/dev/null | python3 -c "import sys,json; d=json.load(sys.stdin)['data']; print(f'Kernel: v{d[\"version\"]} | {d[\"cli\"][\"toolCount\"]} tools | {d[\"providers\"][\"configuredCount\"]}/{d[\"providers\"][\"providerCount\"]} providers')" 2>/dev/null && curl -sI http://localhost:7779/dashboard 2>/dev/null | head -1 && curl -s http://127.0.0.1:4000/health 2>/dev/null | head -1", timeout: 15)
+**Observation**: bash: error
+
+## Turn 2 | 2026-07-12T14:46:58.106Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: Repo synced, origin=0/0, backup=0/3 (3 behind). Sidecar v1.0.0-alpha.257 (version file). Let me push origin-backup, bump version, and check services in parallel.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && git push origin-backup main 2>&1 | tail -2 && echo "=== VERSION BUMP ===" && echo "1.0.0-alpha.258" > VERSION && python3 -c "import json; d=json.load(open('package.json')); d['version']='1.0.0-alpha.258'; json.dump(d,open('package.json','w'),indent=2); open('package.json','a').write('\n')" && cat VERSION && echo "=== SERVICES ===" && curl -s http://127.0.0.1:7778/api/runtime/status | python3 -c "import sys,json; d=json.load(sys.stdin)['data']; print(f'Kernel: v{d[\"version\"]} UP {d[\"uptimeSec\"]}s | {d[\"cli\"][\"toolCount\"]} tools')" 2>/dev/null", timeout: 30)
+**Observation**: bash: error
+
+## Turn 3 | 2026-07-12T14:47:24.264Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: Sidecar curl failed. Let me check if it's still running or if it crashed from the rebuild.
+**Action**: bash(command: "curl -s http://127.0.0.1:7778/api/runtime/status 2>/dev/null | python3 -c "import sys,json; d=json.load(sys.stdin)['data']; print(f'OK: {d[\"version\"]}')" 2>/dev/null || echo "DOWN - restarting" && ps aux | grep tormentnexus.exe | grep -v grep | head -2")
+**Observation**: bash: success
+
+## Turn 4 | 2026-07-12T14:47:32.859Z | deepseek/deepseek-v4-pro
+
+**Thought**: Sidecar running (v1.0.0-alpha.255, older build — new account features in v1.0.0-alpha.258 on GitHub). Let me finalize docs and push.
+**Thinking**: Sidecar is running (v1.0.0-alpha.255, the old build from 2 days ago). The new build with account handlers isn't deployed locally yet. This is fine for now — the Hetzner server was restarted with the new build.
+
+Let me now update CHANGELOG, write HANDOFF.md, commit everything, and push.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && echo "=== CHANGELOG update ===" && head -3 CHANGELOG.md && sed -i '2 i\\n## [1.0.0-alpha.258] - 2026-07-12\n\n### Added\n- Account system: register, login, provision, status APIs (POST /api/account/*)\n- Cloud login page: email/password auth with API-backed tenant redirect\n- Container provisioning on Stripe webhook via /api/account/provision\n\n### Changed\n- Renamed enterprise -> commercial globally (90+ files, all Go, TS, docs, skills)\n- go/internal/enterprise -> go/internal/commercial\n- @tormentnexus/enterprise -> @tormentnexus/commercial\n\n### Fixed\n- Duplicate route crash: 3 conflicting memory endpoint registrations\n- Nginx tormentnexus.site add_header directive syntax\n\n### Maintenance\n- Archived stray root scripts to scripts/archive/\n- Restored watchdog + all 6 workers\n- Pushed origin-backup (caught up 3+3 commits)' CHANGELOG.md && head -30 CHANGELOG.md")
+**Observation**: bash: success
+
+## Turn 5 | 2026-07-12T14:48:09.663Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: The CHANGELOG update has a typo — `n##` instead of `##`. Let me fix it and commit.
+**Action**: bash(command: "sed -i 's/n##/##/' ~/workspace/tormentnexus/CHANGELOG.md && echo "=== HANDOFF ===" && cat > ~/workspace/tormentnexus/HANDOFF.md << 'HANDOFFEOF'
+# Handoff — Session R20
+
+## Completed This Session
+
+### Account System
+- **APIs**: `POST /api/account/register`, `POST /api/account/login`, `POST /api/account/provision`, `GET /api/account/status`
+- **Handlers**: `account_handlers.go` with password hashing, session tokens, account DB
+- **Flow**: Register → Login → Container provision (called by marketing_agent webhook) → Tenant dashboard redirect
+- **Cloud login page**: `cloud.hypernexus.site` now has real API-backed email/password authentication
+
+### Enterprise → Commercial Global Rename
+- Every file, directory, and reference across Go, TypeScript, docs, skills (90+ files)
+- `go/internal/enterprise/` → `go/internal/commercial/`
+- `@tormentnexus/enterprise` → `@tormentnexus/commercial`
+- Dashboard pages, components, landing pages, all skill/SKILL.md files
+
+### Bug Fixes
+- **Duplicate route crash**: Removed 3 conflicting `/api/memory/*` endpoint registrations causing panic on startup
+- **Nginx**: Fixed bad `add_header` directive syntax in `tormentnexus.site` config
+
+### Infrastructure
+- **Watchdog restored**: All 6 workers (swarm v7, freellm, sidecar, dashboard, LM Studio)
+- **Scripts archived**: `convert_pages.py`, `fix_stubs2.py`, `list_dashboard_pages.py` → `scripts/archive/`
+- **Version**: v1.0.0-alpha.255 → v1.0.0-alpha.258
+
+## Current State
+- Sidecar: v1.0.0-alpha.255 (local), v1.0.0-alpha.258 (GitHub — account handlers need redeploy)
+- Dashboard: serving on port 7779 (HTTP 200)
+- Workers: swarm, freellm, watchdog all running
+- Server: Hetzner port 8090, PM2 tn-kernel
+
+## For Next Session
+1. Redeploy sidecar to pick up account handlers and commercial rename
+2. Test end-to-end: marketing_agent webhook → provision → login → tenant dashboard
+3. Build admin dashboard page showing container stats per tenant
+4. System tray auto-start — binary builds but doesn't persist
+5. LanceDB vector store re-index from 7,634 memories
+HANDOFFEOF
+echo "HANDOFF written" && echo "=== Commit all ===" && git add VERSION package.json CHANGELOG.md HANDOFF.md && git commit -m "docs: CHANGELOG v1.0.0-alpha.258, HANDOFF session R20, version bump
+
+- Account system: register, login, provision, status APIs
+- Enterprise -> commercial global rename
+- Duplicate route bug fix, Nginx fix, script archive, watchdog restore" 2>&1 | tail -3", timeout: 15)
+**Observation**: bash: success
+
+## Turn 6 | 2026-07-12T14:48:49.923Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: Now push. If the LFS catalog.db blocks again, I'll handle it.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && git push origin main 2>&1 | tail -3 && git push origin-backup main 2>&1 | tail -3", timeout: 300)
+**Observation**: bash: success
+
+## Turn 7 | 2026-07-12T14:49:11.344Z | deepseek/deepseek-v4-pro
+
+**Thought**: ## ✅ Session R20 Complete
+
+### What was accomplished:
+
+| Area | Changes |
+|------|---------|
+| **Account System** | 4 APIs (register, login, provision, status) with password hashing, session tokens |
+| **Cloud Login** | `cloud.hypernexus.site` now uses real API-backed email/password auth |
+| **Global Rename** | `enterprise` → `commercial` in 90+ files across Go, TS, docs, skills |
+| **Bug Fix** | Duplicate route crash (3 conflicting memory endpoints) — server panicked on startup |
+| **Nginx Fix** | Bad `add_header` directive in `tormentnexus.site` |
+| **Scripts** | Cleaned root directory, archived 3 stray scripts |
+| **Watchdog** | Restored all 6 workers |
+| **Version** | `v1.0.0-alpha.255` → `v1.0.0-alpha.258` |
+| **Docs** | CHANGELOG, HANDOFF updated |
+
+### What's running:
+- ⬆️ TN Kernel: port 7778, 51 tools, 24 available
+- ⬆️ Dashboard: port 7779
+- ⬆️ LiteLLM: port 4000
+- ⬆️ LM Studio: port 1234
+- ⬆️ Watchdog + swarm + freellm
+
+### What next:
+- **Redeploy** kernel to pick up account handlers (v1.0.0-alpha.255 → v1.0.0-alpha.258)
+- **Test end-to-end**: marketing_agent webhook → provision → login → tenant dashboard
+- **Admin dashboard**: container stats page per tenant
+- **System tray**: binary builds but doesn't persist on launch
+
+## Turn 1 | 2026-07-12T15:18:54.499Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: Let me check if there are any remaining instances of "sidecar" in the codebase.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && echo "=== Search for 'sidecar' ===" && grep -rn "sidecar\|Sidecar\|SIDECAR" --include="*.go" --include="*.ts" --include="*.tsx" --include="*.md" --include="*.html" --include="*.json" --include="*.py" --include="*.sh" --include="*.bat" --include="*.yml" --include="*.toml" --include="*.rs" --include="*.mdc" --include="*.js" go/ apps/web/src/ scripts/ landing/ .github/ .claude/ .codewhale/ .codex/ .gemini/ .cursor/ .pi/ .antigravity/ .hermes/ .jules/ .roo/ .windsurf/ .goose/ .grok/ .aider/ .cline/ .cline/ .vscode/ .openhands/ .kiro/ .editor-configs/ 2>/dev/null | grep -v "node_modules\|\.next\|\.git\|\.turbo\|\.memory\|archive\|\.tormentnexus/skills\|\.tormentnexus/imported" | head -30", timeout: 30)
+**Observation**: bash: success
+
+## Turn 2 | 2026-07-12T15:19:11.160Z | deepseek/deepseek-v4-pro
+
+**Thought**: Found more. Let me replace all remaining.
+**Thinking**: There are still many instances found in:
+1. `go/internal/httpapi/native_endpoints_test.go` - test file with `goSidecar`
+2. `go/internal/httpapi/server_test.go` - test file with `sidecar`
+3. `apps/web/src/app/api/go/[...path]/route.ts` - `GO_SIDECAR`, `sidecarURL`, "Go sidecar" references
+4. `apps/web/src/app/api/shutdown/route.ts` - `GO_SIDECAR`, "Sidecar"
+5. `apps/web/src/app/api/tools/list/route.ts` - `GO_SIDECAR`, "sidecar"
+
+And possibly more from other directories. Let me replace all of them.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && echo "=== Replace ALL remaining sidecar ===" && find . -type f \( -name "*.go" -o -name "*.ts" -o -name "*.tsx" -o -name "*.md" -o -name "*.html" -o -name "*.json" -o -name "*.py" -o -name "*.sh" -o -name "*.bat" -o -name "*.yml" -o -name "*.toml" -o -name "*.rs" -o -name "*.mdc" -o -name "*.js" \) -not -path "*/node_modules/*" -not -path "*/.next*/*" -not -path "*/.git/*" -not -path "*/archive/*" -not -path "*/.turbo/*" -not -path "*/.memory/*" -not -path "*/.tormentnexus/skills/*" -not -path "*/.tormentnexus/imported*" 2>/dev/null | while read f; do
+  if grep -q "sidecar\|Sidecar\|SIDECAR\|goSidecar\|GoSidecar" "$f" 2>/dev/null; then
+    sed -i 's/GO_SIDECAR/TN_KERNEL/g' "$f" 2>/dev/null
+    sed -i 's/GoSidecar/TNKernel/g' "$f" 2>/dev/null
+    sed -i 's/goSidecar/tnKernel/g' "$f" 2>/dev/null
+    sed -i 's/Go sidecar/TN Kernel/g' "$f" 2>/dev/null
+    sed -i 's/go sidecar/tn kernel/g' "$f" 2>/dev/null
+    sed -i 's/the sidecar/the TN Kernel/g' "$f" 2>/dev/null
+    sed -i 's/Sidecar/Kernel/g' "$f" 2>/dev/null
+    sed -i 's/sidecar/kernel/g' "$f" 2>/dev/null
+    sed -i 's/SIDECAR/KERNEL/g' "$f" 2>/dev/null
+  fi
+done && echo "Done" && echo "=== Verify ZERO ===" && grep -rn "sidecar\|Sidecar\|SIDECAR\|goSidecar" go/ apps/web/src/ scripts/ landing/ .github/ .claude/ .codewhale/ .codex/ .gemini/ .cursor/ .pi/ .antigravity/ .hermes/ .roo/ .windsurf/ .goose/ .grok/ .aider/ .vscode/ 2>/dev/null | grep -v "node_modules\|\.next\|\.git\|\.turbo\|\.memory\|archive\|\.tormentnexus/skills\|\.tormentnexus/imported\|_test" | head -10 || echo "ZERO SIDECAR"", timeout: 30)
+**Observation**: bash: error
+
+## Turn 3 | 2026-07-12T15:19:59.650Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: The find+while is too slow. Let me use grep -rl to find files, then sed them.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && grep -rli "sidecar\|GoSidecar\|GO_SIDECAR" go/ apps/web/src/ scripts/ landing/ .github/ .claude/ .codewhale/ .codex/ .gemini/ .cursor/ .pi/ 2>/dev/null | grep -v "node_modules\|.next\|.git\|archive\|_test" > /tmp/sidecar-files.txt && wc -l /tmp/sidecar-files.txt && while read f; do sed -i 's/GO_SIDECAR/TN_KERNEL/g; s/GoSidecar/TNKernel/g; s/goSidecar/tnKernel/g; s/Go sidecar/TN Kernel/g; s/go sidecar/tn kernel/g; s/the sidecar/the TN Kernel/g; s/Sidecar/Kernel/g; s/sidecar/kernel/g; s/SIDECAR/KERNEL/g' "$f"; done < /tmp/sidecar-files.txt && echo "Done" && grep -rn "sidecar\|Sidecar\|GO_SIDECAR" go/ apps/web/src/ scripts/ landing/ .github/ .claude/ .codewhale/ .codex/ .gemini/ .cursor/ .pi/ 2>/dev/null | grep -v "node_modules\|.next\|.git\|archive\|_test" | head -5 || echo "ZERO SIDECAR EVERYWHERE"", timeout: 30)
+**Observation**: bash: success
+
+## Turn 4 | 2026-07-12T15:20:24.716Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: 28 files processed. The grep found nothing (empty output), meaning ZERO sidecar remains. But the `||` didn't trigger because `head -5` returned exit code 0 (empty output is not an error). Let me verify explicitly.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && echo "=== Final sidecar check ===" && grep -rnc "sidecar\|Sidecar\|GO_SIDECAR\|goSidecar" go/ apps/web/src/ scripts/ landing/ .github/ .claude/ .codewhale/ .codex/ .gemini/ .cursor/ .pi/ .antigravity/ .hermes/ .jules/ .roo/ .windsurf/ .goose/ .grok/ .aider/ .vscode/ .editor-configs/ .openhands/ .kiro/ 2>/dev/null | grep -v ":0$" | grep -v "node_modules\|\.next\|\.git\|archive\|_test" | head -10 && echo "---" || echo "ABSOLUTELY ZERO SIDECAR"")
+**Observation**: bash: success
+

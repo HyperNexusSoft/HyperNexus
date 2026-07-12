@@ -4,7 +4,7 @@
 //! TormentNexus's local API (port 7778) at each lifecycle hook point.
 //! Mirrors all Pi extension v4 functionality:
 //! - L2 memory integration (store, search, vector search)
-//! - MCP tool discovery via TN sidecar
+//! - MCP tool discovery via TN kernel
 //! - Session / skill / code search
 //! - Context harvesting and scratchpad
 //! - RBAC / audit logging

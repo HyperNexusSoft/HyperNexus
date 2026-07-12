@@ -1,12 +1,12 @@
 /**
- * @file useGoSidecarData.ts
+ * @file useTNKernelData.ts
  * @module apps/web/src/hooks
  *
- * WHAT: React hooks that provide dashboard data from the Go sidecar API
+ * WHAT: React hooks that provide dashboard data from the TN Kernel API
  * when the TypeScript tRPC core is unreachable.
  *
  * WHY: Full Assimilation — the dashboard must display real data even when
- * the TS core is down. These hooks query the Go sidecar REST endpoints
+ * the TS core is down. These hooks query the TN Kernel REST endpoints
  * and return data in the same shape as the tRPC queries, so the
  * DashboardHomeView component can render without changes.
  *
@@ -17,29 +17,29 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react';
 
-const GO_SIDECAR_BASE = process.env.NEXT_PUBLIC_GO_SIDECAR_URL || '';
+const TN_KERNEL_BASE = process.env.NEXT_PUBLIC_TN_KERNEL_URL || '';
 const GO_PROXY_PREFIX = '/api/go';
 
 /**
- * Build a URL for the Go sidecar.
+ * Build a URL for the TN Kernel.
  *
- * When a direct sidecar URL is configured (NEXT_PUBLIC_GO_SIDECAR_URL),
+ * When a direct kernel URL is configured (NEXT_PUBLIC_TN_KERNEL_URL),
  * paths are used as-is.  When going through the Next.js catch-all proxy
  * at /api/go/[...path], the proxy passes the path verbatim to the
- * sidecar, so /api/go/health → sidecar /health,
- * /api/go/api/mcp/status → sidecar /api/mcp/status, etc.
+ * kernel, so /api/go/health → kernel /health,
+ * /api/go/api/mcp/status → kernel /api/mcp/status, etc.
  */
-function sidecarUrl(path: string): string {
-  if (GO_SIDECAR_BASE) {
-    return `${GO_SIDECAR_BASE}${path}`;
+function kernelUrl(path: string): string {
+  if (TN_KERNEL_BASE) {
+    return `${TN_KERNEL_BASE}${path}`;
   }
   return `${GO_PROXY_PREFIX}${path}`;
 }
 
-/** Fetch JSON from the Go sidecar with timeout. */
-async function fetchSidecar<T>(path: string, init?: RequestInit): Promise<T | null> {
+/** Fetch JSON from the TN Kernel with timeout. */
+async function fetchKernel<T>(path: string, init?: RequestInit): Promise<T | null> {
   try {
-    const url = sidecarUrl(path);
+    const url = kernelUrl(path);
     const res = await fetch(url, {
       headers: { accept: 'application/json' },
       signal: AbortSignal.timeout(5000),
@@ -206,10 +206,10 @@ export interface GoSessionSummary {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// Hook: useGoSidecarDashboard
+// Hook: useTNKernelDashboard
 // ────────────────────────────────────────────────────────────────────────────
 
-export interface GoSidecarDashboardData {
+export interface TNKernelDashboardData {
   mcpStatus: GoMCPStatus | null;
   startupStatus: GoStartupStatus | null;
   servers: GoServerSummary[];
@@ -221,7 +221,7 @@ export interface GoSidecarDashboardData {
   lastFetchedAt: number | null;
 }
 
-const EMPTY_DASHBOARD: GoSidecarDashboardData = {
+const EMPTY_DASHBOARD: TNKernelDashboardData = {
   mcpStatus: null,
   startupStatus: null,
   servers: [],
@@ -234,11 +234,11 @@ const EMPTY_DASHBOARD: GoSidecarDashboardData = {
 };
 
 /**
- * useGoSidecarDashboard polls the Go sidecar REST endpoints and returns
+ * useTNKernelDashboard polls the TN Kernel REST endpoints and returns
  * dashboard data. Intended as a fallback data source when tRPC queries fail.
  */
-export function useGoSidecarDashboard(pollIntervalMs = 5000): GoSidecarDashboardData {
-  const [data, setData] = useState<GoSidecarDashboardData>(EMPTY_DASHBOARD);
+export function useTNKernelDashboard(pollIntervalMs = 5000): TNKernelDashboardData {
+  const [data, setData] = useState<TNKernelDashboardData>(EMPTY_DASHBOARD);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const poll = useCallback(async () => {
@@ -251,13 +251,13 @@ export function useGoSidecarDashboard(pollIntervalMs = 5000): GoSidecarDashboard
       healthData,
       healthFallback,
     ] = await Promise.all([
-      fetchSidecar<GoMCPStatus>('/api/mcp/status'),
-      fetchSidecar<GoStartupStatus>('/api/startup/status'),
-      fetchSidecar<GoServerSummary[]>('/api/mcp/servers'),
-      fetchSidecar<any>('/api/billing/status'),
-      fetchSidecar<{ count: number; sessions: GoSessionSummary[] }>('/api/native/session/list'),
-      fetchSidecar<any>('/api/health'),
-      fetchSidecar<any>('/health'),
+      fetchKernel<GoMCPStatus>('/api/mcp/status'),
+      fetchKernel<GoStartupStatus>('/api/startup/status'),
+      fetchKernel<GoServerSummary[]>('/api/mcp/servers'),
+      fetchKernel<any>('/api/billing/status'),
+      fetchKernel<{ count: number; sessions: GoSessionSummary[] }>('/api/native/session/list'),
+      fetchKernel<any>('/api/health'),
+      fetchKernel<any>('/health'),
     ]);
 
     // Use /api/health result, fall back to /health (older binaries)
@@ -307,10 +307,10 @@ export function useGoSidecarDashboard(pollIntervalMs = 5000): GoSidecarDashboard
 }
 
 /**
- * useGoSidecarConnectivity returns just the connection status and version.
+ * useTNKernelConnectivity returns just the connection status and version.
  * Lightweight — only hits /api/health.
  */
-export function useGoSidecarConnectivity(pollIntervalMs = 10000): {
+export function useTNKernelConnectivity(pollIntervalMs = 10000): {
   connected: boolean;
   version: string | null;
   uptime: number | null;
@@ -323,9 +323,9 @@ export function useGoSidecarConnectivity(pollIntervalMs = 10000): {
     async function check() {
       try {
         // Try /api/health first (newer binaries), fall back to /health (older)
-        let health = await fetchSidecar<any>('/api/health');
+        let health = await fetchKernel<any>('/api/health');
         if (!health) {
-          health = await fetchSidecar<any>('/health');
+          health = await fetchKernel<any>('/health');
         }
         if (!cancelled) {
           setState({

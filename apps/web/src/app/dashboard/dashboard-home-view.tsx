@@ -1850,9 +1850,9 @@ export function DashboardHomeView({
 									<div className="flex gap-2">
 										<div
 											className={`px-2 py-0.5 rounded text-[10px] font-mono border font-semibold ${routerStatusTone}`}
-											title="The authoritative Go sidecar background router API server status."
+											title="The authoritative TN Kernel background router API server status."
 										>
-											Go Sidecar: {routerStatusLabel}
+											Go Kernel: {routerStatusLabel}
 										</div>
 										<div
 											className={`px-2 py-0.5 rounded text-[10px] font-mono border font-semibold ${startupToneClass}`}
@@ -3848,7 +3848,7 @@ export function DashboardHomeView({
 										</span>
 									</div>
 									<p className="text-xs text-slate-400">
-										Attaches tormentnexus:// links directly to the local sidecar
+										Attaches tormentnexus:// links directly to the local kernel
 										runtime daemon.
 									</p>
 									<div className="pt-4">
@@ -4479,7 +4479,7 @@ export function DashboardHomeView({
 											</div>
 											<div className="border border-slate-850 bg-zinc-955 p-3 rounded-lg flex flex-col justify-between space-y-1.5">
 												<div className="flex items-center justify-between font-bold text-slate-200">
-													<span>VS Code Sidecar Extension</span>
+													<span>VS Code Kernel Extension</span>
 													<span className="px-1.5 py-0.2 rounded font-mono text-[9px] bg-zinc-800 text-slate-400">
 														VSCODE
 													</span>

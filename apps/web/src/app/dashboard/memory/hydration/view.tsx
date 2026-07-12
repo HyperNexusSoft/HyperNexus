@@ -132,7 +132,7 @@ export default function MemoryHydrationPage() {
 					continue;
 				}
 			}
-			setError("Hydration failed — could not reach Go sidecar");
+			setError("Hydration failed — could not reach TN Kernel");
 		} finally {
 			setHydrating(false);
 		}
@@ -181,7 +181,7 @@ export default function MemoryHydrationPage() {
 						Memory Hydration
 					</h1>
 					<p className="text-zinc-500 mt-1">
-						Bootstrap the Go sidecar context store with essential project
+						Bootstrap the TN Kernel context store with essential project
 						knowledge for autonomous operation
 					</p>
 				</div>

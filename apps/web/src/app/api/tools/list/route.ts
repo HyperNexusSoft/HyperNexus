@@ -9,17 +9,17 @@ interface ToolInfo {
 /**
  * Returns the full list of built-in TormentNexus MCP tools.
  *
- * When the Go sidecar is reachable it fetches the live tool list from
- * the sidecar's MCP tool registry.  When the sidecar is unreachable
+ * When the TN Kernel is reachable it fetches the live tool list from
+ * the TN Kernel's MCP tool registry.  When the TN Kernel is unreachable
  * (dev mode / offline) it falls back to a static snapshot.
  */
 export async function GET() {
-	const GO_SIDECAR =
-		process.env.TORMENTNEXUS_GO_SIDECAR_URL || "http://127.0.0.1:7778";
+	const TN_KERNEL =
+		process.env.TORMENTNEXUS_TN_KERNEL_URL || "http://127.0.0.1:7778";
 
-	// Try the live sidecar first
+	// Try the live kernel first
 	try {
-		const res = await fetch(`${GO_SIDECAR}/api/mcp/tools`, {
+		const res = await fetch(`${TN_KERNEL}/api/mcp/tools`, {
 			signal: AbortSignal.timeout(3000),
 		});
 		if (res.ok) {
@@ -96,22 +96,22 @@ export async function GET() {
 		// MCP Server Management (always-on)
 		{
 			name: "mcp_list_servers",
-			description: "List configured MCP servers from the Go sidecar",
+			description: "List configured MCP servers from the TN Kernel",
 			alwaysOn: true,
 		},
 		{
 			name: "mcp_list_tools",
-			description: "List available MCP tools from the Go sidecar",
+			description: "List available MCP tools from the TN Kernel",
 			alwaysOn: true,
 		},
 		{
 			name: "mcp_call_tool",
-			description: "Call an MCP tool through the Go sidecar",
+			description: "Call an MCP tool through the TN Kernel",
 			alwaysOn: true,
 		},
 		{
 			name: "mcp_status",
-			description: "Get MCP runtime status from the Go sidecar",
+			description: "Get MCP runtime status from the TN Kernel",
 			alwaysOn: true,
 		},
 		{
@@ -153,7 +153,7 @@ export async function GET() {
 				"List all built-in Go accessory tools from the root registry",
 			alwaysOn: true,
 		},
-		// Go sidecar native tool stubs (always always-on)
+		// TN Kernel native tool stubs (always always-on)
 		{
 			name: "echo",
 			description: "Echo back the provided message",
