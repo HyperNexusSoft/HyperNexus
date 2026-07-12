@@ -693,7 +693,7 @@ The Next.js dashboard will automatically open at `http://localhost:3000/dashboar
 
 ## Roadmap
 
-See [ROADMAP.md](ROADMAP.md) for the detailed path to v1.0.0 stable, including:
+See [ROADMAP.md](docs/ROADMAP.md) for the detailed path to v1.0.0 stable, including:
 
 - Progressive Skill Disclosure (Context Hygiene)
 - Go-native MCP sync migration
@@ -709,11 +709,11 @@ See [ROADMAP.md](ROADMAP.md) for the detailed path to v1.0.0 stable, including:
 | Document | Purpose |
 |----------|---------|
 | [AGENTS.md](AGENTS.md) | Multi-agent coordination and handoff protocol |
-| [VISION.md](VISION.md) | North star and philosophical pillars |
-| [ROADMAP.md](ROADMAP.md) | Active development roadmap and milestones |
-| [CHANGELOG.md](CHANGELOG.md) | Detailed version history (400+ entries) |
-| [MEMORY.md](MEMORY.md) | Accumulated multi-agent insights and gotchas |
-| [HANDOFF.md](HANDOFF.md) | Session handoff protocol for agent continuity |
+| [VISION.md](docs/VISION.md) | North star and philosophical pillars |
+| [ROADMAP.md](docs/ROADMAP.md) | Active development roadmap and milestones |
+| [CHANGELOG.md](docs/CHANGELOG.md) | Detailed version history (400+ entries) |
+| [MEMORY.md](docs/MEMORY.md) | Accumulated multi-agent insights and gotchas |
+| [HANDOFF.md](docs/HANDOFF.md) | Session handoff protocol for agent continuity |
 | [docs/API_ENDPOINTS.md](docs/API_ENDPOINTS.md) | Complete 600+ endpoint reference |
 | [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) | Full module dependency diagram |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Architecture deep dive |
