@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	foundationpi "github.com/NexusSoftMDMA/TormentNexus/foundation/pi"
-	foundationrepomap "github.com/NexusSoftMDMA/TormentNexus/foundation/repomap"
+	foundationpi "github.com/MDMAtk/TormentNexus/foundation/pi"
+	foundationrepomap "github.com/MDMAtk/TormentNexus/foundation/repomap"
 )
 
 func TestExecuteFoundationToolAndSessions(t *testing.T) {

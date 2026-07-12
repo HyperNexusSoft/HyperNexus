@@ -7,11 +7,11 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/NexusSoftMDMA/TormentNexus/foundation/adapters"
-	"github.com/NexusSoftMDMA/TormentNexus/foundation/assimilation"
-	"github.com/NexusSoftMDMA/TormentNexus/foundation/compat"
-	foundationpi "github.com/NexusSoftMDMA/TormentNexus/foundation/pi"
-	"github.com/NexusSoftMDMA/TormentNexus/foundation/repomap"
+	"github.com/MDMAtk/TormentNexus/foundation/adapters"
+	"github.com/MDMAtk/TormentNexus/foundation/assimilation"
+	"github.com/MDMAtk/TormentNexus/foundation/compat"
+	foundationpi "github.com/MDMAtk/TormentNexus/foundation/pi"
+	"github.com/MDMAtk/TormentNexus/foundation/repomap"
 	"github.com/spf13/cobra"
 )
 

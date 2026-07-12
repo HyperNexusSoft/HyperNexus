@@ -3,7 +3,7 @@ package orchestrator
 import (
 	"strings"
 
-	foundationorchestration "github.com/NexusSoftMDMA/TormentNexus/foundation/orchestration"
+	foundationorchestration "github.com/MDMAtk/TormentNexus/foundation/orchestration"
 )
 
 func buildAutoDriveObjective(prompt, workingDir string) string {

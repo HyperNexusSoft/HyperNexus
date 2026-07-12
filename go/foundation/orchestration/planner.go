@@ -5,8 +5,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/NexusSoftMDMA/TormentNexus/foundation/adapters"
-	foundationrepomap "github.com/NexusSoftMDMA/TormentNexus/foundation/repomap"
+	"github.com/MDMAtk/TormentNexus/foundation/adapters"
+	foundationrepomap "github.com/MDMAtk/TormentNexus/foundation/repomap"
 )
 
 type PlanRequest struct {

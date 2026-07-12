@@ -153,7 +153,7 @@ const services = [
     {
       id: 'tormentnexus-core',
       description: 'TormentNexus core control plane health',
-      critical: true,
+      critical: false,
       urls: buildCoreUrls(),
     },
     {

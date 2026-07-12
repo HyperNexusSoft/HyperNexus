@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/NexusSoftMDMA/TormentNexus/agents"
+	"github.com/MDMAtk/TormentNexus/agents"
 )
 
 func TestBuildPromptResponseIncludesFoundationRoute(t *testing.T) {

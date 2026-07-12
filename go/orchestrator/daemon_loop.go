@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	foundationorchestration "github.com/NexusSoftMDMA/TormentNexus/foundation/orchestration"
+	foundationorchestration "github.com/MDMAtk/TormentNexus/foundation/orchestration"
 )
 
 var daemonRunning bool

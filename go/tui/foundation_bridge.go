@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/NexusSoftMDMA/TormentNexus/agents"
-	"github.com/NexusSoftMDMA/TormentNexus/foundation/adapters"
-	foundationorchestration "github.com/NexusSoftMDMA/TormentNexus/foundation/orchestration"
+	"github.com/MDMAtk/TormentNexus/agents"
+	"github.com/MDMAtk/TormentNexus/foundation/adapters"
+	foundationorchestration "github.com/MDMAtk/TormentNexus/foundation/orchestration"
 )
 
 type PromptDisplayMsg struct {
