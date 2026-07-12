@@ -145,6 +145,7 @@ type Server struct {
 	mcpDecision        *mcp.DecisionSystem
 	nativeRouter       *mcp.NativeMCPRouter
 	a2aLogger          *orchestration.A2ALogger
+	accountDB          *sql.DB
 	a2aBroker          *orchestration.A2ABroker
 	taskQueue          *orchestration.TaskQueue
 	swarmController    *orchestration.SwarmController
@@ -1157,6 +1158,12 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/billing/task-routing-rule", s.handleBillingSetTaskRoutingRule)
 	s.mux.HandleFunc("/api/billing/depleted-models", s.handleBillingDepletedModels)
 	s.mux.HandleFunc("/api/billing/fallback-history", s.handleBillingFallbackHistory)
+
+	// Account management
+	s.mux.HandleFunc("/api/account/register", s.handleAccountRegister)
+	s.mux.HandleFunc("/api/account/login", s.handleAccountLogin)
+	s.mux.HandleFunc("/api/account/provision", s.handleAccountProvision)
+	s.mux.HandleFunc("/api/account/status", s.handleAccountStatus)
 	s.mux.HandleFunc("/api/billing/fallback-history/clear", s.handleBillingClearFallbackHistory)
 	s.mux.HandleFunc("/api/config/corporate-settings", s.handleGetCorporateSettings)
 	s.mux.HandleFunc("/api/config/corporate-settings/set", s.handleSetCorporateSettings)
@@ -1747,9 +1754,6 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/cli/tools", s.handleCLITools)
 	s.mux.HandleFunc("/api/cli/harnesses", s.handleHarnesses)
 	s.mux.HandleFunc("/api/cli/summary", s.handleCLISummary)
-	s.mux.HandleFunc("/api/memory/project/sync", s.handleMemoryProjectSync)
-	s.mux.HandleFunc("/api/memory/maintenance", s.handleMemoryMaintenance)
-	s.mux.HandleFunc("/api/memory/maintenance-local", s.handleMemoryMaintenanceLocal)
 	s.mux.HandleFunc("/api/memory/tormentnexus-memory/status", s.handleMemoryStatus)
 	s.mux.HandleFunc("/api/import/sources", s.handleImportSources)
 	s.mux.HandleFunc("/api/import/roots", s.handleImportRoots)

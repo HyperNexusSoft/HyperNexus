@@ -104,6 +104,11 @@ func (c Config) ImportedInstructionsPath() string {
 	return filepath.Join(c.WorkspaceRoot, ".tormentnexus", "imported_sessions", "docs", "auto-imported-agent-instructions.md")
 }
 
+// AccountDBPath returns the path to the accounts SQLite database.
+func (c Config) AccountDBPath() string {
+	return filepath.Join(c.ConfigDir, "accounts.db")
+}
+
 func browserHost(host string) string {
 	switch host {
 	case "", "0.0.0.0", "::", "[::]":
