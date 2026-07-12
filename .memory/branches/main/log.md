@@ -91195,3 +91195,16 @@ Let me fix the package.json and check the chrome extension. The turbo build log 
 **Action**: bash(command: "sed -i 's/@tormentnexus\/enterprise/@tormentnexus\/commercial/g' ~/workspace/tormentnexus/apps/web/package.json && grep "commercial\|enterprise" ~/workspace/tormentnexus/apps/web/package.json && echo "=== Final check ===" && grep -rn "enterprise" go/ apps/web/src/ apps/web/package.json scripts/ landing/ .github/ .antigravity/ .claude/ .codewhale/ .cursor/ .pi/ 2>/dev/null | grep -v "node_modules\|.next\|.turbo\|.git\|tormentnexus-extension\|\.exe" | head -5 || echo "ALL CLEAN"")
 **Observation**: bash: success
 
+## Turn 18 | 2026-07-12T12:35:09.204Z | deepseek/deepseek-v4-pro
+
+**Thought**: 
+**Thinking**: The output for the final check is empty (no enterprise found), but the echo didn't fire because `grep` found nothing and `head -5` returned empty. The `||` should trigger "ALL CLEAN" but the empty output from grep is not a failure. Let me just be direct.
+**Action**: bash(command: "cd C:/Users/hyper/workspace/tormentnexus && echo "=== Commit rename ===" && git add -A && git status --short | head -10 && git commit -m "refactor: rename enterprise -> commercial globally
+
+- All Go code, TypeScript, docs, skill files, landing pages, scripts
+- Package: @tormentnexus/enterprise -> @tormentnexus/commercial
+- Directory: go/internal/enterprise -> go/internal/commercial
+- Excluded: .tormentnexus/skills (imported external modules), 
+  Chrome extension policy docs (third-party)" 2>&1 | tail -3", timeout: 15)
+**Observation**: bash: success
+
