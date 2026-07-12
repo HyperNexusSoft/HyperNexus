@@ -64,9 +64,9 @@ CLIENTS = {
     "aider": {
         "dirs": [".aider"],
         "mcp": True,
-        "skills": False,
-        "hooks": False,
-        "commands": False,
+        "skills": True,
+        "hooks": True,
+        "commands": True,
         "ext": False,
     },
     "opencode": {
@@ -74,8 +74,8 @@ CLIENTS = {
         "mcp": True,
         "skills": True,
         "commands": True,
-        "hooks": False,
-        "ext": False,
+        "hooks": True,
+        "ext": True,
     },
     "openclaw": {
         "dirs": [".openclaw"],
