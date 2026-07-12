@@ -33,6 +33,73 @@
 ╚══════════════════════════════════════════════════════════════════════════════╝
 ```
 
+## Installation
+
+### Quick Start (Windows)
+
+```bash
+scripts\install.bat
+```
+
+### Quick Start (macOS / Linux)
+
+```bash
+python3 scripts/install-client-support.py
+```
+
+### GUI Installer
+
+```bash
+python3 scripts/install-gui.py
+```
+
+### What Gets Installed
+
+The installer detects and configures TormentNexus for **38+ AI coding agents**.
+Each client receives every integration it supports:
+
+| Client | SKILL | MCP | CMD | HOOK | EXT | AGENT |
+|--------|-------|-----|-----|------|-----|-------|
+| Claude Code | x | x | x | x | - | - |
+| Cursor | x | x | x | x | x | - |
+| Windsurf | x | x | x | x | x | - |
+| Gemini | x | x | x | - | x | x |
+| Codex CLI | x | x | x | - | - | - |
+| Grok Build | x | x | x | x | x | - |
+| Antigravity | x | x | - | - | x | x |
+| Aider | - | x | - | - | - | - |
+| CodeWhale | x | x | x | x | x | - |
+| Goose | x | x | x | x | x | - |
+| Pi | x | x | x | - | x | - |
+| Cline / Roo | x | x | x | x | - | - |
+| + 26 more | x | x | varies | varies | varies | varies |
+
+### Corporate On-Premises Installation
+
+For enterprises running TormentNexus behind a firewall:
+
+```bash
+python3 scripts/install-client-support.py --mode corporate
+scripts\install.bat corporate
+```
+
+Corporate mode adds:
+
+- **SSO/OIDC** configuration for enterprise identity providers
+- **RBAC roles** with admin/user/auditor defaults
+- **Audit logging** to local SQLite with daily rotation
+- **Multi-tenant isolation** for on-premises tenant separation
+- **Enterprise license** key setup
+
+### Server Deployment
+
+```bash
+GOOS=linux GOARCH=amd64 go build -o tn-kernel ./cmd/tormentnexus
+pm2 start tn-kernel --name tn-kernel -- serve -port 8090 -host 127.0.0.1
+```
+
+---
+
 # TormentNexus: The Cognitive Kernel — Universal Open-Source AI Control Plane for Multi-Agent Workflows, MCP Tools & Context-Aware Memory
 
 ![Version](https://img.shields.io/badge/version-1.0.0--alpha.254-blue)
@@ -51,6 +118,7 @@
 
 For professional, corporate, and enterprise deployments, visit **[HyperNexus](https://hypernexus.site)**.
 **HyperNexus** is the official licensed, certified, authoritative, cloud-hosted corporate installation of the TormentNexus kernel. It provides:
+
 - **Tenant Isolation**: Automated provisioning scripts to spin up per-tenant containers with isolated volumes and resource limits.
 - **Enterprise-Grade Security**: Full SSO support and fine-grained Role-Based Access Control (RBAC) middleware.
 - **Air-Gapped & VPC Support**: Production-ready deployment configurations with daily audit logs for SIEM integration.

@@ -6,6 +6,7 @@ skill files, plugins, extensions, hooks, and commands.
 """
 
 import os
+import sys
 import json
 import shutil
 import platform
@@ -407,9 +408,14 @@ with persistent memory, tool orchestration, and session management.
 
 
 def install():
+    mode = "personal"
+    if "--mode" in sys.argv or "corporate" in sys.argv:
+        mode = "corporate"
+
     print("=" * 60)
     print("TormentNexus Universal Client Support Installer")
     print(f"System: {SYSTEM} | Workspace: {WORKSPACE}")
+    print(f"Mode: {mode.upper()}")
     print("=" * 60)
 
     installed = 0
@@ -427,8 +433,16 @@ def install():
                 if config.get("skills"):
                     skill_dir = os.path.join(base, "skills")
                     os.makedirs(skill_dir, exist_ok=True)
+                    content = get_skill_content()
+                    if mode == "corporate":
+                        content = content.replace(
+                            "TormentNexus", "HyperNexus"
+                        ).replace(
+                            "local AI control plane",
+                            "enterprise AI control plane with SSO, RBAC, and audit logging"
+                        )
                     with open(os.path.join(skill_dir, "SKILL.md"), "w") as f:
-                        f.write(get_skill_content())
+                        f.write(content)
 
                 # MCP Config
                 if config.get("mcp"):
@@ -468,16 +482,16 @@ def install():
                 if config.get("hooks"):
                     hooks_dir = os.path.join(base, "hooks")
                     os.makedirs(hooks_dir, exist_ok=True)
+                    hooks_config = {
+                        "on_session_start": "tn_context_harvest",
+                        "on_tool_error": "tn_memory_store",
+                        "on_decision": "tn_memory_store",
+                    }
+                    if mode == "corporate":
+                        hooks_config["on_security_violation"] = "tn_audit_log"
+                        hooks_config["on_rbac_check"] = "tn_security_check"
                     with open(os.path.join(hooks_dir, "config.json"), "w") as f:
-                        json.dump(
-                            {
-                                "on_session_start": "tn_context_harvest",
-                                "on_tool_error": "tn_memory_store",
-                                "on_decision": "tn_memory_store",
-                            },
-                            f,
-                            indent=2,
-                        )
+                        json.dump(hooks_config, f, indent=2)
 
                 # Extension
                 if config.get("ext"):
@@ -492,6 +506,61 @@ def install():
 
                 print(f"  {client_name} -> {base}")
                 installed += 1
+
+    # Corporate mode: install enterprise config
+    if mode == "corporate":
+        print("\n--- Installing Enterprise Configuration ---")
+        enterprise_dir = os.path.join(HOME, ".tormentnexus", "enterprise")
+        os.makedirs(enterprise_dir, exist_ok=True)
+
+        # SSO/OIDC config
+        sso_config = {
+            "provider": "https://identity.hypernexus.site/oauth/v2",
+            "client_id": "hypernexus-dashboard-prod",
+            "scopes": ["openid", "profile", "email", "groups"],
+            "claim_mapping": {"email": "email", "groups": "groups", "name": "name"},
+            "session_timeout": 3600,
+        }
+        with open(os.path.join(enterprise_dir, "sso.json"), "w") as f:
+            json.dump(sso_config, f, indent=2)
+        print("  SSO/OIDC config -> sso.json")
+
+        # RBAC roles
+        rbac = {
+            "roles": {
+                "admin": {"permissions": ["*"], "scopes": ["memory:write", "tool:exec", "config:write"]},
+                "developer": {"permissions": ["memory:read", "memory:write", "tool:exec"], "scopes": []},
+                "auditor": {"permissions": ["memory:read", "audit:read"], "scopes": []},
+                "viewer": {"permissions": ["memory:read"], "scopes": []},
+            }
+        }
+        with open(os.path.join(enterprise_dir, "rbac.json"), "w") as f:
+            json.dump(rbac, f, indent=2)
+        print("  RBAC roles -> rbac.json")
+
+        # Audit config
+        audit = {"backend": "sqlite", "path": "audit.db", "rotation": "daily", "retention_days": 90, "log_level": "info"}
+        with open(os.path.join(enterprise_dir, "audit.json"), "w") as f:
+            json.dump(audit, f, indent=2)
+        print("  Audit logging -> audit.json")
+
+        # Tenant isolation
+        tenant = {
+            "isolation": "container",
+            "data_root": "/var/lib/hypernexus/tenants",
+            "network": "tenant-network",
+            "resource_limits": {"cpu": "1.5", "memory": "2G"},
+            "auto_provision": True,
+        }
+        with open(os.path.join(enterprise_dir, "tenants.json"), "w") as f:
+            json.dump(tenant, f, indent=2)
+        print("  Tenant isolation -> tenants.json")
+
+        # License template
+        lic = {"licensed_to": "YOUR_ORGANIZATION", "features": ["sso", "rbac", "audit", "multi_tenant", "mesh"], "expires": "2027-01-01", "seats": 50}
+        with open(os.path.join(enterprise_dir, "license.template.json"), "w") as f:
+            json.dump(lic, f, indent=2)
+        print("  License template -> license.template.json")
 
     # Also install preemptively to default config directories
     preemptive = [

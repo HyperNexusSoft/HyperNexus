@@ -1,17 +1,30 @@
 @echo off
+set MODE=%1
+if "%MODE%"=="" set MODE=personal
+
 echo ============================================================
 echo TormentNexus Universal Installer for Windows
+echo Mode: %MODE%
 echo ============================================================
 echo.
 echo This will install TormentNexus support for ALL detected
 echo AI coding clients on your system (38+ supported).
-echo.
+if "%MODE%"=="corporate" (
+    echo.
+    echo *** CORPORATE MODE - Enterprise Features ***
+    echo     SSO/OIDC configuration for identity providers
+    echo     RBAC roles (admin, developer, auditor, viewer)
+    echo     Audit logging with daily rotation
+    echo     Multi-tenant isolation config
+    echo     Enterprise license template
+    echo.
+)
 echo Press Ctrl+C to cancel, or any key to continue...
 pause >nul
 
 echo.
-echo [1/3] Installing Python client support...
-python "%~dp0install-client-support.py"
+echo [1/3] Installing Python client support (mode=%MODE%)...
+python "%~dp0install-client-support.py" --mode %MODE%
 if %ERRORLEVEL% NEQ 0 (
     echo ERROR: Python not found or script failed.
     echo Please install Python 3.9+ and try again.
@@ -40,7 +53,7 @@ if exist "%USERPROFILE%\.vscode\extensions" (
 
 echo.
 echo ============================================================
-echo TormentNexus installation complete!
+echo TormentNexus installation complete! (mode: %MODE%)
 echo.
 echo Start the TN Kernel with: tormentnexus serve
 echo Open dashboard at: http://localhost:7779
