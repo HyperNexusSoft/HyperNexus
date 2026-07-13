@@ -171,9 +171,10 @@ CLIENTS = {
         "dirs": [".openhands"],
         "mcp": True,
         "skills": True,
-        "hooks": False,
-        "commands": False,
+        "hooks": True,
+        "commands": True,
         "ext": True,
+        "agents": True,
     },
     "kiro": {
         "dirs": [".kiro"],
@@ -501,6 +502,28 @@ def install():
                     )
                     if os.path.exists(src_ext):
                         shutil.copy2(src_ext, ext_dir)
+
+                # OpenHands-specific: install agent, actions, plugin, docker compose
+                if client_name == "openhands":
+                    deploy_dir = os.path.join(WORKSPACE, "deploy", "openhands")
+                    if os.path.isdir(deploy_dir):
+                        # Copy agent + actions + plugin to OpenHands plugins dir
+                        plugins_dir = os.path.join(HOME, ".openhands", "plugins", "tormentnexus")
+                        os.makedirs(plugins_dir, exist_ok=True)
+                        for fname in ["tormentnexus_agent.py", "actions.py", "plugin.toml"]:
+                            src = os.path.join(deploy_dir, fname)
+                            if os.path.exists(src):
+                                shutil.copy2(src, os.path.join(plugins_dir, fname))
+                        print(f"  openhands plugins -> {plugins_dir}")
+                        # Copy Docker compose
+                        dc_src = os.path.join(deploy_dir, "docker-compose.yml")
+                        if os.path.exists(dc_src):
+                            shutil.copy2(dc_src, os.path.join(HOME, ".openhands", "tormentnexus"))
+                        # Copy microagent
+                        ma_src = os.path.join(os.path.dirname(deploy_dir), "..", "npm", "@tormentnexus", "openhands", "microagent.md")
+                        if os.path.exists(ma_src):
+                            os.makedirs(os.path.join(HOME, ".openhands", "microagents"), exist_ok=True)
+                            shutil.copy2(ma_src, os.path.join(HOME, ".openhands", "microagents", "tormentnexus.md"))
 
                 print(f"  {client_name} -> {base}")
                 installed += 1
