@@ -1,6 +1,6 @@
 {
   "name": "@tormentnexus/install",
-  "version": "1.0.0-alpha.261",
+  "version": "1.0.0-alpha.262",
   "description": "TormentNexus One-Command Installer — Sets up MCP config, skills, hooks, and extensions for ALL 38+ AI coding clients",
   "bin": { "tninstall": "./cli.js" },
   "scripts": { "install": "node setup.js" },
