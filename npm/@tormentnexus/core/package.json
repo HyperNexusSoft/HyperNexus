@@ -1,6 +1,6 @@
 {
   "name": "@tormentnexus/core",
-  "version": "1.0.0-alpha.262",
+  "version": "1.0.0-b1",
   "description": "TormentNexus Core — Universal AI control plane with persistent multi-tier memory, MCP tool routing, and enterprise RBAC",
   "main": "index.js",
   "bin": { "tncore": "./cli.js" },

@@ -1,6 +1,6 @@
 {
   "name": "@tormentnexus/vscode",
-  "version": "1.0.0-alpha.262",
+  "version": "1.0.0-b1",
   "description": "TormentNexus for VS Code — Persistent AI memory, MCP tools, and context harvesting inside your editor",
   "main": "extension.js",
   "engines": { "vscode": "^1.85.0" },

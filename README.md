@@ -1,37 +1,8 @@
-🛠️ ALPHA SOFTWARE UNDER CONSTRUCTION — Use at your own risk. Backwards compatibility not guaranteed.
+# TormentNexus — Universal AI Control Plane
 
-```text
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                                                                              ║
-║                     ██╗   ██╗███╗   ██╗██████╗ ███████╗██████╗              ║
-║                     ██║   ██║████╗  ██║██╔══██╗██╔════╝██╔══██╗             ║
-║                     ██║   ██║██╔██╗ ██║██║  ██║█████╗  ██████╔╝             ║
-║                     ██║   ██║██║╚██╗██║██║  ██║██╔══╝  ██╔══██╗             ║
-║                     ╚██████╔╝██║ ╚████║██████╔╝███████╗██║  ██║             ║
-║                      ╚═════╝ ╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝             ║
-║                                                                              ║
-║                     ██████╗ ██████╗ ███╗   ██╗███████╗████████╗██████╗      ║
-║                    ██╔════╝██╔═══██╗████╗  ██║██╔════╝╚══██╔══╝██╔══██╗     ║
-║                    ██║     ██║   ██║██╔██╗ ██║███████╗   ██║   ██████╔╝     ║
-║                    ██║     ██║   ██║██║╚██╗██║╚════██║   ██║   ██╔══██╗     ║
-║                    ╚██████╗╚██████╔╝██║ ╚████║███████║   ██║   ██║  ██║     ║
-║                     ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝     ║
-║                                                                              ║
-║                     █████╗ ██╗     ██████╗ ██╗  ██╗ █████╗                  ║
-║                    ██╔══██╗██║     ██╔══██╗██║  ██║██╔══██╗                 ║
-║                    ███████║██║     ██████╔╝███████║███████║                 ║
-║                    ██╔══██║██║     ██╔═══╝ ██╔══██║██╔══██║                 ║
-║                    ██║  ██║███████╗██║     ██║  ██║██║  ██║                 ║
-║                    ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝                 ║
-║                                                                              ║
-║                    ╔══════════════════════════════════════╗                  ║
-║                    ║     ⚠️  ALPHA SOFTWARE  ⚠️           ║                  ║
-║                    ║  EXPECT BREAKING CHANGES & BUGS     ║                  ║
-║                    ║  NOT READY FOR PRODUCTION USE       ║                  ║
-║                    ╚══════════════════════════════════════╝                  ║
-║                                                                              ║
-╚══════════════════════════════════════════════════════════════════════════════╝
-```
+> **One-command install:** `npx @tormentnexus/install`
+>
+> Local-first, open-source AI control plane with persistent multi-tier memory, MCP tool orchestration across 20,000+ servers, multi-agent swarm coordination, and enterprise-grade security — all running on your machine.
 
 ## Installation
 
@@ -102,7 +73,7 @@ pm2 start tn-kernel --name tn-kernel -- serve -port 8090 -host 127.0.0.1
 
 # TormentNexus: The Cognitive Kernel — Universal Open-Source AI Control Plane for Multi-Agent Workflows, MCP Tools & Context-Aware Memory
 
-![Version](https://img.shields.io/badge/version-1.0.0--alpha.254-blue)
+![Version](https://img.shields.io/badge/version-1.0.0--b1-blue)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen)
 ![Go](https://img.shields.io/badge/Go-1.25+-00ADD8?logo=go)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)
@@ -140,7 +111,7 @@ For professional, corporate, and enterprise deployments, visit **[HyperNexus](ht
 - [API Surface](#api-surface)
 - [Quick Start](#quick-start)
 - [What's Planned](#whats-planned)
-- [Roadmap](#roadmap)
+- [Roadmap](ROADMAP.md)
 - [Documentation](#documentation)
 - [Contributing](#contributing)
 - [License](#license)
@@ -151,7 +122,7 @@ For professional, corporate, and enterprise deployments, visit **[HyperNexus](ht
 
 TormentNexus is a **decision system and universal bridge** — not just an aggregator. It runs locally as a modular monolith that unifies the chaotic landscape of AI tools, models, and agents into a single, coherent operating system for AI-driven development.
 
-### Current Capabilities (v1.0.0-alpha.254)
+### Current Capabilities (v1.0.0-b1)
 
 | Capability | Status | Details |
 |------------|--------|---------|
@@ -166,12 +137,36 @@ TormentNexus is a **decision system and universal bridge** — not just an aggre
 | **Skill Registry** | Stable | Unlimited assimilated skills from multiple harness ecosystems (Aider, Agent, CCS, Hermes, Pi, etc.) with Jaccard deduplication |
 | **CodeWhale Extension** | Stable | Native Rust extension with full Pi extension parity — infinite MCP tools, unlimited custom tools, infinite slash commands, unlimited shortcuts, L2 memory hooks, RBAC, @memory:key expansion, per-turn context harvesting, session compaction |
 | **Dashboard** | Stable | Next.js 16 + React 19 + Tailwind CSS 4 with real-time telemetry, knowledge graph, healer view, swarm visualizer |
+| **npm Packages** | Published | `@tormentnexus/install`, `@tormentnexus/core`, `@tormentnexus/cli`, `@tormentnexus/openhands`, `@tormentnexus/vscode`, `@tormentnexus/cursor` |
 | **tRPC Bridge** | Stable | Type-safe API layer (port 7778) connecting UI to Go sidecar |
 | **Session Import** | Beta | Automatic ingestion of Claude, Aider, and other harness session artifacts |
 | **Enterprise Licensing** | Experimental | Ed25519-signed license token validation with offline verification |
 | **Supervisor Nudge** | Stable | Autonomous Windows UI automation to maintain development momentum across AI chat surfaces |
 | **Deep Link Protocol** | Beta | `tormentnexus://attach?session=ID` and `tormentnexus://create?cliType=aider` URI handling |
 | **Provider Metrics** | Stable | Real-time telemetry tracking for all LLM providers with latency and cost analysis |
+
+---
+
+## 🚀 One-Command Install
+
+```bash
+npx @tormentnexus/install
+```
+
+That's it. Detects and configures TormentNexus for **38+ AI coding agents** including Claude, Gemini, Cursor, Windsurf, Aider, CodeWhale, and more. Each gets MCP config, skills, hooks, and commands.
+
+```bash
+# CLI tools
+npm install -g @tormentnexus/cli
+tn search "your topic"
+tn status
+
+# OpenHands integration
+npx @tormentnexus/openhands
+
+# Core kernel
+npx @tormentnexus/core
+```
 
 ---
 
@@ -408,22 +403,19 @@ The Go sidecar is the **authoritative execution kernel** of TormentNexus. It is 
 
 ### Native Go Tool Categories
 
-| Category | Native Tools | Example Implementations |
-|----------|-------------|------------------------|
-| Web Search & Scraping | DuckDuckGo, Firecrawl, Exa | `ddg_search.go`, `firecrawl.go`, `exa.go` |
-| Academic & Research | arXiv, Semantic Scholar | `arxiv.go`, `semantic_scholar.go` |
-| Databases & Storage | SQLite, ChromaDB, Mem0 | `sqlite_mcp.go`, `chroma.go`, `mem0.go` |
-| Finance & Markets | Alpaca, Alpha Vantage, DexPaprika | `alpaca.go`, `alpha_vantage.go`, `dexpaprika.go` |
-| Cloud & DevOps | Vercel, Filesystem | `vercel.go`, `filesystem.go` |
-| AI & LLM | Ollama, Hugging Face, MindsDB | `ollama.go`, `huggingface.go`, `mindsdb.go` |
-| Security | Semgrep, AST-grep | `semgrep.go`, `ast_grep.go` |
-| Code Intelligence | Serena, GitIngest, ripgrep | `serena.go`, `gitingest.go`, `ripgrep_search.go` |
-| Communication | Slack | `slack.go` |
-| Media | TTS, Browser Automation | `tts.go`, `browser_automation.go` |
-| Provider Abstraction | PAL (multi-model routing) | `pal.go` |
-| Memory | Basic Memory, Thoughtbox | `basic_memory.go`, `thoughtbox.go` |
-| System | codemod, anyquery | `codemod.go`, `anyquery.go` |
-| Weather | NWS (National Weather Service) | `nws_weather.go` |
+| Category | Example Integrations |
+|----------|---------------------|
+| Web Search & Scraping | DuckDuckGo, Firecrawl, Exa |
+| Academic & Research | arXiv, Semantic Scholar, PubMed, Open Library |
+| Finance & Markets | Alpaca, Alpha Vantage, CoinGecko, Yahoo Finance |
+| Science & Space | NASA (APOD, NEO, Mars Weather, EPIC), Open-Meteo |
+| Entertainment | PokéAPI, TVMaze, JokeAPI |
+| Reference | World Bank, Nobel Prize, Open Library |
+| AI & LLM | Ollama, Hugging Face, MindsDB |
+| Security | Semgrep, AST-grep |
+| Communication | Slack |
+| Cloud & DevOps | Vercel, Filesystem |
+| Memory | Basic Memory, ChromaDB, Mem0 |
 
 ### Swarm Tool Generation
 
@@ -485,11 +477,9 @@ TormentNexus is the world's largest local MCP registry and the only system with 
 
 ### Registry Scale
 
-- **14,250+** total tracked MCP servers (`assimilation_state.db`)
-- **11,024+** populated with verified metadata (`catalog.db`)
-- **600+** verified and registered in production (`tormentnexus.db`)
-- **11,000+** verified individual tools
-- **3,900+** reimplemented as native Go handlers (eliminating external dependencies)
+- **20,000+** total tracked MCP servers (`assimilation_state.db`)
+- **Thousands** verified individual tools
+- **Continuous native Go reimplementation** eliminating external dependencies
 
 ### Progressive Disclosure Pipeline
 
@@ -627,22 +617,16 @@ All API endpoints return a standardized envelope:
 ### Installation
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/NexusSoftMDMA/TormentNexus.git
+# 1. One-command setup (recommended)
+npx @tormentnexus/install
+
+# 2. Or clone and build from source
+git clone https://github.com/MDMAtk/TormentNexus.git
 cd tormentnexus
-
-# 2. Install dependencies & rebuild SQLite bindings
-pnpm install
-pnpm rebuild better-sqlite3
-
-# 3. Build the Go sidecar
+pnpm install && pnpm rebuild better-sqlite3
 cd go && go build -buildvcs=false ./cmd/tormentnexus && cd ..
-
-# 4. Start the TormentNexus Control Plane
 pnpm run dev
 ```
-
-The Next.js dashboard will automatically open at `http://localhost:3000/dashboard` once the TypeScript Control Plane (port 4100) and Go Sidecar (port 4300) are successfully locked and humming.
 
 ### Development Scripts
 
@@ -693,7 +677,7 @@ The Next.js dashboard will automatically open at `http://localhost:3000/dashboar
 
 ## Roadmap
 
-See [ROADMAP.md](docs/ROADMAP.md) for the detailed path to v1.0.0 stable, including:
+See [ROADMAP.md](ROADMAP.md) for the detailed path to v1.0.0 stable, including:
 
 - Progressive Skill Disclosure (Context Hygiene)
 - Go-native MCP sync migration
@@ -710,8 +694,8 @@ See [ROADMAP.md](docs/ROADMAP.md) for the detailed path to v1.0.0 stable, includ
 |----------|---------|
 | [AGENTS.md](AGENTS.md) | Multi-agent coordination and handoff protocol |
 | [VISION.md](docs/VISION.md) | North star and philosophical pillars |
-| [ROADMAP.md](docs/ROADMAP.md) | Active development roadmap and milestones |
-| [CHANGELOG.md](docs/CHANGELOG.md) | Detailed version history (400+ entries) |
+| [ROADMAP.md](ROADMAP.md) | Active development roadmap and milestones |
+| [CHANGELOG.md](CHANGELOG.md) | Detailed version history |
 | [MEMORY.md](docs/MEMORY.md) | Accumulated multi-agent insights and gotchas |
 | [HANDOFF.md](docs/HANDOFF.md) | Session handoff protocol for agent continuity |
 | [docs/API_ENDPOINTS.md](docs/API_ENDPOINTS.md) | Complete 600+ endpoint reference |

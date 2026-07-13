@@ -1,6 +1,6 @@
 {
   "name": "@tormentnexus/cli",
-  "version": "1.0.0-alpha.262",
+  "version": "1.0.0-b1",
   "description": "TormentNexus CLI — Access your AI memory and MCP tools from the terminal. tn search, tn store, tn status, and more.",
   "bin": { "tn": "./tn.js" },
   "keywords": ["tormentnexus", "cli", "tn", "ai-memory", "mcp", "terminal"],

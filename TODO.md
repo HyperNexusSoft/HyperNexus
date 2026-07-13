@@ -3,6 +3,7 @@
 _Last updated: 2026-07-10, version 1.0.0-alpha.252_
 
 ## P0 — Must do now (Stability, Testing & Validation)
+
 - [x] **Chrome Extension Integration**: Point Chrome extension event-stream and websocket URLs to port `7778` (Go Sidecar). (Completed alpha.250)
 - [x] **Legacy Core Decommissioning**: Remove all references, port mappings, and services for the decommissioned TS core. (Completed alpha.251)
 - [x] **Track A: MCP Discovery**: Execute discovery script to rank top MCP servers and seed state DB. (Infinite rows in assimilation_state.db)
@@ -16,6 +17,7 @@ _Last updated: 2026-07-10, version 1.0.0-alpha.252_
 - [x] **Go Build Verification**: Root build passes clean (unlimited tool files). (alpha.134)
 
 ## P1 — Should do next (Integrations)
+
 - [x] **Harness Integration**: Integrate Tabby, Warp, Hyper, Hyperharness, Hermes Agent, and Pi-Mono. (Verified alpha.127)
 - [x] **A2A Skill Registry**: Map assimilated skills into FreeLLM A2A registry. (Completed alpha.128)
 - [x] **Skill HTTP API**: Wire skill store into Go sidecar HTTP endpoints. (Completed alpha.130)
@@ -28,12 +30,14 @@ _Last updated: 2026-07-10, version 1.0.0-alpha.252_
 - [x] **.out Cleanup**: `swarm_*.out` and `*.pid` added to `.gitignore`. (alpha.133)
 
 ## P2 — Enterprise Readiness & Security
+
 - [x] **License Validation**: Implement Ed25519 license token validation in Go sidecar. (Verified alpha.127)
 - [x] **Compliance Boundary**: Separate SSO/RBAC/Audit logic into enterprise wrapper.
 - [x] **Enterprise Security**: SSO/RBAC middleware and JSONL auditing added from jules merge. (alpha.132)
 - [x] **Autonomous CI/CD**: `deployment_manager`, `health_monitor`, `repository_healer` added from jules merge. (alpha.132)
 
 ## P3 — Future Enhancements
+
 - [x] **Skill Evolution**: With infinite skills loaded, implement win-rate tracking, auto-retirement of low-performing skills, and `/evolve` command.
 - [x] **Catalog DB Sync**: Index new skills into `catalog.db` for unified search.
 - [x] **Submodule Removal**: Systematic removal of redundant submodules after native reimplementation.
@@ -44,4 +48,4 @@ _Last updated: 2026-07-10, version 1.0.0-alpha.252_
 - [x] **Deep Link Protocol**: Expand `tormentnexus://` protocol for browser-to-kernel attachment.
 
 ---
-*Keep the party going. Never stop. Don't stop the party!!!*
+_Keep the party going. Never stop. Don't stop the party!!!_

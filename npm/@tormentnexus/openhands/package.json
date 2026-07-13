@@ -1,6 +1,6 @@
 {
   "name": "@tormentnexus/openhands",
-  "version": "1.0.0-alpha.262",
+  "version": "1.0.0-b1",
   "description": "TormentNexus for OpenHands — Persistent AI memory, MCP tools, and context harvesting in your autonomous agent",
   "main": "index.js",
   "bin": { "tnopenhands": "./cli.js" },
