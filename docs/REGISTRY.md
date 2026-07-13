@@ -1,175 +1,217 @@
 # TormentNexus Registry & Catalog Documentation
 
-> Last updated: 2026-07-13 | Version: 1.0.0-b2
+> Last updated: 2026-07-13 | Version: 1.0.0-b2 | Total entries: 37,289
 
 ## Overview
 
-TormentNexus aggregates MCP tools, skills, and prompts from multiple sources into a unified catalog. This document maps every registry, database, and scraper script in the project.
+TormentNexus aggregates MCP tools, skills, prompts, agent frameworks, and AI/dev tools from 45+ sources into a unified catalog. This document maps every registry, database, scraper script, and content source in the project.
 
 ---
 
-## 1. MCP Tool Registries
+## 1. Content Sources by Category
 
-### 1.1 Go Native Handlers (`go/internal/mcpimpl/registry.go`)
+### 1.1 MCP Servers (19,464 entries)
 
-- **Count:** 5,668 registered tool handlers
-- **Source:** Hardcoded Go implementations for each MCP server
-- **How to update:** Add new handler entries to `AllHandlers()` function
-- **Active tools:** 51 currently registered and serving via kernel API
+| Source | Count | Type | URL/Location |
+|---|---|---|---|
+| awesome-mcp-fork | 10,289 | GitHub forks | `github.com/punkpeye/awesome-mcp-servers` forks |
+| awesome-mcp-servers | 3,042 | GitHub | `github.com/punkpeye/awesome-mcp-servers` |
+| npm | 1,391 | npm registry | `registry.npmjs.org` |
+| multi-source-scrape | 1,260 | Mixed | Combined scraper run |
+| github-search | 1,156 | GitHub API | `api.github.com/search/repositories` |
+| npm-tool | 772 | npm registry | MCP-adjacent packages |
+| github-mcp-name | 505 | GitHub API | Repos with "mcp" in name |
+| github-specific | 270 | GitHub API | Category-specific searches |
+| npm-expanded | 263 | npm registry | Expanded keyword searches |
+| github-topic | 145 | GitHub API | `topic:mcp` repos |
+| pypi | 101 | PyPI | `pypi.org` MCP packages |
+| crates-io | 100 | crates.io | Rust MCP packages |
+| github-topic-mcp | 54 | GitHub API | `topic:mcp` repos |
+| github-mcp-desc | 44 | GitHub API | "mcp-server" in description |
+| github-topic-mcp-proto | 32 | GitHub API | `topic:model-context-protocol` |
+| glama-html | 24 | HTML scrape | `glama.ai/mcp/servers` |
+| awesome-fork-v2 | 9 | GitHub forks | Additional awesome list forks |
+| glama-mock | 3 | Hardcoded | Fallback presets |
+| npm-mcp-sdk | 2 | npm registry | `@modelcontextprotocol` scope |
+| mcp-get | 1 | GitHub | `michaellatman/mcp-get` |
+| docker-hub | 1 | Docker Hub | MCP Docker images |
 
-### 1.2 Published Catalog (`catalog.db` → `published_mcp_servers`)
+### 1.2 MCP by Language (249 entries)
 
-- **Count:** 8 native Go tools
-- **Source:** Auto-registered from Go native handlers at kernel boot
-- **Schema:** `uuid, canonical_id, display_name, description, tags, categories, transport, status, created_at, updated_at`
+| Language | Count | Source |
+|---|---|---|
+| C++ | 81 | `github-lang-c++` |
+| Ruby | 76 | `github-lang-ruby` |
+| Swift | 60 | `github-lang-swift` |
+| Java | 21 | `github-lang-java` |
+| Rust | 10 | `github-lang-rust` |
+| TypeScript | 1 | `github-lang-typescript` |
 
-### 1.3 Links Backlog (`catalog.db` → `links_backlog`)
+### 1.3 MCP by Category (367 entries)
 
-- **Count:** 3,200 entries
-- **Sources:**
-  - `awesome-mcp-servers` (3,042) — scraped from `punkpeye/awesome-mcp-servers` GitHub repo
-  - `github-search` (155) — GitHub topic search for `mcp+server`
-  - `glama-mock` (3) — hardcoded fallback presets
-- **Schema:** `uuid, url, normalized_url, title, description, tags, source, is_duplicate, duplicate_of, research_status, http_status, synced_at, created_at, updated_at`
-- **Scraper:** `scripts/scrape-mcp-servers.py`
+| Category | Count | Category | Count |
+|---|---|---|---|
+| Payment | 40 | CMS | 37 |
+| Stripe | 36 | Social | 36 |
+| E-commerce | 36 | CRM | 35 |
+| Calendar | 19 | Logging | 17 |
+| Email | 17 | Filesystem | 16 |
+| Auth | 14 | Slack | 13 |
+| Notion | 12 | Monitoring | 10 |
+| AWS | 8 | Analytics | 8 |
+| Discord | 6 | GitHub | 3 |
+| Database | 2 | Browser | 2 |
 
-### 1.4 Published Skills (`catalog.db` → `published_skills`)
+### 1.4 AI/Dev Tools (5,582 entries)
 
-- **Count:** 0 (table exists but not populated)
-- **Schema:** TBD — needs to be populated from `.tormentnexus/skills/`
+| Source | Count | Type |
+|---|---|---|
+| awesome-general | 3,363 | General awesome lists |
+| npm-ai-sdk | 784 | AI SDK packages |
+| npm-tool-v2 | 693 | Tool packages |
+| github-ai-tool | 453 | GitHub AI tool repos |
+| npm-adjacent | 272 | MCP-adjacent npm packages |
+| awesome-domain | 10 | Domain-specific awesome lists |
+| awesome-ai-v2 | 7 | AI awesome lists |
+
+### 1.5 Prompts/Templates (295 entries)
+
+| Source | Count | Type |
+|---|---|---|
+| prompt-repo | 92 | Prompt repository READMEs |
+| github-prompt-search | 87 | GitHub prompt searches |
+| fabric-patterns | 45 | `danielmiessler/Fabric` patterns |
+| awesome-ai-system-prompts | 21 | `dontriskit/awesome-ai-system-prompts` |
+| chatgpt-system-prompts | 12 | `LouisShark/chatgpt_system_prompt` |
+| system-prompts-leaks | 9 | `asgeirtj/system_prompts_leaks` |
+| big-prompt-library | 9 | `0xeb/TheBigPromptLibrary` |
+| meigen-ai-design-mcp | 7 | `jau123/MeiGen-AI-Design-MCP` |
+| system-prompts-ai-tools | 5 | `x1xhlol/system-prompts-and-models-of-ai-tools` |
+| claude-code-prompts | 5 | `Piebald-AI/claude-code-system-prompts` |
+| claude-code-prompts-v2 | 2 | `repowise-dev/claude-code-prompts` |
+| leaked-system-prompts | 1 | `jujumilk3/leaked-system-prompts` |
+
+### 1.6 Agent Frameworks (223 entries)
+
+| Source | Count | Type |
+|---|---|---|
+| awesome-ai-agent | 183 | Awesome AI agent lists |
+| agent-framework | 40 | Agent framework repos |
+
+### 1.7 Skills (5,441 entries)
+
+| Location | Count |
+|---|---|
+| `/opt/marketing_agent/borg/` | 5,438 |
+| `/opt/tormentnexus/.antigravity/` | 1 |
+| `/opt/tormentnexus/.mavis/` | 1 |
+| `/opt/tormentnexus/.codewhale/` | 1 |
+
+### 1.8 Go Native Handlers (5,668 entries)
+
+| File | Count | Description |
+|---|---|---|
+| `go/internal/mcpimpl/registry.go` | 5,668 | MCP tool handler definitions |
 
 ---
 
-## 2. Skill Libraries
+## 2. Database Inventory
 
-### 2.1 Local Skills (`.tormentnexus/skills/`)
-
-- **Count:** 2,987 SKILL.md files
-- **Location:** `C:/Users/hyper/workspace/tormentnexus/.tormentnexus/skills/`
-- **Format:** Each skill is a directory with a `SKILL.md` file
-- **Categories:** Includes 000-999 numbered skills + named skills
-- **Examples:**
-  - `000_jeremy_content_consistency_validator`
-  - `2d_games`, `3d_games`, `3d_web_experience`
-  - `6sense_intent`, `a3_problem_solver`
-  - `abc_xyz_classifier`, `abstract_domain_library`
-
-### 2.2 Agent Extension Skills
-
-- **Locations:** `.agent/skills/`, `.antigravity/extensions/`, `.claude/plugins/`, `.codewhale/plugins/`, `.codex/skills/`, `.gemini/skills/`, `.kimi-code/skills/`, `.mavis/skills/`
-- **Count:** ~10-20 across all locations
-- **Format:** Same SKILL.md format
-
-### 2.3 Pi Skills (Installed via npm)
-
-- **Location:** `~/.pi/agent/npm/node_modules/*/skills/`
-- **Count:** ~10-15 (context-management, pi-subagents, prompt-template-authoring, etc.)
-- **Discovery:** Auto-detected by Pi agent at startup
-
----
-
-## 3. Prompt Templates
-
-### 3.1 Pi Prompt Templates
-
-- **Location:** `~/.pi/agent/npm/node_modules/*/prompts/`
-- **Format:** `.md` files with prompt template syntax
-- **Examples:** `/writing-test`, `/code-review`, `/execute-plan`
-
-### 3.2 Project Prompt Templates
-
-- **Location:** `.prompts/` or `prompts/` directories
-- **Count:** TBD — check `.prompts/` directory
-
----
-
-## 4. Database Inventory
-
-### 4.1 Kernel Databases (`/root/.tormentnexus/`)
+### 2.1 Kernel Databases (`/root/.tormentnexus/`)
 
 | Database | Tables | Purpose |
 |---|---|---|
 | `memory.db` | 56 | L2 vault, L3 cold archive, L4 limbo, GraphRAG, FTS5 |
-| `catalog.db` | 3 | MCP tool catalog, skills, links backlog |
+| `catalog.db` | 4 | Published skills, registry tools, sync state, tool index |
 | `accounts.db` | 3 | Tenant accounts and billing |
 | `l3_cold_archive.db` | 14 | Cold storage for old memories |
 
-### 4.2 Docker Tenant Databases
+### 2.2 Catalog Databases (dual location)
+
+| Database | Tables | Count |
+|---|---|---|
+| `/opt/tormentnexus/catalog.db` | links_backlog | 26,180 |
+| `/opt/tormentnexus/catalog.db` | published_mcp_servers | 8 |
+| `/root/.tormentnexus/catalog.db` | published_skills | 5,441 |
+
+### 2.3 Docker Tenant Databases
 
 - Each tenant has its own `tormentnexus.db` in the container volume
 - Located at `/var/lib/hypernexus/tenants/{tenant}/`
 
-### 4.3 Other Databases
+---
 
-- `/opt/tormentnexus/tormentnexus.db` — Session import data (2 tables)
-- `/opt/tormentnexus/catalog.db` — Duplicate catalog (kernel creates in CWD)
+## 3. Scraper Scripts
+
+### 3.1 `scripts/scrape-mega.py`
+
+- **Purpose:** All-in-one mega scraper
+- **Sources:** awesome-mcp-servers, GitHub (20 queries), npm (10 queries), PyPI, curated lists, Glama HTML, Smithery, Docker Hub, crates.io, MCP Hub
+- **Run:** `python3 scripts/scrape-mega.py`
+- **Last run:** 2026-07-13
+
+### 3.2 `scripts/scrape-more.py`
+
+- **Purpose:** Additional sources (language, category, SDK, forks)
+- **Sources:** GitHub by language (7), GitHub by category (24), npm AI SDKs, awesome forks, AI awesome lists
+- **Run:** `python3 scripts/scrape-more.py`
+
+### 3.3 `scripts/scrape-all-registries.py`
+
+- **Purpose:** Comprehensive multi-source scraper
+- **Sources:** awesome-mcp-servers, GitHub topics, npm, PyPI, curated lists
+- **Run:** `python3 scripts/scrape-all-registries.py`
+
+### 3.4 `scripts/scrape-mcp-servers.py`
+
+- **Purpose:** Basic scraper
+- **Sources:** awesome-mcp-servers, GitHub topics
+- **Run:** `python3 scripts/scrape-mcp-servers.py`
 
 ---
 
-## 5. External Registry Sources
+## 4. External Registry Sources
 
-### 5.1 Active Sources (Working)
+### 4.1 Active Sources (Working)
 
 | Source | URL | Status | Last Scrape |
 |---|---|---|---|
 | awesome-mcp-servers | `github.com/punkpeye/awesome-mcp-servers` | ✅ Working | 2026-07-13 |
-| GitHub Topics | `api.github.com/search/repositories?q=mcp+server` | ✅ Working | 2026-07-13 |
-| Official MCP Servers | `github.com/modelcontextprotocol/servers` | ✅ Working (7 dirs) | Manual |
+| GitHub Topics | `api.github.com/search/repositories` | ✅ Working | 2026-07-13 |
+| GitHub Language | `api.github.com/search/repositories` | ✅ Working | 2026-07-13 |
+| GitHub Category | `api.github.com/search/repositories` | ✅ Working | 2026-07-13 |
+| npm | `registry.npmjs.org` | ✅ Working | 2026-07-13 |
+| PyPI | `pypi.org` | ✅ Working | 2026-07-13 |
+| crates.io | `crates.io/api/v1/crates` | ✅ Working | 2026-07-13 |
+| Docker Hub | `hub.docker.com/v2/search/repositories` | ✅ Working | 2026-07-13 |
+| Fabric | `github.com/danielmiessler/Fabric` | ✅ Working | 2026-07-13 |
+| Prompt repos | Various GitHub repos | ✅ Working | 2026-07-13 |
 
-### 5.2 Broken Sources (Need Fix)
+### 4.2 Broken Sources (Need Fix)
 
 | Source | URL | Issue |
 |---|---|---|
-| Glama.ai | `glama.ai/api/v1/mcp/servers` | Returns HTML instead of JSON (API changed) |
-| Smithery | `registry.smery.ai` | Empty response |
-| mcp.run | `mcp.run/api/catalog` | 301 redirect (API changed) |
+| Glama.ai API | `glama.ai/api/v1/mcp/servers` | Returns HTML instead of JSON |
+| Smithery | `smithery.ai/api/v1/servers` | Empty response |
+| mcp.run | `mcp.run/api/catalog` | 301 redirect |
 
-### 5.3 Sources Not Yet Integrated
+### 4.3 Sources Not Yet Integrated
 
 | Source | URL | Notes |
 |---|---|---|
-| npm MCP packages | `registry.npmjs.org` | Search for `mcp-server` keyword |
-| PyPI MCP packages | `pypi.org` | Search for `mcp-server` keyword |
-| MCP Hub | `mcp-hub.com` | Community directory |
 | Toolhouse | `toolhouse.ai` | Agent tool marketplace |
 | Composio | `composio.dev` | Integration platform |
+| Mintlify | `mintlify.com` | API docs platform |
+| LangChain tools | `langchain.com` | Tool registry |
+| LlamaIndex tools | `llamaindex.ai` | Tool registry |
 
 ---
 
-## 6. Scraper Scripts
-
-### 6.1 `scripts/scrape-mcp-servers.py`
-
-- **Purpose:** Bulk scrape MCP servers from awesome-mcp-servers and GitHub topics
-- **Output:** Inserts into `catalog.db` → `links_backlog` table
-- **Run:** `python3 scripts/scrape-mcp-servers.py`
-- **Last run:** 2026-07-13 (3,200 entries)
-
-### 6.2 `scripts/gen-blog.py`
-
-- **Purpose:** Generate blog post HTML files for tormentnexus.site
-- **Output:** HTML files in `/var/www/tormentnexus.site/blog/tormentnexus/`
-- **Run:** `python3 scripts/gen-blog.py`
-
-### 6.3 Go Catalog Sync (`go/internal/hsync/glama.go`)
-
-- **Purpose:** Sync from Glama.ai API (currently broken — API changed)
-- **Run:** Automatic at kernel boot via `CatalogSync` goroutine
-- **Fallback:** Uses 3 hardcoded presets when API fails
-
-### 6.4 Go Catalog Ingest (`go/internal/mcp/catalog_ingest.go`)
-
-- **Purpose:** Ingest from multiple sources via adapter pattern
-- **Adapters:** `GlamaAiAdapter` (only one currently)
-- **Run:** Called from kernel initialization
-
----
-
-## 7. How to Add a New Registry Source
+## 5. How to Add a New Registry Source
 
 ### Option A: Python Scraper (Quick)
 
-1. Add a new function to `scripts/scrape-mcp-servers.py`
+1. Add a new function to `scripts/scrape-mega.py`
 2. Fetch from the API/URL
 3. Parse and normalize entries
 4. Insert into `catalog.db` → `links_backlog`
@@ -184,26 +226,14 @@ TormentNexus aggregates MCP tools, skills, and prompts from multiple sources int
 
 ---
 
-## 8. Sync Schedule
-
-| Task | Frequency | Script |
-|---|---|---|
-| MCP server scrape | Manual / on-demand | `scripts/scrape-mcp-servers.py` |
-| Glama.ai sync | Every 60min (kernel) | `go/internal/hsync/glama.go` |
-| Catalog ingest | At kernel boot | `go/internal/mcp/catalog_ingest.go` |
-| DB backup | Daily 3am | `/etc/cron.d/tn-backup` |
-| Memory maintenance | Every 60min (kernel) | Go kernel goroutine |
-
----
-
-## 9. Quick Reference Commands
+## 6. Quick Reference Commands
 
 ```bash
 # Check catalog counts
-ssh hetzner 'sqlite3 /opt/tormentnexus/catalog.db "SELECT source, count(*) FROM links_backlog GROUP BY source;"'
+ssh hetzner 'sqlite3 /opt/tormentnexus/catalog.db "SELECT source, count(*) FROM links_backlog GROUP BY source ORDER BY count(*) DESC;"'
 
-# Run MCP scraper
-python3 scripts/scrape-mcp-servers.py
+# Run mega scraper
+python3 scripts/scrape-mega.py
 
 # Check active tools
 curl -s http://127.0.0.1:8090/api/runtime/status | jq '.data.cli.toolCount'
@@ -213,4 +243,7 @@ find .tormentnexus/skills/ -name "SKILL.md" | wc -l
 
 # Check Stripe config
 ssh hetzner 'grep STRIPE /opt/tormentnexus/.env'
+
+# Full catalog status
+ssh hetzner 'sqlite3 /opt/tormentnexus/catalog.db "SELECT count(*) FROM links_backlog;" && sqlite3 /root/.tormentnexus/catalog.db "SELECT count(*) FROM published_skills;"'
 ```

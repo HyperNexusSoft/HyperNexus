@@ -1327,3 +1327,44 @@
 - 6 corrupt SQLite DB files
 - enterprise_sales_bot directory (unique pages recovered to landing/_recovered/)
 - 5.1GB disk space reclaimed (caches, temp files, Docker build cache)
+
+## [1.0.0-b2] — 2026-07-13 (continued)
+
+### Catalog Expansion
+
+- Scraped 45+ sources into unified catalog
+- 26,180 MCP servers from GitHub, npm, PyPI, crates.io, Docker Hub
+- 5,441 skills from filesystem scan
+- 5,668 Go native handler definitions
+- 367 MCP entries by category (20 categories)
+- 249 MCP entries by language (6 languages)
+- 295 prompt/template entries from 12 sources
+- 223 agent framework entries
+- Total catalog: 37,289 entries
+
+### Sources Scraped
+
+- awesome-mcp-servers + 10,289 forks
+- GitHub: 20 search queries, 7 language queries, 24 category queries, topic searches
+- npm: 15+ query batches, @modelcontextprotocol scope, AI SDKs
+- PyPI: MCP packages
+- crates.io: Rust MCP packages
+- Docker Hub: MCP images
+- Glama.ai: HTML scrape (API broken)
+- Fabric: 45 prompt patterns
+- 13 prompt/system prompt repositories
+- Agent framework repositories
+
+### Scraper Scripts
+
+- `scripts/scrape-mega.py` — All-in-one mega scraper (10 sources)
+- `scripts/scrape-more.py` — Language, category, SDK, fork scrapers
+- `scripts/scrape-all-registries.py` — Comprehensive multi-source
+- `scripts/scrape-mcp-servers.py` — Basic awesome + GitHub
+
+### Documentation
+
+- `docs/REGISTRY.md` — Complete registry documentation
+- 45+ sources documented with counts and categories
+- Database inventory with all tables and schemas
+- Quick reference commands for each registry
