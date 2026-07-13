@@ -53,7 +53,7 @@ func dashboardURL() string {
 	if u := os.Getenv("TORMENTNEXUS_DASHBOARD_URL"); u != "" {
 		return u
 	}
-	return "http://127.0.0.1:7779/dashboard"
+	return "https://hypernexus.site"
 }
 
 func apiBaseURL() string {
