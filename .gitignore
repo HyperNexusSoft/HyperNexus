@@ -92,7 +92,6 @@ test*.txt
 fix_build*.py
 cleanup_tools.py
 batch_generate.py
-build_watchdog.py
 
 # === Cloned/imported repos ===
 yorck-mcp-src/
@@ -253,7 +252,6 @@ akb*
 _llm_*
 *.pid
 *.tar.gz
-watchdog.bat
 run.bat
 go/*.exe~
 finalize_swarm.pid
@@ -265,7 +263,6 @@ binance.go
 bravesearch.go
 ccoreguidelines.go
 *.exe~
-watchdog.py
 
 # Swarm build artifacts
 go/internal/tools/_staging/
