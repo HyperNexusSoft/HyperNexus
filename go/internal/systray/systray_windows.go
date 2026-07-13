@@ -421,21 +421,27 @@ func hiddenWndProc(hWnd windows.HWND, msg uint32, wParam uintptr, lParam uintptr
 	return ret
 }
 
+func hiddenCommand(name string, args ...string) *exec.Cmd {
+	cmd := exec.Command(name, args...)
+	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
+	return cmd
+}
+
 func TriggerFullShutdown() {
 	// 1. Terminate watchdog
-	_ = exec.Command("taskkill", "/F", "/FI", "WINDOWTITLE eq TormentNexus Watchdog").Run()
-	_ = exec.Command("wmic", "process", "where", "CommandLine like '%watchdog.py%'", "call", "terminate").Run()
+	_ = hiddenCommand("taskkill", "/F", "/FI", "WINDOWTITLE eq TormentNexus Watchdog").Run()
+	_ = hiddenCommand("wmic", "process", "where", "CommandLine like '%watchdog.py%'", "call", "terminate").Run()
 
 	// 2. Terminate scripts
-	_ = exec.Command("wmic", "process", "where", "CommandLine like '%swarm_v7.py%'", "call", "terminate").Run()
-	_ = exec.Command("wmic", "process", "where", "CommandLine like '%bobbybookmarks_sync.py%'", "call", "terminate").Run()
-	_ = exec.Command("wmic", "process", "where", "CommandLine like '%trends_analyzer.py%'", "call", "terminate").Run()
+	_ = hiddenCommand("wmic", "process", "where", "CommandLine like '%swarm_v7.py%'", "call", "terminate").Run()
+	_ = hiddenCommand("wmic", "process", "where", "CommandLine like '%bobbybookmarks_sync.py%'", "call", "terminate").Run()
+	_ = hiddenCommand("wmic", "process", "where", "CommandLine like '%trends_analyzer.py%'", "call", "terminate").Run()
 
 	// 3. Terminate Node dashboard processes
-	_ = exec.Command("wmic", "process", "where", "CommandLine like '%next-dev%' or CommandLine like '%next build%' or CommandLine like '%next start%'", "call", "terminate").Run()
+	_ = hiddenCommand("wmic", "process", "where", "CommandLine like '%next-dev%' or CommandLine like '%next build%' or CommandLine like '%next start%'", "call", "terminate").Run()
 
 	// 4. Terminate freellm
-	_ = exec.Command("taskkill", "/F", "/IM", "freellm.exe").Run()
+	_ = hiddenCommand("taskkill", "/F", "/IM", "freellm.exe").Run()
 
 	// 5. Exit TN Kernel
 	os.Exit(0)
