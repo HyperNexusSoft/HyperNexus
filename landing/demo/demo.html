@@ -1,51 +1,70 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>HyperNexus - Interactive Dashboard Demo</title>
-  <style>
-    body { font-family: sans-serif; padding: 20px; background: #0f172a; color: white; }
-    h1 { color: #38bdf8; }
-    .panel { background: #1e293b; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-    .metric { font-size: 24px; font-weight: bold; }
-    .nav-cta {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 10px 20px;
-      background: #38bdf8;
-      color: #0f172a;
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 4px;
-    }
-  </style>
-</head>
-<body>
-  <h1>HyperNexus Interactive Demo</h1>
-  <div class="panel">
-    <h2>Live Telemetry</h2>
-    <p>Go Sidecar Status: <span id="status" class="metric">Checking...</span></p>
-    <p>Active Agents: <span class="metric">42</span></p>
-    <a href="../hypernexus.site/index.html" class="nav-cta">← Back to HyperNexus</a>
-  </div>
-  <script>
-    async function checkSidecar() {
-      try {
-        const response = await fetch('http://127.0.0.1:7778/health');
-        if (response.ok) {
-          document.getElementById('status').innerText = 'Connected 🟢';
-          document.getElementById('status').style.color = '#4ade80';
-        } else {
-          document.getElementById('status').innerText = 'Offline 🔴';
-          document.getElementById('status').style.color = '#f87171';
-        }
-      } catch (err) {
-        document.getElementById('status').innerText = 'Offline 🔴';
-        document.getElementById('status').style.color = '#f87171';
+  <head>
+    <meta charset="UTF-8" />
+    <title>HyperNexus - Interactive Dashboard Demo</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+        background: #0f172a;
+        color: white;
       }
-    }
-    checkSidecar();
-    setInterval(checkSidecar, 5000);
-  </script>
-</body>
+      h1 {
+        color: #38bdf8;
+      }
+      .panel {
+        background: #1e293b;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      .metric {
+        font-size: 24px;
+        font-weight: bold;
+      }
+      .nav-cta {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 20px;
+        background: #38bdf8;
+        color: #0f172a;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>HyperNexus Interactive Demo</h1>
+    <div class="panel">
+      <h2>Live Telemetry</h2>
+      <p>
+        Go Sidecar Status: <span id="status" class="metric">Checking...</span>
+      </p>
+      <p>Active Agents: <span class="metric">42</span></p>
+      <a href="../hypernexus.site/index.html" class="nav-cta"
+        >← Back to HyperNexus</a
+      >
+    </div>
+    <script>
+      async function checkSidecar() {
+        try {
+          const response = await fetch("http://127.0.0.1:7778/health");
+          if (response.ok) {
+            document.getElementById("status").innerText = "Connected 🟢";
+            document.getElementById("status").style.color = "#4ade80";
+          } else {
+            document.getElementById("status").innerText = "Offline 🔴";
+            document.getElementById("status").style.color = "#f87171";
+          }
+        } catch (err) {
+          document.getElementById("status").innerText = "Offline 🔴";
+          document.getElementById("status").style.color = "#f87171";
+        }
+      }
+      checkSidecar();
+      setInterval(checkSidecar, 5000);
+    </script>
+  </body>
 </html>

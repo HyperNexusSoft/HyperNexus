@@ -2,10 +2,10 @@
   "name": "@tormentnexus/install",
   "version": "1.0.0-alpha.261",
   "description": "TormentNexus One-Command Installer — Sets up MCP config, skills, hooks, and extensions for ALL 38+ AI coding clients",
-  "bin": { "tn-install": "./install.js", "tormentnexus-install": "./install.js" },
-  "scripts": { "install": "node install.js" },
+  "bin": { "tninstall": "./cli.js" },
+  "scripts": { "install": "node setup.js" },
   "keywords": ["tormentnexus", "install", "mcp", "ai-tools", "setup"],
-  "repository": "github:MDMAtk/TormentNexus",
+  "repository": { "type": "git", "url": "git+https://github.com/MDMAtk/TormentNexus.git" },
   "license": "MIT",
-  "files": ["install.js"]
+  "files": ["setup.js", "cli.js", "package.json"]
 }

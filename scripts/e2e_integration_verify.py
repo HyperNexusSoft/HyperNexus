@@ -6,19 +6,21 @@ import os
 BASE_URL = f"http://127.0.0.1:{os.getenv('TORMENTNEXUS_GO_PORT', '7778')}"
 SAMPLE_REPO = "/tmp/tormentnexus-sample"
 
-def call_endpoint(path, method='GET', payload=None):
+
+def call_endpoint(path, method="GET", payload=None):
     url = f"{BASE_URL}{path}"
-    data = json.dumps(payload).encode('utf-8') if payload else None
-    headers = {'Content-Type': 'application/json'} if payload else {}
+    data = json.dumps(payload).encode("utf-8") if payload else None
+    headers = {"Content-Type": "application/json"} if payload else {}
     req = urllib.request.Request(url, data=data, method=method, headers=headers)
 
     print(f"\n>>> {method} {path}")
-    if payload: print(f"Payload: {json.dumps(payload)}")
+    if payload:
+        print(f"Payload: {json.dumps(payload)}")
 
     start = time.perf_counter()
     try:
         with urllib.request.urlopen(req) as response:
-            res_body = response.read().decode('utf-8')
+            res_body = response.read().decode("utf-8")
             end = time.perf_counter()
             duration = (end - start) * 1000
             result = json.loads(res_body)
@@ -28,15 +30,21 @@ def call_endpoint(path, method='GET', payload=None):
         print(f"Status: Failed | Error: {e}")
         return None
 
+
 def call_tool(name, arguments):
-    return call_endpoint("/api/agent/tool", "POST", {"name": name, "arguments": arguments})
+    return call_endpoint(
+        "/api/agent/tool", "POST", {"name": name, "arguments": arguments}
+    )
+
 
 def run_e2e():
     print("🚀 TormentNexus E2E Integration Protocol v1\n")
 
     # 1. Native Tool Execution: Ripgrep
     print("--- Testing Native Tool: ripgrep_search ---")
-    rg_res = call_tool("ripgrep_search", {"pattern": "TormentNexus", "path": SAMPLE_REPO})
+    rg_res = call_tool(
+        "ripgrep_search", {"pattern": "TormentNexus", "path": SAMPLE_REPO}
+    )
     if rg_res and "success" in rg_res:
         print("✅ Ripgrep execution verified.")
 
@@ -44,12 +52,12 @@ def run_e2e():
     print("\n--- Testing Skill Registry ---")
     skills = call_endpoint("/api/skills")
     if skills and "success" in skills:
-        data = skills.get('data', [])
+        data = skills.get("data", [])
         print(f"✅ Listed {len(data)} skills via /api/skills.")
 
     # 3. Prompt Library Operations
     print("\n--- Testing Prompt Library ---")
-    prompts = call_endpoint("/api/scripts") #saved scripts
+    prompts = call_endpoint("/api/scripts")  # saved scripts
     if prompts and "success" in prompts:
         print("✅ API access to scripts/prompts verified.")
 
@@ -60,6 +68,7 @@ def run_e2e():
         print("✅ System overview is healthy.")
 
     print("\n🏁 Integration Tests Complete")
+
 
 if __name__ == "__main__":
     run_e2e()

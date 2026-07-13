@@ -3,10 +3,10 @@
   "version": "1.0.0-alpha.261",
   "description": "TormentNexus Core — Universal AI control plane with persistent multi-tier memory, MCP tool routing, and enterprise RBAC",
   "main": "index.js",
-  "bin": { "tn-core": "./install.js", "tormentnexus": "./install.js" },
-  "scripts": { "install": "node install.js" },
-  "keywords": ["tormentnexus", "mcp", "ai-memory", "vector-store", "rag", "ai-agent", "llm", "model-context-protocol"],
-  "repository": "github:MDMAtk/TormentNexus",
+  "bin": { "tncore": "./cli.js" },
+  "scripts": { "install": "node setup.js" },
+  "keywords": ["tormentnexus", "mcp", "ai-memory", "vector-store", "rag", "ai-agent", "llm"],
+  "repository": { "type": "git", "url": "git+https://github.com/MDMAtk/TormentNexus.git" },
   "license": "MIT",
-  "files": ["install.js", "index.js"]
+  "files": ["setup.js", "cli.js", "index.js", "package.json"]
 }
