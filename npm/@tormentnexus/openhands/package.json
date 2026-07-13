@@ -1,0 +1,10 @@
+{
+  "name": "@tormentnexus/openhands",
+  "version": "1.0.0",
+  "description": "TormentNexus integration for OpenHands — persistent memory, MCP tools, context harvesting",
+  "main": "index.js",
+  "bin": { "tn-openhands-install": "./install.js" },
+  "scripts": { "install": "node install.js" },
+  "keywords": ["tormentnexus", "openhands", "mcp", "memory", "ai-agent"],
+  "files": ["install.js", "microagent.md", "config.toml", "index.js"]
+}
