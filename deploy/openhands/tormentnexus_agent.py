@@ -113,9 +113,7 @@ class TormentNexusAgent:
         """Get all available TN MCP tool names."""
         if not self._tools_cache:
             status = self._tn_request("runtime/status")
-            self._tools_cache = (
-                status.get("data", {}).get("cli", {}).get("tools", [])
-            )
+            self._tools_cache = status.get("data", {}).get("cli", {}).get("tools", [])
         return self._tools_cache or []
 
     def execute_tool(self, tool_name: str, args: Dict) -> Dict:
@@ -165,9 +163,7 @@ class TormentNexusAgent:
         results = []
         if self.is_healthy():
             for d in decisions:
-                results.append(
-                    self.memory_store(d, ["openhands", "decision", "auto"])
-                )
+                results.append(self.memory_store(d, ["openhands", "decision", "auto"]))
             results.append(
                 self.memory_store(summary, ["openhands", "session-summary", "auto"])
             )

@@ -15,8 +15,10 @@ def _tn(endpoint: str, data: Optional[Dict] = None) -> Any:
     url = f"{TN_URL}/api/{endpoint}"
     body = json.dumps(data).encode() if data else None
     req = urllib.request.Request(
-        url, body, {"Content-Type": "application/json"},
-        method="POST" if data else "GET"
+        url,
+        body,
+        {"Content-Type": "application/json"},
+        method="POST" if data else "GET",
     )
     with urllib.request.urlopen(req, timeout=10) as r:
         return json.loads(r.read())
@@ -24,18 +26,25 @@ def _tn(endpoint: str, data: Optional[Dict] = None) -> Any:
 
 # ─── Memory Actions ───
 
+
 def tn_memory_store(content: str, tags: List[str], category: str = "general") -> str:
     """Store a fact, decision, or pattern to TN L2 memory.
     Args: content (str): What to store. tags (list[str]): Tags for retrieval.
           category (str): general, decision, pattern, bug, or architecture."""
-    return json.dumps(_tn("memory/store", {"content": content, "tags": tags, "category": category}))
+    return json.dumps(
+        _tn("memory/store", {"content": content, "tags": tags, "category": category})
+    )
 
 
-def tn_memory_search(query: str, tags: Optional[List[str]] = None, limit: int = 10) -> str:
+def tn_memory_search(
+    query: str, tags: Optional[List[str]] = None, limit: int = 10
+) -> str:
     """Search TN L2 memory by keyword, tag, or category.
     Args: query (str): Search terms. tags (list[str], optional): Filter by tags.
           limit (int): Max results (default 10)."""
-    return json.dumps(_tn("memory/search", {"query": query, "tags": tags or [], "limit": limit}))
+    return json.dumps(
+        _tn("memory/search", {"query": query, "tags": tags or [], "limit": limit})
+    )
 
 
 def tn_memory_vector_search(query: str, limit: int = 5) -> str:
@@ -45,6 +54,7 @@ def tn_memory_vector_search(query: str, limit: int = 5) -> str:
 
 
 # ─── Tool Discovery ───
+
 
 def tn_tool_search(query: str) -> str:
     """Find MCP tools across all configured servers by describing what you need.
@@ -59,6 +69,7 @@ def tn_tool_execute(tool: str, arguments: Dict[str, Any]) -> str:
 
 
 # ─── Sessions ───
+
 
 def tn_session_search(query: str) -> str:
     """Search 542+ imported sessions from Claude Code, Aider, Gemini, etc.
@@ -75,14 +86,18 @@ def tn_session_import(source: str, path: str) -> str:
 
 # ─── Code Search ───
 
+
 def tn_code_search(query: str, scope: str = "all", method: str = "ast-grep") -> str:
     """Search code via AST-grep rules, semantic search, or file patterns.
     Args: query (str): Pattern or query. scope (str): all, go, ts, py, or rust.
           method (str): ast-grep, semantic, or pattern."""
-    return json.dumps(_tn("code/search", {"query": query, "scope": scope, "method": method}))
+    return json.dumps(
+        _tn("code/search", {"query": query, "scope": scope, "method": method})
+    )
 
 
 # ─── System ───
+
 
 def tn_system_status() -> str:
     """Get TN health overview: version, uptime, memory tiers, connected servers, provider quota."""
@@ -109,8 +124,16 @@ ACTIONS = {
         "description": "Store a fact, decision, or pattern to TormentNexus persistent L2 memory",
         "args_schema": {
             "content": {"type": "string", "description": "Content to store"},
-            "tags": {"type": "array", "items": {"type": "string"}, "description": "Tags for retrieval"},
-            "category": {"type": "string", "default": "general", "description": "general, decision, pattern, bug, architecture"},
+            "tags": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "Tags for retrieval",
+            },
+            "category": {
+                "type": "string",
+                "default": "general",
+                "description": "general, decision, pattern, bug, architecture",
+            },
         },
     },
     "tn_memory_search": {
@@ -118,7 +141,11 @@ ACTIONS = {
         "description": "Search TormentNexus L2 memory by keyword, tag, or category",
         "args_schema": {
             "query": {"type": "string", "description": "Search terms"},
-            "tags": {"type": "array", "items": {"type": "string"}, "description": "Filter tags"},
+            "tags": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "Filter tags",
+            },
             "limit": {"type": "integer", "default": 10, "description": "Max results"},
         },
     },
@@ -134,7 +161,10 @@ ACTIONS = {
         "function": tn_tool_search,
         "description": "Find MCP tools across all TormentNexus servers by describing what you need",
         "args_schema": {
-            "query": {"type": "string", "description": "What kind of tool or capability you need"},
+            "query": {
+                "type": "string",
+                "description": "What kind of tool or capability you need",
+            },
         },
     },
     "tn_tool_execute": {
@@ -149,7 +179,10 @@ ACTIONS = {
         "function": tn_session_search,
         "description": "Search 542+ imported AI sessions for patterns and solutions",
         "args_schema": {
-            "query": {"type": "string", "description": "Topic, tool, or pattern to find in past sessions"},
+            "query": {
+                "type": "string",
+                "description": "Topic, tool, or pattern to find in past sessions",
+            },
         },
     },
     "tn_code_search": {
@@ -157,8 +190,16 @@ ACTIONS = {
         "description": "Search codebase via AST-grep, semantic, or pattern matching",
         "args_schema": {
             "query": {"type": "string", "description": "Pattern or query"},
-            "scope": {"type": "string", "default": "all", "description": "all, go, ts, py, rust"},
-            "method": {"type": "string", "default": "ast-grep", "description": "ast-grep, semantic, pattern"},
+            "scope": {
+                "type": "string",
+                "default": "all",
+                "description": "all, go, ts, py, rust",
+            },
+            "method": {
+                "type": "string",
+                "default": "ast-grep",
+                "description": "ast-grep, semantic, pattern",
+            },
         },
     },
     "tn_system_status": {
@@ -177,8 +218,15 @@ ACTIONS = {
         "function": tn_skill_manage,
         "description": "Access the TormentNexus skill registry (5,776+ modules)",
         "args_schema": {
-            "action": {"type": "string", "description": "list, search, install, remove, describe"},
-            "query": {"type": "string", "default": "", "description": "Skill name or search term"},
+            "action": {
+                "type": "string",
+                "description": "list, search, install, remove, describe",
+            },
+            "query": {
+                "type": "string",
+                "default": "",
+                "description": "Skill name or search term",
+            },
         },
     },
 }

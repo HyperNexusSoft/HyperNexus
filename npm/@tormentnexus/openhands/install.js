@@ -12,29 +12,30 @@ console.log("\n⚡ TormentNexus for OpenHands — Full Integration Installer\n")
 
 // 1. Create all directories
 const dirs = [
-  path.join(OPENHANDS_DIR, "microagents"),
-  path.join(OPENHANDS_DIR, "plugins", "tormentnexus"),
-  path.join(OPENHANDS_DIR, "plugins", "tormentnexus", "skills"),
-  path.join(OPENHANDS_DIR, "plugins", "tormentnexus", "commands"),
-  path.join(OPENHANDS_DIR, "plugins", "tormentnexus", "mcp"),
+	path.join(OPENHANDS_DIR, "microagents"),
+	path.join(OPENHANDS_DIR, "plugins", "tormentnexus"),
+	path.join(OPENHANDS_DIR, "plugins", "tormentnexus", "skills"),
+	path.join(OPENHANDS_DIR, "plugins", "tormentnexus", "commands"),
+	path.join(OPENHANDS_DIR, "plugins", "tormentnexus", "mcp"),
 ];
 for (const d of dirs) fs.mkdirSync(d, { recursive: true });
 
 // 2. MCP server config (Stdio transport)
 const mcpConfig = {
-  mcpServers: {
-    tormentnexus: {
-      command: process.platform === "win32" ? "tormentnexus.exe" : "tormentnexus",
-      args: ["mcp"],
-      env: { TORMENTNEXUS_WORKSPACE_ROOT: TN_WORKSPACE },
-      type: "stdio",
-      lifecycle: "eager",
-    },
-  },
+	mcpServers: {
+		tormentnexus: {
+			command:
+				process.platform === "win32" ? "tormentnexus.exe" : "tormentnexus",
+			args: ["mcp"],
+			env: { TORMENTNEXUS_WORKSPACE_ROOT: TN_WORKSPACE },
+			type: "stdio",
+			lifecycle: "eager",
+		},
+	},
 };
 fs.writeFileSync(
-  path.join(OPENHANDS_DIR, "plugins", "tormentnexus", "mcp", "servers.json"),
-  JSON.stringify(mcpConfig, null, 2)
+	path.join(OPENHANDS_DIR, "plugins", "tormentnexus", "mcp", "servers.json"),
+	JSON.stringify(mcpConfig, null, 2),
 );
 
 // 3. TN config.toml for OpenHands
@@ -76,8 +77,8 @@ auto_harvest = true
 servers = ["tormentnexus"]
 `;
 fs.writeFileSync(
-  path.join(OPENHANDS_DIR, "plugins", "tormentnexus", "plugin.toml"),
-  pluginToml
+	path.join(OPENHANDS_DIR, "plugins", "tormentnexus", "plugin.toml"),
+	pluginToml,
 );
 
 // 5. Skills
@@ -111,26 +112,44 @@ across 20+ servers, session import from Claude Code/Aider/Gemini, and commercial
 3. Use \`@memory:keyword\` inline for auto-expanded context
 4. Check the cold archive for archived knowledge`;
 fs.writeFileSync(
-  path.join(OPENHANDS_DIR, "plugins", "tormentnexus", "skills", "SKILL.md"),
-  SKILL_MD
+	path.join(OPENHANDS_DIR, "plugins", "tormentnexus", "skills", "SKILL.md"),
+	SKILL_MD,
 );
 
 // 6. Slash commands
 const commands = {
-  "tn-search": { description: "Search TN memory by keyword, tag, or category", args: "query" },
-  "tn-store": { description: "Store a memory with tags", args: "content, tags" },
-  "tn-status": { description: "Show TN system status", args: "" },
-  "tn-plan": { description: "Create/edit/view project plans in L2", args: "action, query" },
-  "tn-summary": { description: "Summarize current session using TN context", args: "" },
-  "tn-purge": { description: "Remove stale memories from L2", args: "query" },
+	"tn-search": {
+		description: "Search TN memory by keyword, tag, or category",
+		args: "query",
+	},
+	"tn-store": {
+		description: "Store a memory with tags",
+		args: "content, tags",
+	},
+	"tn-status": { description: "Show TN system status", args: "" },
+	"tn-plan": {
+		description: "Create/edit/view project plans in L2",
+		args: "action, query",
+	},
+	"tn-summary": {
+		description: "Summarize current session using TN context",
+		args: "",
+	},
+	"tn-purge": { description: "Remove stale memories from L2", args: "query" },
 };
 
 for (const [name, info] of Object.entries(commands)) {
-  const cmd = `# /${name}\n\n${info.description}.\n\nUsage: /${name}${info.args ? ` ${info.args}` : ""}\n\nThis command routes through TormentNexus L2 memory via MCP.\n`;
-  fs.writeFileSync(
-    path.join(OPENHANDS_DIR, "plugins", "tormentnexus", "commands", `${name}.md`),
-    cmd
-  );
+	const cmd = `# /${name}\n\n${info.description}.\n\nUsage: /${name}${info.args ? ` ${info.args}` : ""}\n\nThis command routes through TormentNexus L2 memory via MCP.\n`;
+	fs.writeFileSync(
+		path.join(
+			OPENHANDS_DIR,
+			"plugins",
+			"tormentnexus",
+			"commands",
+			`${name}.md`,
+		),
+		cmd,
+	);
 }
 
 // 7. Microagent
@@ -167,7 +186,10 @@ You are a TormentNexus-aware OpenHands microagent. Use these tools:
 4. Use tn_code_search for structural code understanding
 5. All destructive operations are RBAC-checked
 `;
-fs.writeFileSync(path.join(OPENHANDS_DIR, "microagents", "tormentnexus.md"), microagent);
+fs.writeFileSync(
+	path.join(OPENHANDS_DIR, "microagents", "tormentnexus.md"),
+	microagent,
+);
 
 // 8. Python extension agent skeleton
 const agentPy = `"""
@@ -244,29 +266,39 @@ def get_agent():
     return tn
 `;
 fs.writeFileSync(
-  path.join(OPENHANDS_DIR, "plugins", "tormentnexus", "tormentnexus_agent.py"),
-  agentPy
+	path.join(OPENHANDS_DIR, "plugins", "tormentnexus", "tormentnexus_agent.py"),
+	agentPy,
 );
 
 // 9. Run TN installer to ensure MCP is wired
 try {
-  const platform = process.platform;
-  const installer = path.join(
-    __dirname, "..", "..", "..", "scripts",
-    platform === "win32" ? "install_codewhale.bat" : "install_codewhale.sh"
-  );
-  if (fs.existsSync(installer)) {
-    console.log("Running TN client installer...");
-  }
+	const platform = process.platform;
+	const installer = path.join(
+		__dirname,
+		"..",
+		"..",
+		"..",
+		"scripts",
+		platform === "win32" ? "install_codewhale.bat" : "install_codewhale.sh",
+	);
+	if (fs.existsSync(installer)) {
+		console.log("Running TN client installer...");
+	}
 } catch (e) {
-  // Non-fatal
+	// Non-fatal
 }
 
 console.log("\n✅ TormentNexus fully installed for OpenHands!");
 console.log("   🧠 Agent:   TormentNexusAgent with memory + tools");
 console.log("   📋 Config:  ~/.openhands/config.toml");
 console.log("   🤖 Plugins: ~/.openhands/plugins/tormentnexus/");
-console.log("   📡 MCP:     ~/.openhands/plugins/tormentnexus/mcp/servers.json");
+console.log(
+	"   📡 MCP:     ~/.openhands/plugins/tormentnexus/mcp/servers.json",
+);
 console.log("   🎯 Skills:  ~/.openhands/plugins/tormentnexus/skills/SKILL.md");
-console.log("   ⌨️  Commands: /tn-search, /tn-store, /tn-status, /tn-plan, /tn-summary, /tn-purge");
-console.log("\nStart OpenHands with: docker compose -f deploy/openhands/docker-compose.yml up\n");
+console.log(
+	"   ⌨️  Commands: /tn-search, /tn-store, /tn-status, /tn-plan, /tn-summary, /tn-purge",
+);
+console.log(
+	"\nStart OpenHands with: docker compose -f deploy/openhands/docker-compose.yml up\n",
+);
