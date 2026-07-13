@@ -318,7 +318,7 @@ func hiddenWndProc(hWnd windows.HWND, msg uint32, wParam uintptr, lParam uintptr
 	case WM_TRAY:
 		switch lParam {
 		case WM_LBUTTONUP, WM_LBUTTONDBLCLK:
-			_ = exec.Command("cmd", "/c", "start", "http://127.0.0.1:7779/dashboard").Start()
+			_ = hiddenCommand("cmd", "/c", "start", "http://127.0.0.1:7779/dashboard").Start()
 			showLogWindow()
 		case WM_RBUTTONUP:
 			pSetForegroundWindow.Call(uintptr(hWnd))
@@ -385,7 +385,7 @@ func hiddenWndProc(hWnd windows.HWND, msg uint32, wParam uintptr, lParam uintptr
 
 			switch cmd {
 			case IDM_DASHBOARD:
-				_ = exec.Command("cmd", "/c", "start", "http://127.0.0.1:7779/dashboard").Start()
+				_ = hiddenCommand("cmd", "/c", "start", "http://127.0.0.1:7779/dashboard").Start()
 			case IDM_LOGS:
 				showLogWindow()
 			case IDM_AUTOSTART:
