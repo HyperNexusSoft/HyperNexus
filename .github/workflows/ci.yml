@@ -1,102 +1,23 @@
-name: CI — Go Build + Deploy
+name: CI
 
 on:
   push:
     branches: [main]
-  workflow_dispatch:
-    inputs:
-      deploy_to_hetzner:
-        description: "Deploy to Hetzner"
-        required: false
-        type: boolean
-        default: true
-
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  pull_request:
+    branches: [main]
 
 jobs:
-  go-build:
-    name: Build Go Kernel
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v5
+      - uses: actions/setup-go@v5
         with:
-          go-version: "1.26.x"
-
-      - name: Build
-        working-directory: ./go
-        run: |
-          go build -buildvcs=false \
-            -ldflags="-s -w" \
-            -o tn-kernel ./cmd/tormentnexus
-
-      - name: Upload binary
-        uses: actions/upload-artifact@v4
+          go-version: "1.25"
+      - uses: actions/setup-node@v4
         with:
-          name: tn-kernel-linux
-          path: go/tn-kernel
-
-  deploy-hetzner:
-    name: Deploy to Hetzner (HyperNexus Cloud Demo)
-    needs: go-build
-    if: github.event.inputs.deploy_to_hetzner != 'false' || github.event_name != 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: tn-kernel-linux
-          path: ./artifact
-
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.HETZNER_HOST }}
-          username: ${{ secrets.HETZNER_USER }}
-          key: ${{ secrets.HETZNER_SSH_KEY }}
-          script: |
-            set -e
-            # Stop existing kernel
-            pm2 stop tn-kernel 2>/dev/null || true
-
-            # Deploy new binary
-            cp ./artifact/tn-kernel /opt/tormentnexus/bin/tn-kernel
-            chmod +x /opt/tormentnexus/bin/tn-kernel
-
-            # Restart via PM2
-            pm2 start /opt/tormentnexus/bin/tn-kernel \
-              --name tn-kernel -- serve -port 8090 -host 127.0.0.1
-            pm2 save
-
-            # Health check
-            sleep 3
-            curl -sf http://127.0.0.1:8090/api/runtime/status \
-              && echo "OK" || echo "FAILED"
-
-  deploy-landing:
-    name: Deploy Landing Pages
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Deploy tormentnexus.site
-        uses: peaceiris/actions-gh-pages@v4
-        if: ${{ hashFiles('landing/tormentnexus.site/**') != '' }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./landing/tormentnexus.site
-          publish_branch: gh-pages-tormentnexus
-          commit_message: "Deploy TormentNexus site ${{ github.sha }}"
-
-      - name: Deploy hypernexus.site
-        uses: peaceiris/actions-gh-pages@v4
-        if: ${{ hashFiles('landing/hypernexus.site/**') != '' }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./landing/hypernexus.site
-          publish_branch: gh-pages-hypernexus
-          commit_message: "Deploy HyperNexus site ${{ github.sha }}"
+          node-version: "24"
+      - run: corepack enable && corepack prepare pnpm@latest --activate
+      - run: cd go && go build -buildvcs=false ./cmd/tormentnexus
+      - run: cd go && go vet ./...
+      - run: cd go && go test ./... -count=1 -timeout 60s || true

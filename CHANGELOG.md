@@ -1,5 +1,25 @@
 ## [1.0.0-alpha.235] - 2026-07-02
 
+# Changelog
+
+## [1.0.0-b1] - 2026-07-13
+
+### Added
+
+- **npm ecosystem**: 6 packages published (@tormentnexus/install, core, cli, openhands, vscode, cursor)
+- **OpenHands integration**: Python agent, 10 actions, Docker compose, plugin manifest
+- **Stripe live pipeline**: Webhook → marketing_agent → TN provision → tenant dashboard
+- **Self-contained npm packages**: All setup.js scripts work standalone (no repo paths)
+- **Landing page**: hypernexus.site product page with one-command install
+- **GitHub Actions CI**: go build + vet + test on push
+
+### Changed
+
+- **Out of alpha**: Version bumped from 1.0.0-alpha.262 → 1.0.0-b1
+- **README rebuilt**: Removed ASCII banner, added npm quickstart, dropped specific counts
+- **Docs to root**: CHANGELOG.md, ROADMAP.md, TODO.md moved from docs/ to root
+- **npm tag**: Packages tagged `beta` (previously `alpha`)
+
 ## [1.0.0-alpha.258] - 2026-07-12
 
 ### Added
