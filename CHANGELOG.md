@@ -1292,3 +1292,34 @@
 - TypeScript control plane running on port 4100
 - Phase 5 (links-backlog) blocked: bobbybookmarks.com DNS failure
 - Phase 7 (session import) pending: 49 valid candidates discovered
+
+## [1.0.0-b2] — 2026-07-13
+
+### Changed
+- Renamed all "enterprise" references to "commercial" across entire codebase
+- `packages/enterprise/` → `packages/commercial/`
+- `@tormentnexus/enterprise` → `@tormentnexus/commercial`
+- All Go API routes, UI components, types, and imports updated
+- Unified single-page dashboard replacing 40+ separate pages
+- Dashboard has 8 tabbed sections: Overview, Memory, Tools, Agents, Code, Security, Infrastructure, Commercial
+- RBAC dangerous pattern check now only applies to bash/shell tools (fixes false positives on write/edit)
+
+### Fixed
+- License validation: YAML format with Ed25519 signature verification
+- SessionImport: removed corrupt DB files causing "file is not a database" errors
+- WordPress wp-config.php syntax error (unmatched brace)
+- hypernexus.site title updated to "Commercial AI Control Plane"
+- WordPress JWT_AUTH_SECRET_KEY constant defined only once
+
+### Added
+- `tormentnexus.lic` demo license for Acme Corporation (50 seats, expires Dec 2027)
+- `landing/hypernexus.site/docs/` product landing page
+- `landing/demo/demo.html` corporate mock dashboard
+- Disk monitoring cron alert at 85% threshold
+- `@tormentnexus/docs@1.0.0-b1` npm package
+- `@tormentnexus/cli@1.0.0-b2` npm package (native http, no curl dependency)
+
+### Removed
+- 6 corrupt SQLite DB files
+- enterprise_sales_bot directory (unique pages recovered to landing/_recovered/)
+- 5.1GB disk space reclaimed (caches, temp files, Docker build cache)
