@@ -279,6 +279,8 @@ export default function (pi: ExtensionAPI) {
 
 	pi.on("tool_call", async (event, ctx) => {
 		// Check dangerous operations against TN commercial RBAC
+		// Only check bash/shell commands, not file content (write/edit tools can contain any text)
+		if (event.toolName === "bash" || event.toolName === "shell") {
 		const dangerousPatterns = [
 			"rm -rf",
 			"sudo ",
@@ -313,6 +315,9 @@ export default function (pi: ExtensionAPI) {
 				}
 			}
 		}
+
+
+		} // end bash-only RBAC guard
 
 		// Log tool execution to TN audit
 		await tnOk("/api/commercial/audit/log", {
