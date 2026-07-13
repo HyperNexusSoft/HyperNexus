@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { UnifiedDashboard } from '@/components/UnifiedDashboard';
+import { UnifiedDashboard } from "@/components/UnifiedDashboard";
 
 export default function Home() {
-  return <UnifiedDashboard />;
+	return <UnifiedDashboard />;
 }

@@ -1296,6 +1296,7 @@
 ## [1.0.0-b2] — 2026-07-13
 
 ### Changed
+
 - Renamed all "enterprise" references to "commercial" across entire codebase
 - `packages/enterprise/` → `packages/commercial/`
 - `@tormentnexus/enterprise` → `@tormentnexus/commercial`
@@ -1305,6 +1306,7 @@
 - RBAC dangerous pattern check now only applies to bash/shell tools (fixes false positives on write/edit)
 
 ### Fixed
+
 - License validation: YAML format with Ed25519 signature verification
 - SessionImport: removed corrupt DB files causing "file is not a database" errors
 - WordPress wp-config.php syntax error (unmatched brace)
@@ -1312,6 +1314,7 @@
 - WordPress JWT_AUTH_SECRET_KEY constant defined only once
 
 ### Added
+
 - `tormentnexus.lic` demo license for Acme Corporation (50 seats, expires Dec 2027)
 - `landing/hypernexus.site/docs/` product landing page
 - `landing/demo/demo.html` corporate mock dashboard
@@ -1320,6 +1323,7 @@
 - `@tormentnexus/cli@1.0.0-b2` npm package (native http, no curl dependency)
 
 ### Removed
+
 - 6 corrupt SQLite DB files
 - enterprise_sales_bot directory (unique pages recovered to landing/_recovered/)
 - 5.1GB disk space reclaimed (caches, temp files, Docker build cache)
