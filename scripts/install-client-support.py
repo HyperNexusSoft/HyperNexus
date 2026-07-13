@@ -168,6 +168,7 @@ CLIENTS = {
         "ext": False,
     },
     "openhands": {
+        "ext": True,
         "dirs": [".openhands"],
         "mcp": True,
         "skills": True,
