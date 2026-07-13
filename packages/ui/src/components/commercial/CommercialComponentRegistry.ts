@@ -1,12 +1,12 @@
-import React from 'react';
+import type React from 'react';
 
-export interface EnterpriseComponents {
+export interface CommercialComponents {
   OidcConfig: React.ComponentType<any> | null;
   RbacManager: React.ComponentType<any> | null;
   AuditLogViewer: React.ComponentType<any> | null;
 }
 
-export const enterpriseRegistry: EnterpriseComponents = {
+export const commercialRegistry: CommercialComponents = {
   OidcConfig: null,
   RbacManager: null,
   AuditLogViewer: null,

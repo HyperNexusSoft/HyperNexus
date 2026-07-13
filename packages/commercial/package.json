@@ -1,5 +1,5 @@
 {
-  "name": "@tormentnexus/enterprise",
+  "name": "@tormentnexus/commercial",
   "version": "1.0.0-alpha.255",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

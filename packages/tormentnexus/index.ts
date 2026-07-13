@@ -13,7 +13,7 @@ const TN_BASE = "http://127.0.0.1:7778";
  * ───────────────────────────────────────────
  * - 9 custom tools (memory, tools, sessions, skills, code, context, scratchpad)
  * - Session priming + per-turn context harvesting + compaction hooks
- * - tool_call RBAC enforcement via enterprise API
+ * - tool_call RBAC enforcement via commercial API
  * - tool_result auto-storage to L2 memory
  * - user_bash audit logging through TN
  * - model_select tracking to L2
@@ -82,8 +82,8 @@ You have access to TormentNexus — a local AI control plane running on port 777
 - \`/tn-summary\` — Summarize current session using TN context
 - \`/tn-purge\` — Remove stale memories from L2
 
-### Enterprise Security
-All tool calls are checked against TormentNexus enterprise RBAC. Blocked tools show a security notice.
+### Commercial Security
+All tool calls are checked against TormentNexus commercial RBAC. Blocked tools show a security notice.
 
 ### Best Practices
 1. Use \`tn_memory_search\` before significant tasks to recall past context
@@ -274,11 +274,11 @@ export default function (pi: ExtensionAPI) {
 	});
 
 	// ══════════════════════════════════════════════
-	// ENTERPRISE RBAC — TOOL CALL ENFORCEMENT
+	// COMMERCIAL RBAC — TOOL CALL ENFORCEMENT
 	// ══════════════════════════════════════════════
 
 	pi.on("tool_call", async (event, ctx) => {
-		// Check dangerous operations against TN enterprise RBAC
+		// Check dangerous operations against TN commercial RBAC
 		const dangerousPatterns = [
 			"rm -rf",
 			"sudo ",
@@ -292,7 +292,7 @@ export default function (pi: ExtensionAPI) {
 		for (const pattern of dangerousPatterns) {
 			if (inputStr.includes(pattern.toLowerCase())) {
 				const res = await tnJson(
-					"/api/enterprise/authorize",
+					"/api/commercial/authorize",
 					{
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
@@ -308,14 +308,14 @@ export default function (pi: ExtensionAPI) {
 				if (!allowed) {
 					return {
 						block: true,
-						reason: `Enterprise policy blocks: ${pattern}. Use tn_memory_store for destructive operations.`,
+						reason: `Commercial policy blocks: ${pattern}. Use tn_memory_store for destructive operations.`,
 					};
 				}
 			}
 		}
 
 		// Log tool execution to TN audit
-		await tnOk("/api/enterprise/audit/log", {
+		await tnOk("/api/commercial/audit/log", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -368,7 +368,7 @@ export default function (pi: ExtensionAPI) {
 	// ══════════════════════════════════════════════
 
 	pi.on("user_bash", async (event, ctx) => {
-		await tnOk("/api/enterprise/audit/log", {
+		await tnOk("/api/commercial/audit/log", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({

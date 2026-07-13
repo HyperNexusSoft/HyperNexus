@@ -1,7 +1,7 @@
 {
   "name": "tormentnexus",
   "version": "1.0.0-alpha.255",
-  "description": "TormentNexus pi extension — L2 memory, tool search, session import, skill registry, code search, subagent orchestration, enterprise RBAC",
+  "description": "TormentNexus pi extension — L2 memory, tool search, session import, skill registry, code search, subagent orchestration, commercial RBAC",
   "keywords": [
     "tormentnexus",
     "pi",

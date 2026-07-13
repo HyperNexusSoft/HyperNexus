@@ -97,7 +97,7 @@ export function OidcConfig() {
               SSO & Identity Providers
             </CardTitle>
             <CardDescription className="text-slate-400">
-              Configure OIDC and SAML providers for enterprise single sign-on.
+              Configure OIDC and SAML providers for commercial single sign-on.
             </CardDescription>
           </div>
           <Button onClick={() => setShowAdd(!showAdd)} variant="outline" className="border-slate-700">

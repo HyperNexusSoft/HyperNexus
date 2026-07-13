@@ -25,7 +25,7 @@ export function StripeBillingSimulator() {
                     <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3">
                         <div>
                             <div className="text-xs text-zinc-500 uppercase">Subscription Plan</div>
-                            <div className="text-base font-bold text-white mt-1">Enterprise Cloud SaaS</div>
+                            <div className="text-base font-bold text-white mt-1">Commercial Cloud SaaS</div>
                         </div>
                         <Badge variant="outline" className="bg-cyan-500/10 text-cyan-400 border-cyan-500/20 text-xs">
                             ACTIVE (PAID)

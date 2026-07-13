@@ -2,32 +2,32 @@
 
 import React from 'react';
 import { WorkflowDesigner } from "@/components/designer/WorkflowDesigner";
-import { NodeManager } from "@/components/enterprise/NodeManager";
-import { Marketplace } from "@/components/enterprise/Marketplace";
-import { ToolInventory } from "@/components/enterprise/ToolInventory";
-import { A2AMesh } from "@/components/enterprise/A2AMesh";
-import { DataResidencyConfig } from "@/components/enterprise/DataResidencyConfig";
-import { GpuDashboard } from "@/components/enterprise/GpuDashboard";
-import { InfrastructureDashboard } from "@/components/enterprise/InfrastructureDashboard";
-import { TrafficInspector } from "@/components/enterprise/TrafficInspector";
+import { NodeManager } from "@/components/commercial/NodeManager";
+import { Marketplace } from "@/components/commercial/Marketplace";
+import { ToolInventory } from "@/components/commercial/ToolInventory";
+import { A2AMesh } from "@/components/commercial/A2AMesh";
+import { DataResidencyConfig } from "@/components/commercial/DataResidencyConfig";
+import { GpuDashboard } from "@/components/commercial/GpuDashboard";
+import { InfrastructureDashboard } from "@/components/commercial/InfrastructureDashboard";
+import { TrafficInspector } from "@/components/commercial/TrafficInspector";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { ShieldCheck, Workflow, History, Users, ShoppingBag, Network, Database, Cpu, Server } from "lucide-react";
-import { enterpriseRegistry } from './EnterpriseComponentRegistry';
+import { commercialRegistry } from './CommercialComponentRegistry';
 
-export function EnterpriseView() {
-  const OidcConfig = enterpriseRegistry.OidcConfig || (() => (
+export function CommercialView() {
+  const OidcConfig = commercialRegistry.OidcConfig || (() => (
     <div className="text-center py-10 text-slate-500 border border-dashed border-slate-800 rounded bg-slate-950">
-      Enterprise SSO is not enabled. Please upgrade your license to unlock OIDC and SAML single sign-on.
+      Commercial SSO is not enabled. Please upgrade your license to unlock OIDC and SAML single sign-on.
     </div>
   ));
-  const RbacManager = enterpriseRegistry.RbacManager || (() => (
+  const RbacManager = commercialRegistry.RbacManager || (() => (
     <div className="text-center py-10 text-slate-500 border border-dashed border-slate-800 rounded bg-slate-950">
       Role-Based Access Control is not enabled. Please upgrade your license to manage user roles.
     </div>
   ));
-  const AuditLogViewer = enterpriseRegistry.AuditLogViewer || (() => (
+  const AuditLogViewer = commercialRegistry.AuditLogViewer || (() => (
     <div className="text-center py-10 text-slate-500 border border-dashed border-slate-800 rounded bg-slate-950">
       Audit Trail is not enabled. Please upgrade your license to view event logs.
     </div>

@@ -34,7 +34,7 @@ pi install npm:tormentnexus
 ### Automatic Features
 
 - Session priming with L2 context injection; per-turn context harvesting
-- Enterprise RBAC enforcement on dangerous tool calls
+- Commercial RBAC enforcement on dangerous tool calls
 - Auto-logging of turns and model changes to L2
 - Compaction enrichment with L2 memory
 - Live stats widget (single line below editor, 60s refresh)

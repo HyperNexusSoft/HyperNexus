@@ -406,9 +406,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.90.19
         version: 5.90.19(react@19.2.3)
-      '@tormentnexus/enterprise':
+      '@tormentnexus/commercial':
         specifier: workspace:*
-        version: link:../../packages/enterprise
+        version: link:../../packages/commercial
       '@tormentnexus/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -630,23 +630,23 @@ importers:
         specifier: '>=7.3.5'
         version: 8.1.0(@types/node@20.19.27)(esbuild@0.28.1)(jiti@2.6.1)(terser@5.44.1)(tsx@4.21.0)(yaml@2.9.0)
 
-  packages/enterprise:
+  packages/commercial:
     dependencies:
       '@tormentnexus/ui':
         specifier: workspace:*
         version: link:../ui
       lucide-react:
         specifier: ^0.562.0
-        version: 0.562.0(react@18.2.0)
+        version: 0.562.0(react@18.3.1)
       react:
         specifier: ^18.2.0
-        version: 18.2.0
+        version: 18.3.1
       react-dom:
         specifier: ^18.2.0
-        version: 18.3.1(react@18.2.0)
+        version: 18.3.1(react@18.3.1)
       sonner:
         specifier: ^2.0.7
-        version: 2.0.7(react-dom@18.3.1(react@18.2.0))(react@18.2.0)
+        version: 2.0.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     devDependencies:
       '@types/react':
         specifier: 18.3.3
@@ -7408,10 +7408,6 @@ packages:
     peerDependencies:
       react: '>=16.6.0'
       react-dom: '>=16.6.0'
-
-  react@18.2.0:
-    resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
-    engines: {node: '>=0.10.0'}
 
   react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
@@ -15796,10 +15792,6 @@ snapshots:
   lru-cache@7.18.3:
     optional: true
 
-  lucide-react@0.562.0(react@18.2.0):
-    dependencies:
-      react: 18.2.0
-
   lucide-react@0.562.0(react@18.3.1):
     dependencies:
       react: 18.3.1
@@ -17152,12 +17144,6 @@ snapshots:
       minimist: 1.2.8
       strip-json-comments: 2.0.1
 
-  react-dom@18.3.1(react@18.2.0):
-    dependencies:
-      loose-envify: 1.4.0
-      react: 18.2.0
-      scheduler: 0.23.2
-
   react-dom@18.3.1(react@18.3.1):
     dependencies:
       loose-envify: 1.4.0
@@ -17306,10 +17292,6 @@ snapshots:
       prop-types: 15.8.1
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
-
-  react@18.2.0:
-    dependencies:
-      loose-envify: 1.4.0
 
   react@18.3.1:
     dependencies:
@@ -17793,11 +17775,6 @@ snapshots:
       ip-address: 10.2.0
       smart-buffer: 4.2.0
     optional: true
-
-  sonner@2.0.7(react-dom@18.3.1(react@18.2.0))(react@18.2.0):
-    dependencies:
-      react: 18.2.0
-      react-dom: 18.3.1(react@18.2.0)
 
   sonner@2.0.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:

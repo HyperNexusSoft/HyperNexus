@@ -22,7 +22,7 @@ import (
 //   STRIPE_WEBHOOK_SECRET     — whsec_xxx
 //   STRIPE_PRICE_ID_BASIC     — price_xxx for $29/mo plan
 //   STRIPE_PRICE_ID_PRO       — price_xxx for $99/mo plan
-//   STRIPE_PRICE_ID_ENTERPRISE — price_xxx for $499/mo plan
+//   STRIPE_PRICE_ID_COMMERCIAL — price_xxx for $499/mo plan
 //   TORMENTNEXUS_DASHBOARD_URL — https://hypernexus.site
 //   TORMENTNEXUS_API_URL      — https://api.hypernexus.site
 
@@ -44,9 +44,9 @@ func stripePriceID(plan string) string {
 	case "pro":
 		return os.Getenv("STRIPE_PRICE_ID_PRO")
 	case "commercial":
-		return os.Getenv("STRIPE_PRICE_ID_ENTERPRISE")
+		return os.Getenv("STRIPE_PRICE_ID_COMMERCIAL")
 	}
-	return os.Getenv("STRIPE_PRICE_ID_ENTERPRISE")
+	return os.Getenv("STRIPE_PRICE_ID_COMMERCIAL")
 }
 
 func dashboardURL() string {

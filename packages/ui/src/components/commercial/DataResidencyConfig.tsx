@@ -66,7 +66,7 @@ export function DataResidencyConfig() {
             Data Residency & Storage
           </CardTitle>
           <CardDescription className="text-slate-400">
-            Configure storage locations and compliance rules for different types of enterprise data.
+            Configure storage locations and compliance rules for different types of commercial data.
           </CardDescription>
         </CardHeader>
         <CardContent>

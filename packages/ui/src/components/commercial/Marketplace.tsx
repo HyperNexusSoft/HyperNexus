@@ -85,7 +85,7 @@ export function Marketplace() {
             <ShoppingBag className="h-6 w-6 text-emerald-400" />
             TORMENTNEXUS Marketplace
           </h2>
-          <p className="text-slate-400 text-sm">Discover and install autonomous agents, skills, and enterprise workflows.</p>
+          <p className="text-slate-400 text-sm">Discover and install autonomous agents, skills, and commercial workflows.</p>
         </div>
         <div className="relative w-full md:w-72">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />

@@ -36,7 +36,7 @@ export function AuditLogViewer() {
     <Card className="w-full h-full bg-slate-950 text-slate-50 border-slate-800">
       <CardHeader>
         <CardTitle className="text-xl font-bold flex items-center justify-between">
-          <span>Enterprise Audit Trail</span>
+          <span>Commercial Audit Trail</span>
           <Badge variant="outline" className="text-slate-400">Phase 13</Badge>
         </CardTitle>
       </CardHeader>
