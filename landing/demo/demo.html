@@ -24,12 +24,12 @@
   <h1>HyperNexus Interactive Demo</h1>
   <div class="panel">
     <h2>Live Telemetry</h2>
-    <p>Go Kernel Status: <span id="status" class="metric">Checking...</span></p>
+    <p>Go Sidecar Status: <span id="status" class="metric">Checking...</span></p>
     <p>Active Agents: <span class="metric">42</span></p>
     <a href="../hypernexus.site/index.html" class="nav-cta">← Back to HyperNexus</a>
   </div>
   <script>
-    async function checkKernel() {
+    async function checkSidecar() {
       try {
         const response = await fetch('http://127.0.0.1:7778/health');
         if (response.ok) {
@@ -44,8 +44,8 @@
         document.getElementById('status').style.color = '#f87171';
       }
     }
-    checkKernel();
-    setInterval(checkKernel, 5000);
+    checkSidecar();
+    setInterval(checkSidecar, 5000);
   </script>
 </body>
 </html>
