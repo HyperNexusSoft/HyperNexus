@@ -214,7 +214,7 @@ export function UnifiedDashboard() {
 								{ v: "overview", i: MonitorSmartphone, l: "Overview" },
 								{ v: "memory", i: Brain, l: "Memory" },
 								{ v: "tools", i: Wrench, l: "Tools" },
-							{ v: "catalog", i: Database, l: "Catalog" },
+								{ v: "catalog", i: Database, l: "Catalog" },
 								{ v: "agents", i: Users, l: "Agents" },
 								{ v: "code", i: FileCode, l: "Code" },
 								{ v: "security", i: Shield, l: "Security" },

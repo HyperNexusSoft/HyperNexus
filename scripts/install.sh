@@ -16,9 +16,9 @@ NC='\033[0m'
 # Detect OS
 OS="$(uname -s)"
 case "${OS}" in
-    Linux*)     MACHINE=Linux;;
-    Darwin*)    MACHINE=Mac;;
-    *)          MACHINE="UNKNOWN:${OS}"
+Linux*) MACHINE=Linux ;;
+Darwin*) MACHINE=Mac ;;
+*) MACHINE="UNKNOWN:${OS}" ;;
 esac
 
 echo "[*] Detected platform: ${MACHINE}"
@@ -35,22 +35,22 @@ mkdir -p "$CONFIG_DIR/memory"
 # Download or copy binary
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [ -f "$SCRIPT_DIR/tormentnexus" ]; then
-    echo "[*] Installing tormentnexus binary..."
-    cp "$SCRIPT_DIR/tormentnexus" "$INSTALL_DIR/tormentnexus"
-    chmod +x "$INSTALL_DIR/tormentnexus"
+	echo "[*] Installing tormentnexus binary..."
+	cp "$SCRIPT_DIR/tormentnexus" "$INSTALL_DIR/tormentnexus"
+	chmod +x "$INSTALL_DIR/tormentnexus"
 elif [ -f "$SCRIPT_DIR/tormentnexus-gui" ]; then
-    echo "[*] Installing tormentnexus-gui binary..."
-    cp "$SCRIPT_DIR/tormentnexus-gui" "$INSTALL_DIR/tormentnexus"
-    chmod +x "$INSTALL_DIR/tormentnexus"
+	echo "[*] Installing tormentnexus-gui binary..."
+	cp "$SCRIPT_DIR/tormentnexus-gui" "$INSTALL_DIR/tormentnexus"
+	chmod +x "$INSTALL_DIR/tormentnexus"
 else
-    echo -e "${RED}[!] No binary found in $SCRIPT_DIR${NC}"
-    echo "    Expected: tormentnexus or tormentnexus-gui"
-    exit 1
+	echo -e "${RED}[!] No binary found in $SCRIPT_DIR${NC}"
+	echo "    Expected: tormentnexus or tormentnexus-gui"
+	exit 1
 fi
 
 # Create default configuration
 echo "[*] Creating default configuration..."
-cat > "$CONFIG_DIR/config.yaml" << 'EOF'
+cat >"$CONFIG_DIR/config.yaml" <<'EOF'
 # TormentNexus Configuration
 host: 127.0.0.1
 port: 7778
@@ -74,14 +74,14 @@ EOF
 
 # Add to PATH if needed
 if [[ ":$PATH:" != *":$INSTALL_DIR:"* ]]; then
-    echo "[*] Adding $INSTALL_DIR to PATH..."
-    if [ -f "$HOME/.bashrc" ]; then
-        echo "export PATH=\"\$PATH:$INSTALL_DIR\"" >> "$HOME/.bashrc"
-    fi
-    if [ -f "$HOME/.zshrc" ]; then
-        echo "export PATH=\"\$PATH:$INSTALL_DIR\"" >> "$HOME/.zshrc"
-    fi
-    export PATH="$PATH:$INSTALL_DIR"
+	echo "[*] Adding $INSTALL_DIR to PATH..."
+	if [ -f "$HOME/.bashrc" ]; then
+		echo "export PATH=\"\$PATH:$INSTALL_DIR\"" >>"$HOME/.bashrc"
+	fi
+	if [ -f "$HOME/.zshrc" ]; then
+		echo "export PATH=\"\$PATH:$INSTALL_DIR\"" >>"$HOME/.zshrc"
+	fi
+	export PATH="$PATH:$INSTALL_DIR"
 fi
 
 echo ""
@@ -106,16 +106,16 @@ echo ""
 read -p "Start TormentNexus now? (y/n) " -n 1 -r
 echo ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo "[*] Starting TormentNexus..."
-    nohup "$INSTALL_DIR/tormentnexus" serve > /tmp/tormentnexus.log 2>&1 &
-    sleep 2
-    echo -e "${GREEN}[✓] TormentNexus started${NC}"
-    echo "[*] Dashboard: http://127.0.0.1:7778"
-    
-    # Open browser
-    if command -v xdg-open &> /dev/null; then
-        xdg-open http://127.0.0.1:7778
-    elif command -v open &> /dev/null; then
-        open http://127.0.0.1:7778
-    fi
+	echo "[*] Starting TormentNexus..."
+	nohup "$INSTALL_DIR/tormentnexus" serve >/tmp/tormentnexus.log 2>&1 &
+	sleep 2
+	echo -e "${GREEN}[✓] TormentNexus started${NC}"
+	echo "[*] Dashboard: http://127.0.0.1:7778"
+
+	# Open browser
+	if command -v xdg-open &>/dev/null; then
+		xdg-open http://127.0.0.1:7778
+	elif command -v open &>/dev/null; then
+		open http://127.0.0.1:7778
+	fi
 fi

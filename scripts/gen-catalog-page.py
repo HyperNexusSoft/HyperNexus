@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """Generate the TormentNexus catalog page"""
+
 import sqlite3
 
 db = sqlite3.connect("/opt/tormentnexus/catalog.db")
 
 # Get sample entries
 samples = {}
-for src, cnt in db.execute("SELECT source, count(*) FROM links_backlog GROUP BY source ORDER BY count(*) DESC"):
+for src, cnt in db.execute(
+    "SELECT source, count(*) FROM links_backlog GROUP BY source ORDER BY count(*) DESC"
+):
     samples[src] = cnt
 
 total_mcp = db.execute("SELECT count(*) FROM links_backlog").fetchone()[0]
@@ -16,7 +19,7 @@ db2 = sqlite3.connect("/root/.tormentnexus/catalog.db")
 skills = db2.execute("SELECT count(*) FROM published_skills").fetchone()[0]
 db2.close()
 
-html = f'''<!DOCTYPE html>
+html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -97,14 +100,14 @@ footer a:hover{{text-decoration:underline}}
 <h2>MCP Server Index</h2>
 <p class="sub">{total_mcp:,} servers from 20+ registries. The largest MCP catalog on the internet.</p>
 <div class="grid">
-<div class="card"><h3>awesome-mcp-servers</h3><p>Community-curated list of MCP servers. The definitive source.</p><div class="meta"><span class="badge badge-gh">GitHub</span><span class="badge badge-mcp">{samples.get("awesome-mcp-servers",0):,} servers</span></div></div>
-<div class="card"><h3>awesome-mcp-fork</h3><p>10,000+ forks of the awesome-mcp-servers repository.</p><div class="meta"><span class="badge badge-gh">GitHub</span><span class="badge badge-mcp">{samples.get("awesome-mcp-fork",0):,} servers</span></div></div>
-<div class="card"><h3>npm MCP Packages</h3><p>MCP server packages published to the npm registry.</p><div class="meta"><span class="badge badge-npm">npm</span><span class="badge badge-mcp">{samples.get("npm",0):,} packages</span></div></div>
-<div class="card"><h3>GitHub Search</h3><p>MCP servers discovered via GitHub API search across 20+ queries.</p><div class="meta"><span class="badge badge-gh">GitHub</span><span class="badge badge-mcp">{samples.get("github-search",0):,} repos</span></div></div>
-<div class="card"><h3>PyPI</h3><p>Python MCP server packages from the Python Package Index.</p><div class="meta"><span class="badge badge-pypi">PyPI</span><span class="badge badge-mcp">{samples.get("pypi",0):,} packages</span></div></div>
-<div class="card"><h3>crates.io</h3><p>Rust MCP server packages from the Rust package registry.</p><div class="meta"><span class="badge badge-gh">crates.io</span><span class="badge badge-mcp">{samples.get("crates-io",0):,} crates</span></div></div>
-<div class="card"><h3>Docker Hub</h3><p>Containerized MCP server images ready to deploy.</p><div class="meta"><span class="badge badge-gh">Docker</span><span class="badge badge-mcp">{samples.get("docker-hub",0):,} images</span></div></div>
-<div class="card"><h3>Glama.ai</h3><p>MCP servers from the Glama.ai directory.</p><div class="meta"><span class="badge badge-gh">Glama</span><span class="badge badge-mcp">{samples.get("glama-html",0):,} servers</span></div></div>
+<div class="card"><h3>awesome-mcp-servers</h3><p>Community-curated list of MCP servers. The definitive source.</p><div class="meta"><span class="badge badge-gh">GitHub</span><span class="badge badge-mcp">{samples.get("awesome-mcp-servers", 0):,} servers</span></div></div>
+<div class="card"><h3>awesome-mcp-fork</h3><p>10,000+ forks of the awesome-mcp-servers repository.</p><div class="meta"><span class="badge badge-gh">GitHub</span><span class="badge badge-mcp">{samples.get("awesome-mcp-fork", 0):,} servers</span></div></div>
+<div class="card"><h3>npm MCP Packages</h3><p>MCP server packages published to the npm registry.</p><div class="meta"><span class="badge badge-npm">npm</span><span class="badge badge-mcp">{samples.get("npm", 0):,} packages</span></div></div>
+<div class="card"><h3>GitHub Search</h3><p>MCP servers discovered via GitHub API search across 20+ queries.</p><div class="meta"><span class="badge badge-gh">GitHub</span><span class="badge badge-mcp">{samples.get("github-search", 0):,} repos</span></div></div>
+<div class="card"><h3>PyPI</h3><p>Python MCP server packages from the Python Package Index.</p><div class="meta"><span class="badge badge-pypi">PyPI</span><span class="badge badge-mcp">{samples.get("pypi", 0):,} packages</span></div></div>
+<div class="card"><h3>crates.io</h3><p>Rust MCP server packages from the Rust package registry.</p><div class="meta"><span class="badge badge-gh">crates.io</span><span class="badge badge-mcp">{samples.get("crates-io", 0):,} crates</span></div></div>
+<div class="card"><h3>Docker Hub</h3><p>Containerized MCP server images ready to deploy.</p><div class="meta"><span class="badge badge-gh">Docker</span><span class="badge badge-mcp">{samples.get("docker-hub", 0):,} images</span></div></div>
+<div class="card"><h3>Glama.ai</h3><p>MCP servers from the Glama.ai directory.</p><div class="meta"><span class="badge badge-gh">Glama</span><span class="badge badge-mcp">{samples.get("glama-html", 0):,} servers</span></div></div>
 </div>
 </div>
 
@@ -233,7 +236,7 @@ footer a:hover{{text-decoration:underline}}
 </footer>
 
 </body>
-</html>'''
+</html>"""
 
 with open("/var/www/tormentnexus.site/catalog.html", "w") as f:
     f.write(html)

@@ -11,20 +11,20 @@ import (
 
 // CatalogResult represents a single catalog entry
 type CatalogResult struct {
-	Title       string `json:"title"`
-	URL         string `json:"url"`
-	Description string `json:"description,omitempty"`
-	Source      string `json:"source"`
-	Category    string `json:"category"`
+	Title       string   `json:"title"`
+	URL         string   `json:"url"`
+	Description string   `json:"description,omitempty"`
+	Source      string   `json:"source"`
+	Category    string   `json:"category"`
 	Tags        []string `json:"tags,omitempty"`
 }
 
 // CatalogSearchResponse is the response from catalog search
 type CatalogSearchResponse struct {
-	Query   string           `json:"query"`
-	Total   int              `json:"total"`
-	Results []CatalogResult  `json:"results"`
-	Sources map[string]int   `json:"sources"`
+	Query   string          `json:"query"`
+	Total   int             `json:"total"`
+	Results []CatalogResult `json:"results"`
+	Sources map[string]int  `json:"sources"`
 }
 
 // handleBacklogSearch handles GET /api/catalog/search?q=...&category=...&limit=...
@@ -32,7 +32,7 @@ func (s *Server) handleBacklogSearch(w http.ResponseWriter, r *http.Request) {
 	query := strings.TrimSpace(r.URL.Query().Get("q"))
 	category := strings.TrimSpace(r.URL.Query().Get("category"))
 	limit := 50
-	
+
 	if l := r.URL.Query().Get("limit"); l != "" {
 		fmt.Sscanf(l, "%d", &limit)
 	}
@@ -48,7 +48,7 @@ func (s *Server) handleBacklogSearch(w http.ResponseWriter, r *http.Request) {
 		filepath.Join(s.cfg.WorkspaceRoot, "catalog.db"),
 		filepath.Join(s.cfg.WorkspaceRoot, "catalog.db"),
 	}
-	
+
 	var db *sql.DB
 	var err error
 	for _, p := range dbPaths {
@@ -59,7 +59,7 @@ func (s *Server) handleBacklogSearch(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	
+
 	if db == nil {
 		writeJSON(w, http.StatusServiceUnavailable, map[string]any{
 			"error": "catalog database not available",
@@ -72,7 +72,7 @@ func (s *Server) handleBacklogSearch(w http.ResponseWriter, r *http.Request) {
 	var results []CatalogResult
 	sources := make(map[string]int)
 	total := 0
-	
+
 	if query == "" && category == "" {
 		// Return top entries by source
 		rows, qerr := db.Query(`
@@ -86,7 +86,7 @@ func (s *Server) handleBacklogSearch(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer rows.Close()
-		
+
 		for rows.Next() {
 			var r CatalogResult
 			if err := rows.Scan(&r.Title, &r.URL, &r.Description, &r.Source); err == nil {
@@ -113,7 +113,7 @@ func (s *Server) handleBacklogSearch(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer rows.Close()
-		
+
 		for rows.Next() {
 			var r CatalogResult
 			if err := rows.Scan(&r.Title, &r.URL, &r.Description, &r.Source); err == nil {
@@ -137,7 +137,7 @@ func (s *Server) handleBacklogSearch(w http.ResponseWriter, r *http.Request) {
 			})
 			return
 		}
-		
+
 		placeholders := make([]string, len(catSources))
 		args := make([]any, len(catSources)+1)
 		for i, src := range catSources {
@@ -145,7 +145,7 @@ func (s *Server) handleBacklogSearch(w http.ResponseWriter, r *http.Request) {
 			args[i] = src
 		}
 		args[len(catSources)] = limit
-		
+
 		rows, qerr := db.Query(fmt.Sprintf(`
 			SELECT title, url, description, source 
 			FROM links_backlog 
@@ -158,7 +158,7 @@ func (s *Server) handleBacklogSearch(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer rows.Close()
-		
+
 		for rows.Next() {
 			var r CatalogResult
 			if err := rows.Scan(&r.Title, &r.URL, &r.Description, &r.Source); err == nil {
@@ -188,7 +188,7 @@ func (s *Server) handleBacklogStats(w http.ResponseWriter, r *http.Request) {
 		filepath.Join(s.cfg.WorkspaceRoot, "catalog.db"),
 		filepath.Join(s.cfg.WorkspaceRoot, "catalog.db"),
 	}
-	
+
 	var db *sql.DB
 	var err error
 	for _, p := range dbPaths {
@@ -199,7 +199,7 @@ func (s *Server) handleBacklogStats(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	
+
 	if db == nil {
 		writeJSON(w, http.StatusServiceUnavailable, map[string]any{"error": "catalog database not available"})
 		return
@@ -217,7 +217,7 @@ func (s *Server) handleBacklogStats(w http.ResponseWriter, r *http.Request) {
 	bySource := make(map[string]int)
 	byCategory := make(map[string]int)
 	total := 0
-	
+
 	for rows.Next() {
 		var source string
 		var count int
@@ -238,11 +238,11 @@ func (s *Server) handleBacklogStats(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusOK, map[string]any{
-		"total":       total,
-		"bySource":    bySource,
-		"byCategory":  byCategory,
-		"skills":      skillsCount,
-		"goHandlers":  5668,
+		"total":      total,
+		"bySource":   bySource,
+		"byCategory": byCategory,
+		"skills":     skillsCount,
+		"goHandlers": 5668,
 	})
 }
 
@@ -313,7 +313,7 @@ func categorizeSource(source string) string {
 	agent := map[string]bool{
 		"agent-framework": true, "awesome-ai-agent": true,
 	}
-	
+
 	if mcp[source] {
 		return "mcp_server"
 	}
