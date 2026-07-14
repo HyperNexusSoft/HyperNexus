@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  tormentnexus:
+    build: .
+    container_name: tormentnexus
+    ports:
+      - "7778:7778"
+      - "7779:7779"
+    volumes:
+      - tn-data:/root/.tormentnexus
+      - tn-workspace:/app/workspace
+    environment:
+      - TN_HOST=0.0.0.0
+      - TN_PORT=7778
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7778/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+volumes:
+  tn-data:
+  tn-workspace:
