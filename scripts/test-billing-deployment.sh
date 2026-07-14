@@ -9,8 +9,15 @@ PASS=0
 FAIL=0
 ERRORS=""
 
-p() { echo "  ✅ $1"; PASS=$((PASS+1)); }
-f() { echo "  ❌ $1"; FAIL=$((FAIL+1)); ERRORS="$ERRORS\n- $1"; }
+p() {
+	echo "  ✅ $1"
+	PASS=$((PASS + 1))
+}
+f() {
+	echo "  ❌ $1"
+	FAIL=$((FAIL + 1))
+	ERRORS="$ERRORS\n- $1"
+}
 
 echo "=========================================="
 echo "  Billing & Deployment Test Suite"
@@ -38,15 +45,15 @@ CODE=$(curl -s -o /dev/null -w "%{http_code}" "$CLOUD")
 echo "[A3] Account Registration"
 EMAIL="billing_test_$(date +%s)@test.com"
 RESULT=$(curl -s -X POST "$KERNEL/api/account/register" \
-  -H "Content-Type: application/json" \
-  -d "{\"email\":\"$EMAIL\",\"password\":\"BillingTest123!\"}")
+	-H "Content-Type: application/json" \
+	-d "{\"email\":\"$EMAIL\",\"password\":\"BillingTest123!\"}")
 echo "$RESULT" | grep -q "id" && p "Registration works" || f "Registration"
 ACCOUNT_ID=$(echo "$RESULT" | python3 -c "import sys,json;print(json.load(sys.stdin).get('id',''))" 2>/dev/null)
 
 echo "[A4] Account Login"
 RESULT=$(curl -s -X POST "$KERNEL/api/account/login" \
-  -H "Content-Type: application/json" \
-  -d "{\"email\":\"$EMAIL\",\"password\":\"BillingTest123!\"}")
+	-H "Content-Type: application/json" \
+	-d "{\"email\":\"$EMAIL\",\"password\":\"BillingTest123!\"}")
 echo "$RESULT" | grep -q "token" && p "Login works" || f "Login"
 TOKEN=$(echo "$RESULT" | python3 -c "import sys,json;print(json.load(sys.stdin).get('token',''))" 2>/dev/null)
 
@@ -56,9 +63,9 @@ echo "$RESULT" | grep -q "success\|status\|account" && p "Account status" || f "
 
 echo "[A6] Subscription Provisioning"
 RESULT=$(curl -s -X POST "$KERNEL/api/account/provision" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $TOKEN" \
-  -d "{\"plan\":\"basic\",\"seats\":1}" 2>/dev/null)
+	-H "Content-Type: application/json" \
+	-H "Authorization: Bearer $TOKEN" \
+	-d "{\"plan\":\"basic\",\"seats\":1}" 2>/dev/null)
 echo "$RESULT" | grep -q "success\|provision\|account" && p "Provisioning" || f "Provisioning"
 
 # ==========================================
@@ -103,9 +110,9 @@ curl -s "$KERNEL/api/index" | grep -q "success" && p "GET /api/index" || f "GET 
 
 echo "[C2] Account APIs"
 curl -s -X POST "$KERNEL/api/account/register" \
-  -H "Content-Type: application/json" \
-  -d "{\"email\":\"api_test_$(date +%s)@test.com\",\"password\":\"test123\"}" \
-  | grep -q "id" && p "POST /api/account/register" || f "POST /api/account/register"
+	-H "Content-Type: application/json" \
+	-d "{\"email\":\"api_test_$(date +%s)@test.com\",\"password\":\"test123\"}" |
+	grep -q "id" && p "POST /api/account/register" || f "POST /api/account/register"
 
 echo "[C3] Catalog APIs"
 curl -s "$KERNEL/api/backlog/search?q=postgres" | grep -q "results" && p "GET /api/backlog/search" || f "GET /api/backlog/search"
@@ -125,8 +132,8 @@ echo "═══ D. LANDING PAGES ═══"
 # ==========================================
 
 for PAGE in "" "blog/" "catalog" "pricing" "newsletter" "blog/feed.xml" "sitemap.xml" "robots.txt"; do
-    CODE=$(curl -s -o /dev/null -w "%{http_code}" "$LANDING/$PAGE")
-    [ "$CODE" = "200" ] && p "/$PAGE" || f "/$PAGE ($CODE)"
+	CODE=$(curl -s -o /dev/null -w "%{http_code}" "$LANDING/$PAGE")
+	[ "$CODE" = "200" ] && p "/$PAGE" || f "/$PAGE ($CODE)"
 done
 
 # ==========================================
@@ -141,7 +148,7 @@ echo "$HEADERS" | grep -qi "x-content-type" && p "X-Content-Type-Options" || f "
 
 echo "[E2] Rate Limiting"
 for i in $(seq 1 10); do
-    curl -s -o /dev/null "$KERNEL/health"
+	curl -s -o /dev/null "$KERNEL/health"
 done
 p "Rate limit test (10 requests)"
 
@@ -197,9 +204,9 @@ echo "  RESULTS: $PASS passed, $FAIL failed"
 echo "=========================================="
 echo ""
 if [ $FAIL -gt 0 ]; then
-    echo "❌ FAILED TESTS:"
-    echo -e "$ERRORS"
-    echo ""
+	echo "❌ FAILED TESTS:"
+	echo -e "$ERRORS"
+	echo ""
 fi
 echo "Total: $((PASS + FAIL)) tests"
 echo ""
