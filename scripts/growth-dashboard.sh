@@ -29,16 +29,16 @@ echo "✨ Enriched Entries: $ENRICHED"
 echo ""
 echo "📄 Landing Pages:"
 for PAGE in "" "blog/" "catalog" "pricing" "newsletter"; do
-    CODE=$(curl -s -o /dev/null -w "%{http_code}" "https://tormentnexus.site/$PAGE" 2>/dev/null)
-    echo "  /$PAGE: $CODE"
+	CODE=$(curl -s -o /dev/null -w "%{http_code}" "https://tormentnexus.site/$PAGE" 2>/dev/null)
+	echo "  /$PAGE: $CODE"
 done
 
 # API Endpoints
 echo ""
 echo "🔌 API Endpoints:"
 for ENDPOINT in "health" "api/index" "api/backlog/search?q=test" "api/backlog/stats"; do
-    CODE=$(curl -s -o /dev/null -w "%{http_code}" "https://demo.hypernexus.site/$ENDPOINT" 2>/dev/null)
-    echo "  /$ENDPOINT: $CODE"
+	CODE=$(curl -s -o /dev/null -w "%{http_code}" "https://demo.hypernexus.site/$ENDPOINT" 2>/dev/null)
+	echo "  /$ENDPOINT: $CODE"
 done
 
 # Docker Status

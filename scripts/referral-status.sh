@@ -8,7 +8,7 @@ REFDB="/opt/tormentnexus/data/referrals.db"
 mkdir -p /opt/tormentnexus/data
 
 # Create referrals table if not exists
-sqlite3 "$REFDB" << "SQL"
+sqlite3 "$REFDB" <<"SQL"
 CREATE TABLE IF NOT EXISTS referrals (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   referrer_id TEXT NOT NULL,
