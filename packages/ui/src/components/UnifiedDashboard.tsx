@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { CatalogBrowser } from "@/components/CatalogBrowser";
 import {
 	Activity,
 	Brain,
@@ -213,6 +214,7 @@ export function UnifiedDashboard() {
 								{ v: "overview", i: MonitorSmartphone, l: "Overview" },
 								{ v: "memory", i: Brain, l: "Memory" },
 								{ v: "tools", i: Wrench, l: "Tools" },
+							{ v: "catalog", i: Database, l: "Catalog" },
 								{ v: "agents", i: Users, l: "Agents" },
 								{ v: "code", i: FileCode, l: "Code" },
 								{ v: "security", i: Shield, l: "Security" },
@@ -612,6 +614,11 @@ export function UnifiedDashboard() {
 									</div>
 								</CardContent>
 							</Card>
+						</TabsContent>
+
+						{/* ═══ CATALOG ═══ */}
+						<TabsContent value="catalog" className="mt-0 p-6">
+							<CatalogBrowser />
 						</TabsContent>
 
 						{/* ═══ AGENTS ═══ */}
