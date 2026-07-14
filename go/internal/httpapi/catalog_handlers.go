@@ -45,7 +45,7 @@ func (s *Server) handleBacklogSearch(w http.ResponseWriter, r *http.Request) {
 
 	// Try both catalog.db locations
 	dbPaths := []string{
-		filepath.Join(s.cfg.ConfigDir, "catalog.db"),
+		filepath.Join(s.cfg.WorkspaceRoot, "catalog.db"),
 		filepath.Join(s.cfg.WorkspaceRoot, "catalog.db"),
 	}
 	
@@ -185,7 +185,7 @@ func (s *Server) handleBacklogSearch(w http.ResponseWriter, r *http.Request) {
 // handleBacklogStats handles GET /api/catalog/stats
 func (s *Server) handleBacklogStats(w http.ResponseWriter, r *http.Request) {
 	dbPaths := []string{
-		filepath.Join(s.cfg.ConfigDir, "catalog.db"),
+		filepath.Join(s.cfg.WorkspaceRoot, "catalog.db"),
 		filepath.Join(s.cfg.WorkspaceRoot, "catalog.db"),
 	}
 	
