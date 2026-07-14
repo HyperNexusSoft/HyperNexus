@@ -9227,6 +9227,7 @@ func (s *Server) handleCatalogValidateBatch(w http.ResponseWriter, r *http.Reque
 	s.handleTRPCBridgeBodyCall(w, r, "catalog.triggerBatchValidation")
 }
 
+func (s *Server) handleCatalogStats(w http.ResponseWriter, r *http.Request) {
 	var result any
 	upstreamBase, err := s.callUpstreamJSON(r.Context(), "catalog.stats", nil, &result)
 	if err == nil {
