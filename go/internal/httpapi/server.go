@@ -1092,9 +1092,9 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/version", s.handleVersion)
 	s.mux.HandleFunc("/.well-known/agent-card", s.handleAgentCard)
 	s.mux.HandleFunc("/api/index", s.handleAPIIndex)
-	s.mux.HandleFunc("/api/catalog/search", s.handleCatalogSearch)
-	s.mux.HandleFunc("/api/catalog/stats", s.handleCatalogStats)
-	s.mux.HandleFunc("/api/catalog/categories", s.handleCatalogCategories)
+	s.mux.HandleFunc("/api/backlog/search", s.handleBacklogSearch)
+	s.mux.HandleFunc("/api/backlog/stats", s.handleBacklogStats)
+	s.mux.HandleFunc("/api/backlog/categories", s.handleBacklogCategories)
 	s.mux.HandleFunc("/api/health", s.handleHealth)
 	s.mux.HandleFunc("/api/health/server", s.handleHealth)
 	s.mux.HandleFunc("/api/config/status", s.handleConfigStatus)
@@ -1650,7 +1650,6 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/catalog/validate", s.handleCatalogValidate)
 	s.mux.HandleFunc("/api/catalog/install", s.handleCatalogInstall)
 	s.mux.HandleFunc("/api/catalog/validate-batch", s.handleCatalogValidateBatch)
-	s.mux.HandleFunc("/api/catalog/stats", s.handleCatalogStats)
 	s.mux.HandleFunc("/api/catalog/linked-servers", s.handleCatalogLinkedServers)
 	s.mux.HandleFunc("/api/oauth/clients/create", s.handleOAuthClientCreate)
 	s.mux.HandleFunc("/api/oauth/clients/get", s.handleOAuthClientGet)
@@ -9228,7 +9227,6 @@ func (s *Server) handleCatalogValidateBatch(w http.ResponseWriter, r *http.Reque
 	s.handleTRPCBridgeBodyCall(w, r, "catalog.triggerBatchValidation")
 }
 
-func (s *Server) handleCatalogStats(w http.ResponseWriter, r *http.Request) {
 	var result any
 	upstreamBase, err := s.callUpstreamJSON(r.Context(), "catalog.stats", nil, &result)
 	if err == nil {

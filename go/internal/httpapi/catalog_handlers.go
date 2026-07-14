@@ -27,8 +27,8 @@ type CatalogSearchResponse struct {
 	Sources map[string]int   `json:"sources"`
 }
 
-// handleCatalogSearch handles GET /api/catalog/search?q=...&category=...&limit=...
-func (s *Server) handleCatalogSearch(w http.ResponseWriter, r *http.Request) {
+// handleBacklogSearch handles GET /api/catalog/search?q=...&category=...&limit=...
+func (s *Server) handleBacklogSearch(w http.ResponseWriter, r *http.Request) {
 	query := strings.TrimSpace(r.URL.Query().Get("q"))
 	category := strings.TrimSpace(r.URL.Query().Get("category"))
 	limit := 50
@@ -182,8 +182,8 @@ func (s *Server) handleCatalogSearch(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// handleCatalogStats handles GET /api/catalog/stats
-func (s *Server) handleCatalogStats(w http.ResponseWriter, r *http.Request) {
+// handleBacklogStats handles GET /api/catalog/stats
+func (s *Server) handleBacklogStats(w http.ResponseWriter, r *http.Request) {
 	dbPaths := []string{
 		filepath.Join(s.cfg.ConfigDir, "catalog.db"),
 		filepath.Join(s.cfg.WorkspaceRoot, "catalog.db"),
@@ -246,8 +246,8 @@ func (s *Server) handleCatalogStats(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// handleCatalogCategories handles GET /api/catalog/categories
-func (s *Server) handleCatalogCategories(w http.ResponseWriter, r *http.Request) {
+// handleBacklogCategories handles GET /api/catalog/categories
+func (s *Server) handleBacklogCategories(w http.ResponseWriter, r *http.Request) {
 	categories := map[string]any{
 		"mcp_server": map[string]any{
 			"label":       "MCP Servers",
