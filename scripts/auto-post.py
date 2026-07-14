@@ -40,17 +40,23 @@ PLATFORMS = {
 def call_deepseek(prompt, max_tokens=500):
     """Call DeepSeek API for content generation"""
     try:
-        data = json.dumps({
-            "model": "deepseek-chat",
-            "messages": [{"role": "user", "content": prompt}],
-            "max_tokens": max_tokens,
-            "temperature": 0.7,
-        }).encode()
+        data = json.dumps(
+            {
+                "model": "deepseek-chat",
+                "messages": [{"role": "user", "content": prompt}],
+                "max_tokens": max_tokens,
+                "temperature": 0.7,
+            }
+        ).encode()
 
-        req = urllib.request.Request(DEEPSEEK_URL, data=data, headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {DEEPSEEK_KEY}",
-        })
+        req = urllib.request.Request(
+            DEEPSEEK_URL,
+            data=data,
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {DEEPSEEK_KEY}",
+            },
+        )
 
         with urllib.request.urlopen(req, timeout=30) as r:
             resp = json.loads(r.read().decode())
@@ -93,7 +99,10 @@ Format as JSON with "title" and "body" fields."""
             return json.loads(result)
         except:
             # Fallback: use raw text
-            return {"title": f"Show r/{subreddit}: TormentNexus - AI Control Plane", "body": result}
+            return {
+                "title": f"Show r/{subreddit}: TormentNexus - AI Control Plane",
+                "body": result,
+            }
     return None
 
 
@@ -128,7 +137,10 @@ Format as JSON with "title" and "body" fields."""
                     result = result[4:]
             return json.loads(result)
         except:
-            return {"title": "Show HN: TormentNexus – Open-source AI control plane with 26K+ MCP tools", "body": result}
+            return {
+                "title": "Show HN: TormentNexus – Open-source AI control plane with 26K+ MCP tools",
+                "body": result,
+            }
     return None
 
 
@@ -164,15 +176,17 @@ Format as JSON with "tweets" array."""
                     result = result[4:]
             return json.loads(result)
         except:
-            return {"tweets": [
-                "🧵 Thread: Why AI needs persistent memory (1/7)",
-                "Current AI assistants lose context between sessions. You explain your project, close the laptop, and start over. Sound familiar?",
-                "TormentNexus fixes this with a tiered memory system: L1 (session) → L2 (hot vector) → L3 (cold archive) → L4 (limbo). Your AI remembers.",
-                "It also has 26,000+ MCP servers indexed and searchable. Databases, filesystems, browsers, APIs - one click to install.",
-                "Works with local LLMs (LM Studio, Ollama, DeepSeek). No data leaves your machine unless you want it to.",
-                "Built in Go. Single binary. Fast startup. Low resource usage.",
-                "Open source: https://github.com/MDMAtk/TormentNexus\n\nTry it now: https://tormentnexus.site",
-            ]}
+            return {
+                "tweets": [
+                    "🧵 Thread: Why AI needs persistent memory (1/7)",
+                    "Current AI assistants lose context between sessions. You explain your project, close the laptop, and start over. Sound familiar?",
+                    "TormentNexus fixes this with a tiered memory system: L1 (session) → L2 (hot vector) → L3 (cold archive) → L4 (limbo). Your AI remembers.",
+                    "It also has 26,000+ MCP servers indexed and searchable. Databases, filesystems, browsers, APIs - one click to install.",
+                    "Works with local LLMs (LM Studio, Ollama, DeepSeek). No data leaves your machine unless you want it to.",
+                    "Built in Go. Single binary. Fast startup. Low resource usage.",
+                    "Open source: https://github.com/MDMAtk/TormentNexus\n\nTry it now: https://tormentnexus.site",
+                ]
+            }
     return None
 
 
@@ -208,7 +222,11 @@ Format as JSON with "tagline", "description", "features", and "maker_comment" fi
             return {
                 "tagline": "Give your AI persistent memory and 26K+ tools",
                 "description": result,
-                "features": ["Persistent Memory System", "26,000+ MCP Servers", "Local LLM Support"],
+                "features": [
+                    "Persistent Memory System",
+                    "26,000+ MCP Servers",
+                    "Local LLM Support",
+                ],
                 "maker_comment": "Built this to solve my own problem - AI assistants losing context between sessions.",
             }
     return None
@@ -217,18 +235,18 @@ Format as JSON with "tagline", "description", "features", and "maker_comment" fi
 def save_post(platform, content, subreddit=None):
     """Save generated post to file"""
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    
+
     if subreddit:
         filename = f"marketing/auto/{platform}_{subreddit}_{timestamp}.json"
     else:
         filename = f"marketing/auto/{platform}_{timestamp}.json"
-    
+
     os.makedirs(os.path.dirname(filename), exist_ok=True)
-    
+
     with open(filename, "w") as f:
         json.dump(content, f, indent=2)
-    
-    print(f"  [✓] Saved to {filename}")
+
+    print(f"  [OK] Saved to {filename}")
     return filename
 
 
@@ -236,12 +254,16 @@ def create_chrome_script(platform, content, subreddit=None):
     """Create a Chrome CDP script for posting"""
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     script_file = f"marketing/auto/{platform}_{timestamp}.js"
-    
+
     if platform == "reddit":
         title = content.get("title", "")
         body = content.get("body", "")
-        url = f"https://www.reddit.com/r/{subreddit}/submit" if subreddit else "https://www.reddit.com/submit"
-        
+        url = (
+            f"https://www.reddit.com/r/{subreddit}/submit"
+            if subreddit
+            else "https://www.reddit.com/submit"
+        )
+
         script = f"""
 // Reddit posting script - {platform}/{subreddit}
 // Generated: {datetime.now().isoformat()}
@@ -286,7 +308,7 @@ const puppeteer = require('puppeteer');
     elif platform == "hackernews":
         title = content.get("title", "")
         body = content.get("body", "")
-        
+
         script = f"""
 // Hacker News posting script
 // Generated: {datetime.now().isoformat()}
@@ -330,7 +352,7 @@ const puppeteer = require('puppeteer');
 """
     elif platform == "twitter":
         tweets = content.get("tweets", [])
-        
+
         script = f"""
 // Twitter thread posting script
 // Generated: {datetime.now().isoformat()}
@@ -382,7 +404,7 @@ const puppeteer = require('puppeteer');
         tagline = content.get("tagline", "")
         description = content.get("description", "")
         features = content.get("features", [])
-        
+
         script = f"""
 // Product Hunt posting script
 // Generated: {datetime.now().isoformat()}
@@ -426,11 +448,11 @@ const puppeteer = require('puppeteer');
 """
     else:
         return None
-    
+
     with open(script_file, "w") as f:
         f.write(script)
-    
-    print(f"  [✓] CDP script saved to {script_file}")
+
+    print(f"  [OK] CDP script saved to {script_file}")
     return script_file
 
 
@@ -439,7 +461,7 @@ def main():
     print("  TormentNexus Marketing Automation")
     print("=" * 50)
     print()
-    
+
     # Generate content for all platforms
     print("[1/4] Generating Reddit posts...")
     for subreddit in PLATFORMS["reddit"]["subreddits"]:
@@ -449,28 +471,28 @@ def main():
             save_post("reddit", content, subreddit)
             create_chrome_script("reddit", content, subreddit)
         time.sleep(1)  # Rate limit
-    
+
     print()
     print("[2/4] Generating Hacker News post...")
     hn_content = generate_hn_post()
     if hn_content:
         save_post("hackernews", hn_content)
         create_chrome_script("hackernews", hn_content)
-    
+
     print()
     print("[3/4] Generating Twitter thread...")
     twitter_content = generate_twitter_thread()
     if twitter_content:
         save_post("twitter", twitter_content)
         create_chrome_script("twitter", twitter_content)
-    
+
     print()
     print("[4/4] Generating Product Hunt post...")
     ph_content = generate_producthunt_post()
     if ph_content:
         save_post("producthunt", ph_content)
         create_chrome_script("producthunt", ph_content)
-    
+
     print()
     print("=" * 50)
     print("  Content generation complete!")
