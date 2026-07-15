@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  packages: write
 
 jobs:
   build:
@@ -30,7 +31,7 @@ jobs:
             suffix: darwin-arm64
           - goos: windows
             goarch: amd64
-            suffix: windows-amd64.exe
+            suffix: windows-amd64
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
@@ -42,17 +43,19 @@ jobs:
           GOARCH: ${{ matrix.goarch }}
         run: |
           cd go
+          EXT=""
+          if [ "$GOOS" = "windows" ]; then EXT=".exe"; fi
           go build -buildvcs=false -ldflags="-s -w" \
-            -o ../tormentnexus-${{ matrix.suffix }} \
+            -o ../tormentnexus-${{ matrix.suffix }}${EXT} \
             ./cmd/tormentnexus
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: tormentnexus-${{ matrix.suffix }}
-          path: tormentnexus-${{ matrix.suffix }}
+          path: tormentnexus-${{ matrix.suffix }}*
 
-  release:
-    name: Create Release
+  create-installers:
+    name: Create Installers
     needs: [build]
     runs-on: ubuntu-latest
     steps:
@@ -60,39 +63,99 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: artifacts
-      - name: List artifacts
-        run: ls -la artifacts/
+          path: binaries
+      - name: Create Windows installer
+        run: |
+          mkdir -p installers/windows
+          cp binaries/tormentnexus-windows-amd64/* installers/windows/
+          cp installers/windows/install.bat installers/windows/ 2>/dev/null || true
+          cd installers/windows
+          zip -r ../../tormentnexus-windows-installer.zip .
+      - name: Create macOS installer
+        run: |
+          mkdir -p installers/macos
+          cp binaries/tormentnexus-darwin-*/* installers/macos/
+          chmod +x installers/macos/tormentnexus-*
+          cp installers/macos/install.sh installers/macos/ 2>/dev/null || true
+          cd installers/macos
+          tar czf ../../tormentnexus-macos-installer.tar.gz .
+      - name: Create Linux installer
+        run: |
+          mkdir -p installers/linux
+          cp binaries/tormentnexus-linux-*/* installers/linux/
+          chmod +x installers/linux/tormentnexus-*
+          cp installers/linux/install.sh installers/linux/ 2>/dev/null || true
+          cd installers/linux
+          tar czf ../../tormentnexus-linux-installer.tar.gz .
+      - name: Upload installers
+        uses: actions/upload-artifact@v4
+        with:
+          name: installers
+          path: tormentnexus-*-installer.*
+
+  docker:
+    name: Build Docker Image
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Linux binary
+        uses: actions/download-artifact@v4
+        with:
+          name: tormentnexus-linux-amd64
+          path: go/
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  release:
+    name: Create GitHub Release
+    needs: [create-installers, docker]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download installers
+        uses: actions/download-artifact@v4
+        with:
+          name: installers
+          path: installers
+      - name: Download raw binaries
+        uses: actions/download-artifact@v4
+        with:
+          path: binaries
       - name: Create release archives
         run: |
           mkdir -p release
-          # Windows
-          cd artifacts/tormentnexus-windows-amd64.exe
-          zip ../../release/tormentnexus-windows-amd64.zip \
-            tormentnexus-windows-amd64.exe
-          cd ../..
-          # macOS amd64
-          cd artifacts/tormentnexus-darwin-amd64
-          tar czf ../../release/tormentnexus-darwin-amd64.tar.gz \
-            tormentnexus-darwin-amd64
-          cd ../..
-          # macOS arm64
-          cd artifacts/tormentnexus-darwin-arm64
-          tar czf ../../release/tormentnexus-darwin-arm64.tar.gz \
-            tormentnexus-darwin-arm64
-          cd ../..
-          # Linux amd64
-          cd artifacts/tormentnexus-linux-amd64
-          tar czf ../../release/tormentnexus-linux-amd64.tar.gz \
-            tormentnexus-linux-amd64
-          cd ../..
-          # Linux arm64
-          cd artifacts/tormentnexus-linux-arm64
-          tar czf ../../release/tormentnexus-linux-arm64.tar.gz \
-            tormentnexus-linux-arm64
-          cd ../..
-      - name: List release files
-        run: ls -la release/
+          for dir in binaries/tormentnexus-*; do
+            name=$(basename $dir)
+            if [[ "$name" == *"windows"* ]]; then
+              zip "release/${name}.zip" "$dir"/*
+            else
+              tar czf "release/${name}.tar.gz" "$dir"/*
+            fi
+          done
+          cp installers/* release/ 2>/dev/null || true
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:

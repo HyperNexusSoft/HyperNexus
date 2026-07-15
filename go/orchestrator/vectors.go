@@ -9,7 +9,8 @@ import (
 
 	"github.com/MDMAtk/TormentNexus/agents"
 
-	"github.com/MDMAtk/TormentNexus/internal/database")
+	"github.com/MDMAtk/TormentNexus/internal/database"
+)
 
 // VectorDB handles the "Jules Autopilot" requirement directly over SQLite natively
 type VectorDB struct {

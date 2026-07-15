@@ -1,9 +1,6 @@
-# Build stage
-FROM golang:1.25-alpine AS builder
+FROM golang:1.22-alpine AS builder
 
-RUN apk add --no-cache git gcc musl-dev sqlite-dev
-
-WORKDIR /app
+WORKDIR /build
 
 # Copy go mod files
 COPY go/go.mod go/go.sum ./
@@ -12,32 +9,29 @@ RUN go mod download
 # Copy source code
 COPY go/ .
 
-# Build
-RUN CGO_ENABLED=1 GOOS=linux go build -buildvcs=false -o /tormentnexus ./cmd/tormentnexus
+# Build binary
+RUN CGO_ENABLED=0 GOOS=linux go build -buildvcs=false -ldflags="-s -w" -o tormentnexus ./cmd/tormentnexus
 
-# Runtime stage
+# Runtime image
 FROM alpine:3.19
 
-RUN apk add --no-cache sqlite-libs ca-certificates
+RUN apk --no-cache add ca-certificates tzdata
 
 WORKDIR /app
 
-# Copy binary
-COPY --from=builder /tormentnexus .
+# Copy binary from builder
+COPY --from=builder /build/tormentnexus .
 
 # Create data directory
-RUN mkdir -p /root/.tormentnexus/memory
+RUN mkdir -p /root/.tormentnexus
 
-# Expose ports
-EXPOSE 7778 7779
-
-# Environment
-ENV TN_HOST=0.0.0.0
-ENV TN_PORT=7778
+# Expose port
+EXPOSE 7778
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-  CMD wget -qO- http://localhost:7778/health || exit 1
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD wget -qO- http://localhost:7778/health || exit 1
 
 # Run
-CMD ["./tormentnexus", "serve", "--host", "0.0.0.0"]
+ENTRYPOINT ["./tormentnexus"]
+CMD ["serve"]

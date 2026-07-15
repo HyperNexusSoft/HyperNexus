@@ -1,31 +1,40 @@
 {
   "name": "tormentnexus",
-  "version": "1.0.0-alpha.255",
-  "description": "TormentNexus pi extension — L2 memory, tool search, session import, skill registry, code search, subagent orchestration, commercial RBAC",
+  "version": "1.0.0",
+  "description": "AI Control Plane with Persistent Memory - 26,000+ MCP Tools",
+  "main": "index.js",
+  "bin": {
+    "tormentnexus": "./bin/tormentnexus"
+  },
+  "scripts": {
+    "postinstall": "node scripts/install.js"
+  },
   "keywords": [
-    "tormentnexus",
-    "pi",
-    "pi-extension",
-    "memory",
+    "ai",
     "mcp",
-    "ai-control-plane"
+    "memory",
+    "llm",
+    "tools",
+    "agent",
+    "control-plane"
   ],
-  "homepage": "https://github.com/MDMAtk/TormentNexus",
+  "author": "TormentNexus",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MDMAtk/TormentNexus.git",
-    "directory": "packages/tormentnexus"
+    "url": "https://github.com/MDMAtk/TormentNexus.git"
   },
-  "license": "MIT",
-  "author": "Robert Pelloni <robertpelloni@users.noreply.github.com>",
-  "type": "module",
-  "main": "index.ts",
-  "files": [
-    "index.ts",
-    "README.md",
-    "SKILL.md"
+  "homepage": "https://tormentnexus.site",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
   ],
-  "pi": {
-    "kind": "extension"
-  }
+  "cpu": [
+    "x64",
+    "arm64"
+  ]
 }
