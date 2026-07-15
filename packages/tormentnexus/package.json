@@ -1,6 +1,6 @@
 {
   "name": "@tormentnexus/core",
-  "version": "1.0.0",
+  "version": "1.0.0-b14",
   "description": "AI Control Plane with Persistent Memory - 26,000+ MCP Tools",
   "main": "index.js",
   "bin": {
