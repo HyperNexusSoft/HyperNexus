@@ -79,7 +79,8 @@ jobs:
           cp binaries/tormentnexus-darwin-arm64/* installers/macos/
           chmod +x installers/macos/tormentnexus-*
           cp installers/macos/install-terminal.sh installers/macos/
-          cp -r installers/macos/TormentNexusInstaller.app installers/macos/ 2>/dev/null || true
+          cp -r installers/macos/TormentNexusInstaller.app \
+            installers/macos/ 2>/dev/null || true
           cd installers/macos
           tar czf ../../tormentnexus-macos-installer.tar.gz .
       - name: Create Linux installer
