@@ -36,11 +36,11 @@ echo ""
 # Detect architecture
 ARCH=$(uname -m)
 if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
-    BINARY_NAME="tormentnexus-linux-arm64"
-    echo -e "  ${GREEN}Detected: ARM64${NC}"
+	BINARY_NAME="tormentnexus-linux-arm64"
+	echo -e "  ${GREEN}Detected: ARM64${NC}"
 else
-    BINARY_NAME="tormentnexus-linux-amd64"
-    echo -e "  ${GREEN}Detected: x86_64${NC}"
+	BINARY_NAME="tormentnexus-linux-amd64"
+	echo -e "  ${GREEN}Detected: x86_64${NC}"
 fi
 echo ""
 
@@ -55,7 +55,7 @@ echo ""
 
 # Copy binary
 echo "  [2/6] Installing TormentNexus binary..."
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cp "$SCRIPT_DIR/$BINARY_NAME" "$BINARY_PATH"
 chmod +x "$BINARY_PATH"
 echo -e "        ${GREEN}OK${NC} - $BINARY_PATH"
@@ -69,7 +69,7 @@ echo ""
 
 # Create default config
 echo "  [4/6] Creating default configuration..."
-cat > "$INSTALL_DIR/.tormentnexus/config.json" << 'EOF'
+cat >"$INSTALL_DIR/.tormentnexus/config.json" <<'EOF'
 {
   "version": "1.0.0",
   "server": {
@@ -93,25 +93,25 @@ echo ""
 echo "  [5/6] Adding to PATH..."
 SHELL_RC=""
 if [ -f "$HOME/.bashrc" ]; then
-    SHELL_RC="$HOME/.bashrc"
+	SHELL_RC="$HOME/.bashrc"
 elif [ -f "$HOME/.bash_profile" ]; then
-    SHELL_RC="$HOME/.bash_profile"
+	SHELL_RC="$HOME/.bash_profile"
 elif [ -f "$HOME/.zshrc" ]; then
-    SHELL_RC="$HOME/.zshrc"
+	SHELL_RC="$HOME/.zshrc"
 fi
 
 if [ -n "$SHELL_RC" ]; then
-    if ! grep -q "$INSTALL_DIR" "$SHELL_RC"; then
-        echo "" >> "$SHELL_RC"
-        echo "# TormentNexus" >> "$SHELL_RC"
-        echo "export PATH=\"\$PATH:$INSTALL_DIR\"" >> "$SHELL_RC"
-        echo -e "        ${GREEN}OK${NC} - Added to $SHELL_RC"
-    else
-        echo -e "        ${GREEN}OK${NC} - Already in PATH"
-    fi
+	if ! grep -q "$INSTALL_DIR" "$SHELL_RC"; then
+		echo "" >>"$SHELL_RC"
+		echo "# TormentNexus" >>"$SHELL_RC"
+		echo "export PATH=\"\$PATH:$INSTALL_DIR\"" >>"$SHELL_RC"
+		echo -e "        ${GREEN}OK${NC} - Added to $SHELL_RC"
+	else
+		echo -e "        ${GREEN}OK${NC} - Already in PATH"
+	fi
 else
-    echo -e "        ${YELLOW}WARN${NC} - Could not find shell RC file"
-    echo "              Add $INSTALL_DIR to your PATH manually"
+	echo -e "        ${YELLOW}WARN${NC} - Could not find shell RC file"
+	echo "              Add $INSTALL_DIR to your PATH manually"
 fi
 echo ""
 
@@ -120,7 +120,7 @@ echo "  [6/6] Creating systemd service..."
 SERVICE_FILE="$HOME/.config/systemd/user/tormentnexus.service"
 mkdir -p "$HOME/.config/systemd/user"
 
-cat > "$SERVICE_FILE" << EOF
+cat >"$SERVICE_FILE" <<EOF
 [Unit]
 Description=TormentNexus AI Control Plane
 After=network.target
@@ -166,19 +166,19 @@ echo ""
 read -p "  Start TormentNexus now? (y/n): " -n 1 -r
 echo ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo ""
-    echo "  Starting TormentNexus..."
-    mkdir -p "$INSTALL_DIR/logs"
-    "$BINARY_PATH" serve > "$INSTALL_DIR/logs/stdout.log" 2>&1 &
-    SERV_PID=$!
-    sleep 2
-    if kill -0 $SERV_PID 2>/dev/null; then
-        echo -e "  ${GREEN}TormentNexus is running (PID: $SERV_PID)${NC}"
-        echo "  Dashboard: http://localhost:7778"
-        xdg-open http://localhost:7778 2>/dev/null || echo "  Open http://localhost:7778 in your browser"
-    else
-        echo -e "  ${RED}Failed to start. Check logs: $INSTALL_DIR/logs/${NC}"
-    fi
+	echo ""
+	echo "  Starting TormentNexus..."
+	mkdir -p "$INSTALL_DIR/logs"
+	"$BINARY_PATH" serve >"$INSTALL_DIR/logs/stdout.log" 2>&1 &
+	SERV_PID=$!
+	sleep 2
+	if kill -0 $SERV_PID 2>/dev/null; then
+		echo -e "  ${GREEN}TormentNexus is running (PID: $SERV_PID)${NC}"
+		echo "  Dashboard: http://localhost:7778"
+		xdg-open http://localhost:7778 2>/dev/null || echo "  Open http://localhost:7778 in your browser"
+	else
+		echo -e "  ${RED}Failed to start. Check logs: $INSTALL_DIR/logs/${NC}"
+	fi
 fi
 
 echo ""

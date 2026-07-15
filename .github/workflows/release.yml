@@ -64,25 +64,29 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: binaries
-      - name: Create Windows installer
+      - name: Create Windows GUI installer
         run: |
           mkdir -p installers/windows
           cp binaries/tormentnexus-windows-amd64/* installers/windows/
-          cp installers/windows/install.bat installers/windows/ 2>/dev/null || true
+          cp installers/windows/install-gui.ps1 installers/windows/
+          cp installers/windows/install.bat installers/windows/
           cd installers/windows
           zip -r ../../tormentnexus-windows-installer.zip .
       - name: Create macOS installer
         run: |
           mkdir -p installers/macos
-          cp binaries/tormentnexus-darwin-*/* installers/macos/
+          cp binaries/tormentnexus-darwin-amd64/* installers/macos/
+          cp binaries/tormentnexus-darwin-arm64/* installers/macos/
           chmod +x installers/macos/tormentnexus-*
-          cp installers/macos/install.sh installers/macos/ 2>/dev/null || true
+          cp installers/macos/install-terminal.sh installers/macos/
+          cp -r installers/macos/TormentNexusInstaller.app installers/macos/ 2>/dev/null || true
           cd installers/macos
           tar czf ../../tormentnexus-macos-installer.tar.gz .
       - name: Create Linux installer
         run: |
           mkdir -p installers/linux
-          cp binaries/tormentnexus-linux-*/* installers/linux/
+          cp binaries/tormentnexus-linux-amd64/* installers/linux/
+          cp binaries/tormentnexus-linux-arm64/* installers/linux/
           chmod +x installers/linux/tormentnexus-*
           cp installers/linux/install.sh installers/linux/ 2>/dev/null || true
           cd installers/linux
