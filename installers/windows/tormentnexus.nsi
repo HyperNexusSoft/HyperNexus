@@ -3,6 +3,8 @@
 
 !include "MUI2.nsh"
 !include "FileFunc.nsh"
+!include "StrFunc.nsh"
+${StrRep}
 
 ; ── General ──
 Name "TormentNexus"
@@ -120,8 +122,10 @@ Section "TormentNexus (Required)" SecMain
 SectionEnd
 
 Section "Add to PATH" SecPath
-    ; Add to user PATH
-    EnVar::AddValue "PATH" "$INSTDIR"
+    ; Add to user PATH via registry
+    ReadRegStr $0 HKCU "Environment" "PATH"
+    StrCpy $0 "$0;$INSTDIR"
+    WriteRegStr HKCU "Environment" "PATH" "$0"
 SectionEnd
 
 Section "Desktop Shortcut" SecDesktop
@@ -168,6 +172,8 @@ Section "Uninstall"
     DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\TormentNexus"
     DeleteRegKey HKCU "Software\TormentNexus"
     
-    ; Remove from PATH
-    EnVar::RemoveValue "PATH" "$INSTDIR"
+    ; Remove from PATH via registry
+    ReadRegStr $0 HKCU "Environment" "PATH"
+    ${StrRep} $0 $0 ";$INSTDIR" ""
+    WriteRegStr HKCU "Environment" "PATH" "$0"
 SectionEnd
