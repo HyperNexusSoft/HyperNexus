@@ -2,7 +2,9 @@
 
 > **One-command install:** `npx @tormentnexus/install`
 >
-> Local-first, open-source AI control plane with persistent multi-tier memory, MCP tool orchestration across 20,000+ servers, multi-agent swarm coordination, and enterprise-grade security — all running on your machine.
+> Local-first, open-source AI control plane with persistent multi-tier memory, MCP tool orchestration across 20,000+ servers, multi-agent swarm coordination, and corporate-grade security — all running on your machine.
+>
+> **📄 [Read the Technical Whitepaper](https://tormentnexus.site/tormentnexus_whitepaper.html)**
 
 ## Installation
 
