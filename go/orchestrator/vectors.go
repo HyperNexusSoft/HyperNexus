@@ -7,7 +7,7 @@ import (
 	"math"
 	"sort"
 
-	"github.com/NexusSoftMDMA/TormentNexus/agents"
+	"github.com/MDMAtk/TormentNexus/agents"
 
 	"github.com/MDMAtk/TormentNexus/internal/database")
 
