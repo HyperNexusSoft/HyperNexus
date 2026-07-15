@@ -1,10 +1,11 @@
 {
-  "name": "tormentnexus",
+  "name": "@tormentnexus/core",
   "version": "1.0.0",
   "description": "AI Control Plane with Persistent Memory - 26,000+ MCP Tools",
   "main": "index.js",
   "bin": {
-    "tormentnexus": "./bin/tormentnexus"
+    "tormentnexus": "./index.js",
+    "tn": "./index.js"
   },
   "scripts": {
     "postinstall": "node scripts/install.js"

@@ -1,4 +1,4 @@
-# TormentNexus
+# @tormentnexus/core
 
 AI Control Plane with Persistent Memory & 26,000+ MCP Tools
 
@@ -6,7 +6,7 @@ AI Control Plane with Persistent Memory & 26,000+ MCP Tools
 
 ```bash
 # Install globally
-npm install -g tormentnexus
+npm install -g @tormentnexus/core
 
 # Start the server
 tormentnexus serve
@@ -18,7 +18,7 @@ open http://localhost:7778
 ## Or use npx
 
 ```bash
-npx tormentnexus serve
+npx @tormentnexus/core serve
 ```
 
 ## Features
