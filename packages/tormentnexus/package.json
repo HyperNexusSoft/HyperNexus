@@ -16,7 +16,10 @@
     "llm",
     "tools",
     "agent",
-    "control-plane"
+    "control-plane",
+    "persistent-memory",
+    "ollama",
+    "local-ai"
   ],
   "author": "TormentNexus",
   "license": "MIT",
@@ -25,6 +28,9 @@
     "url": "https://github.com/MDMAtk/TormentNexus.git"
   },
   "homepage": "https://tormentnexus.site",
+  "bugs": {
+    "url": "https://github.com/MDMAtk/TormentNexus/issues"
+  },
   "engines": {
     "node": ">=18.0.0"
   },
