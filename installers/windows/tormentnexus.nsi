@@ -3,8 +3,6 @@
 
 !include "MUI2.nsh"
 !include "FileFunc.nsh"
-!include "StrFunc.nsh"
-${StrRep}
 
 ; ── General ──
 Name "TormentNexus"
@@ -27,17 +25,13 @@ VIAddVersionKey "LegalCopyright" "© 2026 TormentNexus"
 !define MUI_ABORTWARNING
 !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\modern-install.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
-!define MUI_HEADERIMAGE
-!define MUI_HEADERIMAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Header\win.bmp"
-!define MUI_WELCOMEFINISHPAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Wizard\win.bmp"
 
 ; ── Welcome Page ──
 !define MUI_WELCOMEPAGE_TITLE "Welcome to TormentNexus Setup"
-!define MUI_WELCOMEPAGE_TEXT "TormentNexus is an AI Control Plane with Persistent Memory.$\r$\n$\r$\nFeatures:$\r$\n  • 26,000+ MCP Tools$\r$\n  • 4-Tier Memory System$\r$\n  • Multi-Agent Orchestration$\r$\n  • Local-First Architecture$\r$\n$\r$\nThis wizard will guide you through the installation.$\r$\n$\r$\nClick Next to continue."
+!define MUI_WELCOMEPAGE_TEXT "TormentNexus is an AI Control Plane with Persistent Memory.$\r$\n$\r$\nFeatures:$\r$\n  - 26,000+ MCP Tools$\r$\n  - 4-Tier Memory System$\r$\n  - Multi-Agent Orchestration$\r$\n  - Local-First Architecture$\r$\n$\r$\nThis wizard will guide you through the installation.$\r$\n$\r$\nClick Next to continue."
 
 ; ── Pages ──
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "LICENSE.txt"
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_RUN "$INSTDIR\tormentnexus.exe"
@@ -62,8 +56,6 @@ Section "TormentNexus (Required)" SecMain
     
     ; Install files
     File "tormentnexus.exe"
-    File "install-gui.ps1"
-    File "install.bat"
     
     ; Create config directory
     CreateDirectory "$INSTDIR\.tormentnexus"
@@ -121,13 +113,6 @@ Section "TormentNexus (Required)" SecMain
         "EstimatedSize" "$0"
 SectionEnd
 
-Section "Add to PATH" SecPath
-    ; Add to user PATH via registry
-    ReadRegStr $0 HKCU "Environment" "PATH"
-    StrCpy $0 "$0;$INSTDIR"
-    WriteRegStr HKCU "Environment" "PATH" "$0"
-SectionEnd
-
 Section "Desktop Shortcut" SecDesktop
     CreateShortcut "$DESKTOP\TormentNexus.lnk" "$INSTDIR\tormentnexus.exe" "serve" "$INSTDIR\tormentnexus.exe" 0
 SectionEnd
@@ -139,20 +124,10 @@ Section "Start Menu Shortcuts" SecStartMenu
     CreateShortcut "$SMPROGRAMS\TormentNexus\Uninstall.lnk" "$INSTDIR\Uninstall.exe" "" "$INSTDIR\Uninstall.exe" 0
 SectionEnd
 
-; ── Descriptions ──
-!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecMain} "Install TormentNexus core files."
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecPath} "Add TormentNexus to your system PATH."
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecDesktop} "Create a desktop shortcut."
-    !insertmacro MUI_DESCRIPTION_TEXT ${SecStartMenu} "Create Start Menu shortcuts."
-!insertmacro MUI_FUNCTION_DESCRIPTION_END
-
 ; ── Uninstaller Section ──
 Section "Uninstall"
     ; Remove files
     Delete "$INSTDIR\tormentnexus.exe"
-    Delete "$INSTDIR\install-gui.ps1"
-    Delete "$INSTDIR\install.bat"
     Delete "$INSTDIR\Uninstall.exe"
     
     ; Remove config (ask first)
@@ -171,9 +146,4 @@ Section "Uninstall"
     ; Remove registry keys
     DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\TormentNexus"
     DeleteRegKey HKCU "Software\TormentNexus"
-    
-    ; Remove from PATH via registry
-    ReadRegStr $0 HKCU "Environment" "PATH"
-    ${StrRep} $0 $0 ";$INSTDIR" ""
-    WriteRegStr HKCU "Environment" "PATH" "$0"
 SectionEnd
