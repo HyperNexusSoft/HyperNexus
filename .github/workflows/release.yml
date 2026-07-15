@@ -66,24 +66,26 @@ jobs:
           name: tormentnexus-windows-amd64
           path: build/
       - name: Install NSIS
-        run: |
-          choco install nsis -y
+        run: choco install nsis -y
       - name: Prepare installer files
         run: |
-          if (Test-Path installer) {
-            Remove-Item -Recurse -Force installer
-          }
+          Remove-Item -Recurse -Force installer `
+            -ErrorAction SilentlyContinue
           New-Item -ItemType Directory -Path installer -Force
-          Copy-Item build/tormentnexus-windows-amd64.exe \
-            installer/tormentnexus.exe
-          Copy-Item installers/windows/tormentnexus.nsi installer/
-          Copy-Item installers/windows/install-gui.ps1 installer/
-          Copy-Item installers/windows/install.bat installer/
-          Copy-Item LICENSE.txt installer/
+          Copy-Item "build/tormentnexus-windows-amd64.exe" `
+            "installer/tormentnexus.exe"
+          Copy-Item "installers/windows/tormentnexus.nsi" `
+            "installer/"
+          Copy-Item "installers/windows/install-gui.ps1" `
+            "installer/"
+          Copy-Item "installers/windows/install.bat" `
+            "installer/"
+          Copy-Item "LICENSE.txt" "installer/"
       - name: Build NSIS installer
         run: |
           cd installer
-          & "C:\Program Files (x86)\NSIS\makensis.exe" tormentnexus.nsi
+          & "C:\Program Files (x86)\NSIS\makensis.exe" `
+            tormentnexus.nsi
       - name: Upload installer
         uses: actions/upload-artifact@v4
         with:
@@ -120,7 +122,8 @@ jobs:
           cp installers/windows/install.bat release/
           cp installers/macos/install-terminal.sh release/
           cp installers/linux/install.sh release/
-          cp installer/tormentnexus-setup.exe release/ 2>/dev/null || true
+          cp installer/tormentnexus-setup.exe release/ \
+            2>/dev/null || true
           ls -la release/
       - name: Create Release
         uses: softprops/action-gh-release@v2
