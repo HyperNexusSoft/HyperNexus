@@ -60,30 +60,39 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: binaries
+          path: artifacts
+      - name: List artifacts
+        run: ls -la artifacts/
       - name: Create release archives
         run: |
           mkdir -p release
-          cd binaries/tormentnexus-windows-amd64.exe
-          zip ../release/tormentnexus-windows-amd64.zip \
+          # Windows
+          cd artifacts/tormentnexus-windows-amd64.exe
+          zip ../../release/tormentnexus-windows-amd64.zip \
             tormentnexus-windows-amd64.exe
           cd ../..
-          cd binaries/tormentnexus-darwin-amd64
-          tar czf ../release/tormentnexus-darwin-amd64.tar.gz \
+          # macOS amd64
+          cd artifacts/tormentnexus-darwin-amd64
+          tar czf ../../release/tormentnexus-darwin-amd64.tar.gz \
             tormentnexus-darwin-amd64
           cd ../..
-          cd binaries/tormentnexus-darwin-arm64
-          tar czf ../release/tormentnexus-darwin-arm64.tar.gz \
+          # macOS arm64
+          cd artifacts/tormentnexus-darwin-arm64
+          tar czf ../../release/tormentnexus-darwin-arm64.tar.gz \
             tormentnexus-darwin-arm64
           cd ../..
-          cd binaries/tormentnexus-linux-amd64
-          tar czf ../release/tormentnexus-linux-amd64.tar.gz \
+          # Linux amd64
+          cd artifacts/tormentnexus-linux-amd64
+          tar czf ../../release/tormentnexus-linux-amd64.tar.gz \
             tormentnexus-linux-amd64
           cd ../..
-          cd binaries/tormentnexus-linux-arm64
-          tar czf ../release/tormentnexus-linux-arm64.tar.gz \
+          # Linux arm64
+          cd artifacts/tormentnexus-linux-arm64
+          tar czf ../../release/tormentnexus-linux-arm64.tar.gz \
             tormentnexus-linux-arm64
           cd ../..
+      - name: List release files
+        run: ls -la release/
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
