@@ -48,40 +48,78 @@ jobs:
           go build -buildvcs=false -ldflags="-s -w" \
             -o ../tormentnexus-${{ matrix.suffix }}${EXT} \
             ./cmd/tormentnexus
-      - name: Create archive
-        run: |
-          mkdir -p release
-          if [ "${{ matrix.goos }}" = "windows" ]; then
-            zip "release/tormentnexus-${{ matrix.suffix }}.zip" \
-              tormentnexus-${{ matrix.suffix }}.exe
-          else
-            tar czf "release/tormentnexus-${{ matrix.suffix }}.tar.gz" \
-              tormentnexus-${{ matrix.suffix }}
-          fi
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: release-${{ matrix.suffix }}
-          path: release/*
+          name: tormentnexus-${{ matrix.suffix }}
+          path: tormentnexus-${{ matrix.suffix }}*
 
-  release:
-    name: Create GitHub Release
+  build-windows-installer:
+    name: Build Windows Installer (NSIS)
     needs: [build]
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Windows binary
+        uses: actions/download-artifact@v4
+        with:
+          name: tormentnexus-windows-amd64
+          path: build/
+      - name: Install NSIS
+        run: |
+          choco install nsis -y
+      - name: Prepare installer files
+        run: |
+          mkdir -p installer
+          cp build/tormentnexus-windows-amd64.exe installer/tormentnexus.exe
+          cp installers/windows/tormentnexus.nsi installer/
+          cp installers/windows/install-gui.ps1 installer/
+          cp installers/windows/install.bat installer/
+          cp LICENSE.txt installer/
+      - name: Build NSIS installer
+        run: |
+          cd installer
+          & "C:\Program Files (x86)\NSIS\makensis.exe" tormentnexus.nsi
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: installer/tormentnexus-setup.exe
+
+  create-release:
+    name: Create GitHub Release
+    needs: [build, build-windows-installer]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download all artifacts
+      - name: Download all binaries
         uses: actions/download-artifact@v4
         with:
-          path: release-artifacts
-      - name: Prepare release files
+          path: binaries
+      - name: Download Windows installer
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-installer
+          path: installer
+      - name: Create release archives
         run: |
           mkdir -p release
-          cp release-artifacts/**/tormentnexus-* release/ 2>/dev/null || true
-          cp installers/windows/install-gui.ps1 release/ 2>/dev/null || true
-          cp installers/windows/install.bat release/ 2>/dev/null || true
-          cp installers/macos/install-terminal.sh release/ 2>/dev/null || true
-          cp installers/linux/install.sh release/ 2>/dev/null || true
+          # Create archives for each platform
+          for dir in binaries/tormentnexus-*; do
+            name=$(basename $dir)
+            if [[ "$name" == *"windows"* ]]; then
+              zip "release/${name}.zip" "$dir"/*
+            else
+              tar czf "release/${name}.tar.gz" "$dir"/*
+            fi
+          done
+          # Copy installer scripts
+          cp installers/windows/install-gui.ps1 release/
+          cp installers/windows/install.bat release/
+          cp installers/macos/install-terminal.sh release/
+          cp installers/linux/install.sh release/
+          # Copy NSIS installer
+          cp installer/tormentnexus-setup.exe release/ 2>/dev/null || true
           ls -la release/
       - name: Create Release
         uses: softprops/action-gh-release@v2
