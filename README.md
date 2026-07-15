@@ -4,7 +4,7 @@
 >
 > Local-first, open-source AI control plane with persistent multi-tier memory, MCP tool orchestration across 20,000+ servers, multi-agent swarm coordination, and corporate-grade security — all running on your machine.
 >
-> **📄 [Read the Technical Whitepaper](https://tormentnexus.site/tormentnexus_whitepaper.html)**
+> **📄 [Read the Technical Whitepaper](https://tormentnexus.site/tormentnexus_whitepaper.html)** | **💬 [Join Discord](https://discord.gg/Hj9P3GbVxR)**
 
 ## Installation
 
