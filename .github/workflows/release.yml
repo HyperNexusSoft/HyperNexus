@@ -70,12 +70,16 @@ jobs:
           choco install nsis -y
       - name: Prepare installer files
         run: |
-          mkdir -p installer
-          cp build/tormentnexus-windows-amd64.exe installer/tormentnexus.exe
-          cp installers/windows/tormentnexus.nsi installer/
-          cp installers/windows/install-gui.ps1 installer/
-          cp installers/windows/install.bat installer/
-          cp LICENSE.txt installer/
+          if (Test-Path installer) {
+            Remove-Item -Recurse -Force installer
+          }
+          New-Item -ItemType Directory -Path installer -Force
+          Copy-Item build/tormentnexus-windows-amd64.exe \
+            installer/tormentnexus.exe
+          Copy-Item installers/windows/tormentnexus.nsi installer/
+          Copy-Item installers/windows/install-gui.ps1 installer/
+          Copy-Item installers/windows/install.bat installer/
+          Copy-Item LICENSE.txt installer/
       - name: Build NSIS installer
         run: |
           cd installer
@@ -104,7 +108,6 @@ jobs:
       - name: Create release archives
         run: |
           mkdir -p release
-          # Create archives for each platform
           for dir in binaries/tormentnexus-*; do
             name=$(basename $dir)
             if [[ "$name" == *"windows"* ]]; then
@@ -113,12 +116,10 @@ jobs:
               tar czf "release/${name}.tar.gz" "$dir"/*
             fi
           done
-          # Copy installer scripts
           cp installers/windows/install-gui.ps1 release/
           cp installers/windows/install.bat release/
           cp installers/macos/install-terminal.sh release/
           cp installers/linux/install.sh release/
-          # Copy NSIS installer
           cp installer/tormentnexus-setup.exe release/ 2>/dev/null || true
           ls -la release/
       - name: Create Release
