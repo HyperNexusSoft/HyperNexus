@@ -47,21 +47,46 @@ SUBREDDITS = [
 ]
 
 RELEVANT_KEYWORDS = [
-    "memory", "persistent memory", "context window", "forget",
-    "mcp", "model context protocol", "tool use", "function calling",
-    "local llm", "ollama", "lm studio", "localai", "self-hosted",
-    "ai agent", "multi-agent", "agent framework",
-    "ai control plane", "ai orchestration",
-    "vector database", "embedding", "rag",
-    "ai assistant", "ai coding", "ai developer",
-    "open source ai", "ai tools",
+    "memory",
+    "persistent memory",
+    "context window",
+    "forget",
+    "mcp",
+    "model context protocol",
+    "tool use",
+    "function calling",
+    "local llm",
+    "ollama",
+    "lm studio",
+    "localai",
+    "self-hosted",
+    "ai agent",
+    "multi-agent",
+    "agent framework",
+    "ai control plane",
+    "ai orchestration",
+    "vector database",
+    "embedding",
+    "rag",
+    "ai assistant",
+    "ai coding",
+    "ai developer",
+    "open source ai",
+    "ai tools",
 ]
 
 HIGH_RELEVANCE_KEYWORDS = [
-    "persistent memory", "mcp server", "model context protocol",
-    "ai control plane", "ai that remembers", "memory for ai",
-    "give ai memory", "ai memory system", "tool catalog",
-    "mcp catalog", "mcp tools",
+    "persistent memory",
+    "mcp server",
+    "model context protocol",
+    "ai control plane",
+    "ai that remembers",
+    "memory for ai",
+    "give ai memory",
+    "ai memory system",
+    "tool catalog",
+    "mcp catalog",
+    "mcp tools",
 ]
 
 # MiMo API config
@@ -84,7 +109,6 @@ REPLY_TEMPLATES = {
 It's open source and works with Ollama, LM Studio, and any OpenAI-compatible API.
 
 GitHub: https://github.com/MDMAtk/TormentNexus""",
-    
     "mcp": """I've cataloged 26,000+ MCP servers in TormentNexus. You can search them at https://tormentnexus.site/catalog
 
 It includes tools for:
@@ -95,7 +119,6 @@ It includes tools for:
 - And thousands more
 
 GitHub: https://github.com/MDMAtk/TormentNexus""",
-    
     "tools": """TormentNexus is an open-source AI control plane that does exactly this:
 
 - 26,000+ MCP tools in one catalog
@@ -153,28 +176,32 @@ def init_db():
 
 def get_reddit_instance():
     """Get authenticated Reddit instance using PRAW"""
-    creds_file = os.path.join(os.path.dirname(__file__), "..", "data", "reddit-creds.json")
-    
+    creds_file = os.path.join(
+        os.path.dirname(__file__), "..", "data", "reddit-creds.json"
+    )
+
     if not os.path.exists(creds_file):
         print(f"  [!] No credentials found at {creds_file}")
         print("  Create the file with:")
-        print('  {"client_id": "...", "client_secret": "...", "username": "...", "password": "..."}')
+        print(
+            '  {"client_id": "...", "client_secret": "...", "username": "...", "password": "..."}'
+        )
         return None
-    
+
     with open(creds_file) as f:
         creds = json.load(f)
-    
+
     if creds.get("client_id") == "YOUR_CLIENT_ID":
         print("  [!] Credentials are placeholder. Please update reddit-creds.json")
         return None
-    
+
     try:
         reddit = praw.Reddit(
             client_id=creds["client_id"],
             client_secret=creds["client_secret"],
             username=creds["username"],
             password=creds["password"],
-            user_agent="TormentNexus/1.0 (AI research assistant; https://github.com/MDMAtk/TormentNexus)"
+            user_agent="TormentNexus/1.0 (AI research assistant; https://github.com/MDMAtk/TormentNexus)",
         )
         # Test authentication
         print(f"  [+] Logged in as: {reddit.user.me()}")
@@ -189,21 +216,21 @@ def call_mimo(prompt, max_tokens=500):
     if not MIMO_KEY:
         print("  [!] No MIMO_API_KEY set")
         return None
-    
+
     try:
         response = requests.post(
             MIMO_URL,
             headers={
                 "Content-Type": "application/json",
-                "Authorization": f"Bearer {MIMO_KEY}"
+                "Authorization": f"Bearer {MIMO_KEY}",
             },
             json={
                 "model": MIMO_MODEL,
                 "messages": [{"role": "user", "content": prompt}],
                 "max_tokens": max_tokens,
-                "temperature": 0.7
+                "temperature": 0.7,
             },
-            timeout=60
+            timeout=60,
         )
         response.raise_for_status()
         result = response.json()
@@ -216,21 +243,21 @@ def call_mimo(prompt, max_tokens=500):
 def calculate_relevance(title, selftext=""):
     """Calculate relevance score"""
     text = (title + " " + selftext).lower()
-    
+
     score = 0
     matched_keywords = []
     high_matches = []
-    
+
     for keyword in RELEVANT_KEYWORDS:
         if keyword.lower() in text:
             score += 1
             matched_keywords.append(keyword)
-    
+
     for keyword in HIGH_RELEVANCE_KEYWORDS:
         if keyword.lower() in text:
             score += 3
             high_matches.append(keyword)
-    
+
     return score, matched_keywords, high_matches
 
 
@@ -238,13 +265,15 @@ def generate_reply(title, selftext, subreddit, include_link=False):
     """Generate a helpful reply"""
     # Check for template matches first
     text = (title + " " + selftext).lower()
-    
-    if "memory" in text and ("forget" in text or "remember" in text or "persistent" in text):
+
+    if "memory" in text and (
+        "forget" in text or "remember" in text or "persistent" in text
+    ):
         return REPLY_TEMPLATES["memory"]
-    
+
     if "mcp" in text and ("tool" in text or "server" in text or "catalog" in text):
         return REPLY_TEMPLATES["mcp"]
-    
+
     # Use MiMo for custom replies
     link_section = ""
     if include_link:
@@ -252,7 +281,7 @@ def generate_reply(title, selftext, subreddit, include_link=False):
 If genuinely relevant, include at the end:
 "Full disclosure: I'm working on TormentNexus (https://github.com/MDMAtk/TormentNexus), an open-source AI control plane with persistent memory and 26K+ MCP tools."
 Only include if it genuinely helps."""
-    
+
     prompt = f"""You are a helpful AI/ML developer on r/{subreddit}.
 
 Someone posted:
@@ -276,25 +305,34 @@ def post_reply(reddit, post_id, reply_text, db):
     try:
         submission = reddit.submission(id=post_id)
         comment = submission.reply(reply_text)
-        
+
         # Log success
-        db.execute("""
+        db.execute(
+            """
             INSERT INTO post_log (post_id, action, success)
             VALUES (?, 'reply', TRUE)
-        """, (post_id,))
-        db.execute("""
+        """,
+            (post_id,),
+        )
+        db.execute(
+            """
             UPDATE replies SET posted = TRUE WHERE post_id = ?
-        """, (post_id,))
+        """,
+            (post_id,),
+        )
         db.commit()
-        
+
         print(f"  [+] Posted reply: {comment.permalink}")
         return True
     except Exception as e:
         print(f"  [!] Failed to post: {e}")
-        db.execute("""
+        db.execute(
+            """
             INSERT INTO post_log (post_id, action, success, error)
             VALUES (?, 'reply', FALSE, ?)
-        """, (post_id, str(e)))
+        """,
+            (post_id, str(e)),
+        )
         db.commit()
         return False
 
@@ -305,32 +343,32 @@ def main():
     print("  TormentNexus Reddit Agent v2")
     print("=" * 60)
     print()
-    
+
     db = init_db()
     reddit = get_reddit_instance()
-    
+
     if not reddit:
         print("  [!] Running in SCAN-ONLY mode (no posting)")
         print("  Add Reddit credentials to enable posting")
     else:
         print("  [+] Running in AUTHENTICATED mode (will post)")
-    
+
     print()
     print(f"  Monitoring {len(SUBREDDITS)} subreddits:")
     for sub in SUBREDDITS:
         print(f"    - r/{sub}")
     print()
-    
+
     cycle = 0
     while True:
         cycle += 1
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print(f"  Cycle {cycle} — {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        print(f"{'='*60}")
-        
+        print(f"{'=' * 60}")
+
         for subreddit_name in SUBREDDITS:
             print(f"\n--- r/{subreddit_name} ---")
-            
+
             try:
                 subreddit = reddit.subreddit(subreddit_name) if reddit else None
                 if subreddit:
@@ -339,15 +377,20 @@ def main():
                     # Fallback to JSON API for scanning
                     posts = []
                     import urllib.request
+
                     url = f"https://www.reddit.com/r/{subreddit_name}/new.json?limit=25"
-                    req = urllib.request.Request(url, headers={
-                        "User-Agent": "TormentNexus/1.0 (https://github.com/MDMAtk/TormentNexus)"
-                    })
+                    req = urllib.request.Request(
+                        url,
+                        headers={
+                            "User-Agent": "TormentNexus/1.0 (https://github.com/MDMAtk/TormentNexus)"
+                        },
+                    )
                     try:
                         with urllib.request.urlopen(req, timeout=30) as r:
                             data = json.loads(r.read().decode())
                             for p in data.get("data", {}).get("children", []):
                                 d = p.get("data", {})
+
                                 # Create a simple object to mimic PRAW
                                 class Post:
                                     def __init__(self, data):
@@ -356,57 +399,77 @@ def main():
                                         self.selftext = data.get("selftext", "")
                                         self.permalink = data.get("permalink", "")
                                         self.url = data.get("url", "")
+
                                 posts.append(Post(d))
                     except Exception as e:
                         print(f"  [!] Error: {e}")
                         continue
-                
+
                 for post in posts:
                     post_id = post.id
-                    
+
                     # Skip if already seen
                     existing = db.execute(
-                        "SELECT post_id FROM seen_posts WHERE post_id = ?", 
-                        (post_id,)
+                        "SELECT post_id FROM seen_posts WHERE post_id = ?", (post_id,)
                     ).fetchone()
                     if existing:
                         continue
-                    
+
                     # Calculate relevance
-                    score, keywords, high_matches = calculate_relevance(post.title, post.selftext)
-                    
+                    score, keywords, high_matches = calculate_relevance(
+                        post.title, post.selftext
+                    )
+
                     # Save to database
-                    db.execute("""
+                    db.execute(
+                        """
                         INSERT OR IGNORE INTO seen_posts 
                         (post_id, subreddit, title, url, permalink, relevance_score)
                         VALUES (?, ?, ?, ?, ?, ?)
-                    """, (post_id, subreddit_name, post.title, post.url, post.permalink, score))
+                    """,
+                        (
+                            post_id,
+                            subreddit_name,
+                            post.title,
+                            post.url,
+                            post.permalink,
+                            score,
+                        ),
+                    )
                     db.commit()
-                    
+
                     if score >= 2:
                         include_link = len(high_matches) > 0
                         print(f"  [+] Relevant ({score}): {post.title[:60]}...")
                         print(f"      Keywords: {', '.join(keywords[:3])}")
-                        
+
                         if include_link:
                             print("      HIGH RELEVANCE — will include link")
-                        
+
                         # Generate reply
-                        reply = generate_reply(post.title, post.selftext, subreddit_name, include_link)
-                        
+                        reply = generate_reply(
+                            post.title, post.selftext, subreddit_name, include_link
+                        )
+
                         if reply:
                             print(f"      Reply: {reply[:100]}...")
-                            
+
                             # Save reply
-                            db.execute("""
+                            db.execute(
+                                """
                                 INSERT INTO replies (post_id, reply_text, included_link)
                                 VALUES (?, ?, ?)
-                            """, (post_id, reply, include_link))
-                            db.execute("""
+                            """,
+                                (post_id, reply, include_link),
+                            )
+                            db.execute(
+                                """
                                 UPDATE seen_posts SET replied = TRUE WHERE post_id = ?
-                            """, (post_id,))
+                            """,
+                                (post_id,),
+                            )
                             db.commit()
-                            
+
                             # Post if authenticated
                             if reddit:
                                 success = post_reply(reddit, post_id, reply, db)
@@ -415,45 +478,56 @@ def main():
                                 time.sleep(10)  # Rate limiting
                             else:
                                 # Save to pending file
-                                pending_file = os.path.join(os.path.dirname(__file__), "..", "data", "pending-replies.json")
+                                pending_file = os.path.join(
+                                    os.path.dirname(__file__),
+                                    "..",
+                                    "data",
+                                    "pending-replies.json",
+                                )
                                 pending = []
                                 if os.path.exists(pending_file):
                                     with open(pending_file) as f:
                                         pending = json.load(f)
-                                
-                                pending.append({
-                                    "post_id": post_id,
-                                    "subreddit": subreddit_name,
-                                    "title": post.title,
-                                    "url": f"https://reddit.com{post.permalink}",
-                                    "reply": reply,
-                                    "include_link": include_link,
-                                    "score": score,
-                                    "keywords": keywords,
-                                    "timestamp": datetime.now().isoformat()
-                                })
-                                
+
+                                pending.append(
+                                    {
+                                        "post_id": post_id,
+                                        "subreddit": subreddit_name,
+                                        "title": post.title,
+                                        "url": f"https://reddit.com{post.permalink}",
+                                        "reply": reply,
+                                        "include_link": include_link,
+                                        "score": score,
+                                        "keywords": keywords,
+                                        "timestamp": datetime.now().isoformat(),
+                                    }
+                                )
+
                                 with open(pending_file, "w") as f:
                                     json.dump(pending, f, indent=2)
-                
+
                 time.sleep(2)  # Rate limiting between subreddits
-                
+
             except Exception as e:
                 print(f"  [!] Error with r/{subreddit_name}: {e}")
                 continue
-        
+
         # Stats
         total_seen = db.execute("SELECT count(*) FROM seen_posts").fetchone()[0]
-        total_relevant = db.execute("SELECT count(*) FROM seen_posts WHERE relevance_score >= 2").fetchone()[0]
+        total_relevant = db.execute(
+            "SELECT count(*) FROM seen_posts WHERE relevance_score >= 2"
+        ).fetchone()[0]
         total_replies = db.execute("SELECT count(*) FROM replies").fetchone()[0]
-        total_posted = db.execute("SELECT count(*) FROM replies WHERE posted = TRUE").fetchone()[0]
-        
+        total_posted = db.execute(
+            "SELECT count(*) FROM replies WHERE posted = TRUE"
+        ).fetchone()[0]
+
         print("\n--- Stats ---")
         print(f"  Posts seen: {total_seen}")
         print(f"  Relevant: {total_relevant}")
         print(f"  Replies generated: {total_replies}")
         print(f"  Replies posted: {total_posted}")
-        
+
         # Wait before next cycle (5 minutes)
         print("\n  Waiting 5 minutes before next cycle...")
         time.sleep(300)
